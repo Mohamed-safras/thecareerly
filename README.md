@@ -1,4 +1,4 @@
-# Automated Job Hiring Agent
+# Automated Job Hiring Agent: Software Requirements Specification (SRS) - Version 1.2
 
 ## 1. Introduction
 
@@ -475,10 +475,6 @@ The following diagram illustrates the high-level architecture and workflow of th
 
 ```mermaid
 
----
-config:
-  layout: elk
----
 flowchart TD
     A(["HR User"]) -- Create JD --> B["Job Posting Module"]
     B -- "AI-Generated Content" --> C["Gen AI Service"]
@@ -789,3 +785,178 @@ end
   - **External APIs**: Integrates with social media (LinkedIn, X/Twitter, Instagram, Facebook), calendar (Google Calendar, Outlook), and assessment (HackerRank, Codility) APIs.
 - **User Access**: HR Users, Jobseekers, Internal Employees (future), and System Admins access the system via CloudFront, interacting with dashboards, application forms, and portals.
 - **Deployment Flow**: Code is pushed to Git, built/tested by Jenkins with SonarQube analysis, containerized with Docker, and deployed via CodePipeline to EKS, ensuring automated, reliable deployments with high code quality.
+
+### Appendix F: Database Schema
+
+The following MongoDB Atlas schema defines the data structure for storing job, application, candidate, assessment, scheduling, notification, referral, and user data, supporting the system’s functional requirements (Section 3) and non-functional requirements (Section 4, e.g., encryption, GDPR compliance). AWS S3 is used for file storage (e.g., CVs, AI-generated assets), with paths referenced in the schema.
+
+**Schema Explanation:**:
+
+- **Jobs Collection**: Stores job descriptions (Sub-Req 1.1.1), AI-generated content (Sub-Req 1.1.6), and social media analytics (Sub-Req 1.1.3). Includes compliance status (FR1.2) and text index for search.
+- **Applications Collection**:Captures candidate applications (Sub-Req 2.1.1), including CV/cover letter paths in S3, encrypted contact info (Sub-Req 2.1.4), and links (GitHub, portfolio, etc.). Tracks status for workflow progression.
+- **Candidates Collection**: Stores parsed CV data (Sub-Req 3.1.1), including vector embeddings for semantic matching (Sub-Req 3.2.1) and match scores (Sub-Req 3.2.2). Supports link data parsing (e.g., GitHub repos).
+- **Assessments Collection**: Manages optional skill assessments (FR6.1), storing generated content and results (Sub-Req 6.1.2, 6.1.4). References S3 for question/response storage.
+- **Schedules Collection**: Tracks interview scheduling data (FR7.1), including proposed and finalized slots (Sub-Req 7.1.2, 7.1.3) and calendar event IDs (Sub-Req 7.1.4).
+- **Notifications Collection**: Logs notifications for auditing (FR4.2, Sub-Req 5.1.3), including email/Slack/Teams alerts and tracking data (Sub-Req 5.3).
+- **Referrals Collection**: Supports the future Employee Referral Portal (FR9.1), storing referral data, CVs, and AI-generated summaries (Sub-Req 9.1.4).
+- **Users Collection**: Manages HR, admin, and employee accounts (FR8.2, Sub-Req 9.1.1), linked to Auth0 for SSO.
+
+Security: Sensitive fields (e.g., contact info, names) are encrypted with AWS KMS (Section 4.3). Anonymization is applied for bias reduction.
+
+Indexes: Optimize queries for job_id, candidate_id, and vector search (Atlas Search) to meet performance requirements (Section 4.1).
+
+### Appendix G: Database Schema Diagram
+
+The following UML class diagram visually represents the MongoDB Atlas schema defined in Appendix F, illustrating the collections, their key fields, data types, relationships (via references), and indexes. Each collection is depicted as a class, with fields as attributes, relationships as associations, and indexes noted.
+
+```mermaid
+classDiagram
+    class Jobs {
+        _id: ObjectId
+        title: String
+        description: String
+        requirements: String[]
+        location: String
+        salary_range: Object
+        created_by: ObjectId
+        created_at: Date
+        updated_at: Date
+        status: String
+        ai_content: Object
+        compliance_status: String
+        social_media_posts: Array
+        Index_title: title
+        Index_status: status
+    }
+
+    class Applications {
+        _id: ObjectId
+        job_id: ObjectId
+        candidate_id: ObjectId
+        cv_s3_path: String
+        cover_letter_s3_path: String
+        contact_info: Object
+        links: Array
+        status: String
+        submitted_at: Date
+        updated_at: Date
+        Index_job_id: job_id
+        Index_candidate_id: candidate_id
+        Index_status: status
+    }
+
+    class Candidates {
+        _id: ObjectId
+        parsed_data: Object
+        match_scores: Array
+        created_at: Date
+        updated_at: Date
+        Index_parsed_data: parsed_data.vector_embedding
+        Index_match_scores: match_scores.job_id
+    }
+
+    class Assessments {
+        _id: ObjectId
+        job_id: ObjectId
+        candidate_id: ObjectId
+        enabled: Boolean
+        content: Object
+        results: Object
+        created_at: Date
+        updated_at: Date
+        Index_job_id: job_id
+        Index_candidate_id: candidate_id
+    }
+
+    class Schedules {
+        _id: ObjectId
+        job_id: ObjectId
+        candidate_id: ObjectId
+        hr_id: ObjectId
+        proposed_slots: Array
+        finalized_slot: Object
+        calendar_event_id: String
+        reminders: Array
+        status: String
+        created_at: Date
+        updated_at: Date
+        Index_job_id: job_id
+        Index_candidate_id: candidate_id
+        Index_hr_id: hr_id
+    }
+
+    class Notifications {
+        _id: ObjectId
+        type: String
+        recipient_id: ObjectId
+        content: String
+        status: String
+        sent_at: Date
+        tracking: Object
+        Index_recipient_id: recipient_id
+        Index_sent_at: sent_at
+    }
+
+    class Referrals {
+        _id: ObjectId
+        job_id: ObjectId
+        candidate_id: ObjectId
+        referrer_id: ObjectId
+        cv_s3_path: String
+        notes: String
+        links: Array
+        ai_summary: String
+        priority_score: Number
+        status: String
+        created_at: Date
+        updated_at: Date
+        Index_job_id: job_id
+        Index_candidate_id: candidate_id
+        Index_referrer_id: referrer_id
+    }
+
+    class Users {
+        _id: ObjectId
+        auth0_id: String
+        role: String
+        email: String
+        name: String
+        created_at: Date
+        updated_at: Date
+        Index_auth0_id: auth0_id
+        Index_role: role
+    }
+```
+
+**Diagram Explanation:**:
+
+Classes (Collections): Each MongoDB collection (Jobs, Applications, Candidates, Assessments, Schedules, Notifications, Referrals, Users) is represented as a UML class with key fields and their data types, as defined in Appendix F.
+
+Fields: Simplified to show critical attributes (e.g., \_id, job_id, candidate_id, status, etc.) and complex structures (e.g., requirements: String[], social_media_posts: [{...}]).
+
+Relationships: Associations depict references:
+
+Jobs links to Applications, Candidates, Assessments, Schedules, and Referrals via job_id.
+
+Applications links to Candidates, Assessments, Schedules, and Referrals via candidate_id.
+
+Schedules links to Users via hr_id.
+
+Referrals links to Users via referrer_id.
+
+Jobs links to Users via created_by.
+
+Notifications links to Users or Candidates via recipient_id.
+
+Indexes: Noted below each class (e.g., Index: title (text), status (index) for Jobs), indicating text, index, or vectorSearch indexes for query optimization.
+
+Security Notes: Fields like contact_info.email and cv_s3_path are marked as encrypted (AWS KMS), and contact_info.name is anonymized for bias reduction (Section 4.3).
+
+Future Feature: The Referrals collection is included to support the future Employee Referral Portal (Step 9).
+
+### Section 9: Conclusion
+The Automated Job Hiring Agent system is designed to revolutionize the recruitment process by leveraging Generative AI, LangChain AI agents, and a robust cloud-native architecture to automate critical hiring tasks. By addressing inefficiencies in traditional hiring workflows—such as manual CV screening, job posting, assessment creation, and interview scheduling—the system delivers significant time savings and reduces human bias through AI-driven candidate matching and anonymized evaluations. The Minimum Viable Product (MVP) focuses on core functionalities: AI-generated job postings across social media and websites, automated CV parsing and matching, real-time HR notifications, personalized candidate communications, optional skill assessments, and HR-driven interview scheduling. The modular design, built on AWS EKS, MongoDB Atlas, and a CI/CD pipeline with Jenkins, SonarQube, and AWS CodePipeline, ensures scalability, reliability, and maintainability, meeting performance requirements (e.g., processing 100 applications per hour) and security standards (e.g., GDPR compliance, data encryption).
+
+The system’s MongoDB schema (Appendix F) and its visual representation (Appendix G) provide a structured foundation for data management, supporting job descriptions, candidate profiles, assessments, scheduling, and future features like the Employee Referral Portal. By integrating with external APIs (e.g., LinkedIn, Google Calendar, HackerRank) and utilizing modern web technologies (Next.js, TypeScript, Tailwind CSS), the system offers an intuitive, accessible user experience for HR users, jobseekers, and system admins. Future enhancements, such as AI-generated interview questions and diversity analytics (Section 7), will further strengthen its capabilities, positioning the system as a scalable, future-proof solution for organizations seeking to optimize hiring processes while maintaining fairness and efficiency.
+
+This SRS provides a comprehensive blueprint for development, ensuring alignment with stakeholder needs and industry standards. The Automated Job Hiring Agent is poised to empower HR teams, streamline recruitment, and deliver measurable value through automation and intelligent decision-making.
