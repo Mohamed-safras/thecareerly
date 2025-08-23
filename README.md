@@ -810,6 +810,10 @@ Indexes: Optimize queries for job_id, candidate_id, and vector search (Atlas Sea
 The following UML class diagram visually represents the MongoDB Atlas schema defined in Appendix F, illustrating the collections, their key fields, data types, relationships (via references), and indexes. Each collection is depicted as a class, with fields as attributes, relationships as associations, and indexes noted.
 
 ```mermaid
+---
+config:
+  layout: dagre
+---
 classDiagram
     class Jobs {
         _id: ObjectId
@@ -821,28 +825,25 @@ classDiagram
         created_by: ObjectId
         created_at: Date
         updated_at: Date
-        status: String
+        status: String (Enum: draft, active, closed)
         ai_content: Object
-        compliance_status: String
+        compliance_status: String (Enum: pending, approved, flagged)
         social_media_posts: Array
-        Index_title: title
-        Index_status: status
+        Index: title (text), status (index)
     }
 
     class Applications {
         _id: ObjectId
         job_id: ObjectId
         candidate_id: ObjectId
-        cv_s3_path: String
-        cover_letter_s3_path: String
-        contact_info: Object
+        cv_s3_path: String (Encrypted)
+        cover_letter_s3_path: String (Encrypted)
+        contact_info: Object (Encrypted, Anonymized)
         links: Array
-        status: String
+        status: String (Enum: submitted, parsed, shortlisted, approved, rejected)
         submitted_at: Date
         updated_at: Date
-        Index_job_id: job_id
-        Index_candidate_id: candidate_id
-        Index_status: status
+        Index: job_id (index), candidate_id (index), status (index)
     }
 
     class Candidates {
@@ -851,8 +852,7 @@ classDiagram
         match_scores: Array
         created_at: Date
         updated_at: Date
-        Index_parsed_data: parsed_data.vector_embedding
-        Index_match_scores: match_scores.job_id
+        Index: parsed_data.vector_embedding (vectorSearch), match_scores.job_id (index)
     }
 
     class Assessments {
@@ -864,8 +864,7 @@ classDiagram
         results: Object
         created_at: Date
         updated_at: Date
-        Index_job_id: job_id
-        Index_candidate_id: candidate_id
+        Index: job_id (index), candidate_id (index)
     }
 
     class Schedules {
@@ -877,24 +876,21 @@ classDiagram
         finalized_slot: Object
         calendar_event_id: String
         reminders: Array
-        status: String
+        status: String (Enum: proposed, finalized, cancelled)
         created_at: Date
         updated_at: Date
-        Index_job_id: job_id
-        Index_candidate_id: candidate_id
-        Index_hr_id: hr_id
+        Index: job_id (index), candidate_id (index), hr_id (index)
     }
 
     class Notifications {
         _id: ObjectId
-        type: String
+        type: String (Enum: email, slack, teams, dashboard)
         recipient_id: ObjectId
         content: String
-        status: String
+        status: String (Enum: sent, delivered, failed)
         sent_at: Date
         tracking: Object
-        Index_recipient_id: recipient_id
-        Index_sent_at: sent_at
+        Index: recipient_id (index), sent_at (index)
     }
 
     class Referrals {
@@ -902,30 +898,28 @@ classDiagram
         job_id: ObjectId
         candidate_id: ObjectId
         referrer_id: ObjectId
-        cv_s3_path: String
+        cv_s3_path: String (Encrypted)
         notes: String
         links: Array
         ai_summary: String
         priority_score: Number
-        status: String
+        status: String (Enum: submitted, processed, hired, rejected)
         created_at: Date
         updated_at: Date
-        Index_job_id: job_id
-        Index_candidate_id: candidate_id
-        Index_referrer_id: referrer_id
+        Index: job_id (index), candidate_id (index), referrer_id (index)
     }
 
     class Users {
         _id: ObjectId
         auth0_id: String
-        role: String
-        email: String
-        name: String
+        role: String (Enum: hr, admin, employee)
+        email: String (Encrypted)
+        name: String (Encrypted)
         created_at: Date
         updated_at: Date
-        Index_auth0_id: auth0_id
-        Index_role: role
+        Index: auth0_id (index), role (index)
     }
+
 ```
 
 **Diagram Explanation:**:
