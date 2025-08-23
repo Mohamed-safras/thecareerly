@@ -1,4 +1,4 @@
-# Automated_Job_Hiring_Agent
+# Automated Job Hiring Agent: Software Requirements Specification (SRS) - Version 1.2
 
 ## 1. Introduction
 
@@ -653,27 +653,28 @@ flowchart TD
 
 The following diagram illustrates the interactions between actors and the system’s use cases, as outlined in Section 5.
 
+```mermaid
 %% Use Case Diagram for Automated Hiring System
 flowchart LR
-subgraph SystemBoundary ["Automated Hiring System"]
-UC1["Post Job"]
-UC2["Generate AI Content"]
-UC3["Approve/Reject Candidate"]
-UC4["Send Candidate Emails"]
-UC5["View Dashboard/Reports"]
-UC6["Enable/Disable Assessments"]
-UC7["Generate Assessments"]
-UC8["Schedule Interview"]
-UC9["Propose Interview Slots"]
-UC10["Send Invites"]
-UC11["Apply for Job"]
-UC12["Parse CV/Links"]
-UC13["Match JD"]
-UC14["Complete Assessment"]
-UC15["Submit Referral (Future)"]
-UC16["Manage System"]
-UC17["Monitor/Configure"]
-end
+    subgraph SystemBoundary ["Automated Hiring System"]
+        UC1["Post Job"]
+        UC2["Generate AI Content"]
+        UC3["Approve/Reject Candidate"]
+        UC4["Send Candidate Emails"]
+        UC5["View Dashboard/Reports"]
+        UC6["Enable/Disable Assessments"]
+        UC7["Generate Assessments"]
+        UC8["Schedule Interview"]
+        UC9["Propose Interview Slots"]
+        UC10["Send Invites"]
+        UC11["Apply for Job"]
+        UC12["Parse CV/Links"]
+        UC13["Match JD"]
+        UC14["Complete Assessment"]
+        UC15["Submit Referral (Future)"]
+        UC16["Manage System"]
+        UC17["Monitor/Configure"]
+    end
 
     %% Actors
     HRUser(["HR User"])
@@ -683,7 +684,6 @@ end
 
     %% Relationships
     HRUser --> UC1
-
     HRUser --> UC3
     HRUser --> UC5
     HRUser --> UC6
@@ -706,6 +706,7 @@ end
 
     SysAdmin --> UC16
     UC16 --> UC17
+```
 
 **Diagram Explanation**:
 
@@ -720,6 +721,7 @@ end
 
 The following diagram illustrates the deployment architecture of the Automated Job Hiring Agent system, focusing on AWS services, Jenkins, SonarQube, and DevOps tools for CI/CD and deployment processes.
 
+```mermaid
 %%{ init: { 'theme': 'base', 'themeVariables': { 'primaryColor': '#FFA500', 'primaryTextColor': '#000000', 'lineColor': '#000000', 'fontSize': '14px'} } }%%
 flowchart TD
 subgraph Development_Environment["Development Environment"]
@@ -757,6 +759,7 @@ end
         AA["Internal Employee"] -->|"Submit Referral Future"| M
         AB["System Admin"] -->|"Manage System"| M
     end
+```
 
 **Diagram Explanation**:
 
