@@ -1,4 +1,4 @@
-# Automated Job Hiring Agent: Software Requirements Specification (SRS) - Version 1.2
+# Automated Job Hiring Agent
 
 ## 1. Introduction
 
