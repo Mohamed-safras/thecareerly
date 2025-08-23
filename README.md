@@ -475,6 +475,10 @@ The following diagram illustrates the high-level architecture and workflow of th
 
 ```mermaid
 
+---
+config:
+  layout: elk
+---
 flowchart TD
     A(["HR User"]) -- Create JD --> B["Job Posting Module"]
     B -- "AI-Generated Content" --> C["Gen AI Service"]
