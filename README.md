@@ -99,7 +99,7 @@ The system enhances traditional Applicant Tracking Systems (e.g., Lever, Greenho
 - Web-based application hosted on AWS.
 - Compatible with modern browsers (Chrome, Firefox, Edge).
 - Frontend: Next.js with TypeScript, Tailwind CSS, and Shadcn/UI.
-- Backend: Node.js (Next.js API routes) or Python (FastAPI), integrated with MongoDB.
+- Backend: Node.js (Next.js API routes), integrated with MongoDB.
 - Mobile-responsive interfaces for application forms and assessments.
 - **Deployment**: Managed via AWS EKS with Docker for container orchestration; Jenkins, SonarQube, and AWS CodePipeline for CI/CD, ensuring automated deployments and code quality analysis.
 
