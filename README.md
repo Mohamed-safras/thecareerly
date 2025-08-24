@@ -6,8 +6,6 @@
 
 This document details the requirements for an Automated Job Hiring Agent system designed to streamline the initial stages of the hiring process. The system automates job posting with AI-generated content, application processing, candidate CV/resume matching against job descriptions (JD), filtering, HR notifications, candidate communications, optional skill assessments, and interview scheduling. Leveraging Generative AI (Gen AI), LangChain, and AI agents, the system reduces manual effort, minimizes bias, and enhances efficiency.
 
-**New in Version 1.2**: Updated the Interview Scheduling Module (Step 7) and related use cases to reflect that HR schedules interviews instead of jobseekers selecting slots. The system proposes optimal interview times based on HR and candidate availability, and HR finalizes the schedule via a dashboard interface. The use case diagram in Appendix C has been updated to reflect this change. Previous updates from Version 1.1 remain, including the replacement of AWS ECS with AWS EKS for container orchestration and the integration of SonarQube for code quality analysis. The deployment diagram in Appendix E reflects the use of EKS and SonarQube, complementing the system, use case, and architecture diagrams from Version 1.0. The Application Submission Module (Sub-Req 2.1.1) retains updates from Version 1.0 to collect GitHub profile and portfolio links for technical roles and relevant links for non-technical roles. The Candidate Skill Assessment module remains optional, with other future features deferred to focus on the MVP.
-
 The primary goals are:
 
 - Automate repetitive hiring tasks to handle high application volumes.
