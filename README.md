@@ -453,7 +453,7 @@ The following features are planned for post-MVP phases:
 ### Appendix A: Technology Stack
 
 - **Frontend**: Next.js with TypeScript, Tailwind CSS, Shadcn/UI.
-- **Backend**: Node.js (Next.js API routes) or Python (FastAPI) for logic.
+- **Backend**: Node.js (Next.js API routes) for logic.
 - **AI**: OpenAI/Hugging Face for Gen AI (text, images, assessments); LangChain for agents.
 - **Database**: MongoDB Atlas for data storage.
 - **Storage**: AWS S3 for CVs, AI-generated assets, assessment content.
