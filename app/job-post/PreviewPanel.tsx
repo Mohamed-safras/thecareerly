@@ -6,14 +6,25 @@ import { platformMeta } from "@/components/platforms";
 import { Badge } from "@/components/ui/badge";
 import MarkdownEditor from "@uiw/react-md-editor";
 import { ImageIcon } from "lucide-react";
+import { employmentTypeValue } from "@/data/employmentTypes";
 
 export interface PreviewPanelProps {
   compact?: boolean;
 }
 
 const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
-  const form = useAppSelector((s) => s.jobForm);
-  const logoPreview = useAppSelector((s) => s.ui.logoPreview);
+  const {
+    title,
+    location,
+    employmentType,
+    workArragement,
+    salaryMin,
+    salaryMax,
+    currency,
+    description,
+    platforms,
+    logoPreview,
+  } = useAppSelector((selector) => selector.jobForm);
 
   function prettyCurrency(code?: string) {
     if (!code) return "";
@@ -21,9 +32,9 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
   }
 
   return (
-    <div className={compact ? "space-y-4" : "space-y-6"}>
-      <div className="flex items-start gap-3">
-        <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border bg-background">
+    <div className={compact ? "space-y-2" : "space-y-6"}>
+      <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center h-12 w-12 rounded-xl border bg-background overflow-hidden">
           {logoPreview ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -35,31 +46,40 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
             <ImageIcon className="h-5 w-5 text-muted-foreground" />
           )}
         </div>
+        <h1 className="text-base font-medium md:text-xl">Acentura Inc!</h1>
+      </div>
+
+      <div className="flex items-center gap-3">
         <div className="min-w-0">
-          <div className="flex flex-wrap  flex-col">
+          <div className="flex flex-wrap flex-col">
             <h3 className="truncate text-base font-semibold md:text-lg">
-              {form.title || "Untitled Role"}
+              {title || "Untitled Role"}
             </h3>
-            <div className="flex items-center gap-2">
+
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant="secondary">{location || "Location TBD"}</Badge>
+
               <Badge variant="secondary">
-                {form.location || "Location TBD"}
+                {workArragement || "Work Arrangement TDB"}
               </Badge>
+
               <Badge variant="secondary">
-                {form.jobType || "Job Type TBD"}
+                {(employmentType as employmentTypeValue) || "Job Type TBD"}
               </Badge>
             </div>
           </div>
-          {(form.salaryMin || form.salaryMax || form.currency) && (
+
+          {(salaryMin || salaryMax || currency) && (
             <div className="text-xs text-muted-foreground mt-2">
-              {form.salaryMin && (
+              {salaryMin && (
                 <span>
-                  {prettyCurrency(form.currency)} {form.salaryMin}
+                  {prettyCurrency(currency)} {salaryMin}
                 </span>
               )}
-              {form.salaryMin && form.salaryMax && <span> – </span>}
-              {form.salaryMax && (
+              {salaryMin && salaryMax && <span> – </span>}
+              {salaryMax && (
                 <span>
-                  {prettyCurrency(form.currency)} {form.salaryMax}
+                  {prettyCurrency(currency)} {salaryMax}
                 </span>
               )}
             </div>
@@ -68,25 +88,26 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
       </div>
 
       <MarkdownEditor.Markdown
-        source={form.description || "No description yet."}
+        source={description || "No description yet."}
         style={{
           backgroundColor: "white",
           color: "black",
           fontSize: "14px",
           lineHeight: "1.6",
-          padding: "0.75rem",
+
           borderRadius: "0.5rem",
         }}
+        className="max-h-120 overflow-y-scroll"
       />
 
       <div className="flex flex-wrap gap-2">
-        {form.platforms.map((p) => (
+        {platforms?.map((p) => (
           <Badge key={p} variant="outline" className="gap-1">
             {platformMeta[p]?.icon}
             <span>{platformMeta[p]?.label}</span>
           </Badge>
         ))}
-        {form.platforms.length === 0 && (
+        {platforms?.length === 0 && (
           <Badge variant="outline">No platforms selected</Badge>
         )}
       </div>

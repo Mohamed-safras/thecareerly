@@ -1,5 +1,10 @@
 import { POSTER_SIZE } from "@/constent/GenAiConstent";
-import { JobDescriptionInput, PosterInput } from "@/types/GenAITypes";
+import {
+  buildJDUserPrompt,
+  oneLine,
+  setSystemPromptJobDescriptionBuilder,
+} from "@/lib/prompts/jd";
+import { AIPromptInput, PosterInput } from "@/types/GenAITypes";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
@@ -28,7 +33,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (mode === "jd") {
-      const data = body?.payload as JobDescriptionInput | undefined;
+      const data = body?.payload as AIPromptInput | undefined;
       if (!data || !data.title) {
         return NextResponse.json(
           { error: "JD payload requires at least: { title }" },
@@ -37,22 +42,15 @@ export async function POST(req: NextRequest) {
       }
 
       // Build a compact prompt (tiny system + minimal user)
-      function setSystemPrompt(extraPrompt: string) {
-        const system = `You write concise job descriptions. 
-        Keep output short, skimmable, and ATS-friendly. 
-        Use bullet points. Avoid fluff. 
-        consider whatever extra ai prompt as well ${extraPrompt}, do not mention the job title again in the response , also each heading should be bold`;
-        return system;
-      }
 
-      const user = compactJobDescriptionUserPrompt(data);
+      const user = buildJDUserPrompt(data);
 
       const resp = await client.chat.completions.create({
         model: JD_MODEL,
         max_tokens: JD_MAX_TOKENS,
         temperature: JD_TEMP,
         messages: [
-          { role: "system", content: setSystemPrompt(data.aiPrompt) },
+          { role: "system", content: setSystemPromptJobDescriptionBuilder() },
           { role: "user", content: user },
         ],
       });
@@ -109,23 +107,6 @@ export async function POST(req: NextRequest) {
   }
 }
 
-function compactJobDescriptionUserPrompt(d: JobDescriptionInput) {
-  // Keep everything crisp; no long context → fewer tokens
-  // If a field is missing, omit it (no filler)
-  return [
-    `Write a concise JD for: ${d.title}`,
-    d.description ? `Summary: ${oneLine(d.description)}` : "",
-    "Format:",
-    "About the role (3–4 lines)",
-    "Key Responsibilities (4–8 bullets)",
-    "Required Qualifications (5–8 bullets)",
-    "Nice to Have (optional, 3–5 bullets)",
-    "How to Apply (1 line)",
-  ]
-    .filter(Boolean)
-    .join("\n");
-}
-
 function compactPosterPrompt(p: PosterInput) {
   // A compact, high-signal image prompt—not verbose—to save tokens
   // NOTE: purely text → no extra tokens from long descriptions
@@ -144,9 +125,4 @@ function compactPosterPrompt(p: PosterInput) {
     .join(" ");
 
   return lines;
-}
-
-function oneLine(s?: string) {
-  if (!s) return "";
-  return s.replace(/\s+/g, " ").trim();
 }

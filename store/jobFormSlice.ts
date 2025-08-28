@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction, Draft } from "@reduxjs/toolkit";
-import type { JobForm } from "@/types/jobform";
+import type { JobForm } from "@/types/jobForm";
 
 const initialState: JobForm = {
   title: "",
-  jobType: "",
+  employmentType: "",
+  workArragement: "",
   description: "",
   location: "",
   salaryMin: "",
@@ -14,6 +15,7 @@ const initialState: JobForm = {
   includeMultimedia: true,
   platforms: [],
   logoFileId: null,
+  logoPreview: null,
 };
 
 const jobFormSlice = createSlice({
@@ -44,10 +46,19 @@ const jobFormSlice = createSlice({
         ? state.platforms.filter((k) => k !== key)
         : [...state.platforms, key];
     },
+
+    setLogoPreview: (state, action: PayloadAction<string | null>) => {
+      state.logoPreview = action.payload;
+    },
   },
 });
 
-export const { setForm, replaceForm, setField, togglePlatform } =
-  jobFormSlice.actions;
+export const {
+  setForm,
+  replaceForm,
+  setField,
+  togglePlatform,
+  setLogoPreview,
+} = jobFormSlice.actions;
 
 export default jobFormSlice.reducer;

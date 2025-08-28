@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import {
   Card,
@@ -19,22 +19,17 @@ import SchedulePanel from "./SchedulePanel";
 import PreviewPanel from "./PreviewPanel";
 import AIAssistPanel from "./AIAssistPanel";
 
-import { useAppSelector } from "@/store/hooks";
-
 export default function JobPost() {
-  const form = useAppSelector((s) => s.jobForm);
-  const logoPreview = useAppSelector((s) => s.ui.logoPreview);
-
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-white to-slate-50 p-4 md:p-8">
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="mx-auto grid max-w-7xl grid-cols-1 gap-6 md:grid-cols-5"
+        className="mx-auto grid max-w-7xl grid-cols-1 gap-6 md:grid-cols-6"
       >
         {/* Left column: Controls */}
-        <div className="md:col-span-3 space-y-6">
+        <div className="sm:col-span-1 md:col-span-3 space-y-6">
           <Card className="shadow-sm rounded-2xl">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-xl">
@@ -56,13 +51,10 @@ export default function JobPost() {
                   </TabsTrigger>
                 </TabsList>
 
-                {/* Compose */}
                 <ComposePanel />
 
-                {/* AI Assist */}
                 <AIAssistPanel />
 
-                {/* Schedule */}
                 <SchedulePanel />
               </Tabs>
             </CardContent>
@@ -86,7 +78,7 @@ export default function JobPost() {
         </div>
 
         {/* Right column: Live Preview (sticky) */}
-        <div className="md:col-span-2">
+        <div className="sm:col-span-1 md:col-span-3">
           <div className="md:sticky md:top-8 space-y-6">
             <Card className="shadow-sm rounded-2xl">
               <CardHeader>

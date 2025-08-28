@@ -1,6 +1,7 @@
 export type JobForm = {
   title: string;
-  jobType: string;
+  employmentType: string;
+  workArragement: string;
   description: string;
   location: string;
   salaryMin?: string;
@@ -9,6 +10,7 @@ export type JobForm = {
   schedule?: string; // datetime-local
   aiPrompt?: string;
   includeMultimedia: boolean;
-  platforms: string[]; // ["linkedin","twitter","instagram","facebook"]
+  platforms: string[];
   logoFileId: string | null;
+  logoPreview: string | null;
 };

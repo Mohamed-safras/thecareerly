@@ -29,7 +29,7 @@ const Platforms: React.FC<PlatformsProps> = ({ platforms, togglePlatform }) => {
           return (
             <div
               key={key}
-              className="flex items-center gap-2 rounded-xl border p-3 hover:bg-accent"
+              className="flex items-center gap-2 rounded-md border p-2 hover:bg-accent"
             >
               <Checkbox
                 id={id}
