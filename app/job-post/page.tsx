@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback } from "react";
 import { motion } from "framer-motion";
 import {
   Card,
@@ -11,31 +11,19 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Sparkles } from "lucide-react";
-import { JobForm } from "@/types/jobform";
 import ComposePanel from "./ComposePanel";
 import SchedulePanel from "./SchedulePanel";
 import PreviewPanel from "./PreviewPanel";
 import AIAssistPanel from "./AIAssistPanel";
 
-export default function JobPost() {
-  const [form, setForm] = useState<JobForm>({
-    title: "",
-    description: "",
-    location: "",
-    salaryMin: "",
-    salaryMax: "",
-    currency: "",
-    schedule: "",
-    aiPrompt: "",
-    includeMultimedia: true,
-    platforms: [],
-    logoFile: null,
-  });
+import { useAppSelector } from "@/store/hooks";
 
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+export default function JobPost() {
+  const form = useAppSelector((s) => s.jobForm);
+  const logoPreview = useAppSelector((s) => s.ui.logoPreview);
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-white to-slate-50 p-4 md:p-8">
@@ -53,37 +41,32 @@ export default function JobPost() {
                 <Sparkles className="h-5 w-5" /> Job Posting
               </CardTitle>
               <CardDescription>
-                Create and optimize your JD, then schedule and publish.
+                Create and optimize your Job Description, then schedule and
+                publish.
               </CardDescription>
             </CardHeader>
+
             <CardContent>
               <Tabs defaultValue="compose" className="w-full">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="compose">Compose</TabsTrigger>
                   <TabsTrigger value="ai">AI Assist</TabsTrigger>
-                  <TabsTrigger value="schedule">Schedule & Publish</TabsTrigger>
-                  <TabsTrigger value="preview">Preview</TabsTrigger>
+                  <TabsTrigger value="schedule">
+                    Schedule &amp; Publish
+                  </TabsTrigger>
                 </TabsList>
 
                 {/* Compose */}
-                <ComposePanel
-                  form={form}
-                  logoPreview={logoPreview}
-                  setForm={setForm}
-                  setLogoPreview={setLogoPreview}
-                />
+                <ComposePanel />
 
                 {/* AI Assist */}
-                <AIAssistPanel form={form} setForm={setForm} />
-                {/* Schedule */}
-                <SchedulePanel form={form} setForm={setForm} />
+                <AIAssistPanel />
 
-                {/* Preview */}
-                <TabsContent value="preview" className="mt-4">
-                  <PreviewPanel form={form} logoPreview={logoPreview} />
-                </TabsContent>
+                {/* Schedule */}
+                <SchedulePanel />
               </Tabs>
             </CardContent>
+
             <CardFooter className="flex items-center justify-between">
               <Button
                 variant="outline"
@@ -111,29 +94,9 @@ export default function JobPost() {
                 <CardDescription>How your post may appear.</CardDescription>
               </CardHeader>
               <CardContent>
-                <PreviewPanel form={form} logoPreview={logoPreview} compact />
+                <PreviewPanel compact />
               </CardContent>
             </Card>
-
-            {/* <Card className="rounded-2xl">
-              <CardHeader>
-                <CardTitle className="text-base">Tips</CardTitle>
-                <CardDescription>
-                  Quick checks before publishing
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="grid gap-2 text-sm">
-                <div className="rounded-xl border p-3">
-                  Keep title under 70 characters.
-                </div>
-                <div className="rounded-xl border p-3">
-                  Use 3–6 bullet points for key requirements.
-                </div>
-                <div className="rounded-xl border p-3">
-                  Add a logo or banner for better engagement.
-                </div>
-              </CardContent>
-            </Card> */}
           </div>
         </div>
       </motion.div>

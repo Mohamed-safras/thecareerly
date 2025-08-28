@@ -1,15 +1,22 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import { TabsContent } from "@radix-ui/react-tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { TabsContent } from "@radix-ui/react-tabs";
-import { Wand2, FileText, ImageIcon } from "lucide-react";
-import React, { useMemo, useState } from "react";
-import type { JobForm } from "@/types/jobform";
+import { ImageIcon, Bot, FileText, Wand2 } from "lucide-react";
+
+// Redux
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setForm as setFormMerge, replaceForm } from "@/store/jobFormSlice";
+import { JobForm } from "@/types/jobform";
 
 type JDPayload = {
   title: string;
   description?: string;
+  aiPrompt?: string;
   location?: string;
   salary?: string;
 };
@@ -22,16 +29,25 @@ type PosterPayload = {
   notes?: string;
 };
 
-export interface AIAssistPanelProps {
-  form: JobForm;
-  setForm: React.Dispatch<React.SetStateAction<JobForm>>;
-}
+const AIAssistPanel: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const form = useAppSelector((s) => s.jobForm);
 
-const AIAssistPanel: React.FC<AIAssistPanelProps> = ({ form, setForm }) => {
   const [busyJD, setBusyJD] = useState(false);
   const [busyPoster, setBusyPoster] = useState(false);
   const [jdOut, setJdOut] = useState("");
   const [posterImg, setPosterImg] = useState<string>("");
+
+  // adapter matching your previous setForm signature
+  const setForm = (next: React.SetStateAction<JobForm>) => {
+    if (typeof next === "function") {
+      // compute new state locally, then dispatch a serializable payload
+      const updated = next(structuredClone(form));
+      dispatch(replaceForm(updated));
+    } else {
+      dispatch(setFormMerge(next)); // partial merge
+    }
+  };
 
   // Build compact JD payload from existing form (low token)
   const salaryString =
@@ -49,11 +65,12 @@ const AIAssistPanel: React.FC<AIAssistPanelProps> = ({ form, setForm }) => {
   const jdPayload: JDPayload = useMemo(
     () => ({
       title: form.title?.trim() || "",
+      aiPrompt: form.aiPrompt?.trim() || "",
       description: form.description?.trim() || "",
       location: form.location?.trim() || "",
       salary: salaryString,
     }),
-    [form.title, form.description, form.location, salaryString]
+    [form.title, form.aiPrompt, form.description, form.location, salaryString]
   );
 
   // Poster uses only essential fields to keep tokens tiny
@@ -88,9 +105,9 @@ const AIAssistPanel: React.FC<AIAssistPanelProps> = ({ form, setForm }) => {
     }
   }
 
-  async function applyJDToForm() {
+  function applyJDToForm() {
     if (!jdOut) return;
-    setForm((s) => ({ ...s, description: jdOut }));
+    dispatch(setFormMerge({ description: jdOut })); // simpler, serializable
   }
 
   async function generatePoster() {
@@ -125,33 +142,17 @@ const AIAssistPanel: React.FC<AIAssistPanelProps> = ({ form, setForm }) => {
       setBusyPoster(false);
     }
   }
-
   return (
     <TabsContent value="ai" className="mt-4 space-y-6">
-      {/* Tiny helper prompt (optional, kept short to save tokens) */}
-      <div className="space-y-2">
-        <Label htmlFor="aiPrompt">Optional hint to AI (≤ 280 chars)</Label>
-        <Textarea
-          id="aiPrompt"
-          rows={3}
-          value={form.aiPrompt}
-          onChange={(e) =>
-            setForm({ ...form, aiPrompt: e.target.value.slice(0, 280) })
-          }
-          placeholder="Keep short, e.g., 'Tone: concise & ATS-friendly.'"
-        />
-      </div>
-
-      {/* JD Generator (runs here in AI Assist tab) */}
+      {/* JD Generator */}
       <section className="space-y-3 border rounded-xl p-4 bg-white">
         <div className="flex items-center gap-2">
-          <FileText className="h-4 w-4" />
+          <Bot className="h-5 w-5" />
           <h3 className="font-medium">
             AI-Enhanced Requirement Review & Refinement
           </h3>
         </div>
 
-        {/* Show the source fields (read-only preview) */}
         <div className="grid sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
           <div>
             <span className="font-medium text-foreground">Title:</span>{" "}
@@ -163,13 +164,26 @@ const AIAssistPanel: React.FC<AIAssistPanelProps> = ({ form, setForm }) => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="space-y-2">
+          <Textarea
+            id="aiPrompt"
+            rows={4}
+            value={form.aiPrompt}
+            onChange={(e) =>
+              setForm({ ...form, aiPrompt: e.target.value.slice(0, 280) })
+            }
+            placeholder="Keep short (≤280 chars), e.g., 'Tone: concise, ATS-friendly.'"
+          />
+        </div>
+
+        <div className="flex items-center justify-between gap-2">
           <Button onClick={generateJD} disabled={busyJD} className="gap-2">
             <Wand2 className="h-4 w-4" />
-            {busyJD ? "Generating…" : "Generate JD"}
+            {busyJD ? "Generating…" : "Generate Job Description"}
           </Button>
           <Button variant="outline" onClick={applyJDToForm} disabled={!jdOut}>
-            Use JD in form
+            <FileText className="h-4 w-4 text-muted-foreground" />
+            Use Job Description in form
           </Button>
         </div>
 
@@ -180,7 +194,7 @@ const AIAssistPanel: React.FC<AIAssistPanelProps> = ({ form, setForm }) => {
         )}
       </section>
 
-      {/* Poster Generator (single image) */}
+      {/* Poster Generator */}
       <section className="space-y-3 border rounded-xl p-4 bg-white">
         <div className="flex items-center gap-2">
           <ImageIcon className="h-4 w-4" />
@@ -244,6 +258,7 @@ const AIAssistPanel: React.FC<AIAssistPanelProps> = ({ form, setForm }) => {
 
         {posterImg && (
           <div className="space-y-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={posterImg}
               alt="Generated poster"

@@ -1,40 +1,41 @@
-import Platforms, { platformMeta } from "@/components/Platforms";
+"use client";
+
+import React, { useState } from "react";
+import { TabsContent } from "@radix-ui/react-tabs";
+import { Label } from "@radix-ui/react-label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@radix-ui/react-label";
-import { TabsContent } from "@radix-ui/react-tabs";
+import { Badge } from "@/components/ui/badge";
 import {
   Calendar,
-  CheckCircle2,
   Globe,
   PauseCircle,
   PlayCircle,
+  CheckCircle2,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import React, { useState } from "react";
 import { toast } from "sonner";
-import { JobForm } from "@/types/jobform";
 
-export interface SchedulePanelProps {
-  form: JobForm;
-  setForm: React.Dispatch<React.SetStateAction<JobForm>>;
-}
+import Platforms, { platformMeta } from "@/components/platforms";
 
-const SchedulePanel: React.FC<SchedulePanelProps> = ({ form, setForm }) => {
+// redux
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import {
+  setForm as setFormMerge,
+  togglePlatform as togglePlatformAction,
+} from "@/store/jobFormSlice";
+
+const SchedulePanel: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const form = useAppSelector((s) => s.jobForm);
+
+  // local UI state only (not in redux)
   const [posting, setPosting] = useState<
     "idle" | "queued" | "posting" | "done" | "error"
   >("idle");
 
+  // pure action (NO function payloads)
   function togglePlatform(key: string) {
-    setForm((prev) => {
-      const has = prev.platforms.includes(key);
-      return {
-        ...prev,
-        platforms: has
-          ? prev.platforms.filter((k) => k !== key)
-          : [...prev.platforms, key],
-      };
-    });
+    dispatch(togglePlatformAction(key));
   }
 
   function handleApproveAndQueue() {
@@ -45,11 +46,11 @@ const SchedulePanel: React.FC<SchedulePanelProps> = ({ form, setForm }) => {
   async function handlePostNow() {
     try {
       setPosting("posting");
-      // Simulate async work
+      // simulate async work
       await new Promise((res) => setTimeout(res, 1200));
       setPosting("done");
       toast.success("Posted to selected platforms (demo)");
-    } catch (e) {
+    } catch {
       setPosting("error");
       toast.error("Failed to post (demo)");
     }
@@ -70,13 +71,16 @@ const SchedulePanel: React.FC<SchedulePanelProps> = ({ form, setForm }) => {
               id="schedule"
               type="datetime-local"
               value={form.schedule}
-              onChange={(e) => setForm({ ...form, schedule: e.target.value })}
+              onChange={(e) =>
+                dispatch(setFormMerge({ schedule: e.target.value }))
+              }
             />
           </div>
           <p className="text-xs text-muted-foreground">
             Leave blank to post immediately.
           </p>
         </div>
+
         <div className="space-y-2">
           <Label>Destination</Label>
           <div className="flex flex-wrap gap-2">
@@ -95,14 +99,16 @@ const SchedulePanel: React.FC<SchedulePanelProps> = ({ form, setForm }) => {
           </div>
         </div>
       </div>
+
       <div>
         <Platforms platforms={form.platforms} togglePlatform={togglePlatform} />
       </div>
 
       <div className="flex flex-wrap gap-2">
         <Button className="gap-2" onClick={handleApproveAndQueue}>
-          <CheckCircle2 className="h-4 w-4" /> Approve & Queue
+          <CheckCircle2 className="h-4 w-4" /> Approve &amp; Queue
         </Button>
+
         <Button variant="outline" className="gap-2" onClick={handlePostNow}>
           {posting === "posting" ? (
             <>
@@ -114,6 +120,7 @@ const SchedulePanel: React.FC<SchedulePanelProps> = ({ form, setForm }) => {
             </>
           )}
         </Button>
+
         {posting !== "idle" && (
           <Button variant="ghost" onClick={resetFlow}>
             Reset

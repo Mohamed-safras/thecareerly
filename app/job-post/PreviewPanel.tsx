@@ -1,20 +1,20 @@
-import { platformMeta } from "@/components/Platforms";
-import { Badge } from "@/components/ui/badge";
-import { JobForm } from "@/types/jobform";
-import MarkdownEditor from "@uiw/react-markdown-editor";
-import { ImageIcon } from "lucide-react";
+"use client";
+
 import React from "react";
+import { useAppSelector } from "@/store/hooks";
+import { platformMeta } from "@/components/platforms";
+import { Badge } from "@/components/ui/badge";
+import MarkdownEditor from "@uiw/react-md-editor";
+import { ImageIcon } from "lucide-react";
+
 export interface PreviewPanelProps {
-  form: JobForm;
-  logoPreview: string | null;
   compact?: boolean;
 }
 
-const PreviewPanel: React.FC<PreviewPanelProps> = ({
-  form,
-  logoPreview,
-  compact,
-}) => {
+const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
+  const form = useAppSelector((s) => s.jobForm);
+  const logoPreview = useAppSelector((s) => s.ui.logoPreview);
+
   function prettyCurrency(code?: string) {
     if (!code) return "";
     return code.toUpperCase();
@@ -36,14 +36,21 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({
           )}
         </div>
         <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap  flex-col">
             <h3 className="truncate text-base font-semibold md:text-lg">
               {form.title || "Untitled Role"}
             </h3>
-            <Badge variant="secondary">{form.location || "Location TBD"}</Badge>
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary">
+                {form.location || "Location TBD"}
+              </Badge>
+              <Badge variant="secondary">
+                {form.jobType || "Job Type TBD"}
+              </Badge>
+            </div>
           </div>
           {(form.salaryMin || form.salaryMax || form.currency) && (
-            <div className="text-xs text-muted-foreground">
+            <div className="text-xs text-muted-foreground mt-2">
               {form.salaryMin && (
                 <span>
                   {prettyCurrency(form.currency)} {form.salaryMin}
@@ -65,6 +72,10 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({
         style={{
           backgroundColor: "white",
           color: "black",
+          fontSize: "14px",
+          lineHeight: "1.6",
+          padding: "0.75rem",
+          borderRadius: "0.5rem",
         }}
       />
 

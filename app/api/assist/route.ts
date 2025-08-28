@@ -1,3 +1,5 @@
+import { POSTER_SIZE } from "@/constent/GenAiConstent";
+import { JobDescriptionInput, PosterInput } from "@/types/GenAITypes";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
@@ -11,31 +13,6 @@ const JD_MAX_TOKENS = 350; // concise JD
 const JD_TEMP = 0.4;
 
 const POSTER_MODEL = "gpt-image-1";
-const POSTER_SIZE = "768x768" as
-  | "512x512"
-  | "1024x1024"
-  | "auto"
-  | "1536x1024"
-  | "1024x1536"
-  | "256x256"
-  | "1792x1024"
-  | "1024x1792"
-  | null
-  | "512x512";
-
-type JDInput = {
-  title: string;
-  description?: string; // 1–3 lines max (optional)
-};
-
-type PosterInput = {
-  jobTitle: string;
-  brandColorHex?: string; // e.g. "#00A8E8"
-  companyName?: string;
-  mustUseLogo?: boolean; // if your UI will overlay logo itself, set false
-  vibe?: "professional" | "modern" | "minimal" | "vibrant";
-  notes?: string; // e.g., "white title text, subtle shapes"
-};
 
 export async function POST(req: NextRequest) {
   try {
@@ -51,7 +28,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (mode === "jd") {
-      const data = body?.payload as JDInput | undefined;
+      const data = body?.payload as JobDescriptionInput | undefined;
       if (!data || !data.title) {
         return NextResponse.json(
           { error: "JD payload requires at least: { title }" },
@@ -60,16 +37,22 @@ export async function POST(req: NextRequest) {
       }
 
       // Build a compact prompt (tiny system + minimal user)
-      const system =
-        "You write concise job descriptions. Keep output short, skimmable, and ATS-friendly. Use bullet points. Avoid fluff.";
-      const user = compactJDUserPrompt(data);
+      function setSystemPrompt(extraPrompt: string) {
+        const system = `You write concise job descriptions. 
+        Keep output short, skimmable, and ATS-friendly. 
+        Use bullet points. Avoid fluff. 
+        consider whatever extra ai prompt as well ${extraPrompt}, do not mention the job title again in the response , also each heading should be bold`;
+        return system;
+      }
+
+      const user = compactJobDescriptionUserPrompt(data);
 
       const resp = await client.chat.completions.create({
         model: JD_MODEL,
         max_tokens: JD_MAX_TOKENS,
         temperature: JD_TEMP,
         messages: [
-          { role: "system", content: system },
+          { role: "system", content: setSystemPrompt(data.aiPrompt) },
           { role: "user", content: user },
         ],
       });
@@ -126,18 +109,18 @@ export async function POST(req: NextRequest) {
   }
 }
 
-function compactJDUserPrompt(d: JDInput) {
+function compactJobDescriptionUserPrompt(d: JobDescriptionInput) {
   // Keep everything crisp; no long context → fewer tokens
   // If a field is missing, omit it (no filler)
   return [
     `Write a concise JD for: ${d.title}`,
     d.description ? `Summary: ${oneLine(d.description)}` : "",
     "Format:",
-    "* About the role (2–3 lines)",
-    "* Key Responsibilities (4–6 bullets)",
-    "* Required Qualifications (5–8 bullets)",
-    "* Nice to Have (optional, 3–5 bullets)",
-    "* How to Apply (1 line)",
+    "About the role (3–4 lines)",
+    "Key Responsibilities (4–8 bullets)",
+    "Required Qualifications (5–8 bullets)",
+    "Nice to Have (optional, 3–5 bullets)",
+    "How to Apply (1 line)",
   ]
     .filter(Boolean)
     .join("\n");
