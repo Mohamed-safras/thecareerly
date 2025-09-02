@@ -90,14 +90,12 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
       <MarkdownEditor.Markdown
         source={description || "No description yet."}
         style={{
-          backgroundColor: "white",
-          color: "black",
           fontSize: "14px",
           lineHeight: "1.6",
-
           borderRadius: "0.5rem",
+          background: "transparent",
         }}
-        className="max-h-120 overflow-y-scroll"
+        className="max-h-120 overflow-y-scroll p-4"
       />
 
       <div className="flex flex-wrap gap-2">

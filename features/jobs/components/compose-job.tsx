@@ -22,7 +22,7 @@ import { slugify } from "@/lib/common/common";
 import { jobTitleOptions } from "@/data/jobtitles";
 
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setForm as setFormMerge } from "@/store/jobFormSlice";
+import { setForm as setFormMerge } from "@/features/jobs/jobs-slice";
 
 import { AnimatedIconButton } from "@/components/animatediconbutton";
 import { EMPLOYMENT_TYPES, employmentTypeValue } from "@/data/employmentTypes";
@@ -30,9 +30,9 @@ import {
   workArragementTypeValue,
   WORKARRANGMENTS_TYPES,
 } from "@/data/workArrangments";
-import useAIGenerateJobDescription from "@/hooks/useAIGenerateJobDescription";
+import useAIGenerateJobDescription from "@/hooks/use-ai-generate-Job-description";
 import CircleSpinner from "@/components/circlespinner";
-import { useUndoRedo } from "@/hooks/useUndoRedo";
+import { useUndoRedo } from "@/hooks/use-undo-redo";
 import { FormErrors } from "@/types/formErrors";
 
 const LOCAL_STORE_KEY = "job_title_options";
@@ -312,11 +312,11 @@ const ComposePanel: React.FC = () => {
               }
               dispatch(setFormMerge({ description: v }));
             }}
-            classNames="relative"
+            classNames="relative bg-transparent"
           />
 
           {generating && (
-            <div className="absolute inset-0 bg-background/50 backdrop-blur-sm flex items-center justify-center rounded-lg">
+            <div className="absolute inset-0 backdrop-blur-sm flex items-center justify-center rounded-lg">
               <CircleSpinner size={56} />
             </div>
           )}

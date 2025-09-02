@@ -72,7 +72,7 @@ const AIAssistPanel: React.FC = () => {
       {/* JD Generator */}
 
       {/* Poster Generator */}
-      <section className="space-y-3 border rounded-xl p-4 bg-white">
+      <section className="space-y-3 border rounded-xl p-4">
         <div className="flex items-center gap-2">
           <ImageIcon className="h-4 w-4" />
           <h3 className="font-medium">Generate Hiring Poster (one image)</h3>

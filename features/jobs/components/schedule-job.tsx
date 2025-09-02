@@ -22,9 +22,9 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   setForm as setFormMerge,
   togglePlatform as togglePlatformAction,
-} from "@/store/jobFormSlice";
+} from "@/features/jobs/jobs-slice";
 import { Switch } from "@/components/ui/switch";
-import useFileHandler from "@/hooks/useFileHandler";
+import useFileHandler from "@/hooks/use-file-handler";
 
 const SchedulePanel: React.FC = () => {
   const dispatch = useAppDispatch();

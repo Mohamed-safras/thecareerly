@@ -1,4 +1,4 @@
-import { POSTER_SIZE } from "@/constent/GenAiConstent";
+import { POSTER_SIZE } from "@/constents/gen-ai-constent";
 import {
   buildJDUserPrompt,
   oneLine,

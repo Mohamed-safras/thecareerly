@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, Draft } from "@reduxjs/toolkit";
-import type { JobForm } from "@/types/jobForm";
+import type { JobForm } from "@/types/job";
 
 const initialState: JobForm = {
   title: "",

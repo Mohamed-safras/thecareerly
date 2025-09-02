@@ -29,10 +29,7 @@ const MarkdownEditor: React.FC<MarkDownEditorProps> = ({
   if (!mounted) return null;
 
   return (
-    <div
-      className={`rounded-xl border bg-white ${classNames}`}
-      data-color-mode="light"
-    >
+    <div className={`rounded-xl border ${classNames}`} data-color-mode="light">
       <MDEditor
         value={value}
         height={height}
@@ -43,7 +40,6 @@ const MarkdownEditor: React.FC<MarkDownEditorProps> = ({
           spellCheck: true,
           "aria-label": "Markdown editor",
         }}
-        style={{ backgroundColor: "#fff", color: "#000" }}
         className="placeholder:text-6xl"
       />
 

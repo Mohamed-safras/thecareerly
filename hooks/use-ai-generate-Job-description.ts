@@ -1,5 +1,5 @@
 import { AIPromptInput } from "@/types/GenAITypes";
-import { JobForm } from "@/types/jobForm";
+import { JobForm } from "@/types/job";
 import { useMemo, useState } from "react";
 
 const useAIGenerateJobDescription = (form: JobForm) => {
@@ -23,7 +23,7 @@ const useAIGenerateJobDescription = (form: JobForm) => {
     setJobDescriptionOutput("Generating job description...");
 
     try {
-      const res = await fetch("/api/assist", {
+      const res = await fetch("/api/gen-ai-description", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ mode: "jd", payload: aiPromptInputs }),

@@ -4,7 +4,7 @@ import { useAppDispatch } from "@/store/hooks";
 import {
   setForm as setFormMerge,
   setLogoPreview as setLogoPreviewAction,
-} from "@/store/jobFormSlice";
+} from "@/features/jobs/jobs-slice";
 
 const useFileHandler = (fileId: string | null) => {
   const dispatch = useAppDispatch();

@@ -14,22 +14,29 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Sparkles } from "lucide-react";
-import ComposePanel from "./ComposePanel";
-import SchedulePanel from "./SchedulePanel";
-import PreviewPanel from "./PreviewPanel";
-import AIAssistPanel from "./AIAssistPanel";
+import ComposePanel from "@/features/jobs/components/compose-job";
+import AIAssistPanel from "@/features/jobs/components/AI-assist";
+import SchedulePanel from "@/features/jobs/components/schedule-job";
+import PreviewPanel from "@/features/jobs/components/preview-job";
+import HiringShell from "@/features/jobs/components/hiring-shell";
 
 export default function JobPost() {
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-white to-slate-50 p-4 md:p-8">
+    <HiringShell
+      breadCrumpPage="Create"
+      breadCrumbsItems={[
+        { label: "Hiring", link: "/hiring" },
+        { label: "Jobs", link: "/hiring/jobs" },
+      ]}
+    >
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="mx-auto grid max-w-7xl grid-cols-1 gap-6 md:grid-cols-6"
+        className="mx-auto grid max-w-8xl grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-9 p-4"
       >
         {/* Left column: Controls */}
-        <div className="sm:col-span-1 md:col-span-3 space-y-6">
+        <div className="sm:col-span-1 lg:col-span-5 space-y-6">
           <Card className="shadow-sm rounded-2xl">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-xl">
@@ -78,8 +85,8 @@ export default function JobPost() {
         </div>
 
         {/* Right column: Live Preview (sticky) */}
-        <div className="sm:col-span-1 md:col-span-3">
-          <div className="md:sticky md:top-8 space-y-6">
+        <div className="sm:col-span-1 lg:col-span-4">
+          <div className="md:sticky md:top-15 space-y-6">
             <Card className="shadow-sm rounded-2xl">
               <CardHeader>
                 <CardTitle className="text-lg">Live Preview</CardTitle>
@@ -92,6 +99,6 @@ export default function JobPost() {
           </div>
         </div>
       </motion.div>
-    </div>
+    </HiringShell>
   );
 }
