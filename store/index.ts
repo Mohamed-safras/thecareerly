@@ -1,0 +1,12 @@
+import { configureStore } from "@reduxjs/toolkit";
+import jobFormReducer from "../features/jobs/jobs-slice";
+
+export const store = configureStore({
+  reducer: {
+    jobForm: jobFormReducer,
+  },
+  // middleware, devTools defaults are fine
+});
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
