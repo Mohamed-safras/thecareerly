@@ -12,7 +12,7 @@ export default function HiringShell({
   breadCrumpPage,
   breadCrumbsItems,
 }: {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   breadCrumpPage: string;
   breadCrumbsItems: BreadcrumbItem[];
 }) {

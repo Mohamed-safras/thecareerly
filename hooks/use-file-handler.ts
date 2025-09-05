@@ -1,4 +1,4 @@
-import { putFile, removeFile } from "@/lib/uploadsvault";
+import { putFile, removeFile } from "@/lib/common/uploadsvault";
 import { useAppDispatch } from "@/store/hooks";
 
 import {
@@ -6,7 +6,7 @@ import {
   setLogoPreview as setLogoPreviewAction,
 } from "@/features/jobs/jobs-slice";
 
-const useFileHandler = (fileId: string | null) => {
+const useFileHandler = (fileId?: string | null) => {
   const dispatch = useAppDispatch();
 
   function handleFileChange(file?: File | null) {

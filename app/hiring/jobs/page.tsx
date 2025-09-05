@@ -121,11 +121,8 @@ export const sampleJobs: JobPosting[] = [
 const JobOpenings = () => {
   return (
     <HiringShell
-      breadCrumpPage="Create"
-      breadCrumbsItems={[
-        { label: "Hiring", link: "/hiring" },
-        { label: "Jobs", link: "/hiring/jobs" },
-      ]}
+      breadCrumpPage="Jobs"
+      breadCrumbsItems={[{ label: "Hiring", link: "/hiring" }]}
     >
       <div className="mx-auto max-w-8xl p-4">
         <JobsOpeningHeader

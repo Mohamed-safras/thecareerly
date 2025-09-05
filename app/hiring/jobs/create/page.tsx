@@ -12,10 +12,9 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 import { Sparkles } from "lucide-react";
 import ComposePanel from "@/features/jobs/components/compose-job";
-import AIAssistPanel from "@/features/jobs/components/AI-assist";
 import SchedulePanel from "@/features/jobs/components/schedule-job";
 import PreviewPanel from "@/features/jobs/components/preview-job";
 import HiringShell from "@/features/jobs/components/hiring-shell";
@@ -50,9 +49,9 @@ export default function JobPost() {
 
             <CardContent>
               <Tabs defaultValue="compose" className="w-full">
-                <TabsList className="grid w-full grid-cols-3">
+                <TabsList className="grid w-full grid-cols-2">
                   <TabsTrigger value="compose">Compose</TabsTrigger>
-                  <TabsTrigger value="ai">AI Assist</TabsTrigger>
+                  {/* <TabsTrigger value="ai">AI Assist</TabsTrigger> */}
                   <TabsTrigger value="schedule">
                     Schedule &amp; Publish
                   </TabsTrigger>
@@ -60,7 +59,7 @@ export default function JobPost() {
 
                 <ComposePanel />
 
-                <AIAssistPanel />
+                {/* <AIAssistPanel /> */}
 
                 <SchedulePanel />
               </Tabs>

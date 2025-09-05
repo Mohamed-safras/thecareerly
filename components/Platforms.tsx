@@ -14,7 +14,7 @@ export const platformMeta: Record<
 };
 
 export interface PlatformsProps {
-  platforms: string[];
+  platforms?: string[];
   togglePlatform: (platform: string) => void;
 }
 
@@ -22,10 +22,10 @@ const Platforms: React.FC<PlatformsProps> = ({ platforms, togglePlatform }) => {
   return (
     <div className="space-y-2">
       <Label>Post to Platforms</Label>
-      <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
         {Object.entries(platformMeta).map(([key, meta]) => {
           const id = `platform-${key}`;
-          const checked = platforms.includes(key);
+          const checked = platforms?.includes(key);
           return (
             <div
               key={key}

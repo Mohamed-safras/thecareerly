@@ -1,8 +1,9 @@
 // prompts/jd.ts
-import type { AIPromptInput } from "@/types/GenAITypes";
+import type { AIPromptInput } from "@/types/gen-AI-types";
+import { oneLine } from "../utils/utils";
 
 // ---------- System Prompt ----------
-export function setSystemPromptJobDescriptionBuilder() {
+function setSystemPromptJobDescriptionBuilder() {
   return [
     `You write concise, skimmable, ATS-friendly Job Descriptions in Markdown.`,
     `Rules:`,
@@ -42,7 +43,7 @@ export function setSystemPromptJobDescriptionBuilder() {
 }
 
 // ---------- User Prompt Builder ----------
-export function buildJDUserPrompt(d: AIPromptInput) {
+function buildJobDescriptionUserPrompt(d: AIPromptInput) {
   const H = (s: string) => `**${s}**`;
   const lines: string[] = [];
 
@@ -121,7 +122,4 @@ export function buildJDUserPrompt(d: AIPromptInput) {
   return lines.filter(Boolean).join("\n");
 }
 
-// ---------- Util ----------
-export function oneLine(s: string) {
-  return s.replace(/\s+/g, " ").trim();
-}
+export { setSystemPromptJobDescriptionBuilder, buildJobDescriptionUserPrompt };

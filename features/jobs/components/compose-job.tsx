@@ -17,23 +17,26 @@ import { TabsContent } from "@radix-ui/react-tabs";
 import { Sparkles, RotateCcw, RotateCw } from "lucide-react";
 
 import { Combobox, type ComboItem } from "@/components/combobox";
-import { localStoreGet, localStoreSet } from "@/lib/localstore";
-import { slugify } from "@/lib/common/common";
+import { localStoreGet, localStoreSet } from "@/lib/common/localstore";
+import { slugify } from "@/lib/utils/utils";
 import { jobTitleOptions } from "@/data/jobtitles";
 
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setForm as setFormMerge } from "@/features/jobs/jobs-slice";
 
 import { AnimatedIconButton } from "@/components/animatediconbutton";
-import { EMPLOYMENT_TYPES, employmentTypeValue } from "@/data/employmentTypes";
+import {
+  EMPLOYMENT_TYPES,
+  employmentTypeValue,
+} from "@/types/employment-types";
 import {
   workArragementTypeValue,
   WORKARRANGMENTS_TYPES,
-} from "@/data/workArrangments";
+} from "@/types/work-arrangments-types";
 import useAIGenerateJobDescription from "@/hooks/use-ai-generate-Job-description";
 import CircleSpinner from "@/components/circlespinner";
 import { useUndoRedo } from "@/hooks/use-undo-redo";
-import { FormErrors } from "@/types/formErrors";
+import { FormErrors } from "@/types/form-errors";
 
 const LOCAL_STORE_KEY = "job_title_options";
 
@@ -145,7 +148,7 @@ const ComposePanel: React.FC = () => {
   const show = (k: keyof FormErrors) => showErrors && hasError(k);
 
   return (
-    <TabsContent value="compose" className="mt-4 space-y-4">
+    <TabsContent value="compose" className="mt-4 space-y-4 rounded border p-4">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="space-y-1.5">
           <Label htmlFor="job-title">Job Title</Label>

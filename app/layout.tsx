@@ -3,9 +3,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "./providers";
 import { ThemeProvider } from "@/components/theme-provider";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { cookies } from "next/headers";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -33,6 +34,7 @@ export default async function RootLayout({
             <SidebarProvider defaultOpen={defaultOpen}>
               <AppSidebar />
               {children}
+              <Toaster richColors position="top-center" expand={true} />
             </SidebarProvider>
           </Providers>
         </ThemeProvider>

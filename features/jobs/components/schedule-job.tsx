@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { Label } from "@radix-ui/react-label";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import {
   PauseCircle,
   PlayCircle,
   CheckCircle2,
-  Upload,
+  RotateCcw,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -24,13 +24,11 @@ import {
   togglePlatform as togglePlatformAction,
 } from "@/features/jobs/jobs-slice";
 import { Switch } from "@/components/ui/switch";
-import useFileHandler from "@/hooks/use-file-handler";
+import AIAssistPanel from "./AI-poster-generator";
 
 const SchedulePanel: React.FC = () => {
   const dispatch = useAppDispatch();
   const form = useAppSelector((s) => s.jobForm);
-  const { handleFileChange } = useFileHandler(form.logoFileId);
-  const fileRef = useRef<HTMLInputElement | null>(null);
 
   // local UI state only (not in redux)
   const [posting, setPosting] = useState<
@@ -65,7 +63,26 @@ const SchedulePanel: React.FC = () => {
   }
 
   return (
-    <TabsContent value="schedule" className="mt-4 space-y-4">
+    <TabsContent value="schedule" className="mt-4 space-y-4 border p-4 rounded">
+      <Platforms platforms={form.platforms} togglePlatform={togglePlatform} />
+
+      <div className="space-y-2">
+        <Label htmlFor="include-multimedia">Include Multimedia</Label>
+        <div id="include-multimedia" className="flex items-center gap-2">
+          <Switch
+            checked={form.includeMultimedia}
+            onCheckedChange={(v) =>
+              dispatch(setFormMerge({ includeMultimedia: v }))
+            }
+          />
+          <span className="text-sm text-muted-foreground">
+            Logos, banners, videos
+          </span>
+        </div>
+      </div>
+
+      {form.includeMultimedia && <AIAssistPanel />}
+
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="schedule">Schedule (optional)</Label>
@@ -84,48 +101,9 @@ const SchedulePanel: React.FC = () => {
             Leave blank to post immediately.
           </p>
         </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="include-multimedia">Include Multimedia</Label>
-          <div id="include-multimedia" className="flex items-center gap-2">
-            <Switch
-              checked={form.includeMultimedia}
-              onCheckedChange={(v) =>
-                dispatch(setFormMerge({ includeMultimedia: v }))
-              }
-            />
-            <span className="text-sm text-muted-foreground">
-              Logos, banners, videos
-            </span>
-          </div>
-        </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2">
-        <div className="space-y-1.5">
-          <Label htmlFor="company-logo">Company Logo</Label>
-          <div id="company-logo" className="flex items-center gap-3">
-            <Input
-              ref={fileRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={(e) => handleFileChange(e.target.files?.[0])}
-            />
-            <Button
-              variant="outline"
-              className="gap-2"
-              onClick={() => fileRef.current?.click()}
-            >
-              <Upload className="h-4 w-4" /> Upload
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      <Platforms platforms={form.platforms} togglePlatform={togglePlatform} />
-
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <Button className="gap-2" onClick={handleApproveAndQueue}>
           <CheckCircle2 className="h-4 w-4" /> Approve &amp; Queue
         </Button>
@@ -137,13 +115,14 @@ const SchedulePanel: React.FC = () => {
             </>
           ) : (
             <>
-              <PlayCircle className="h-4 w-4" /> Post Now (demo)
+              <PlayCircle className="h-4 w-4" /> Post No w (demo)
             </>
           )}
         </Button>
 
         {posting !== "idle" && (
-          <Button variant="ghost" onClick={resetFlow}>
+          <Button variant="secondary" onClick={resetFlow}>
+            <RotateCcw />
             Reset
           </Button>
         )}

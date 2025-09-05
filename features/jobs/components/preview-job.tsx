@@ -6,7 +6,7 @@ import { platformMeta } from "@/components/platforms";
 import { Badge } from "@/components/ui/badge";
 import MarkdownEditor from "@uiw/react-md-editor";
 import { ImageIcon } from "lucide-react";
-import { employmentTypeValue } from "@/data/employmentTypes";
+import { employmentTypeValue } from "@/types/employment-types";
 
 export interface PreviewPanelProps {
   compact?: boolean;
@@ -15,6 +15,7 @@ export interface PreviewPanelProps {
 const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
   const {
     title,
+    companyName,
     location,
     employmentType,
     workArragement,
@@ -46,7 +47,7 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
             <ImageIcon className="h-5 w-5 text-muted-foreground" />
           )}
         </div>
-        <h1 className="text-base font-medium md:text-xl">Acentura Inc!</h1>
+        <h1 className="text-base font-medium md:text-xl">{companyName}</h1>
       </div>
 
       <div className="flex items-center gap-3">
@@ -86,17 +87,20 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
           )}
         </div>
       </div>
-
-      <MarkdownEditor.Markdown
-        source={description || "No description yet."}
-        style={{
-          fontSize: "14px",
-          lineHeight: "1.6",
-          borderRadius: "0.5rem",
-          background: "transparent",
-        }}
-        className="max-h-120 overflow-y-scroll p-4"
-      />
+      {description ? (
+        <MarkdownEditor.Markdown
+          source={description}
+          style={{
+            fontSize: "14px",
+            lineHeight: "1.6",
+            borderRadius: "0.5rem",
+            background: "transparent",
+          }}
+          className="max-h-[30rem] overflow-y-auto"
+        />
+      ) : (
+        <p className="text-sm">No description yet.</p>
+      )}
 
       <div className="flex flex-wrap gap-2">
         {platforms?.map((p) => (

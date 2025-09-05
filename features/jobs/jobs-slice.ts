@@ -3,6 +3,7 @@ import type { JobForm } from "@/types/job";
 
 const initialState: JobForm = {
   title: "",
+  companyName: "Acentura",
   employmentType: "",
   workArragement: "",
   description: "",
@@ -16,6 +17,8 @@ const initialState: JobForm = {
   platforms: [],
   logoFileId: null,
   logoPreview: null,
+  posterVibe: "minimal",
+  posterNotes: "",
 };
 
 const jobFormSlice = createSlice({
@@ -41,10 +44,10 @@ const jobFormSlice = createSlice({
     // toggle a platform (used by SchedulePanel)
     togglePlatform: (state, action: PayloadAction<string>) => {
       const key = action.payload;
-      const has = state.platforms.includes(key);
+      const has = state?.platforms?.includes(key);
       state.platforms = has
-        ? state.platforms.filter((k) => k !== key)
-        : [...state.platforms, key];
+        ? state?.platforms?.filter((k) => k !== key)
+        : [...state?.platforms, key];
     },
 
     setLogoPreview: (state, action: PayloadAction<string | null>) => {

@@ -126,7 +126,7 @@ export function JobPostingCard({ job }: { job: JobPosting }) {
           <div className="flex items-center justify-between text-sm">
             <div className="inline-flex items-center gap-2 text-muted-foreground">
               <CalendarDays className="h-4 w-4" />
-              <span className="text-xs md:text-sm">
+              <span className="text-xs">
                 Posted at <span className="font-semibold">{job.postedAt}</span>
                 <span className="mx-1">•</span> Close at{" "}
                 <span className="font-semibold">{job.closeAt}</span>
