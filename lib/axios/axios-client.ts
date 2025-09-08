@@ -46,7 +46,6 @@ function extractMessage(
 }
 
 export const axiosClient: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "/api",
   timeout: 20_000,
   headers: { "Content-Type": "application/json" },
 });

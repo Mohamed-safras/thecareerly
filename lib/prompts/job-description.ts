@@ -1,6 +1,23 @@
 // prompts/jd.ts
-import type { AIPromptInput } from "@/types/gen-AI-types";
-import { oneLine } from "../utils/utils";
+import type { AIPromptInput } from "@/types/gen-AI";
+import { oneLine } from "../utils";
+
+function parseBenefits(benefits?: string[] | string): string[] {
+  if (!benefits) return [];
+  const items = Array.isArray(benefits) ? benefits : benefits.split(",");
+  // Trim, remove empties, de-duplicate (case-insensitive), preserve first-seen order
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const raw of items) {
+    const v = String(raw).trim();
+    if (!v) continue;
+    const key = v.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(v);
+  }
+  return out;
+}
 
 // ---------- System Prompt ----------
 function setSystemPromptJobDescriptionBuilder() {
@@ -16,11 +33,11 @@ function setSystemPromptJobDescriptionBuilder() {
     `- Ignore input that is irrelevant to JD creation.`,
     ``,
     `Required section order and shapes:`,
-    `1) **About the Role** — one short paragraph (2–4 sentences). Start naturally (e.g., “We are seeking…”, “You will…”).`,
+    `1) **About the Role** — one short paragraph (2–5 sentences). Start naturally (e.g., “We are seeking…”, “You will…”).`,
     `2) **Key Responsibilities** — 4–8 bullets.`,
     `3) **Required Qualifications** — 5–8 bullets.`,
     `4) **Nice to Have** — 3–5 bullets (omit if empty).`,
-    `5) **What We Offer** — bullets (only if benefits are provided).`,
+    `5) **What We Offer** — bullets with very short straight forward explantion (only if benefits are provided).`,
     `6) **How to Apply** — exactly ONE sentence (NO bullet), only if a method/link (URL or email) is provided.`,
     `7) **Source** — include the provided URL only (optional).`,
     ``,
@@ -55,7 +72,7 @@ function buildJobDescriptionUserPrompt(d: AIPromptInput) {
       : ``
   );
 
-  // Global format guards (explicitly forbid hashtags in How to Apply)
+  // Global format guards
   lines.push(
     `Follow the section order exactly. Under each heading (except About the Role) write bullets.`,
     `For **How to Apply**, write exactly one sentence with no bullet and DO NOT mention hashtags.`,
@@ -78,10 +95,12 @@ function buildJobDescriptionUserPrompt(d: AIPromptInput) {
     `- 3–5 optional bullets (include only if content exists)`
   );
 
-  // What We Offer (only if explicit benefits provided)
-  if (Array.isArray(d.benefits) && d.benefits.length > 0) {
-    lines.push(``, H("What We Offer"), ...d.benefits.map((b) => `- ${b}`));
+  // What We Offer — dynamic, comma-separated (or array) -> bullets
+  const parsedBenefits = parseBenefits(d.benefits as string[]);
+  if (parsedBenefits.length > 0) {
+    lines.push(``, H("What We Offer"), ...parsedBenefits.map((b) => `- ${b}`));
   } else {
+    // If nothing provided, instruct generator to omit the section in final output
     lines.push(
       ``,
       H("What We Offer"),
@@ -90,8 +109,9 @@ function buildJobDescriptionUserPrompt(d: AIPromptInput) {
   }
 
   // How to Apply — single sentence, NO bullet, NO hashtags
-  if (d.applyUrl) {
-    lines.push(``, H("How to Apply"), `Apply via ${d.applyUrl}`);
+  const applyTarget = d.applyUrl;
+  if (applyTarget) {
+    lines.push(``, H("How to Apply"), `Apply via ${applyTarget}`);
   } else {
     lines.push(
       ``,
@@ -100,7 +120,7 @@ function buildJobDescriptionUserPrompt(d: AIPromptInput) {
     );
   }
 
-  // Optional Source section if provided
+  // Optional Source
   if (d.sourceUrl) {
     lines.push(``, H("Source"), d.sourceUrl);
   }
@@ -113,7 +133,7 @@ function buildJobDescriptionUserPrompt(d: AIPromptInput) {
       `Honor these extra requests if relevant: ${d.extras.join("; ")}`
     );
 
-  // Final directive for hashtags line (no heading, no extra words)
+  // Final directive for hashtags
   lines.push(
     ``,
     `Finally, output ONE line of 6–10 auto-generated, space-separated hashtags based on the role domain, core skills/tech, seniority, work arrangement, and location. Exclude job-title words. The line must contain ONLY hashtags and nothing else.`

@@ -1,15 +1,22 @@
 // types/job.ts
-import type { PosterVibe } from "@/types/poster-types";
+import type { PosterVibe } from "@/types/poster-vibe";
+import { Question } from "./question";
 
 export type JobForm = {
   title: string;
   employmentType?: string;
-  workArragement?: string;
+  workPreference?: string;
+  jobSeniority?: string;
+  minimumQualificationLevel?: string;
+  facilities: string[]; // array of facility keys
   description?: string;
   location?: string;
-  salaryMin?: string;
-  salaryMax?: string;
-  currency?: string;
+  salary: {
+    min?: string;
+    max?: string;
+    currency?: string;
+    payPeriod?: string;
+  };
   schedule?: string; // datetime-local
   aiPrompt?: string;
   includeMultimedia?: boolean;
@@ -20,20 +27,13 @@ export type JobForm = {
   companyName?: string;
   posterVibe: PosterVibe;
   posterNotes: string;
+  questions: Question[]; // array of question ids
 };
 
-export interface JobPosting {
-  status: "Open" | "Hold" | "Closed" | "Draft";
-  role: string;
-  department: string;
-  employmentType: string;
-  location: string;
-  workplace: string;
-  candidatesApplied: number;
-  interviewsCompleted: number;
-  postedAt: string;
-  closeAt: string;
-  daysToGo?: number;
-  createdBy: { name: string; avatarUrl?: string };
-  progress?: number;
-}
+export type PosterPayload = {
+  title: string;
+  posterNotes?: string;
+  posterVibe?: string;
+  companyName?: string;
+  brandColorHex?: string;
+};

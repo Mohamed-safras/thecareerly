@@ -1,4 +1,4 @@
-import { ImageSizes } from "@/types/gen-AI-types";
+import { ImageSizes } from "@/types/gen-AI";
 
 const JD_MODEL = "gpt-4o-mini";
 const JD_MAX_TOKENS = 350; // concise JD

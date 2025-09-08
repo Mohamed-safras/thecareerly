@@ -1,5 +1,7 @@
-import { JobPostingCard } from "@/features/jobs/components/job-posting-card";
-import { JobPosting } from "@/types/job";
+import {
+  JobPosting,
+  JobPostingCard,
+} from "@/features/jobs/components/job-posting-card";
 import React from "react";
 import JobFiltersBar from "../../../features/jobs/components/job-filters-bar";
 import JobsOpeningHeader from "../../../features/jobs/components/jobs-header";

@@ -1,5 +1,5 @@
 import { axiosClient } from "@/lib/axios/axios-client";
-import { AIPromptInput } from "@/types/gen-AI-types";
+import { AIPromptInput } from "@/types/gen-AI";
 import { JobForm } from "@/types/job";
 import { useMemo, useState } from "react";
 import axios from "axios";
@@ -16,9 +16,10 @@ const useAIGenerateJobDescription = (form: JobForm) => {
   const aiPromptInputs: AIPromptInput = useMemo(
     () => ({
       title: form.title?.trim() || "",
+      benefits: form.facilities,
       description: form.description?.trim() || "",
     }),
-    [form.title, form.description]
+    [form.title, form.description, form.facilities]
   );
 
   async function generateJobDescription() {
@@ -29,7 +30,7 @@ const useAIGenerateJobDescription = (form: JobForm) => {
 
     try {
       const { data } = await axiosClient.post<{ type: string; text: string }>(
-        "/generate-jd",
+        "/api/generate-jd",
         { payload: aiPromptInputs }
       );
 

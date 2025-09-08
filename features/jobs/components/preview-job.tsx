@@ -5,8 +5,10 @@ import { useAppSelector } from "@/store/hooks";
 import { platformMeta } from "@/components/platforms";
 import { Badge } from "@/components/ui/badge";
 import MarkdownEditor from "@uiw/react-md-editor";
-import { ImageIcon } from "lucide-react";
-import { employmentTypeValue } from "@/types/employment-types";
+import { Forward, Heart, ImageIcon, SquareArrowOutUpRight } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export interface PreviewPanelProps {
   compact?: boolean;
@@ -17,76 +19,99 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
     title,
     companyName,
     location,
+    minimumQualificationLevel,
     employmentType,
-    workArragement,
-    salaryMin,
-    salaryMax,
-    currency,
+    workPreference,
+    salary,
     description,
     platforms,
     logoPreview,
   } = useAppSelector((selector) => selector.jobForm);
 
-  function prettyCurrency(code?: string) {
-    if (!code) return "";
-    return code.toUpperCase();
-  }
-
   return (
     <div className={compact ? "space-y-2" : "space-y-6"}>
-      <div className="flex items-center gap-2">
-        <div className="flex items-center justify-center h-12 w-12 rounded-xl border bg-background overflow-hidden">
-          {logoPreview ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={logoPreview}
-              alt="logo"
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            <ImageIcon className="h-5 w-5 text-muted-foreground" />
-          )}
-        </div>
-        <h1 className="text-base font-medium md:text-xl">{companyName}</h1>
-      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="col-span-2">
+          <h3 className="truncate text-base font-semibold md:text-lg">
+            {title || "Untitled Role"}
+          </h3>
 
-      <div className="flex items-center gap-3">
-        <div className="min-w-0">
-          <div className="flex flex-wrap flex-col">
-            <h3 className="truncate text-base font-semibold md:text-lg">
-              {title || "Untitled Role"}
-            </h3>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="secondary">{location || "Location TBD"}</Badge>
-
-              <Badge variant="secondary">
-                {workArragement || "Work Arrangement TDB"}
-              </Badge>
-
-              <Badge variant="secondary">
-                {(employmentType as employmentTypeValue) || "Job Type TBD"}
-              </Badge>
+          <div className="flex gap-2">
+            <div className="flex items-center justify-center h-10 w-10 rounded border bg-background overflow-hidden">
+              {logoPreview ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={logoPreview}
+                  alt="logo"
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <ImageIcon className="h-4 w-4 text-muted-foreground" />
+              )}
             </div>
+            <Link
+              href="https://www.acentura.com/"
+              className="flex items-center gap-2 text-sm text-emerald-600"
+            >
+              {companyName}
+              <SquareArrowOutUpRight className="w-3 h-3" />
+            </Link>
           </div>
 
-          {(salaryMin || salaryMax || currency) && (
-            <div className="text-xs text-muted-foreground mt-2">
-              {salaryMin && (
-                <span>
-                  {prettyCurrency(currency)} {salaryMin}
-                </span>
-              )}
-              {salaryMin && salaryMax && <span> – </span>}
-              {salaryMax && (
-                <span>
-                  {prettyCurrency(currency)} {salaryMax}
-                </span>
-              )}
+          <div className="flex flex-wrap flex-col mt-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant="secondary">
+                {location && location?.length > 50
+                  ? `${location?.slice(0, 40)}...`
+                  : location || "Location TBD"}
+              </Badge>
+              <span className="text-muted-foreground">-</span>
+              <Badge variant="secondary">
+                {workPreference || "Work Arrangement TDB"}
+              </Badge>
             </div>
-          )}
+            <div className="flex flex-wrap items-center gap-2 mt-1">
+              <span className="text-sm text-muted-foreground">
+                Posted 3 days ago
+              </span>
+              <span className="text-muted-foreground">•</span>
+              <span className="text-sm  text-muted-foreground">
+                34 Applicants
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-span-1 grid grid-cols-3 gap-2">
+          <Button variant="secondary" className="cursor-pointer">
+            <Heart className="h-4 w-4" /> Save
+          </Button>
+          <Button variant="secondary" className="cursor-pointer">
+            <Forward className="h-4 w-4" /> Share
+          </Button>
+          <Button className="bg-emerald-700 cursor-pointer" variant="ghost">
+            Apply Now
+          </Button>
         </div>
       </div>
+
+      <div className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
+        <SqureCard title="Education" value={minimumQualificationLevel} />
+        <SqureCard title="Work Level" value={workPreference} />
+        <SqureCard title="Employe Type" value={employmentType} />
+        {salary.min && (
+          <SqureCard
+            title="Offer Salary"
+            value={
+              (salary.min || salary.max) &&
+              `${salary.currency} ${salary.min} - ${salary.currency} ${salary.max}`
+            }
+          >
+            <Badge>{salary.payPeriod}</Badge>
+          </SqureCard>
+        )}
+      </div>
+
       {description ? (
         <MarkdownEditor.Markdown
           source={description}
@@ -118,3 +143,19 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
 };
 
 export default PreviewPanel;
+
+const SqureCard: React.FC<{
+  title: string;
+  value?: string;
+  children?: React.ReactNode;
+}> = ({ title, value, children }) => {
+  return (
+    <div className="p-4 border rounded-lg flex flex-col items-start gap-2">
+      <span className="text-sm">{title}</span>
+      <Badge variant="secondary" className="text-sm text-wrap text-emerald-700">
+        {value || "N/A"}
+      </Badge>
+      {children}
+    </div>
+  );
+};

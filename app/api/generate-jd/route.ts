@@ -5,7 +5,7 @@ import {
   buildJobDescriptionUserPrompt,
   setSystemPromptJobDescriptionBuilder,
 } from "@/lib/prompts/job-description";
-import { AIPromptInput } from "@/types/gen-AI-types";
+import { AIPromptInput } from "@/types/gen-AI";
 import { rateLimiter } from "@/lib/server/rate-limiter.redis";
 import { cacheGet, cacheSet } from "@/lib/server/cache.redis";
 import { badRequest, withHeaders } from "@/lib/error/errors";
@@ -73,7 +73,9 @@ export async function POST(req: NextRequest) {
     }
 
     // Build prompt and call OpenAI
-    const user = buildJobDescriptionUserPrompt(normalized);
+    const userPrompt = buildJobDescriptionUserPrompt(normalized);
+
+    console.log("JD prompt:", userPrompt);
 
     try {
       const resp = await client.chat.completions.create({
@@ -82,7 +84,7 @@ export async function POST(req: NextRequest) {
         temperature: JD_TEMP,
         messages: [
           { role: "system", content: setSystemPromptJobDescriptionBuilder() },
-          { role: "user", content: user },
+          { role: "user", content: userPrompt },
         ],
       });
 

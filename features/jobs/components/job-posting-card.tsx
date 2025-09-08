@@ -25,34 +25,24 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-import { JobPosting } from "@/types/job";
+import KV from "@/features/jobs/components/kv";
+import { jobStatus } from "@/constents/job";
+import StatisticPill from "@/features/jobs/components/statistic-pill";
 
-import { jobStatus } from "../../../constents/job";
-
-function StatPill({ value, label }: { value: number | string; label: string }) {
-  return (
-    <div className="flex-1 rounded-xl border bg-muted/30 p-4">
-      <div className="text-2xl font-semibold leading-none tracking-tight">
-        {value}
-      </div>
-      <div className="mt-1 text-xs text-muted-foreground">{label}</div>
-    </div>
-  );
-}
-
-function KV({
-  icon: Icon,
-  children,
-}: {
-  icon: React.ElementType;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="inline-flex items-center gap-2 text-sm text-muted-foreground">
-      <Icon className="h-4 w-4" aria-hidden />
-      <span>{children}</span>
-    </div>
-  );
+export interface JobPosting {
+  status: "Open" | "Hold" | "Closed" | "Draft";
+  role: string;
+  department: string;
+  employmentType: string;
+  location: string;
+  workplace: string;
+  candidatesApplied: number;
+  interviewsCompleted: number;
+  postedAt: string;
+  closeAt: string;
+  daysToGo?: number;
+  createdBy: { name: string; avatarUrl?: string };
+  progress?: number;
 }
 
 export function JobPostingCard({ job }: { job: JobPosting }) {
@@ -115,8 +105,11 @@ export function JobPostingCard({ job }: { job: JobPosting }) {
 
       <CardContent>
         <div className="grid grid-cols-2 gap-3 sm:gap-2">
-          <StatPill value={job.candidatesApplied} label="Candidates Applied" />
-          <StatPill
+          <StatisticPill
+            value={job.candidatesApplied}
+            label="Candidates Applied"
+          />
+          <StatisticPill
             value={job.interviewsCompleted}
             label="Completed interview"
           />

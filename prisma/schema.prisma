@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  email   String   @unique
+  name    String?
+  address Address?
+  posts   Job[]    // inverse side of Job.created_by
+
+  @@map("User")
+}
+
+// Embedded document (MongoDB)
+type Address {
+  street String
+  city   String
+  state  String
+  zip    String
+}
+
+model Job {
+  id                 String            @id @default(auto()) @map("_id") @db.ObjectId
+  title              String
+  description        String
+  requirements       String[]
+  location           String
+  salary_range       Json
+  // relation to User (creator)
+  created_by         User              @relation(fields: [user_id], references: [id])
+  user_id            String            @db.ObjectId
+  created_at         DateTime          @default(now())
+  updated_at         DateTime          @updatedAt
+  status             JobStatus
+  ai_content         Json
+  compliance_status  ComplianceStatus
+  social_media_posts Json
+
+  @@map("Job")                 // collection name
+  @@index([status])            // regular index
+  @@index([title]) // MongoDB text index on title
+}
+
+enum JobStatus {
+  open
+  hold
+  closed
+  draft
+}
+
+enum ComplianceStatus {
+  pending
+  approved
+  flagged
+}

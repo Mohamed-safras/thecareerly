@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 import { Separator } from "@/components/ui/separator";
 import { LayoutGrid, List, Settings2 } from "lucide-react";
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 import CategoryPill from "./category-pill";
 import StatusPill from "./status-pill";
 import LocationPill from "./location-pill";

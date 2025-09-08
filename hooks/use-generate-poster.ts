@@ -1,19 +1,20 @@
-// hooks/useGeneratePoster.ts
 "use client";
 
 import { useMemo, useState } from "react";
 import { axiosClient } from "@/lib/axios/axios-client";
-import type { JobForm } from "@/types/job";
-import { normalizePosterVibe, PosterPayload } from "@/types/poster-types";
+import type { JobForm, PosterPayload } from "@/types/job";
+import { normalizePosterVibe } from "@/types/poster";
 import axios from "axios";
 import { extractStatusAndMessage } from "@/lib/error/error-message-extractor";
 import { toast } from "sonner";
 
 interface GeneratePosterResponse {
   type: "poster";
-  image: string;
-  meta: { prompt: string; size: string; mode?: "generate" | "edit" };
+  image: string; // single output
+  meta: { prompt: string; size: string; mode: "generate" | "edit_compose" };
 }
+
+const MAX_FILES = 3;
 
 export function useGeneratePoster({
   title,
@@ -25,7 +26,7 @@ export function useGeneratePoster({
   const [busyPoster, setBusyPoster] = useState(false);
   const [posterImg, setPosterImg] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const [sampleImage, setSampleImage] = useState<File | null>(null);
+  const [sampleImages, setSampleImages] = useState<File[]>([]);
 
   const AIInputs: PosterPayload = useMemo(
     () => ({
@@ -39,8 +40,12 @@ export function useGeneratePoster({
   );
 
   async function generatePoster() {
-    if (!AIInputs.posterNotes) {
+    // Fix: Properly validate posterNotes before making the API call
+    const cleanPosterNotes = (AIInputs.posterNotes || "").trim();
+
+    if (!cleanPosterNotes) {
       setError("Write your poster notes...");
+      toast.error("Write your poster notes...");
       return;
     }
 
@@ -51,35 +56,109 @@ export function useGeneratePoster({
     try {
       const vibe = normalizePosterVibe(AIInputs.posterVibe);
 
-      if (sampleImage) {
-        // multipart form-data (with image)
+      if (sampleImages.length > 0) {
         const formData = new FormData();
-        formData.append("posterNotes", AIInputs.posterNotes.slice(0, 220));
-        formData.append("title", AIInputs.title ?? "");
-        if (AIInputs.companyName)
-          formData.append("companyName", AIInputs.companyName);
-        if (AIInputs.brandColorHex)
-          formData.append("brandColorHex", AIInputs.brandColorHex);
+
+        // Always append required fields as strings
+        formData.append("posterNotes", cleanPosterNotes.slice(0, 220));
+        formData.append("title", (AIInputs.title || "").trim());
         formData.append("posterVibe", vibe);
-        formData.append("sampleImage", sampleImage, sampleImage.name);
+
+        // Only append optional fields if they have values
+        const cleanCompanyName = (AIInputs.companyName || "").trim();
+        if (cleanCompanyName) {
+          formData.append("companyName", cleanCompanyName);
+        }
+
+        const cleanBrandColor = (AIInputs.brandColorHex || "").trim();
+        if (cleanBrandColor) {
+          formData.append("brandColorHex", cleanBrandColor);
+        }
+
+        // Append valid image files only with strict validation
+        const validImages = sampleImages.slice(0, MAX_FILES).filter((file) => {
+          if (!(file instanceof File) || file.size === 0) {
+            console.warn("Skipping invalid file:", file);
+            return false;
+          }
+
+          // Check MIME type
+          const supportedTypes = [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/webp",
+          ];
+          if (!supportedTypes.includes(file.type.toLowerCase())) {
+            // If MIME type is missing, check file extension
+            const ext = file.name?.split(".").pop()?.toLowerCase();
+            const supportedExts = ["jpg", "jpeg", "png", "webp"];
+            if (!ext || !supportedExts.includes(ext)) {
+              console.warn(
+                "Skipping unsupported file type:",
+                file.type,
+                file.name
+              );
+              return false;
+            }
+          }
+
+          // Check file size (max 10MB)
+          if (file.size > 10 * 1024 * 1024) {
+            console.warn("Skipping oversized file:", file.size, file.name);
+            return false;
+          }
+
+          return true;
+        });
+
+        if (validImages.length === 0) {
+          setError(
+            "No valid image files selected. Please use JPEG, PNG, or WebP images."
+          );
+          toast.error(
+            "No valid image files selected. Please use JPEG, PNG, or WebP images."
+          );
+          return;
+        }
+
+        validImages.forEach((file) => {
+          formData.append("sampleImages", file, file.name || "image.png");
+        });
+
+        for (const [key, value] of formData.entries()) {
+          if (value instanceof File) {
+            console.log(
+              `${key}: File(${value.name}, ${value.size} bytes, ${value.type})`
+            );
+          } else {
+            console.log(`${key}: "${value}"`);
+          }
+        }
 
         const { data } = await axiosClient.post<GeneratePosterResponse>(
-          "/generate-poster",
-          formData
+          "/api/generate-poster",
+          formData,
+          {
+            headers: {
+              // Let the browser set Content-Type with boundary for multipart
+              "Content-Type": undefined,
+            },
+          }
         );
         setPosterImg(data.image);
       } else {
-        // JSON payload (without image)
+        // Fix: Ensure all fields are properly handled
         const payload: PosterPayload = {
-          title: AIInputs.title ?? "",
-          posterNotes: AIInputs.posterNotes.slice(0, 220),
-          companyName: AIInputs.companyName ?? undefined,
-          brandColorHex: AIInputs.brandColorHex ?? undefined,
+          title: (AIInputs.title || "").trim(),
+          posterNotes: cleanPosterNotes.slice(0, 220),
+          companyName: AIInputs.companyName?.trim() || undefined,
+          brandColorHex: AIInputs.brandColorHex?.trim() || undefined,
           posterVibe: vibe,
         };
 
         const { data } = await axiosClient.post<GeneratePosterResponse>(
-          "/generate-poster",
+          "/api/generate-poster",
           { payload }
         );
         setPosterImg(data.image);
@@ -114,8 +193,8 @@ export function useGeneratePoster({
     busyPoster,
     posterImg,
     error,
-    sampleImage,
-    setSampleImage,
+    sampleImages,
+    setSampleImages,
     generatePoster,
     clearPoster: () => setPosterImg(""),
     clearError: () => setError(""),

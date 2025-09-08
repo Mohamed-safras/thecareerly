@@ -1,5 +1,5 @@
-import { oneLine } from "../utils/utils";
-import { PosterPayload } from "@/types/poster-types";
+import { oneLine } from "../utils";
+import { PosterPayload } from "@/types/poster";
 
 function compactPosterPrompt(p: PosterPayload) {
   // A compact, high-signal image prompt—not verbose—to save tokens

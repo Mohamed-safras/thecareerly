@@ -3,8 +3,7 @@ export type ImageSizes =
   | "512x512"
   | "1024x1024"
   | "1024x1536"
-  | "1536x1024"
-  | null;
+  | "1536x1024";
 
 export type AIPromptInput = {
   title: string; // e.g. "Senior Software Engineer"

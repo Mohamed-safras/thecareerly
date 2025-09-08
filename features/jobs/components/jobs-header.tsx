@@ -3,7 +3,7 @@
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 import { FileDown, FolderPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 
