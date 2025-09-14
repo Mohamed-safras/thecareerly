@@ -36,18 +36,11 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
-import { title } from "process";
-import { url } from "inspector";
+import { CREATE_JOB, HIRING_JOBS } from "@/constents/router-links";
+import { useAppSelector } from "@/store/hooks";
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
   teams: [
     {
       name: "Acentura Inc",
@@ -85,13 +78,13 @@ const data = {
   recuitment: [
     {
       title: "Jobs",
-      url: "/hiring/jobs",
+      url: HIRING_JOBS,
       icon: BriefcaseBusiness,
       isActive: true,
       items: [
         {
           title: "Add New Job",
-          url: "/hiring/jobs/create",
+          url: CREATE_JOB,
         },
         {
           title: "Job Posts",
@@ -204,7 +197,7 @@ const RectruiterAppSideBar = () => {
       </SidebarContent>
 
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </React.Fragment>

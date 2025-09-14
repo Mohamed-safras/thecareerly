@@ -1,7 +1,7 @@
 // components/typeahead-location.tsx
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Command,
@@ -36,6 +36,7 @@ export default function TypeaheadLocation({
   minChars = 3,
 }: TypeAheadLocationProps) {
   const [open, setOpen] = useState(false);
+  const [focused, setFocused] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const { loading, results, error } = useAutoSearch<Place>({
@@ -45,9 +46,29 @@ export default function TypeaheadLocation({
     buildParams: (q) => ({ format: "jsonv2", q, limit: 8 }),
     mapper: mapNominatim,
     minChars,
-    debounceMs: 250,
+    debounceMs: 200,
     enabled: true,
   });
+
+  // Open/close based on focus + results/loading + minChars
+  useEffect(() => {
+    const hasQuery = value.trim().length >= minChars;
+    const shouldOpen = focused && hasQuery && (loading || results.length > 0);
+    setOpen(shouldOpen);
+  }, [focused, value, minChars, loading, results.length]);
+
+  // Close on outside click
+  useEffect(() => {
+    function onDocClick(e: MouseEvent) {
+      if (!wrapperRef.current) return;
+      if (!wrapperRef.current.contains(e.target as Node)) {
+        setOpen(false);
+        setFocused(false);
+      }
+    }
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, []);
 
   return (
     <div ref={wrapperRef} className="space-y-2">
@@ -63,12 +84,20 @@ export default function TypeaheadLocation({
           className="pl-9"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          onFocus={() => results.length && setOpen(true)}
+          onFocus={() => setFocused(true)}
+          onBlur={() => {
+            // do nothing here; outside-click handler manages closing
+            // (prevents flicker while clicking items)
+          }}
           autoComplete="off"
         />
 
         {open && (
-          <div className="absolute z-50 mt-1 w-full rounded-md border bg-popover text-popover-foreground shadow-md">
+          <div
+            className="absolute z-50 mt-1 w-full rounded-md border bg-popover text-popover-foreground shadow-md"
+            // keep input focused while interacting with the panel
+            onMouseDown={(e) => e.preventDefault()}
+          >
             <Command shouldFilter={false}>
               <CommandList>
                 {loading && (

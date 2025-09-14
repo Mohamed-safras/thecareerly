@@ -2,9 +2,8 @@
 
 import { useRef } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setForm as setFormMerge } from "@/features/jobs/jobs-slice";
+import { setForm as setFormMerge } from "@/store/slice/jobs-slice";
 import { useGeneratePoster } from "@/hooks/use-generate-poster";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +14,7 @@ import {
   X,
   RotateCcw,
   RotateCw,
+  AlertCircle,
 } from "lucide-react";
 import MarkdownEditor from "@/components/markdowneditor";
 import CircleSpinner from "@/components/circlespinner";
@@ -27,14 +27,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import { useFileHandler } from "@/hooks/use-file-handler";
 import { AllowedVibesTypeValue, isPosterVibe } from "@/types/poster";
 import { ALLOWED_VIBES_TYPES } from "@/constents/basic-info-options";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const MAX_FILES = 3;
 
-const AIAssistPanel: React.FC = () => {
+const AIPosterGenerator: React.FC = () => {
   const form = useAppSelector((s) => s.jobForm);
   const dispatch = useAppDispatch();
 
@@ -103,20 +103,10 @@ const AIAssistPanel: React.FC = () => {
     <section className="space-y-3 border rounded-xl p-4">
       <div className="flex items-center gap-2">
         <ImageIcon className="h-4 w-4" />
-        <h3 className="font-medium">Generate Hiring Poster</h3>
+        <h3 className="text-base">Generate Hiring Poster</h3>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-3">
-        <div className="space-y-1">
-          <Label>Company</Label>
-          <Input
-            value={form.companyName || ""}
-            onChange={(e) =>
-              dispatch(setFormMerge({ companyName: e.target.value }))
-            }
-            placeholder="Your Company"
-          />
-        </div>
         <div className="space-y-1">
           <Label>Brand Color (hex)</Label>
           <Input
@@ -127,9 +117,6 @@ const AIAssistPanel: React.FC = () => {
             placeholder="#00A8E8"
           />
         </div>
-      </div>
-
-      <div className="grid sm:grid-cols-2 gap-3">
         <div className="space-y-1.5">
           <Label htmlFor="poster-vibe">Poster vibe</Label>
           <Select
@@ -197,36 +184,55 @@ const AIAssistPanel: React.FC = () => {
 
         {galleryPreviews.length > 0 && (
           <div className="mt-3 columns-2 sm:columns-3 lg:columns-4 gap-3 [column-fill:_balance]">
-            {galleryPreviews.map((u, i) => (
+            {galleryPreviews.map((galaryItem, index) => (
               <div
-                key={u}
+                key={galaryItem}
                 className="relative mb-3 border rounded overflow-hidden group"
                 style={{ breakInside: "avoid" }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={u}
-                  alt={`Sample ${i + 1}`}
+                  src={galaryItem}
+                  alt={`Sample ${index + 1}`}
                   className="w-full h-auto block"
                   loading="lazy"
                 />
                 <button
                   type="button"
-                  onClick={() => removeOne(i)}
+                  onClick={() => removeOne(index)}
                   className="absolute top-1 right-1 rounded-full border border-accent-foreground shadow p-1 opacity-0 group-hover:opacity-100 transition cursor-pointer bg-white/85 hover:bg-white"
-                  aria-label={`Remove sample ${i + 1}`}
+                  aria-label={`Remove sample ${index + 1}`}
                   title="Remove"
                 >
                   <X className="h-4 w-4" />
                 </button>
                 <p className="text-xs text-muted-foreground px-2 py-1 truncate">
-                  {galleryFiles[i]?.name}
+                  {galleryFiles[index]?.name}
                 </p>
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {error && (
+        // <div className="text-red-600">
+        //   {error}{" "}
+        //   <button className="underline" onClick={clearError}>
+        //     dismiss
+        //   </button>
+        // </div>
+        <Alert variant="destructive" className="h-fit text-sm">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Can’t generate description</AlertTitle>
+          <AlertDescription>
+            {/* Render all validation messages */}
+            {Object.values([error]).map((msg, i) => (
+              <div key={i}>{msg}</div>
+            ))}
+          </AlertDescription>
+        </Alert>
+      )}
 
       <div className="relative space-y-1.5">
         <div className="flex items-center justify-between">
@@ -272,7 +278,7 @@ const AIAssistPanel: React.FC = () => {
           />
 
           {busyPoster && (
-            <div className="absolute inset-0 backdrop-blur-sm flex items-center justify-center rounded-lg">
+            <div className="absolute inset-0 backdrop-blur-xs flex items-center justify-center rounded-lg">
               <CircleSpinner size={56} />
             </div>
           )}
@@ -293,17 +299,7 @@ const AIAssistPanel: React.FC = () => {
         </div>
       </div>
 
-      {/* Notes editor */}
-
       {/* Error display */}
-      {error && (
-        <div className="text-red-600">
-          {error}{" "}
-          <button className="underline" onClick={clearError}>
-            dismiss
-          </button>
-        </div>
-      )}
 
       {/* Final single poster */}
       {posterImg && (
@@ -332,4 +328,4 @@ const AIAssistPanel: React.FC = () => {
   );
 };
 
-export default AIAssistPanel;
+export default AIPosterGenerator;

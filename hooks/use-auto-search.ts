@@ -1,7 +1,7 @@
 // hooks/use-auto-search.ts
 import { useEffect, useRef, useState } from "react";
 import { AxiosError, AxiosInstance } from "axios";
-import { isAxiosCanceled } from "@/lib/http/is-axios-canceled";
+import { isAxiosCanceled } from "@/lib/axios/is-axios-canceled";
 
 export type AutoSearchOptions<T> = {
   client: AxiosInstance;
@@ -57,13 +57,13 @@ export function useAutoSearch<T>({
 
     const ctrl = new AbortController();
 
-    const timer = window.setTimeout(async () => {
+    const timer = setTimeout(async () => {
       setLoading(true);
       setError(null);
       try {
         const params = buildParamsRef.current
           ? buildParamsRef.current(query)
-          : { q: query };
+          : { query };
 
         const { data } = await client.get<unknown>(path, {
           params,
@@ -90,7 +90,7 @@ export function useAutoSearch<T>({
 
     return () => {
       ctrl.abort(); // triggers CanceledError (ignored)
-      window.clearTimeout(timer);
+      clearTimeout(timer);
     };
     // DO NOT include buildParams/mapper (their refs keep latest versions)
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { FileDown, FolderPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { CREATE_JOB } from "@/constents/router-links";
 
 type Props = {
   title?: string;
@@ -68,7 +69,7 @@ export default function JobsOpeningHeader({
 
           <Button
             className="h-8 rounded-lg bg-emerald-700 text-white hover:bg-emerald-700/90"
-            onClick={() => router.push("/hiring/jobs/create")}
+            onClick={() => router.push(CREATE_JOB)}
           >
             <FolderPlus className="mr-2 h-4 w-4" />
             Create Job

@@ -1,37 +1,23 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { TabsContent } from "@radix-ui/react-tabs";
 import { Label } from "@radix-ui/react-label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
 import {
   Calendar,
   PauseCircle,
   PlayCircle,
   CheckCircle2,
   RotateCcw,
-  Upload,
-  X,
 } from "lucide-react";
 import { toast } from "sonner";
-import { setLogoPreview as setLogoPreviewAction } from "@/features/jobs/jobs-slice";
-
 import Platforms from "@/components/platforms";
-
-// redux
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   setForm as setFormMerge,
   togglePlatform as togglePlatformAction,
-} from "@/features/jobs/jobs-slice";
-import { Switch } from "@/components/ui/switch";
-import AIAssistPanel from "./AI-poster-generator";
-import { useFileHandler } from "@/hooks/use-file-handler";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { putFile, removeFile } from "@/lib/common/uploadsvault";
-// import Image from "next/image";
+} from "@/store/slice/jobs-slice";
 
 const SchedulePanel: React.FC = () => {
   // local UI state only (not in redux)
@@ -39,53 +25,8 @@ const SchedulePanel: React.FC = () => {
     "idle" | "queued" | "posting" | "done" | "error"
   >("idle");
 
-  const logoFileRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
   const form = useAppSelector((s) => s.jobForm); // has logoFileId, etc.
-
-  const {
-    files: logoFiles,
-    previews: logoPreviews,
-    onInputChange: onLogoInputChange,
-    clearAll: clearLogoAll,
-  } = useFileHandler({ multiple: false, maxFiles: 1 });
-
-  function handleLogoFilesChosen(list: FileList | null) {
-    // update the generic hook (previews + internal files)
-    onLogoInputChange(list);
-
-    // always clear any previously stored vault file
-    if (form.logoFileId) {
-      removeFile(form.logoFileId);
-      dispatch(setFormMerge({ logoFileId: null }));
-      dispatch(setLogoPreviewAction(null));
-    }
-
-    // if a new file was chosen, store it in vault and set preview
-    const file = list?.[0] ?? null;
-    if (file) {
-      const id = putFile(file); // keep File out of Redux
-      const preview = URL.createObjectURL(file); // preview for other parts of UI if needed
-      dispatch(setFormMerge({ logoFileId: id }));
-      dispatch(setLogoPreviewAction(preview));
-    }
-
-    // IMPORTANT: allow re-selecting the same file again
-    if (logoFileRef.current) logoFileRef.current.value = "";
-  }
-
-  function clearLogo() {
-    // clear hook state (previews & files)
-    clearLogoAll();
-
-    // clear vault + redux
-    if (form.logoFileId) removeFile(form.logoFileId);
-    dispatch(setFormMerge({ logoFileId: null }));
-    dispatch(setLogoPreviewAction(null));
-
-    // reset the file input so the same file can be chosen again
-    if (logoFileRef.current) logoFileRef.current.value = "";
-  }
 
   // pure action (NO function payloads)
   function togglePlatform(key: string) {
@@ -112,7 +53,6 @@ const SchedulePanel: React.FC = () => {
 
   function resetFlow() {
     setPosting("idle");
-    clearLogo();
     dispatch(
       setFormMerge({
         title: "",
@@ -121,16 +61,18 @@ const SchedulePanel: React.FC = () => {
         schedule: "",
         logoFileId: null,
         logoPreview: null,
-
         description: "",
         posterNotes: "",
         posterVibe: "",
         brandColorHex: "",
         location: "",
-        workArragement: "",
-        salaryMax: "",
-        salaryMin: "",
-        currency: "",
+        workPreference: "",
+        salary: {
+          min: "",
+          max: "",
+          currency: "",
+          payPeriod: "",
+        },
         companyName: "",
         employmentType: "",
       })
@@ -138,76 +80,7 @@ const SchedulePanel: React.FC = () => {
   }
 
   return (
-    <div className="mt-4 space-y-4 border p-4 rounded">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <Input
-              id="logo-upload"
-              ref={logoFileRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={(e) => handleLogoFilesChosen(e.target.files)}
-            />
-            <Button
-              variant="outline"
-              className="gap-2"
-              onClick={() => logoFileRef.current?.click()}
-            >
-              <Upload className="h-4 w-4" />
-              {logoFiles.length
-                ? "Change Company Profile"
-                : "Add Company Profile"}
-            </Button>
-
-            <Button
-              type="button"
-              size="sm"
-              variant="ghost"
-              onClick={clearLogo}
-              aria-label="Remove logo"
-              title="Remove logo"
-              disabled={logoFiles.length === 0 && !form.logoFileId}
-            >
-              <X className="h-4 w-4 mr-1" />
-              Clear
-            </Button>
-          </div>
-
-          {/* preview */}
-          {logoPreviews[0] && (
-            <div className="mt-2 w-40">
-              <AspectRatio ratio={16 / 9}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={logoPreviews[0]}
-                  alt="Logo preview"
-                  className="w-full h-auto border rounded"
-                />
-              </AspectRatio>
-            </div>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="include-multimedia">Include Multimedia</Label>
-          <div id="include-multimedia" className="flex items-center gap-2">
-            <Switch
-              checked={form.includeMultimedia}
-              onCheckedChange={(v) =>
-                dispatch(setFormMerge({ includeMultimedia: v }))
-              }
-            />
-            <span className="text-sm text-muted-foreground">
-              Logos, banners, videos
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {form.includeMultimedia && <AIAssistPanel />}
-
+    <div className="space-y-4 border p-4 rounded">
       <Platforms platforms={form.platforms} togglePlatform={togglePlatform} />
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -235,24 +108,32 @@ const SchedulePanel: React.FC = () => {
           <CheckCircle2 className="h-4 w-4" /> Approve &amp; Queue
         </Button>
 
-        <Button variant="outline" className="gap-2" onClick={handlePostNow}>
-          {posting === "posting" ? (
-            <>
-              <PauseCircle className="h-4 w-4" /> Posting…
-            </>
-          ) : (
-            <>
-              <PlayCircle className="h-4 w-4" /> Post No w (demo)
-            </>
-          )}
-        </Button>
-
         {posting !== "idle" && (
           <Button variant="secondary" onClick={resetFlow}>
             <RotateCcw />
             Reset
           </Button>
         )}
+
+        <div className="flex justify-end gap-2">
+          <Button
+            variant="outline"
+            onClick={() => toast.success("Draft saved")}
+          >
+            Save Draft
+          </Button>
+          <Button onClick={handlePostNow}>
+            {posting === "posting" ? (
+              <>
+                <PauseCircle className="h-4 w-4" /> Publishing...
+              </>
+            ) : (
+              <>
+                <PlayCircle className="h-4 w-4" /> Publish Now
+              </>
+            )}
+          </Button>
+        </div>
       </div>
     </div>
   );

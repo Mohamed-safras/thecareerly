@@ -1,12 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../lib/generated/prisma"
 }
 
 datasource db {
@@ -14,17 +7,40 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  email   String   @unique
-  name    String?
-  address Address?
-  posts   Job[]    // inverse side of Job.created_by
-
-  @@map("User")
+/**
+ * =========================
+ * Enums
+ * =========================
+ */
+enum UserType {
+  Employee
+  Candidate
 }
 
-// Embedded document (MongoDB)
+enum TeamRole {
+  Admin
+  HR
+  Member
+}
+
+enum JobStatus {
+  open
+  hold
+  draft
+  closed
+}
+
+enum ComplianceStatus {
+  pending
+  approved
+  flagged
+}
+
+/**
+ * =========================
+ * Embedded (MongoDB types)
+ * =========================
+ */
 type Address {
   street String
   city   String
@@ -32,37 +48,194 @@ type Address {
   zip    String
 }
 
+type Salary {
+  min       String?
+  max       String?
+  currency  String?
+  payPeriod String?
+}
+
+type Question {
+  prompt   String
+  required Boolean?
+  kind     String?
+  options  String[]
+}
+
+type SelectionProcess {
+  order       Int     @default(0)
+  title       String
+  description String?
+}
+
+/**
+ * =========================
+ * Auth core (NextAuth)
+ * =========================
+ */
+model User {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String?
+  email       String?  @unique
+  image       String?
+  userType    UserType @default(Candidate)
+  emailDomain String?
+
+  accounts  Account[]
+  sessions  Session[]
+  teamUsers TeamUser[]
+
+  candidate CandidateProfile?
+
+  // opposite relation for Job.created_by
+  jobs            Job[]            @relation("UserCreatedJobs")
+  localCredential LocalCredential?
+
+  @@map("User")
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId // ✅ REQUIRED for Mongo
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model LocalCredential {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String @unique @db.ObjectId
+  passwordHash String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("LocalCredential")
+}
+
+/**
+ * =========================
+ * Organization / Teams
+ * =========================
+ */
+model Organization {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  name            String   @unique
+  domainAllowlist String[]
+  teams           Team[]
+}
+
+model Team {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  organizationId String       @db.ObjectId
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  members        TeamUser[]
+  jobs           Job[]
+
+  @@unique([organizationId, name])
+}
+
+model TeamUser {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  team_id String   @db.ObjectId
+  user_id String   @db.ObjectId
+  role    TeamRole
+
+  team Team @relation(fields: [team_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
+
+  @@unique([team_id, user_id])
+}
+
+/**
+ * =========================
+ * Candidate profile
+ * =========================
+ */
+model CandidateProfile {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String  @unique @db.ObjectId
+  phone     String?
+  resumeUrl String?
+  location  String?
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+/**
+ * =========================
+ * Job
+ * =========================
+ */
 model Job {
-  id                 String            @id @default(auto()) @map("_id") @db.ObjectId
-  title              String
-  description        String
-  requirements       String[]
-  location           String
-  salary_range       Json
-  // relation to User (creator)
-  created_by         User              @relation(fields: [user_id], references: [id])
-  user_id            String            @db.ObjectId
-  created_at         DateTime          @default(now())
-  updated_at         DateTime          @updatedAt
-  status             JobStatus
-  ai_content         Json
-  compliance_status  ComplianceStatus
-  social_media_posts Json
+  id                        String             @id @default(auto()) @map("_id") @db.ObjectId
+  title                     String
+  employment_type           String?
+  work_preference           String?
+  job_seniority             String?
+  minimum_qualification_lvl String?
+  skills                    String[]
+  facilities                String[]
+  description               String?
+  location                  String?
+  salary                    Salary
+  schedule                  DateTime?
+  platforms                 String[]
+  logo_file_id              String?
+  logo_preview              String?
+  poster_file_id            String?
+  poster_preview            String?
+  company_name              String?
+  company_site              String
+  questions                 Question[]
+  selection_process         SelectionProcess[]
 
-  @@map("Job")                 // collection name
-  @@index([status])            // regular index
-  @@index([title]) // MongoDB text index on title
-}
+  // relations
+  created_by User   @relation("UserCreatedJobs", fields: [user_id], references: [id])
+  user_id    String @db.ObjectId
 
-enum JobStatus {
-  open
-  hold
-  closed
-  draft
-}
+  team    Team   @relation(fields: [team_id], references: [id])
+  team_id String @db.ObjectId
 
-enum ComplianceStatus {
-  pending
-  approved
-  flagged
+  created_at         DateTime         @default(now())
+  updated_at         DateTime         @updatedAt
+  status             JobStatus        @default(draft)
+  ai_content         Json?
+  compliance_status  ComplianceStatus @default(pending)
+  social_media_posts Json?
+
+  @@index([status])
+  @@index([title])
+  @@index([team_id])
+  @@index([team_id, status])
+  @@map("Job")
 }

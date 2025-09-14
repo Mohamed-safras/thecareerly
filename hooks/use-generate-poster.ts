@@ -2,11 +2,10 @@
 
 import { useMemo, useState } from "react";
 import { axiosClient } from "@/lib/axios/axios-client";
-import type { JobForm, PosterPayload } from "@/types/job";
+import type { JobForm, PosterPayload } from "@/types/job-form";
 import { normalizePosterVibe } from "@/types/poster";
 import axios from "axios";
 import { extractStatusAndMessage } from "@/lib/error/error-message-extractor";
-import { toast } from "sonner";
 
 interface GeneratePosterResponse {
   type: "poster";
@@ -45,7 +44,6 @@ export function useGeneratePoster({
 
     if (!cleanPosterNotes) {
       setError("Write your poster notes...");
-      toast.error("Write your poster notes...");
       return;
     }
 
@@ -116,9 +114,6 @@ export function useGeneratePoster({
           setError(
             "No valid image files selected. Please use JPEG, PNG, or WebP images."
           );
-          toast.error(
-            "No valid image files selected. Please use JPEG, PNG, or WebP images."
-          );
           return;
         }
 
@@ -175,14 +170,12 @@ export function useGeneratePoster({
             ? `Rate limit hit. Try again in ~${retryAfter} seconds.`
             : "Rate limit hit. Please wait a bit and retry.";
         setError(msg);
-        toast.error(msg);
       } else if (status && status >= 400 && status < 500) {
         const msg = message || "Request failed.";
         setError(msg);
       } else {
         const msg = "Poster generation failed";
         setError(msg);
-        toast.error(msg);
       }
     } finally {
       setBusyPoster(false);

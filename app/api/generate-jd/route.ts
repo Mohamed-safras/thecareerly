@@ -6,15 +6,13 @@ import {
   setSystemPromptJobDescriptionBuilder,
 } from "@/lib/prompts/job-description";
 import { AIPromptInput } from "@/types/gen-AI";
-import { rateLimiter } from "@/lib/server/rate-limiter.redis";
-import { cacheGet, cacheSet } from "@/lib/server/cache.redis";
+import { cacheGet, cacheSet } from "@/lib/cache/cache.redis";
 import { badRequest, withHeaders } from "@/lib/error/errors";
 import { mapOpenAIError } from "@/lib/error/openai.error";
-import {
-  clampString,
-  clientIpFromHeaders,
-  stableIdempotencyKey,
-} from "@/lib/server/utils";
+import { errorResponse } from "@/server/response/api-error-response";
+import { rateLimiter } from "@/lib/rate-limit/rate-limiter.redis";
+import { clientIpFromHeaders, clampString } from "@/lib/utils";
+import { stableIdempotencyKey } from "@/lib/utils/json";
 
 export const runtime = "nodejs";
 
@@ -106,6 +104,6 @@ export async function POST(req: NextRequest) {
     }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Server error";
-    return NextResponse.json({ error: message }, { status: 500 });
+    return errorResponse(500, "Something went wrong", message);
   }
 }

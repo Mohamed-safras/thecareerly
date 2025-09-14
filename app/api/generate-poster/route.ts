@@ -6,17 +6,15 @@ import OpenAI from "openai";
 import sharp from "sharp";
 import { POSTER_MODEL, POSTER_SIZE } from "@/constents/gen-ai-constent";
 import { compactPosterPrompt } from "@/lib/prompts/job-poster";
-import { rateLimiter } from "@/lib/server/rate-limiter.redis";
-import { cacheGet, cacheSet } from "@/lib/server/cache.redis";
+import { cacheGet, cacheSet } from "@/lib/cache/cache.redis";
 import { badRequest, withHeaders } from "@/lib/error/errors";
 import { mapOpenAIError } from "@/lib/error/openai.error";
-import {
-  clientIpFromHeaders,
-  stableIdempotencyKey,
-  clampString,
-} from "@/lib/server/utils";
+
 import { normalizePosterVibe } from "@/types/poster";
-import { PosterPayload } from "@/types/job";
+import { PosterPayload } from "@/types/job-form";
+import { clampString, clientIpFromHeaders } from "@/lib/utils";
+import { stableIdempotencyKey } from "@/lib/utils/json";
+import { rateLimiter } from "@/lib/rate-limit/rate-limiter.redis";
 
 export const runtime = "nodejs";
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });

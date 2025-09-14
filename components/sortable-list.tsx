@@ -28,7 +28,7 @@ export default function SortableList<T>({
   renderItem,
   className,
 }: SortableListProps<T>) {
-  const ids = items.map(getId);
+  const ids = items?.map(getId);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -42,7 +42,7 @@ export default function SortableList<T>({
     <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <SortableContext items={ids} strategy={verticalListSortingStrategy}>
         <div className={className}>
-          {items.map((item, index) => (
+          {items?.map((item, index) => (
             <SortableRow id={getId(item)} key={String(getId(item))}>
               {(sortable) => renderItem({ item, index, sortable })}
             </SortableRow>

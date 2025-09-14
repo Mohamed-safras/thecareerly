@@ -5,7 +5,7 @@ export default function VerticalStepper({
   currentStep,
   onGoTo,
 }: {
-  steps: { title: string }[];
+  steps: Readonly<{ title: string }[]>;
   currentStep: number;
   onGoTo: (i: number) => void;
 }) {
@@ -32,7 +32,7 @@ export default function VerticalStepper({
                 onClick={() => onGoTo(stepNo)}
                 className={`group flex items-center gap-2 rounded-full border px-3 py-1.5 transition-colors ${
                   active
-                    ? "border-emerald-600/60 bg-emerald-50 text-emerald-700"
+                    ? "border-primary bg-pr text-primary"
                     : done
                     ? "border-muted bg-muted/40 text-foreground"
                     : "border-muted text-muted-foreground"
@@ -41,13 +41,13 @@ export default function VerticalStepper({
                 <span
                   className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold ${
                     done
-                      ? "bg-emerald-600 text-white"
+                      ? "bg-primary text-accent"
                       : active
-                      ? "bg-emerald-100 text-emerald-700"
-                      : "bg-muted text-foreground"
+                      ? "bg-primary text-accent"
+                      : "bg-muted border text-foreground"
                   }`}
                 >
-                  {done ? <CheckCircle2 className="h-4 w-4" /> : stepNo}
+                  {done ? <CheckCircle2 className="h-5 w-5" /> : stepNo}
                 </span>
                 <span className="text-xs sm:text-sm font-medium whitespace-nowrap">
                   {s.title}
@@ -56,12 +56,12 @@ export default function VerticalStepper({
 
               {/* vertical connector (mobile & lg) */}
               {!isLast && (
-                <div className="md:hidden lg:inline-block ml-6 h-6 w-0.5 bg-muted rounded" />
+                <div className="md:hidden lg:inline-block ml-6 h-8 w-1 bg-primary rounded" />
               )}
 
               {/* horizontal connector (md) aligned with button and included in scroll width */}
               {!isLast && (
-                <div className="absolute hidden md:inline-block lg:hidden h-0.5 w-8 bg-muted rounded top-1/2 -translate-y-1/2 left-full translate-x-0" />
+                <div className="absolute hidden md:inline-block lg:hidden h-1 w-8 bg-primary rounded top-1/2 -translate-y-1/2 left-full translate-x-0" />
               )}
             </div>
           );

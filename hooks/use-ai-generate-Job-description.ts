@@ -1,6 +1,6 @@
 import { axiosClient } from "@/lib/axios/axios-client";
 import { AIPromptInput } from "@/types/gen-AI";
-import { JobForm } from "@/types/job";
+import { JobForm } from "@/types/job-form";
 import { useMemo, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";

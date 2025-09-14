@@ -2,7 +2,6 @@
 
 import React from "react";
 import { useAppSelector } from "@/store/hooks";
-import { platformMeta } from "@/components/platforms";
 import { Badge } from "@/components/ui/badge";
 import MarkdownEditor from "@uiw/react-md-editor";
 import { Forward, Heart, ImageIcon, SquareArrowOutUpRight } from "lucide-react";
@@ -24,12 +23,12 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
     workPreference,
     salary,
     description,
-    platforms,
+    companySite,
     logoPreview,
   } = useAppSelector((selector) => selector.jobForm);
 
   return (
-    <div className={compact ? "space-y-2" : "space-y-6"}>
+    <div className={`${compact ? "space-y-2" : "space-y-6"} p-4 border`}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         <div className="col-span-2">
           <h3 className="truncate text-base font-semibold md:text-lg">
@@ -49,13 +48,16 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
                 <ImageIcon className="h-4 w-4 text-muted-foreground" />
               )}
             </div>
-            <Link
-              href="https://www.acentura.com/"
-              className="flex items-center gap-2 text-sm text-emerald-600"
-            >
-              {companyName}
-              <SquareArrowOutUpRight className="w-3 h-3" />
-            </Link>
+            {companyName && (
+              <Link
+                target="_blank"
+                href={companySite}
+                className="flex items-center gap-2 text-sm text-primary"
+              >
+                {companyName}
+                <SquareArrowOutUpRight className="w-3 h-3" />
+              </Link>
+            )}
           </div>
 
           <div className="flex flex-wrap flex-col mt-2">
@@ -82,14 +84,17 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
           </div>
         </div>
 
-        <div className="col-span-1 grid grid-cols-3 gap-2">
-          <Button variant="secondary" className="cursor-pointer">
-            <Heart className="h-4 w-4" /> Save
-          </Button>
-          <Button variant="secondary" className="cursor-pointer">
-            <Forward className="h-4 w-4" /> Share
-          </Button>
-          <Button className="bg-emerald-700 cursor-pointer" variant="ghost">
+        <div className="h-fit col-span-1 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-2">
+          <div className="grid grid-cols-2 gap-2">
+            <Button variant="outline" className=" cursor-pointer">
+              <Heart className="h-4 w-4" /> Save
+            </Button>
+            <Button variant="outline" className="cursor-pointer">
+              <Forward className="h-4 w-4" /> Share
+            </Button>
+          </div>
+
+          <Button className="cursor-pointer" variant="default">
             Apply Now
           </Button>
         </div>
@@ -118,7 +123,6 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
           style={{
             fontSize: "14px",
             lineHeight: "1.6",
-            borderRadius: "0.5rem",
             background: "transparent",
           }}
           className="max-h-[30rem] overflow-y-auto"
@@ -127,7 +131,7 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
         <p className="text-sm">No description yet.</p>
       )}
 
-      <div className="flex flex-wrap gap-2">
+      {/* <div className="flex flex-wrap gap-2">
         {platforms?.map((p) => (
           <Badge key={p} variant="outline" className="gap-1">
             {platformMeta[p]?.icon}
@@ -137,7 +141,7 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
         {platforms?.length === 0 && (
           <Badge variant="outline">No platforms selected</Badge>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };
@@ -152,7 +156,10 @@ const SqureCard: React.FC<{
   return (
     <div className="p-4 border rounded-lg flex flex-col items-start gap-2">
       <span className="text-sm">{title}</span>
-      <Badge variant="secondary" className="text-sm text-wrap text-emerald-700">
+      <Badge
+        variant="secondary"
+        className="text-sm text-wrap text-accent-foreground"
+      >
         {value || "N/A"}
       </Badge>
       {children}

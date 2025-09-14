@@ -1,0 +1,27 @@
+import { FilePayload } from "@/types/file-payload";
+
+export type SocialPlatformKey = "website" | "linkedin" | "x" | "facebook";
+
+export type PublishPayload = {
+  title: string;
+  text: string;
+  url: string; // public job URL on your site
+  company: string;
+  teamId: string;
+  scheduleAt?: string; // ISO datetime string
+  media?: FilePayload[]; // 👈 optional media files
+};
+
+export type SocialResult = {
+  platform: SocialPlatformKey;
+  ok: boolean;
+  status?: number;
+  statusText?: string;
+  message?: string;
+  externalId?: string;
+};
+
+export interface SocialAdapter {
+  readonly key: SocialPlatformKey;
+  publish(data: PublishPayload): Promise<SocialResult>;
+}

@@ -56,7 +56,7 @@ export default function CheckboxGroup({
             />
             <Label
               htmlFor={id}
-              className={`text-sm ${disabled ? "opacity-60" : ""}`}
+              className={`text-sm font-normal ${disabled ? "opacity-60" : ""}`}
             >
               {opt.label}
             </Label>

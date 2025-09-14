@@ -1,5 +1,5 @@
 // scripts/test-redis.ts
-import { redis } from "../lib/server/redis";
+import { redis } from "../lib/cache/redis";
 
 (async () => {
   try {

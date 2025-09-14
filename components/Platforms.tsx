@@ -22,7 +22,7 @@ const Platforms: React.FC<PlatformsProps> = ({ platforms, togglePlatform }) => {
   return (
     <div className="space-y-2">
       <Label>Post to Platforms</Label>
-      <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:grid-cols-4">
         {Object.entries(platformMeta).map(([key, meta]) => {
           const id = `platform-${key}`;
           const checked = platforms?.includes(key);
