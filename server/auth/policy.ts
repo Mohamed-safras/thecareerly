@@ -5,7 +5,7 @@ export function getEmailDomain(email?: string | null): string {
 }
 
 export function getOrgAllowlist(): string[] {
-  return (process.env.ORG_DOMAIN_ALLOWLIST ?? "")
+  return (process.env.NEXT_PUBLIC_ORG_DOMAIN ?? "")
     .split(",")
     .map((domain) => domain.trim().toLowerCase())
     .filter(Boolean);

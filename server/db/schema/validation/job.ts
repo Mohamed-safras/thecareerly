@@ -1,6 +1,5 @@
+import { DatetimeLocalRegex } from "@/lib/common/validate";
 import { z as zod } from "zod";
-
-const DatetimeLocalRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
 
 const objectId = zod
   .string()
@@ -41,7 +40,7 @@ export const CreateJobSchema = zod.object({
 
   salary: SalarySchema.default({}),
 
-  schedule: zod
+  scheduleDate: zod
     .union([
       zod
         .string()
@@ -59,17 +58,11 @@ export const CreateJobSchema = zod.object({
       message: "Invalid datetime",
     }),
 
-  platforms: zod.array(zod.string()).default([]),
-
   companyName: zod.string().optional(),
-  companySite: zod.string().url(),
+  companySite: zod.string().url().optional(),
 
   questions: zod.array(QuestionSchema).default([]),
   selectionProcess: zod.array(SelectionProcessSchema).default([]),
-
-  // S3 uploads are handled separately; keys get written back here
-  logoFileId: zod.string().nullable().optional(),
-  logoPreview: zod.string().nullable().optional(),
 
   posterFileId: zod.string().nullable().optional(),
   posterPreview: zod.string().nullable().optional(),
@@ -86,7 +79,7 @@ export const CreateJobSchema = zod.object({
 
   // free-form JSONs
   ai_content: zod.any().default({}),
-  social_media_posts: zod.any().default({}),
+  selectedPlatforms: zod.any().default({}),
 });
 
 export type CreateJobInput = zod.infer<typeof CreateJobSchema>;

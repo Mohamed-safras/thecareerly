@@ -12,7 +12,12 @@ export async function requireUser() {
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
-    select: { id: true, email: true, name: true },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      userType: true,
+    },
   });
 
   if (!user)
@@ -31,4 +36,23 @@ export async function requireTeamRole(
   });
   if (!membership)
     throw new ForbiddenError("You do not have permission for this team.");
+}
+
+export async function requireOrgId() {
+  const user = await requireUser();
+  console.log(user.id);
+  const membership = await prisma.teamUser.findFirst({
+    where: { user_id: user.id },
+    include: {
+      team: {
+        select: { organizationId: true },
+      },
+    },
+  });
+
+  if (!membership?.team?.organizationId) {
+    throw new ForbiddenError("No organization linked to your account.");
+  }
+
+  return membership.team.organizationId;
 }

@@ -6,6 +6,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { CONNECT_EMPLOYEE_LOGIN, FORBIDDEN } from "@/constents/router-links";
 import ProtectedRoleClientShell from "@/features/auth/components/protected-role-client-shell";
+import RectruiterAppSideBar from "@/features/users/components/employee-app-site-bar";
 
 export default function ProtectedEmployeeClientShell({
   children,
@@ -19,7 +20,9 @@ export default function ProtectedEmployeeClientShell({
       forbiddenUrl={FORBIDDEN}
     >
       <SidebarProvider defaultOpen>
-        <AppSidebar />
+        <AppSidebar>
+          <RectruiterAppSideBar />
+        </AppSidebar>
         {children}
       </SidebarProvider>
     </ProtectedRoleClientShell>

@@ -19,9 +19,16 @@ export type SocialResult = {
   statusText?: string;
   message?: string;
   externalId?: string;
+  retryAfterSec?: number;
+};
+
+export type TokenBundle = {
+  accountId: string;
+  access: string;
+  refresh?: string;
 };
 
 export interface SocialAdapter {
   readonly key: SocialPlatformKey;
-  publish(data: PublishPayload): Promise<SocialResult>;
+  publish(data: PublishPayload, token: TokenBundle): Promise<SocialResult>;
 }

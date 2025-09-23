@@ -37,6 +37,7 @@ export default function ProtectedRoleClientShell({
       if (pathname !== loginUrl) {
         redirectingRef.current = true;
         const url = `${loginUrl}?callbackUrl=${encodeURIComponent(pathname)}`;
+        console.log(url);
         router.replace(url);
       }
       return;

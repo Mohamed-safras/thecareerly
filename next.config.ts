@@ -2,8 +2,14 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+
   images: {
-    domains: ["www.acentura.com"], // allow remote images
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: `www.${process.env.NEXT_PUBLIC_ORG_DOMAIN!}`,
+      },
+    ],
   },
 };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { Combobox, type ComboItem } from "@/components/combobox";
 import { localStoreGet, localStoreSet } from "@/lib/common/localstore";
-import { slugify } from "@/lib/utils";
+import { isComboItemArray, slugify } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { replaceForm, setForm as setFormMerge } from "@/store/slice/jobs-slice";
 import { employmentTypeValue } from "@/types/employment";
@@ -34,22 +34,21 @@ import { Separator } from "@/components/ui/separator";
 import { payPeriodTypeValue } from "@/types/pay-period";
 import { currencyOptionTypeValue } from "@/types/currency-option";
 import TypeaheadLocation from "@/components/type-ahead-location";
-import { useSelector } from "react-redux";
-import { selectFormFieldError } from "@/store/form-errors/form-error-selectors";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-
-import { setFieldErrors } from "@/store/slice/form-error-slice";
-import { JobForm } from "@/types/job-form";
+import { setFieldError } from "@/store/slice/form-error-slice";
+import type { JobForm } from "@/types/job-form";
 import { JOB_FORM, JOB_TITLE_OPTIONS } from "@/constents/local-store-values";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { FORM_ID } from "@/constents/job-form";
 
 const BasicInfo: React.FC = () => {
   const [titleOptions, setTitleOptions] = useState<ComboItem[]>([]);
+  const [titlesHydrated, setTitlesHydrated] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
-  const form = useAppSelector((formSlice) => formSlice.jobForm);
-  const titleError = useSelector(selectFormFieldError(FORM_ID, "title"));
+
+  const jobForm = useAppSelector(({ jobForm }) => jobForm);
+  const { byForm } = useAppSelector(({ formErrors }) => formErrors);
 
   const {
     title,
@@ -60,7 +59,21 @@ const BasicInfo: React.FC = () => {
     minimumQualificationLevel,
     location,
     salary: { min, max, currency, payPeriod },
-  } = form;
+  } = jobForm;
+
+  // Load title options once
+  useEffect(() => {
+    const stored = localStoreGet<unknown>(JOB_TITLE_OPTIONS, []);
+    const safeStored = isComboItemArray(stored) ? stored : [];
+    setTitleOptions(safeStored);
+    setTitlesHydrated(true);
+  }, []);
+
+  // Save title options only AFTER they are hydrated
+  useEffect(() => {
+    if (!titlesHydrated) return;
+    localStoreSet<ComboItem[]>(JOB_TITLE_OPTIONS, titleOptions);
+  }, [titleOptions, titlesHydrated]);
 
   function onCreate(label: string) {
     const trimmed = label.trim();
@@ -80,52 +93,30 @@ const BasicInfo: React.FC = () => {
       label: trimmed,
     };
 
-    setTitleOptions((prev) => [...prev, newItem]);
+    setTitleOptions((prev) => {
+      const next = [...prev, newItem];
+      // Persist immediately (titlesHydrated is true after initial load)
+      localStoreSet<ComboItem[]>(JOB_TITLE_OPTIONS, next);
+      return next;
+    });
+
     dispatch(setFormMerge({ title: trimmed }));
     return newItem;
   }
 
-  // load & persist titles (localStorage)
+  // Form hydration & persistence (unchanged)
+  const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
-    const stored = localStoreGet<ComboItem[]>(JOB_TITLE_OPTIONS, []);
-    const safeStored = Array.isArray(stored) ? stored : [];
-    const byLabel = new Map<string, ComboItem>();
-    for (const it of titleOptions) byLabel.set(it.label.toLowerCase(), it);
-    for (const it of safeStored) {
-      if (it && typeof it.label === "string" && typeof it.value === "string") {
-        byLabel.set(it.label.toLowerCase(), it);
-      }
-    }
-    setTitleOptions(Array.from(byLabel.values()));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    localStoreSet<ComboItem[]>(JOB_TITLE_OPTIONS, titleOptions);
-  }, [titleOptions]);
-
-  useEffect(() => {
-    const stored = localStoreGet<JobForm>(JOB_FORM, form);
+    const stored = localStoreGet<JobForm>(JOB_FORM, jobForm);
     dispatch(replaceForm(stored));
+    setHydrated(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(
-    () => {
-      localStoreSet<JobForm>(JOB_FORM, {
-        ...form,
-        title,
-        employmentType,
-        workPreference,
-        jobSeniority,
-        facilities,
-        minimumQualificationLevel,
-        location,
-        salary: { min, max, currency, payPeriod },
-      });
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
+  useEffect(() => {
+    if (!hydrated) return;
+    localStoreSet<JobForm>(JOB_FORM, {
+      ...jobForm,
       title,
       employmentType,
       workPreference,
@@ -133,11 +124,27 @@ const BasicInfo: React.FC = () => {
       facilities,
       minimumQualificationLevel,
       location,
-      min,
-      max,
-      currency,
-      payPeriod,
-    ]
+      salary: { min, max, currency, payPeriod },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    hydrated,
+    title,
+    employmentType,
+    workPreference,
+    jobSeniority,
+    facilities,
+    minimumQualificationLevel,
+    location,
+    min,
+    max,
+    currency,
+    payPeriod,
+  ]);
+
+  const selectedTitleValue = useMemo(
+    () => titleOptions.find((o) => o.label === title)?.value ?? null,
+    [titleOptions, title]
   );
 
   return (
@@ -154,19 +161,10 @@ const BasicInfo: React.FC = () => {
               <Combobox
                 id="job-title"
                 items={titleOptions}
-                value={
-                  titleOptions.find((option) => option.label === title)
-                    ?.value ?? null
-                }
+                value={selectedTitleValue}
                 onChange={(_, item) => {
-                  dispatch(setFormMerge({ title: item?.label ?? "" }));
-                  if (!title)
-                    dispatch(
-                      setFieldErrors({
-                        formId: FORM_ID,
-                        errors: [{ path: "title", message: "" }],
-                      })
-                    );
+                  const nextTitle = item?.label ?? "";
+                  dispatch(setFormMerge({ title: nextTitle }));
                 }}
                 allowCreate
                 onCreate={onCreate}
@@ -175,32 +173,24 @@ const BasicInfo: React.FC = () => {
                 emptyMessage="No matching titles."
                 createPrefix="Create"
                 matchTriggerWidth
-                className={`w-full
-                ${
-                  titleError
-                    ? "border-destructive ring-destructive/20 ring-[3px]"
-                    : ""
-                }
-                  `}
+                className={`w-full`}
                 contentClassName="w-full"
               />
-              {titleError && (
-                <Alert variant="destructive" className="h-fit text-sm">
+              {byForm?.createJob?.title && (
+                <Alert variant="destructive" className="h-fit text-sm p-2">
                   <AlertCircle className="h-4 w-4" />
 
                   <AlertDescription>
-                    {Object.values([titleError]).map((msg, i) => (
-                      <div key={i}>{msg}</div>
-                    ))}
+                    {byForm?.createJob?.title}
                   </AlertDescription>
                 </Alert>
               )}
             </div>
 
-            {/* location */}
             <TypeaheadLocation
               value={location}
               onChange={(v) => dispatch(setFormMerge({ location: v }))}
+              fieldError={byForm?.createJob?.location}
             />
           </div>
 
@@ -229,6 +219,15 @@ const BasicInfo: React.FC = () => {
                   ))}
                 </SelectContent>
               </Select>
+              {byForm?.createJob?.workPreference && (
+                <Alert variant="destructive" className="h-fit text-sm p-2">
+                  <AlertCircle className="h-4 w-4" />
+
+                  <AlertDescription>
+                    {byForm?.createJob?.workPreference}
+                  </AlertDescription>
+                </Alert>
+              )}
             </div>
 
             {/* employmenet type */}
@@ -253,6 +252,15 @@ const BasicInfo: React.FC = () => {
                   ))}
                 </SelectContent>
               </Select>
+              {byForm?.createJob?.employementType && (
+                <Alert variant="destructive" className="h-fit text-sm p-2">
+                  <AlertCircle className="h-4 w-4" />
+
+                  <AlertDescription>
+                    {byForm?.createJob?.employementType}
+                  </AlertDescription>
+                </Alert>
+              )}
             </div>
           </div>
 
@@ -279,12 +287,21 @@ const BasicInfo: React.FC = () => {
                   ))}
                 </SelectContent>
               </Select>
+              {byForm?.createJob?.jobSeniority && (
+                <Alert variant="destructive" className="h-fit text-sm p-2">
+                  <AlertCircle className="h-4 w-4" />
+
+                  <AlertDescription>
+                    {byForm?.createJob?.jobSeniority}
+                  </AlertDescription>
+                </Alert>
+              )}
             </div>
 
             {/* qualification level */}
             <div className="space-y-1.5">
               <Label htmlFor="qualification-level">
-                Minimum Qualification level required
+                Minimum Qualification Level
               </Label>
               <Select
                 value={
@@ -312,6 +329,15 @@ const BasicInfo: React.FC = () => {
                   ))}
                 </SelectContent>
               </Select>
+              {byForm?.createJob?.minimumQualificationLevel && (
+                <Alert variant="destructive" className="h-fit text-sm p-2">
+                  <AlertCircle className="h-4 w-4" />
+
+                  <AlertDescription>
+                    {byForm?.createJob?.minimumQualificationLevel}
+                  </AlertDescription>
+                </Alert>
+              )}
             </div>
           </div>
 
@@ -330,7 +356,7 @@ const BasicInfo: React.FC = () => {
                       dispatch(
                         setFormMerge({
                           salary: {
-                            ...form.salary,
+                            ...jobForm.salary,
                             currency: v as currencyOptionTypeValue,
                           },
                         })
@@ -358,7 +384,7 @@ const BasicInfo: React.FC = () => {
                       dispatch(
                         setFormMerge({
                           salary: {
-                            ...form.salary,
+                            ...jobForm.salary,
                             payPeriod: v as payPeriodTypeValue,
                           },
                         })
@@ -389,7 +415,7 @@ const BasicInfo: React.FC = () => {
                     onChange={(e) =>
                       dispatch(
                         setFormMerge({
-                          salary: { ...form.salary, min: e.target.value },
+                          salary: { ...jobForm.salary, min: e.target.value },
                         })
                       )
                     }
@@ -407,7 +433,7 @@ const BasicInfo: React.FC = () => {
                     onChange={(e) =>
                       dispatch(
                         setFormMerge({
-                          salary: { ...form.salary, max: e.target.value },
+                          salary: { ...jobForm.salary, max: e.target.value },
                         })
                       )
                     }

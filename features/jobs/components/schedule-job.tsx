@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { Label } from "@radix-ui/react-label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,14 +19,22 @@ import {
   togglePlatform as togglePlatformAction,
 } from "@/store/slice/jobs-slice";
 
-const SchedulePanel: React.FC = () => {
+import { useSubmitForm } from "@/hooks/use-submit-job";
+
+interface SchedulePanelProps {
+  setCurrentStep: Dispatch<SetStateAction<number>>;
+}
+
+const SchedulePanel: React.FC<SchedulePanelProps> = ({ setCurrentStep }) => {
+  const dispatch = useAppDispatch();
+  const form = useAppSelector(({ jobForm }) => jobForm); // has logoFileId, etc.
+  const formErrors = useAppSelector(({ formErrors }) => formErrors);
+  const { loading, submit, postingType } = useSubmitForm();
+
   // local UI state only (not in redux)
   const [posting, setPosting] = useState<
     "idle" | "queued" | "posting" | "done" | "error"
   >("idle");
-
-  const dispatch = useAppDispatch();
-  const form = useAppSelector((s) => s.jobForm); // has logoFileId, etc.
 
   // pure action (NO function payloads)
   function togglePlatform(key: string) {
@@ -38,19 +46,6 @@ const SchedulePanel: React.FC = () => {
     toast("Content approved and queued for publishing (demo)");
   }
 
-  async function handlePostNow() {
-    try {
-      setPosting("posting");
-      // simulate async work
-      await new Promise((res) => setTimeout(res, 1200));
-      setPosting("done");
-      toast.success("Posted to selected platforms (demo)");
-    } catch {
-      setPosting("error");
-      toast.error("Failed to post (demo)");
-    }
-  }
-
   function resetFlow() {
     setPosting("idle");
     dispatch(
@@ -58,9 +53,7 @@ const SchedulePanel: React.FC = () => {
         title: "",
         platforms: [],
         includeMultimedia: false,
-        schedule: "",
-        logoFileId: null,
-        logoPreview: null,
+        scheduleDate: "",
         description: "",
         posterNotes: "",
         posterVibe: "",
@@ -73,10 +66,10 @@ const SchedulePanel: React.FC = () => {
           currency: "",
           payPeriod: "",
         },
-        companyName: "",
         employmentType: "",
       })
     );
+    setCurrentStep(1);
   }
 
   return (
@@ -91,9 +84,9 @@ const SchedulePanel: React.FC = () => {
             <Input
               id="schedule"
               type="datetime-local"
-              value={form.schedule}
+              value={form.scheduleDate}
               onChange={(e) =>
-                dispatch(setFormMerge({ schedule: e.target.value }))
+                dispatch(setFormMerge({ scheduleDate: e.target.value }))
               }
             />
           </div>
@@ -117,13 +110,17 @@ const SchedulePanel: React.FC = () => {
 
         <div className="flex justify-end gap-2">
           <Button
+            disabled={Object.keys(formErrors.byForm.createJob).length > 0}
             variant="outline"
-            onClick={() => toast.success("Draft saved")}
+            onClick={() => submit("draft")}
           >
-            Save Draft
+            {loading && postingType === "draft" ? "Saving..." : "Save Draft"}
           </Button>
-          <Button onClick={handlePostNow}>
-            {posting === "posting" ? (
+          <Button
+            disabled={Object.keys(formErrors.byForm.createJob).length > 0}
+            onClick={() => submit("publish")}
+          >
+            {loading && postingType === "publish" ? (
               <>
                 <PauseCircle className="h-4 w-4" /> Publishing...
               </>

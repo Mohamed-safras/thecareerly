@@ -1,10 +1,11 @@
-import { axiosClient } from "@/lib/axios/axios-client";
+import { axiosClient } from "@/lib/http/axios-client";
 import { AIPromptInput } from "@/types/gen-AI";
 import { JobForm } from "@/types/job-form";
 import { useMemo, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import { extractStatusAndMessage } from "@/lib/error/error-message-extractor";
+import { GENERATE_JD } from "@/constents/router-links";
 
 const useAIGenerateJobDescription = (form: JobForm) => {
   const [generating, setGenerating] = useState(false);
@@ -30,7 +31,7 @@ const useAIGenerateJobDescription = (form: JobForm) => {
 
     try {
       const { data } = await axiosClient.post<{ type: string; text: string }>(
-        "/api/generate-jd",
+        GENERATE_JD,
         { payload: aiPromptInputs }
       );
 

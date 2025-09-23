@@ -1,11 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { axiosClient } from "@/lib/axios/axios-client";
+import { axiosClient } from "@/lib/http/axios-client";
 import type { JobForm, PosterPayload } from "@/types/job-form";
 import { normalizePosterVibe } from "@/types/poster";
 import axios from "axios";
 import { extractStatusAndMessage } from "@/lib/error/error-message-extractor";
+import { GENERATE_POSTER } from "@/constents/router-links";
 
 interface GeneratePosterResponse {
   type: "poster";
@@ -132,7 +133,7 @@ export function useGeneratePoster({
         }
 
         const { data } = await axiosClient.post<GeneratePosterResponse>(
-          "/api/generate-poster",
+          GENERATE_POSTER,
           formData,
           {
             headers: {
@@ -153,7 +154,7 @@ export function useGeneratePoster({
         };
 
         const { data } = await axiosClient.post<GeneratePosterResponse>(
-          "/api/generate-poster",
+          GENERATE_POSTER,
           { payload }
         );
         setPosterImg(data.image);

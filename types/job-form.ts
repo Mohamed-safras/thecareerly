@@ -4,32 +4,30 @@ import { SelectionProcess } from "@/types/selection-process";
 
 export type JobForm = {
   title: string;
+  location: string;
   employmentType?: string;
   workPreference?: string;
   jobSeniority?: string;
   minimumQualificationLevel?: string;
   facilities: string[]; // array of facility keys
   description?: string;
-  location?: string;
+
   salary: {
     min?: string;
     max?: string;
     currency?: string;
     payPeriod?: string;
   };
-  schedule?: string; // datetime-local
+  scheduleDate?: string; // datetime-local
   aiPrompt?: string;
   includeMultimedia?: boolean;
   platforms: string[];
-  logoFileId?: string | null;
-  logoPreview?: string | null;
   brandColorHex?: string;
-  companyName?: string;
-  companySite: string;
   posterVibe: PosterVibe;
   posterNotes: string;
   questions: Question[];
   selectionProcess: SelectionProcess[];
+  skills: [];
 };
 
 export type PosterPayload = {

@@ -1,54 +1,32 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
+import { CONNECT_CANDIDATE_DASHBOARD } from "@/constents/router-links";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { LoginFormScheama } from "@/lib/form-validation/login-form-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function validateEmail(v: string): string | null {
-  const value = v.trim();
-  if (!value) return "Email is required.";
-  if (!EMAIL_RE.test(value)) return "Enter a valid email address.";
-  return null;
-}
-
-function validatePassword(v: string): string | null {
-  if (!v) return "Password is required.";
-  if (v.length < 8) return "Password must be at least 8 characters.";
-  return null;
-}
+type FormValues = z.infer<typeof LoginFormScheama>;
 
 export default function useCandidateLogin() {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [emailError, setEmailError] = useState<string | null>(null);
-  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const form = useForm<FormValues>({
+    resolver: zodResolver(LoginFormScheama),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    mode: "onTouched",
+  });
 
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const isValid = useMemo(() => {
-    return !validateEmail(email) && !validatePassword(password);
-  }, [email, password]);
-
-  const candidateLoginHandler = useCallback(async () => {
-    // clear global error each attempt
-
-    // validate fields
-    const emailErr = validateEmail(email);
-    const passwordErr = validatePassword(password);
-    setEmailError(emailErr);
-    setPasswordError(passwordErr);
-
-    if (emailErr || passwordErr) return; // stop if invalid
-
-    setLoading(true);
+  const onSubmit = async (values: FormValues) => {
     try {
       const res = await signIn("credentials", {
-        email: email.trim(),
-        password,
+        email: values.email,
+        password: values.password,
         redirect: false,
-        callbackUrl: "/connect/dashboard",
+        callbackUrl: CONNECT_CANDIDATE_DASHBOARD,
       });
 
       if (!res) {
@@ -70,53 +48,11 @@ export default function useCandidateLogin() {
       }
     } catch (error) {
       toast.error((error as Error).message);
-    } finally {
-      setLoading(false);
     }
-  }, [email, password]);
-
-  // onChange helpers: clear field-specific errors as user edits
-  const onEmailChange = useCallback(
-    (v: string) => {
-      setEmail(v);
-      if (emailError) setEmailError(null);
-    },
-    [emailError]
-  );
-
-  const onPasswordChange = useCallback(
-    (v: string) => {
-      setPassword(v);
-      if (passwordError) setPasswordError(null);
-    },
-    [passwordError]
-  );
-
-  // onBlur helpers: validate on blur for instant feedback
-  const onEmailBlur = useCallback(
-    () => setEmailError(validateEmail(email)),
-    [email]
-  );
-  const onPasswordBlur = useCallback(
-    () => setPasswordError(validatePassword(password)),
-    [password]
-  );
+  };
 
   return {
-    // values
-    email,
-    password,
-    loading,
-    isValid,
-    // errors
-    emailError,
-    passwordError,
-    // setters
-    setEmail: onEmailChange,
-    setPassword: onPasswordChange,
-    onEmailBlur,
-    onPasswordBlur,
-    // actions
-    candidateLoginHandler,
+    form,
+    onSubmit,
   };
 }

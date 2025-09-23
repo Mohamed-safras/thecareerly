@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/store/hooks";
 import { CONNECT_CANDIDATE_lOGIN, FORBIDDEN } from "@/constents/router-links";
 import ProtectedRoleClientShell from "@/features/auth/components/protected-role-client-shell";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import CandidateAppSideBar from "@/features/users/components/candidate-app-site-bar";
 
 export default function ProtectedCandidateClientShell({
   children,
@@ -54,6 +57,11 @@ export default function ProtectedCandidateClientShell({
       forbiddenUrl={FORBIDDEN}
     >
       {/* Add candidate header/nav if you have one */}
+      <SidebarProvider>
+        <AppSidebar>
+          <CandidateAppSideBar />
+        </AppSidebar>
+      </SidebarProvider>
       {children}
     </ProtectedRoleClientShell>
   );

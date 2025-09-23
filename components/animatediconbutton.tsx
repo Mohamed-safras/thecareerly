@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
 type AnimatedIconButtonProps = {
-  onClick: () => void;
+  onClick?: () => void;
   icon: React.ReactNode;
   label: string;
   busy?: boolean;
@@ -102,7 +102,7 @@ export function AnimatedIconButton({
 
   const handleClick = () => {
     if (isInactive) return;
-    onClick();
+    if (onClick) onClick();
   };
 
   return (

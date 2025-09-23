@@ -32,23 +32,7 @@ export async function saveJob(
   }
   const bucket = process.env.S3_BUCKET;
 
-  let logoFileId = input.logoFileId ?? undefined;
   let posterFileId = input.posterFileId ?? undefined;
-
-  if (files?.logoFile) {
-    const result = await putToS3({
-      bucket,
-      keyPrefix: `teams/${input.teamId}/logos`,
-      contentType: files.logoFile.contentType,
-      body: files.logoFile.buffer,
-    });
-    if (!result.success) {
-      throw new BadRequestError(
-        `Failed to upload logo: ${result.error ?? "Unknown error"}`
-      );
-    }
-    logoFileId = result.key;
-  }
 
   if (files?.posterFile) {
     const result = await putToS3({
@@ -86,19 +70,15 @@ export async function saveJob(
         payPeriod: input.salary.payPeriod,
       },
 
-      schedule: input.schedule, // Date | undefined (already coerced by Zod)
+      schedule: input.scheduleDate, // Date | undefined (already coerced by Zod)
 
-      platforms: input.platforms,
-
-      // S3 object keys (final)
-      logo_file_id: logoFileId,
-      logo_preview: input.logoPreview ?? undefined,
+      platforms: input.selectedPlatforms,
 
       poster_file_id: posterFileId,
       poster_preview: input.posterPreview ?? undefined,
 
       company_name: input.companyName,
-      company_site: input.companySite,
+      company_site: input.companySite ?? undefined,
 
       questions: input.questions.map((question) => ({
         prompt: question.prompt,
@@ -107,7 +87,7 @@ export async function saveJob(
         options: question.options,
       })),
 
-      selection_process: input.selectionProcess.map((process) => ({
+      selection_process: input.selectionProcess?.map((process) => ({
         order: process.order,
         title: process.title,
         description: process.description,
@@ -120,7 +100,6 @@ export async function saveJob(
       status: input.status,
       compliance_status: input.complianceStatus,
       ai_content: input.ai_content,
-      social_media_posts: input.social_media_posts,
     },
   });
 

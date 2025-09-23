@@ -10,11 +10,18 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { Loader2, MapPin, Search } from "lucide-react";
+import { AlertCircle, Loader2, MapPin, Search } from "lucide-react";
 import axios from "axios";
 import { useAutoSearch } from "@/hooks/use-auto-search";
 import { mapNominatim } from "@/lib/geo/place";
 import { Place } from "@/types/place";
+import { Label } from "./ui/label";
+import { Alert, AlertDescription } from "./ui/alert";
+import { useSelector } from "react-redux";
+import { selectFormFieldError } from "@/store/form-errors/form-error-selectors";
+import { FORM_ID } from "@/constents/job-form";
+import { useAppDispatch } from "@/store/hooks";
+import { setFieldError } from "@/store/slice/form-error-slice";
 
 const nominatim = axios.create({
   baseURL: "https://nominatim.openstreetmap.org",
@@ -27,6 +34,7 @@ export interface TypeAheadLocationProps {
   onChange: (v: string) => void;
   onSelect?: (v: string) => void;
   minChars?: number;
+  fieldError: string;
 }
 
 export default function TypeaheadLocation({
@@ -34,6 +42,7 @@ export default function TypeaheadLocation({
   onChange,
   onSelect,
   minChars = 3,
+  fieldError,
 }: TypeAheadLocationProps) {
   const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState(false);
@@ -71,19 +80,19 @@ export default function TypeaheadLocation({
   }, []);
 
   return (
-    <div ref={wrapperRef} className="space-y-2">
-      <label htmlFor="location" className="text-sm font-medium">
-        Location
-      </label>
+    <div ref={wrapperRef} className="space-y-1.5">
+      <Label htmlFor="location">Location</Label>
 
-      <div className="relative">
+      <div className={`relative`}>
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 opacity-60 pointer-events-none" />
         <Input
           id="location"
           placeholder="Type a city, area, address…"
           className="pl-9"
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => {
+            onChange(e.target.value);
+          }}
           onFocus={() => setFocused(true)}
           onBlur={() => {
             // do nothing here; outside-click handler manages closing
@@ -132,6 +141,13 @@ export default function TypeaheadLocation({
           </div>
         )}
       </div>
+      {fieldError && (
+        <Alert variant="destructive" className="h-fit text-sm p-2">
+          <AlertCircle className="h-4 w-4" />
+
+          <AlertDescription>{fieldError}</AlertDescription>
+        </Alert>
+      )}
     </div>
   );
 }

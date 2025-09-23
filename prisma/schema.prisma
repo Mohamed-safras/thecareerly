@@ -36,6 +36,15 @@ enum ComplianceStatus {
   flagged
 }
 
+enum SocialPlatform {
+  website
+  linkedin
+  facebook
+  x
+  instagram
+  other
+}
+
 /**
  * =========================
  * Embedded (MongoDB types)
@@ -76,8 +85,9 @@ type SelectionProcess {
 model User {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name        String?
-  email       String?  @unique
+  email       String  @unique
   image       String?
+  phone       String  @unique
   userType    UserType @default(Candidate)
   emailDomain String?
 
@@ -151,6 +161,7 @@ model Organization {
   name            String   @unique
   domainAllowlist String[]
   teams           Team[]
+  socialAccounts  SocialAccount[]
 }
 
 model Team {
@@ -185,7 +196,6 @@ model CandidateProfile {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
   userId    String  @unique @db.ObjectId
   phone     String?
-  resumeUrl String?
   location  String?
 
   user User @relation(fields: [userId], references: [id])
@@ -219,7 +229,6 @@ model Job {
   questions                 Question[]
   selection_process         SelectionProcess[]
 
-  // relations
   created_by User   @relation("UserCreatedJobs", fields: [user_id], references: [id])
   user_id    String @db.ObjectId
 
@@ -231,11 +240,46 @@ model Job {
   status             JobStatus        @default(draft)
   ai_content         Json?
   compliance_status  ComplianceStatus @default(pending)
-  social_media_posts Json?
+
+  socialPosts        SocialPost[]
 
   @@index([status])
   @@index([title])
   @@index([team_id])
   @@index([team_id, status])
   @@map("Job")
+}
+
+/**
+ * =========================
+ * Social Media Integrations
+ * =========================
+ */
+model SocialAccount {
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String          @db.ObjectId
+  organization   Organization    @relation(fields: [organizationId], references: [id])
+  platform       SocialPlatform
+  accountId      String
+  accessToken    String          // encrypted
+  refreshToken   String?
+  expiry         DateTime?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  posts          SocialPost[]
+  @@unique([organizationId, platform, accountId])
+}
+
+model SocialPost {
+  id         String         @id @default(auto()) @map("_id") @db.ObjectId
+  jobId      String         @db.ObjectId
+  job        Job            @relation(fields: [jobId], references: [id])
+  accountId  String         @db.ObjectId
+  account    SocialAccount  @relation(fields: [accountId], references: [id])
+  platform   SocialPlatform
+  postId     String
+  url        String?
+  createdAt  DateTime       @default(now())
+
+  @@unique([jobId, accountId]) 
 }

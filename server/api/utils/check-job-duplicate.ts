@@ -16,7 +16,7 @@ export async function findExactDuplicateJob(args: {
   location?: string;
   status: "open" | "hold" | "closed" | "draft";
   complianceStatus: "pending" | "approved" | "flagged";
-  schedule?: Date;
+  scheduleDate?: Date;
   companyName?: string;
   skills: string[];
   facilities: string[];
@@ -33,7 +33,7 @@ export async function findExactDuplicateJob(args: {
       location: args.location,
       status: args.status,
       compliance_status: args.complianceStatus,
-      schedule: args.schedule,
+      schedule: args.scheduleDate,
       company_name: args.companyName,
       skills: { equals: args.skills },
       facilities: { equals: args.facilities },

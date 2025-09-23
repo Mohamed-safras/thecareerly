@@ -4,10 +4,11 @@ import React from "react";
 import { useAppSelector } from "@/store/hooks";
 import { Badge } from "@/components/ui/badge";
 import MarkdownEditor from "@uiw/react-md-editor";
-import { Forward, Heart, ImageIcon, SquareArrowOutUpRight } from "lucide-react";
+import { Forward, Heart, SquareArrowOutUpRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 
 export interface PreviewPanelProps {
   compact?: boolean;
@@ -16,15 +17,12 @@ export interface PreviewPanelProps {
 const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
   const {
     title,
-    companyName,
     location,
     minimumQualificationLevel,
     employmentType,
     workPreference,
     salary,
     description,
-    companySite,
-    logoPreview,
   } = useAppSelector((selector) => selector.jobForm);
 
   return (
@@ -36,25 +34,25 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
           </h3>
 
           <div className="flex gap-2">
-            <div className="flex items-center justify-center h-10 w-10 rounded border bg-background overflow-hidden">
-              {logoPreview ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={logoPreview}
+            {process.env.NEXT_PUBLIC_ORG_LOGO && (
+              <div className="flex items-center justify-center h-10 w-10 rounded border bg-background overflow-hidden">
+                <Image
+                  src={process.env.NEXT_PUBLIC_ORG_LOGO}
                   alt="logo"
-                  className="h-full w-full object-cover"
+                  width={100}
+                  height={100}
+                  className="w-full h-full object-cover"
                 />
-              ) : (
-                <ImageIcon className="h-4 w-4 text-muted-foreground" />
-              )}
-            </div>
-            {companyName && (
+              </div>
+            )}
+
+            {process.env.NEXT_PUBLIC_ORG_WEB_SITE && (
               <Link
                 target="_blank"
-                href={companySite}
+                href={process.env.NEXT_PUBLIC_ORG_WEB_SITE! ?? ""}
                 className="flex items-center gap-2 text-sm text-primary"
               >
-                {companyName}
+                {process.env.NEXT_PUBLIC_ORG_NAME}
                 <SquareArrowOutUpRight className="w-3 h-3" />
               </Link>
             )}

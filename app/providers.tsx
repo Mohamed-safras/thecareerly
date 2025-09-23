@@ -6,7 +6,6 @@ import { SessionProvider } from "next-auth/react";
 import { Provider as ReduxProvider } from "react-redux";
 import { store } from "@/store";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "sonner";
 import { useAppDispatch } from "@/store/hooks";
 import { hydrateUserFromSession } from "@/store/slice/user-slice";
 
@@ -29,7 +28,6 @@ export default function AppProviders({ children }: { children: ReactNode }) {
           disableTransitionOnChange
         >
           <Hydrator>{children}</Hydrator>
-          <Toaster richColors position="top-center" expand />
         </ThemeProvider>
       </ReduxProvider>
     </SessionProvider>

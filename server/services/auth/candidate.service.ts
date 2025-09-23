@@ -7,38 +7,67 @@ import { ConflictError } from "@/lib/error/http-error";
 export async function candidateSignUp(
   emailRaw: string,
   password: string,
-  name?: string
-): Promise<{ userId: string; email: string | null; name: string | null }> {
+  name: string,
+  phone: string
+): Promise<{
+  userId: string;
+  email: string | null;
+  name: string | null;
+  phone: string | null;
+}> {
   const email = emailRaw.toLowerCase();
+
+  // Block organization users
   if (isOrgEmail(email)) {
     throw new ConflictError(
       "Organization users must use SSO or their provisioned account."
     );
   }
 
-  const existingUser = await prisma.user.findUnique({ where: { email } });
+  // Check if email already exists
+  const existingEmailUser = await prisma.user.findUnique({
+    where: { email },
+  });
 
-  if (existingUser) {
+  // Check if phone already exists
+  const existingPhoneUser = await prisma.user.findUnique({
+    where: { phone },
+  });
+
+  // Handle phone already registered
+  if (existingPhoneUser) {
+    throw new ConflictError("The provided phone is already registered.");
+  }
+
+  // Email exists → maybe already registered or just needs credentials
+  if (existingEmailUser) {
     const localCredentials = await prisma.localCredential.findUnique({
-      where: { userId: existingUser.id },
+      where: { userId: existingEmailUser.id },
     });
 
-    if (localCredentials)
-      throw new ConflictError("Account already exists. Please sign in.");
+    // Email fully registered
+    if (localCredentials) {
+      throw new ConflictError(
+        `Account already exists with this email ${existingEmailUser.email}. Please sign in.`
+      );
+    }
 
+    // Email exists but no credentials → attach credentials now
     const passwordHash = await hashPassword(password);
 
     await prisma.localCredential.create({
-      data: { userId: existingUser.id, passwordHash },
+      data: { userId: existingEmailUser.id, passwordHash },
     });
 
     return {
-      userId: existingUser.id,
-      name: existingUser.name,
-      email: existingUser.email,
+      userId: existingEmailUser.id,
+      name: existingEmailUser.name,
+      email: existingEmailUser.email,
+      phone: existingEmailUser.phone,
     };
   }
 
+  // All checks passed → create user and credentials
   const passwordHash = await hashPassword(password);
 
   const user = await prisma.user.create({
@@ -47,14 +76,21 @@ export async function candidateSignUp(
       name,
       userType: "Candidate",
       emailDomain: getEmailDomain(email),
+      phone,
     },
-    select: { id: true, email: true, name: true },
+    select: { id: true, email: true, name: true, phone: true },
   });
 
   await prisma.localCredential.create({
     data: { userId: user.id, passwordHash },
   });
-  return { userId: user.id, email: user.email, name: user.name };
+
+  return {
+    userId: user.id,
+    email: user.email,
+    name: user.name,
+    phone: user.phone,
+  };
 }
 
 export async function candidateCredentialsAuthorize(

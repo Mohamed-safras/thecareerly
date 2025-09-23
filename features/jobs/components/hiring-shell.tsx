@@ -7,7 +7,7 @@ import { SearchForm } from "@/components/search-form";
 
 export type BreadcrumbItem = { label: string; link: string };
 
-export default function HiringShell({
+export default function HeaderShell({
   children,
   breadCrumpPage,
   breadCrumbsItems,
