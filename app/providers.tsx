@@ -19,17 +19,17 @@ function Hydrator({ children }: { children: ReactNode }) {
 
 export default function AppProviders({ children }: { children: ReactNode }) {
   return (
-    <SessionProvider>
-      <ReduxProvider store={store}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <SessionProvider>
+        <ReduxProvider store={store}>
           <Hydrator>{children}</Hydrator>
-        </ThemeProvider>
-      </ReduxProvider>
-    </SessionProvider>
+        </ReduxProvider>
+      </SessionProvider>
+    </ThemeProvider>
   );
 }

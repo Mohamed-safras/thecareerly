@@ -24,7 +24,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { NavSecondary } from "@/components/nav-secondary";
-import { CREATE_JOB, HIRING_JOBS } from "@/constents/router-links";
+import { CREATE_JOB, JOBS } from "@/constents/router-links";
 import { useAppSelector } from "@/store/hooks";
 
 const data = {
@@ -62,66 +62,7 @@ const data = {
       icon: Calendar,
     },
   ],
-  recuitment: [
-    {
-      title: "Jobs",
-      url: HIRING_JOBS,
-      icon: BriefcaseBusiness,
-      isActive: true,
-      items: [
-        {
-          title: "Add New Job",
-          url: CREATE_JOB,
-        },
-        {
-          title: "Job Posts",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Candidates",
-      url: "#",
-      icon: UserRound,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    // {
-    //   title: "Settings",
-    //   url: "#",
-    //   icon: Settings2,
-    //   items: [
-    //     {
-    //       title: "General",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Team",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Billing",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Limits",
-    //       url: "#",
-    //     },
-    //   ],
-    // },
-  ],
+
   organization: [
     {
       title: "Employee",
@@ -169,14 +110,6 @@ const CandidateAppSideBar = () => {
       </SidebarHeader>
       <SidebarContent>
         <NavSecondary sectionTitle="MENU" linearItems={data.NavMain} />
-        <NavSecondary
-          linearItems={[
-            { title: "My Referrals", icon: Speech, url: "#" },
-            { title: "Career Site", icon: Link, url: "#" },
-          ]}
-          collapsibleItems={data.recuitment}
-          sectionTitle="RECRUITMENT"
-        />
         {/* <NavProjects projects={data.projects} /> */}
         <NavSecondary
           collapsibleItems={data.organization}

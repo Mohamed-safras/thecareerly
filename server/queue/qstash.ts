@@ -20,7 +20,7 @@ export async function enqueueSocialQStash(
   },
   scheduleAt?: Date
 ) {
-  const url = `${process.env.APP_URL}/api/social/publish`;
+  const url = `${process.env.NEXT_APP_URL}/api/social/publish`;
 
   return await qstash.publishJSON({
     url,

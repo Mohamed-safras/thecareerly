@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     ) {
       await enqueueSocialQStash(
         {
-          organizationId: teamUser?.team.organizationId, // 👈 pass orgId
+          organizationId: teamUser?.team.organizationId,
           teamId: parsed.teamId,
           job: {
             id: job.id,
@@ -90,9 +90,13 @@ export async function POST(req: NextRequest) {
         parsed.scheduleDate ?? undefined // scheduleAt optional
       );
 
-      return successResponse(201, "Job published; social task enqueued", {
-        job,
-      });
+      return successResponse(
+        201,
+        " Your Job has been published & it will automatically publish on your organization social media pages",
+        {
+          job,
+        }
+      );
     }
 
     return successResponse(

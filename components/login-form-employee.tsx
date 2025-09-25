@@ -36,88 +36,84 @@ export function EmployeeLoginForm({
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form
-              className="p-6 md:p-8"
-              onSubmit={form.handleSubmit(onSubmit)}
-              noValidate
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
               <div className="grid gap-4">
-                <div className="flex flex-col gap-4">
-                  <Button variant="outline" className="w-full">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M11 2H2v9h9V2zm11 0h-9v9h9V2zM11 13H2v9h9v-9zm11 0h-9v9h9v-9z"
-                      />
-                    </svg>
-                    Login with Microsoft
-                  </Button>
-                </div>
-                <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-                  <span className="bg-card text-muted-foreground relative z-10 px-2">
-                    Or continue with
-                  </span>
-                </div>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem className="grid gap-1.5">
+                      <FormLabel htmlFor="email">Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          id="email"
+                          placeholder="john@email.com"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                <div className="grid gap-4">
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem className="grid gap-1.5">
-                        <FormLabel htmlFor="email">Full Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            id="email"
-                            placeholder="john@email.com"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem className="grid gap-1.5">
-                        <FormLabel htmlFor="password">Password</FormLabel>
-                        <FormControl>
-                          <PasswordInput
-                            id="password"
-                            placeholder="******"
-                            autoComplete="new-password"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button
-                    disabled={
-                      form.formState.isSubmitting &&
-                      form.formState.isLoading &&
-                      !form.formState.isValid
-                    }
-                    type="submit"
-                    className="w-full"
-                  >
-                    {form.formState.isSubmitting ? "Login..." : "Login"}
-                  </Button>
-                </div>
-                <div className="text-center text-sm">
-                  Don&apos;t have an account? Contact your admin to create an
-                  account
-                </div>
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem className="grid gap-1.5">
+                      <FormLabel htmlFor="password">Password</FormLabel>
+                      <FormControl>
+                        <PasswordInput
+                          id="password"
+                          placeholder="******"
+                          autoComplete="new-password"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  disabled={
+                    form.formState.isSubmitting &&
+                    form.formState.isLoading &&
+                    !form.formState.isValid
+                  }
+                  type="submit"
+                  className="w-full"
+                >
+                  {form.formState.isSubmitting ? "Login..." : "Login"}
+                </Button>
               </div>
             </form>
+
+            <div className="mt-4 grid gap-4">
+              <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+                <span className="bg-card text-muted-foreground relative z-10 px-2">
+                  Or continue with
+                </span>
+              </div>
+              <div className="flex flex-col gap-4">
+                <Button variant="outline" className="w-full">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M11 2H2v9h9V2zm11 0h-9v9h9V2zM11 13H2v9h9v-9zm11 0h-9v9h9v-9z"
+                    />
+                  </svg>
+                  Login with Microsoft
+                </Button>
+              </div>
+              <div className="text-center text-sm">
+                Don&apos;t have an account? Contact your admin to create an
+                account
+              </div>
+            </div>
           </Form>
         </CardContent>
       </Card>

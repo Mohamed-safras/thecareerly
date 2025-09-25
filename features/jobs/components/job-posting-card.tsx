@@ -30,19 +30,21 @@ import { jobStatus } from "@/constents/job-form";
 import StatisticPill from "@/features/jobs/components/statistic-pill";
 
 export interface JobPosting {
-  status: "Open" | "Hold" | "Closed" | "Draft";
-  role: string;
-  department: string;
-  employmentType: string;
+  id: string;
+  status: "open" | "hold" | "closed" | "draft";
+  title: string;
+  department?: string;
+  work_preference: string;
+  employment_type: string;
   location: string;
-  workplace: string;
-  candidatesApplied: number;
-  interviewsCompleted: number;
-  postedAt: string;
-  closeAt: string;
-  daysToGo?: number;
-  createdBy: { name: string; avatarUrl?: string };
-  progress?: number;
+  // workplace: string;
+  // candidatesApplied?: number;
+  // interviewsCompleted?: number;
+  // postedAt?: string;
+  // closeAt?: string;
+  // daysToGo?: number;
+  // createdBy: { name: string; avatarUrl?: string };
+  // progress?: number;
 }
 
 export function JobPostingCard({ job }: { job: JobPosting }) {
@@ -51,26 +53,28 @@ export function JobPostingCard({ job }: { job: JobPosting }) {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Badge
+            {/* <Badge
               variant={"secondary"}
               className={`${
                 jobStatus[job.status]
               } text-white font-bold text-sm`}
             >
-              {job.status === "Open" && <CircleDot />}
-              {job.status === "Hold" && <PauseCircleIcon />}
-              {job.status === "Draft" && <Pencil />}
-              {job.status === "Closed" && <CircleCheck />}
+              {job.status === "open" && <CircleDot />}
+              {job.status === "hold" && <PauseCircleIcon />}
+              {job.status === "draft" && <Pencil />}
+              {job.status === "closed" && <CircleCheck />}
 
               {job.status}
 
               {!(
-                job.status === "Open" ||
-                job.status === "Hold" ||
-                job.status === "Closed"
+                job.status === "open" ||
+                job.status === "hold" ||
+                job.status === "closed"
               ) && <ChevronDown className="cursor-copy" />}
+            </Badge> */}
+            <Badge className="text-sm font-semibold">
+              {job?.department ?? ""}
             </Badge>
-            <Badge className="text-sm font-semibold">{job.department}</Badge>
           </div>
           <div className="flex items-center gap-2">
             <Button
@@ -93,26 +97,20 @@ export function JobPostingCard({ job }: { job: JobPosting }) {
         </div>
 
         <CardTitle className="text-lg sm:text-xl">
-          {job.role.length > 25 ? `${job.role.slice(0, 25)}...` : job.role}
+          {job.title.length > 25 ? `${job.title.slice(0, 25)}...` : job.title}
         </CardTitle>
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-          <KV icon={BriefcaseBusiness}>{job.employmentType}</KV>
+          <KV icon={BriefcaseBusiness}>2</KV>
           <KV icon={MapPin}>{job.location}</KV>
-          <KV icon={Building}>{job.workplace}</KV>
+          <KV icon={Building}>{job.employment_type}</KV>
         </div>
       </CardHeader>
 
       <CardContent>
         <div className="grid grid-cols-2 gap-3 sm:gap-2">
-          <StatisticPill
-            value={job.candidatesApplied}
-            label="Candidates Applied"
-          />
-          <StatisticPill
-            value={job.interviewsCompleted}
-            label="Completed interview"
-          />
+          <StatisticPill value={3} label="Candidates Applied" />
+          <StatisticPill value={3} label="Completed interview" />
         </div>
         <Separator className="my-4" />
         <div className="flex flex-col gap-2">
@@ -120,27 +118,27 @@ export function JobPostingCard({ job }: { job: JobPosting }) {
             <div className="inline-flex items-center gap-2 text-muted-foreground">
               <CalendarDays className="h-4 w-4" />
               <span className="text-xs">
-                Posted at <span className="font-semibold">{job.postedAt}</span>
+                Posted at <span className="font-semibold"></span>
                 <span className="mx-1">•</span> Close at{" "}
-                <span className="font-semibold">{job.closeAt}</span>
+                <span className="font-semibold"></span>
               </span>
             </div>
           </div>
-          {job?.daysToGo && (
+          {/* {job?.daysToGo && (
             <span className="text-xs font-medium text-muted-foreground">
               {job.daysToGo} Days to go
             </span>
-          )}
-          {typeof job.progress === "number" && (
+          )} */}
+          {/* {typeof job.progress === "number" && (
             <Progress value={job.progress} />
-          )}
+          )} */}
         </div>
       </CardContent>
 
       <CardFooter className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Avatar className="h-10 w-10">
-            {job.createdBy.avatarUrl ? (
+            {/* {job.createdBy.avatarUrl ? (
               <AvatarImage
                 src={job.createdBy.avatarUrl}
                 alt={job.createdBy.name}
@@ -150,11 +148,11 @@ export function JobPostingCard({ job }: { job: JobPosting }) {
               <AvatarFallback>
                 {job.createdBy.name.slice(0, 2).toUpperCase()}
               </AvatarFallback>
-            )}
+            )} */}
           </Avatar>
-          <span className="text-sm text-muted-foreground">
+          {/* <span className="text-sm text-muted-foreground">
             Created by <span className="font-bold">{job.createdBy.name}</span>
-          </span>
+          </span> */}
         </div>
         <Button
           variant="outline"

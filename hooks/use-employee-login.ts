@@ -25,6 +25,7 @@ export default function useEmployeeLogin() {
       const res = await signIn("credentials", {
         email: values.email,
         password: values.password,
+        userType: "Employee",
         redirect: false,
         callbackUrl: CONNECT_EMPLOYEE_DASHBOARD,
       });

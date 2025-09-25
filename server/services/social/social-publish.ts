@@ -9,6 +9,7 @@ import {
 import { getAdapter } from "./registry";
 import { enqueueSocialQStash } from "@/server/queue/qstash";
 import { FilePayload } from "@/types/file-payload";
+import { BadRequestError } from "@/lib/error/http-error";
 
 type Args = {
   job: {
@@ -34,7 +35,7 @@ export async function postToSocialIfSelected({
   media,
 }: Args): Promise<SocialResult[]> {
   if (!job.id || !job.title || !job.company_site) {
-    throw new Error("Missing required job fields");
+    throw new BadRequestError("Missing required job fields");
   }
 
   const payload: PublishPayload = {
@@ -47,9 +48,13 @@ export async function postToSocialIfSelected({
     ...(media && media.length > 0 ? { media } : {}),
   };
 
+  console.log(payload);
+
   const accounts = await prisma.socialAccount.findMany({
     where: { organizationId },
   });
+
+  console.log(accounts);
 
   const supported = new Set<SocialPlatformKey>([
     "website",
@@ -59,6 +64,7 @@ export async function postToSocialIfSelected({
   ]);
 
   const tasks = platforms.map(async (pRaw) => {
+    console.log(pRaw);
     const key = pRaw.toLowerCase() as SocialPlatformKey;
     if (!supported.has(key)) {
       return { platform: key, ok: false, message: "Unsupported platform" };
@@ -69,6 +75,8 @@ export async function postToSocialIfSelected({
       return { platform: key, ok: false, message: "Not connected" };
     }
 
+    console.log(acct);
+
     const tok: TokenBundle =
       key === "website"
         ? { accountId: "", access: "" }
@@ -77,9 +85,10 @@ export async function postToSocialIfSelected({
             access: open(acct!.accessToken),
             refresh: acct!.refreshToken ? open(acct!.refreshToken) : undefined,
           };
-
+    console.log(tok);
     try {
       const adapter = getAdapter(key);
+      console.log(adapter);
       const result = await adapter.publish(payload, tok);
 
       if (result.ok && acct) {

@@ -19,7 +19,7 @@ import PreviewPanel from "@/features/jobs/components/preview-job";
 import BasicInfo from "@/features/jobs/components/basci-info";
 import ScreeningQuestions from "@/features/jobs/components/screen-questions";
 import { jobPostingSteps } from "@/constents/stepper-item";
-import { HIRING, HIRING_JOBS } from "@/constents/router-links";
+import { EMPLOYEE, JOBS } from "@/constents/router-links";
 import HiringProcesses from "@/features/jobs/components/hiring-processes";
 import HeaderShell from "@/features/jobs/components/hiring-shell";
 
@@ -50,8 +50,8 @@ export default function JobPost() {
     <HeaderShell
       breadCrumpPage="Create"
       breadCrumbsItems={[
-        { label: "Hiring", link: HIRING },
-        { label: "Jobs", link: HIRING_JOBS },
+        { label: "Employee", link: EMPLOYEE },
+        { label: "Jobs", link: JOBS },
       ]}
     >
       <motion.div
@@ -62,7 +62,7 @@ export default function JobPost() {
       >
         {/* Left column*/}
         <div className="relative sm:col-span-1 lg:col-span-3">
-          <div className="md:sticky md:top-15 p-4 space-y-6 border rounded-2xl shadow-sm col-span-1 h-fit">
+          <div className="md:sticky md:top-15 p-4 space-y-6 border rounded-2xl shadow-sm col-span-1 h-fit bg-card">
             <HorizontalStepper
               steps={jobPostingSteps}
               currentStep={currentStep}

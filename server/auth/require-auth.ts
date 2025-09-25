@@ -8,7 +8,8 @@ import { TeamRoleType } from "@/types/roles";
 
 export async function requireUser() {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.email) throw new UnauthorizedError("Sign in required.");
+  if (!session?.user?.email)
+    throw new UnauthorizedError("Unauthorized Sign in required.");
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },

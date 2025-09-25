@@ -173,7 +173,7 @@ const BasicInfo: React.FC = () => {
                 emptyMessage="No matching titles."
                 createPrefix="Create"
                 matchTriggerWidth
-                className={`w-full`}
+                className={`w-full bg-transparent`}
                 contentClassName="w-full"
               />
               {byForm?.createJob?.title && (

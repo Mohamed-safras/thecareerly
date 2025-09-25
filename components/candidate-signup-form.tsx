@@ -209,7 +209,7 @@ export function CandidateSignupForm({
               alt={process.env.NEXT_PUBLIC_ORG_NAME!}
               fill
               priority
-              className="object-cover w-full"
+              className="object-cover w-full dark:brightness-[0.2] dark:grayscale"
             />
           </div>
         </CardContent>

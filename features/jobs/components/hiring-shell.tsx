@@ -14,10 +14,10 @@ export default function HeaderShell({
 }: {
   children?: React.ReactNode;
   breadCrumpPage: string;
-  breadCrumbsItems: BreadcrumbItem[];
+  breadCrumbsItems?: BreadcrumbItem[];
 }) {
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b [--header-height:calc(--spacing(14))]">
+    <div className="min-h-screen w-full [--header-height:calc(--spacing(14))]">
       <SiteHeader>
         <SideHeaderBreadCrumb
           breadCrumpPage={breadCrumpPage}

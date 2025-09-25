@@ -6,9 +6,9 @@ const API_AUTH = "/api/auth";
 // Employee paths
 const CONNECT_EMPLOYEE_LOGIN = "/connect/employee/login";
 const CONNECT_EMPLOYEE_DASHBOARD = "/connect/employee/dashboard";
-const HIRING = "/hiring";
-const HIRING_JOBS = "/connect/employee/hiring/jobs";
-const CREATE_JOB = "/connect/employee/hiring/jobs/create";
+const EMPLOYEE = "/connect/employee";
+const JOBS = "/connect/employee/jobs";
+const CREATE_JOB = "/connect/employee/jobs/create";
 const CREATE_JOB_API = "/api/employee/jobs/create-job";
 const GENERATE_JD = "/api/employee/generate-jd";
 const GENERATE_POSTER = "/api/employee/generate-poster";
@@ -27,10 +27,10 @@ export {
   FORBIDDEN,
   CONNECT_CANDIDATE_SIGNUP,
   CONNECT_CANDIDATE_lOGIN,
-  HIRING,
-  HIRING_JOBS,
+  JOBS,
   CREATE_JOB,
   EMPLOYEE_ONLY,
+  EMPLOYEE,
   CANDIDATE_ONLY,
   CONNECT_EMPLOYEE_LOGIN,
   API_AUTH,

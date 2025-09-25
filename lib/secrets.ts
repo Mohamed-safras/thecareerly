@@ -1,7 +1,5 @@
-import { object } from "zod";
-
 export const envVerification = {
-  appUrl: process.env.NEXTAUTH_URL!,
+  appUrl: process.env.NEXT_AUTH_LOCAL_URL! || process.env.NEXT_AUTH_NGROG_URL!,
   linkedin: {
     clientId: process.env.LINKEDIN_CLIENT_ID!,
     clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,

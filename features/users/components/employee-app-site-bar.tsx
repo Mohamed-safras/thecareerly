@@ -37,7 +37,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { NavSecondary } from "@/components/nav-secondary";
-import { CREATE_JOB, HIRING_JOBS } from "@/constents/router-links";
+import { CREATE_JOB, JOBS } from "@/constents/router-links";
 import { useAppSelector } from "@/store/hooks";
 
 const data = {
@@ -78,7 +78,7 @@ const data = {
   recuitment: [
     {
       title: "Jobs",
-      url: HIRING_JOBS,
+      url: JOBS,
       icon: BriefcaseBusiness,
       isActive: true,
       items: [

@@ -7,8 +7,11 @@ import { setFieldErrors } from "@/store/slice/form-error-slice";
 import { FORM_ID } from "@/constents/job-form";
 import { toast } from "sonner";
 import { STATUS_TEXT } from "@/server/response/http-status";
+import { redirect, useRouter } from "next/navigation";
+import { JOBS } from "@/constents/router-links";
 
 export function useSubmitForm() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [postingType, setPostingType] = useState<"draft" | "publish">("draft");
   const [error, setError] = useState<string | null>(null);
@@ -148,7 +151,7 @@ export function useSubmitForm() {
       ) {
         console.log(response.data);
         toast.success(response?.data?.message);
-        return response.data;
+        router.push(JOBS);
       }
     } catch (err: unknown) {
       console.log(err);

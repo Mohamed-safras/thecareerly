@@ -21,6 +21,7 @@ export async function middleware(req: NextRequest) {
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith(API_AUTH) ||
+    pathname.startsWith("/api/linkedin") ||
     pathname === CONNECT_CANDIDATE_lOGIN ||
     pathname === CONNECT_CANDIDATE_SIGNUP ||
     pathname === CONNECT_EMPLOYEE_LOGIN ||
@@ -37,7 +38,7 @@ export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
   if (!token) {
-    const url = new URL(CONNECT_CANDIDATE_lOGIN, req.url);
+    const url = new URL(HOME, req.url);
     console.log(url);
     url.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(url);
