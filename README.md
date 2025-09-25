@@ -1,10 +1,10 @@
-# Automated Job Hiring Agent
+# thecareerly
 
 ## 1. Introduction
 
 ### 1.1 Purpose
 
-This document details the requirements for an Automated Job Hiring Agent system designed to streamline the initial stages of the hiring process. The system automates job posting with AI-generated content, application processing, candidate CV/resume matching against job descriptions (JD), filtering, HR notifications, candidate communications, optional skill assessments, and interview scheduling. Leveraging Generative AI (Gen AI), LangChain, and AI agents, the system reduces manual effort, minimizes bias, and enhances efficiency.
+This document details the requirements for an thecareerly system designed to streamline the initial stages of the hiring process. The system automates job posting with AI-generated content, application processing, candidate CV/resume matching against job descriptions (JD), filtering, HR notifications, candidate communications, optional skill assessments, and interview scheduling. Leveraging Generative AI (Gen AI), LangChain, and AI agents, the system reduces manual effort, minimizes bias, and enhances efficiency.
 
 The primary goals are:
 
@@ -469,14 +469,14 @@ The following features are planned for post-MVP phases:
 
 ### Appendix B: High-Level System Diagram
 
-The following diagram illustrates the high-level architecture and workflow of the Automated Job Hiring Agent system, highlighting key components and data flow.
+The following diagram illustrates the high-level architecture and workflow of the thecareerly system, highlighting key components and data flow.
 
 ```mermaid
 
 flowchart TD
     A(["HR User"]) -- Create JD --> B["Job Posting Module"]
     B -- "AI-Generated Content" --> C["Gen AI Service"]
-    B -- Update on Platforms --> D["Social Media APIs &amp; Third party portal / Automated job Hiring Agent"]
+    B -- Update on Platforms --> D["Social Media APIs &amp; Third party portal / thecareerly"]
     F(["Jobseeker"]) -- Submit Application --> G["Application Submission Module"]
     G -- Upload CV, Links --> H["AWS S3"]
     G -- Store Metadata --> I["MongoDB"]
@@ -495,7 +495,7 @@ flowchart TD
     P -- Trigger Assessment Optional --> Q["Candidate Skill Assessment Module"]
     Q -- Generate Test --> C
     Q -- External Platforms --> R["HackerRank/Codility APIs"]
-    Q -- Candidate Portal --> S["Automated job Hiring Agent portal"]
+    Q -- Candidate Portal --> S["thecareerly portal"]
     Q -- Evaluate Responses --> L
     Q -- Store Results --> I
     Q -- Notify Candidate --> J
@@ -547,7 +547,7 @@ flowchart TD
 
 ### Appendix C: High-Level Cloud Native Architecture Diagram
 
-The following diagram illustrates the high-level cloud-based architecture of the Automated Job Hiring Agent system, emphasizing AWS services, MongoDB Atlas, and external API integrations.
+The following diagram illustrates the high-level cloud-based architecture of the thecareerly system, emphasizing AWS services, MongoDB Atlas, and external API integrations.
 
 ```mermaid
 ---
@@ -717,7 +717,7 @@ flowchart LR
 
 ### Appendix E: Deployment Diagram
 
-The following diagram illustrates the deployment architecture of the Automated Job Hiring Agent system, focusing on AWS services, Jenkins, SonarQube, and DevOps tools for CI/CD and deployment processes.
+The following diagram illustrates the deployment architecture of the thecareerly system, focusing on AWS services, Jenkins, SonarQube, and DevOps tools for CI/CD and deployment processes.
 
 ```mermaid
 %%{ init: { 'theme': 'base', 'themeVariables': { 'primaryColor': '#FFA500', 'primaryTextColor': '#000000', 'lineColor': '#000000', 'fontSize': '14px'} } }%%
@@ -948,8 +948,8 @@ Future Feature: The Referrals collection is included to support the future Emplo
 
 ### Section 9: Conclusion
 
-The Automated Job Hiring Agent system is designed to revolutionize the recruitment process by leveraging Generative AI, LangChain AI agents, and a robust cloud-native architecture to automate critical hiring tasks. By addressing inefficiencies in traditional hiring workflows—such as manual CV screening, job posting, assessment creation, and interview scheduling—the system delivers significant time savings and reduces human bias through AI-driven candidate matching and anonymized evaluations. The Minimum Viable Product (MVP) focuses on core functionalities: AI-generated job postings across social media and websites, automated CV parsing and matching, real-time HR notifications, personalized candidate communications, optional skill assessments, and HR-driven interview scheduling. The modular design, built on AWS EKS, MongoDB Atlas, and a CI/CD pipeline with Jenkins, SonarQube, and AWS CodePipeline, ensures scalability, reliability, and maintainability, meeting performance requirements (e.g., processing 100 applications per hour) and security standards (e.g., GDPR compliance, data encryption).
+The thecareerly system is designed to revolutionize the recruitment process by leveraging Generative AI, LangChain AI agents, and a robust cloud-native architecture to automate critical hiring tasks. By addressing inefficiencies in traditional hiring workflows—such as manual CV screening, job posting, assessment creation, and interview scheduling—the system delivers significant time savings and reduces human bias through AI-driven candidate matching and anonymized evaluations. The Minimum Viable Product (MVP) focuses on core functionalities: AI-generated job postings across social media and websites, automated CV parsing and matching, real-time HR notifications, personalized candidate communications, optional skill assessments, and HR-driven interview scheduling. The modular design, built on AWS EKS, MongoDB Atlas, and a CI/CD pipeline with Jenkins, SonarQube, and AWS CodePipeline, ensures scalability, reliability, and maintainability, meeting performance requirements (e.g., processing 100 applications per hour) and security standards (e.g., GDPR compliance, data encryption).
 
 The system’s MongoDB schema (Appendix F) and its visual representation (Appendix G) provide a structured foundation for data management, supporting job descriptions, candidate profiles, assessments, scheduling, and future features like the Employee Referral Portal. By integrating with external APIs (e.g., LinkedIn, Google Calendar, HackerRank) and utilizing modern web technologies (Next.js, TypeScript, Tailwind CSS), the system offers an intuitive, accessible user experience for HR users, jobseekers, and system admins. Future enhancements, such as AI-generated interview questions and diversity analytics (Section 7), will further strengthen its capabilities, positioning the system as a scalable, future-proof solution for organizations seeking to optimize hiring processes while maintaining fairness and efficiency.
 
-This SRS provides a comprehensive blueprint for development, ensuring alignment with stakeholder needs and industry standards. The Automated Job Hiring Agent is poised to empower HR teams, streamline recruitment, and deliver measurable value through automation and intelligent decision-making.
+This SRS provides a comprehensive blueprint for development, ensuring alignment with stakeholder needs and industry standards. The thecareerly is poised to empower HR teams, streamline recruitment, and deliver measurable value through automation and intelligent decision-making.
