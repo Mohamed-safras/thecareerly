@@ -4,14 +4,14 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.9782 0.0034 247.8578);
+  --background: oklch(100% 0.00011 271.152);
   --foreground: oklch(0.2542 0.0111 254.038);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.2542 0.0111 254.038);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.2542 0.0111 254.038);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.6671 0.1615 245.54);
+  --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.9782 0.0034 247.8578);
@@ -68,13 +68,13 @@
 
 .dark {
   --background: oklch(0.1763 0.014 258.3572);
-  --foreground: oklch(0.8569 0.0141 247.9925);
+  --foreground: oklch(100% 0.00011 271.152);
   --card: oklch(0.2202 0.0157 256.8163);
   --card-foreground: oklch(0.8569 0.0141 247.9925);
   --popover: oklch(0.2202 0.0157 256.8163);
   --popover-foreground: oklch(0.8569 0.0141 247.9925);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
+  --primary: oklch(0.6671 0.1615 245.54);
+  --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.2202 0.0157 256.8163);
@@ -349,4 +349,14 @@
 .wmde-markdown li > ul,
 .wmde-markdown li > ol {
   padding-left: 1.25rem !important;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge, and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

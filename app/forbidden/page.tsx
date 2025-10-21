@@ -19,7 +19,6 @@ export default function ForbiddenPage() {
         </p>
 
         <ul className="mt-4 list-inside list-disc space-y-2 text-sm text-muted-foreground">
-          <li>Your account lacks the required role (e.g., Admin or HR).</li>
           <li>
             Your session expired or you’re signed in with the wrong account.
           </li>
@@ -28,17 +27,33 @@ export default function ForbiddenPage() {
           </li>
         </ul>
 
-        <div className="mt-6 flex flex-wrap gap-3">
-          <Button asChild>
-            <Link href={HOME}>Go Home</Link>
-          </Button>
+        <div className="mt-6 flex justify-between flex-wrap gap-3">
+          <button
+            className="relative z-10 overflow-hidden px-12 py-2 rounded-lg cursor-pointer text-base tracking-widest font-bold my-3 border border-border bg-background text-foreground group transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 w-fit"
+            aria-label="Go to homepage"
+          >
+            <Link href={HOME}>
+              <span className="absolute left-0 top-0 w-0 h-full z-[-1] transition-all duration-200 ease-in-out group-hover:w-full group-focus:w-full bg-muted"></span>
+              <span className="relative z-10 transition-colors duration-200 group-hover:text-foreground group-focus:text-foreground">
+                Go Home
+              </span>
+            </Link>
+          </button>
 
-          <Button variant="ghost" asChild>
-            <Link href="/support">Contact Support</Link>
-          </Button>
+          <button
+            className="relative z-10 overflow-hidden px-12 py-2 rounded-lg cursor-pointer text-base tracking-widest font-bold my-3 border border-border bg-background text-foreground group transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 w-fit"
+            aria-label="Go to support page"
+          >
+            <Link href="/support">
+              <span className="absolute left-0 top-0 w-0 h-full z-[-1] transition-all duration-200 ease-in-out group-hover:w-full group-focus:w-full bg-muted"></span>
+              <span className="relative z-10 transition-colors duration-200 group-hover:text-foreground group-focus:text-foreground">
+                Contact Support
+              </span>
+            </Link>
+          </button>
         </div>
 
-        <div className="mt-6 rounded-lg bg-muted p-4 text-xs text-muted-foreground">
+        <div className="mt-6 rounded-lg bg-muted text-xs text-muted-foreground">
           <p className="font-medium">Request details</p>
           <p className="mt-1">
             If you contact support, include the time of the error and the page

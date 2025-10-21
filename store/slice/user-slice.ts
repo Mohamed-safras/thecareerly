@@ -3,6 +3,17 @@ import { UserProfile } from "@/types/user-profile";
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
+import { TeamRole } from "@prisma/client";
+
+interface SessionUser {
+  id: string;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+  roles?: TeamRole[];
+  organizationId?: string | null;
+  teamId?: string | null;
+}
 
 export type UserState = {
   status: AuthStatus;
@@ -29,7 +40,7 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<Partial<UserProfile | null>>) => {
+    setUser: (state, action: PayloadAction<UserProfile | null>) => {
       state.user = action.payload;
       state.isAuthenticated = !!action.payload;
       state.status = action.payload ? "authenticated" : "unauthenticated";
@@ -52,12 +63,18 @@ const userSlice = createSlice({
       })
       .addCase(hydrateUserFromSession.fulfilled, (state, { payload }) => {
         const session = payload;
+
         if (session?.user) {
+          const sessionUser = session.user as SessionUser;
+
           state.user = {
-            name: session?.user?.name ?? null,
-            email: session?.user?.email ?? null,
-            avatar: session?.user?.image ?? null,
-            userType: session.user?.userType ?? null,
+            id: sessionUser?.id ?? null,
+            name: sessionUser?.name ?? null,
+            email: sessionUser?.email ?? null,
+            avatar: sessionUser?.image ?? null,
+            roles: sessionUser?.roles ?? [],
+            organizationId: sessionUser?.organizationId ?? null,
+            teamId: sessionUser?.teamId ?? null,
           };
           state.isAuthenticated = true;
           state.status = "authenticated";
@@ -77,9 +94,3 @@ const userSlice = createSlice({
 
 export const { setUser, clearUser, setAuthLoading } = userSlice.actions;
 export default userSlice.reducer;
-
-// -------- selectors --------
-export const selectAuthStatus = (s: { user: UserState }) => s.user.status;
-export const selectIsAuthenticated = (s: { user: UserState }) =>
-  s.user.isAuthenticated;
-export const selectUser = (s: { user: UserState }) => s.user.user;

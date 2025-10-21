@@ -19,7 +19,7 @@ import { Label } from "./ui/label";
 import { Alert, AlertDescription } from "./ui/alert";
 import { useSelector } from "react-redux";
 import { selectFormFieldError } from "@/store/form-errors/form-error-selectors";
-import { FORM_ID } from "@/constents/job-form";
+
 import { useAppDispatch } from "@/store/hooks";
 import { setFieldError } from "@/store/slice/form-error-slice";
 

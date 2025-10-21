@@ -20,13 +20,13 @@ const uid = () => Math.random().toString(36).slice(2, 9);
 
 export default function ScreeningQuestions() {
   const dispatch = useAppDispatch();
-  const form = useAppSelector((s) => s.jobForm as JobForm);
+  const { jobForm } = useAppSelector(({ jobs }) => jobs);
 
   const addQuestion = () =>
     dispatch(
       setFormMerge({
         questions: [
-          ...form.questions,
+          ...jobForm.questions,
           { id: uid(), prompt: "", type: "short" },
         ],
       })
@@ -36,10 +36,10 @@ export default function ScreeningQuestions() {
     dispatch(
       setFormMerge({
         questions: (() => {
-          const i = form.questions.findIndex((q) => q.id === id);
-          if (i < 0) return form.questions;
-          const copy = { ...form.questions[i], id: uid() };
-          const next = [...form.questions];
+          const i = jobForm.questions.findIndex((q) => q.id === id);
+          if (i < 0) return jobForm.questions;
+          const copy = { ...jobForm.questions[i], id: uid() };
+          const next = [...jobForm.questions];
           next.splice(i + 1, 0, copy);
           return next;
         })(),
@@ -49,7 +49,7 @@ export default function ScreeningQuestions() {
   const remove = (id: string) =>
     dispatch(
       setFormMerge({
-        questions: form.questions.filter((q) => q.id !== id),
+        questions: jobForm.questions.filter((q) => q.id !== id),
       })
     );
 
@@ -57,7 +57,7 @@ export default function ScreeningQuestions() {
   const patch = (id: string, changes: Partial<Question>) =>
     dispatch(
       setFormMerge({
-        questions: form.questions.map((q) =>
+        questions: jobForm.questions.map((q) =>
           q.id === id ? { ...q, ...changes } : q
         ),
       })
@@ -68,20 +68,23 @@ export default function ScreeningQuestions() {
     dispatch(setFormMerge({ questions: next }));
 
   useEffect(() => {
-    const stored = localStoreGet<JobForm>(JOB_FORM, form);
+    const stored = localStoreGet<JobForm>(JOB_FORM, jobForm);
     dispatch(replaceForm(stored));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    localStoreSet<JobForm>(JOB_FORM, { ...form, questions: form.questions });
+    localStoreSet<JobForm>(JOB_FORM, {
+      ...jobForm,
+      questions: jobForm.questions,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form.questions]);
+  }, [jobForm.questions]);
   return (
     <div>
       <ScrollArea className="max-h-[600px] overflow-y-scroll">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          {form.questions.length > 0 && (
+          {jobForm.questions.length > 0 && (
             <Card className="overflow-hidden">
               <CardHeader>
                 <CardTitle className="text-sm">Screening Questions</CardTitle>
@@ -89,7 +92,7 @@ export default function ScreeningQuestions() {
               <Separator />
               <CardContent className="px-4">
                 <SortableList<Question>
-                  items={form.questions}
+                  items={jobForm.questions}
                   getId={(q) => q.id}
                   onReorder={handleReorder}
                   className="grid gap-2"
@@ -111,14 +114,14 @@ export default function ScreeningQuestions() {
           )}
 
           <div className="h-fit">
-            {form.questions.length > 0 && (
+            {jobForm.questions.length > 0 && (
               <Card>
                 <CardHeader>
                   <CardTitle className="text-sm">Question Preview</CardTitle>
                 </CardHeader>
                 <Separator />
                 <CardContent className="grid gap-4 px-4">
-                  {form.questions.map((q, i) => (
+                  {jobForm.questions.map((q, i) => (
                     <div key={q.id} className="grid gap-2">
                       <div className="font-medium">
                         {i + 1}.{" "}

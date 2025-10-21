@@ -4,7 +4,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
 
 import { ForbiddenError, UnauthorizedError } from "@/lib/error/http-error";
-import { TeamRoleType } from "@/types/roles";
+import { TeamRole } from "@prisma/client";
 
 export async function requireUser() {
   const session = await getServerSession(authOptions);
@@ -17,7 +17,19 @@ export async function requireUser() {
       id: true,
       email: true,
       name: true,
-      userType: true,
+      image: true,
+      teamUsers: {
+        select: {
+          id: true,
+          role: true,
+          team: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -30,10 +42,10 @@ export async function requireUser() {
 export async function requireTeamRole(
   teamId: string,
   userId: string,
-  roles: TeamRoleType[]
+  roles: TeamRole[]
 ) {
   const membership = await prisma.teamUser.findFirst({
-    where: { team_id: teamId, user_id: userId, role: { in: roles } },
+    where: { teamId, userId, role: { in: roles } },
   });
   if (!membership)
     throw new ForbiddenError("You do not have permission for this team.");
@@ -41,9 +53,9 @@ export async function requireTeamRole(
 
 export async function requireOrgId() {
   const user = await requireUser();
-  console.log(user.id);
+
   const membership = await prisma.teamUser.findFirst({
-    where: { user_id: user.id },
+    where: { userId: user.id },
     include: {
       team: {
         select: { organizationId: true },

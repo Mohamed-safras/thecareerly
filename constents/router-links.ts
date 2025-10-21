@@ -1,42 +1,33 @@
-const HOME = "/";
-const FORBIDDEN = "/forbidden";
+// Do not import useAppSelector here; use a pure helper function instead
 
-const API_AUTH = "/api/auth";
+export const HOME = "/";
+export const FORBIDDEN = "/forbidden";
 
-// Employee paths
-const CONNECT_EMPLOYEE_LOGIN = "/connect/employee/login";
-const CONNECT_EMPLOYEE_DASHBOARD = "/connect/employee/dashboard";
-const EMPLOYEE = "/connect/employee";
-const JOBS = "/connect/employee/jobs";
-const CREATE_JOB = "/connect/employee/jobs/create";
-const CREATE_JOB_API = "/api/employee/jobs/create-job";
-const GENERATE_JD = "/api/employee/generate-jd";
-const GENERATE_POSTER = "/api/employee/generate-poster";
+export const API_AUTH = "/api/auth";
 
-const EMPLOYEE_ONLY = [CONNECT_EMPLOYEE_DASHBOARD, "/jobs", "/teams"];
+// Organization paths
+export const CONNECT_ORGANIZATION_CREATE = "/connect/organization/create";
 
-// Employee paths
-const CONNECT_CANDIDATE_SIGNUP = "/connect/candidate/signup";
-const CONNECT_CANDIDATE_lOGIN = "/connect/candidate/login";
-const CONNECT_CANDIDATE_DASHBOARD = "/connect/candidate/dashboard";
+export const CONNECT_ORGANIZATION_LOGIN = "/connect/organization/login";
+export const CONNECT_EMPLOYEE_DASHBOARD = "/connect/dashboard";
+export const EMPLOYEE = "/connect";
 
-const CANDIDATE_ONLY = [CONNECT_CANDIDATE_DASHBOARD, "/profile"];
+export const GENERATE_JD = "/api/employee/generate-jd";
 
-export {
-  HOME,
-  FORBIDDEN,
-  CONNECT_CANDIDATE_SIGNUP,
-  CONNECT_CANDIDATE_lOGIN,
-  JOBS,
-  CREATE_JOB,
-  EMPLOYEE_ONLY,
-  EMPLOYEE,
-  CANDIDATE_ONLY,
-  CONNECT_EMPLOYEE_LOGIN,
-  API_AUTH,
-  CONNECT_CANDIDATE_DASHBOARD,
-  CONNECT_EMPLOYEE_DASHBOARD,
-  GENERATE_JD,
-  GENERATE_POSTER,
-  CREATE_JOB_API,
-};
+export const GENERATE_POSTER = "/api/employee/generate-poster";
+
+export const CONNECT_MEMBER_LOGIN = "/connect/member/login";
+
+export const GENERATE_JOB_DESCRIPTION_API = `api/ai-agent/generate-job-description`;
+
+/**
+ * Returns the jobs path for a given organizationId and teamId.
+ * Usage: getJobsPath(organizationId, teamId)
+ */
+export function getJobsPath(
+  organizationId?: string | null,
+  teamId?: string | null
+) {
+  if (!organizationId || !teamId) return null;
+  return `/organization/${organizationId}/team/${teamId}/jobs`;
+}

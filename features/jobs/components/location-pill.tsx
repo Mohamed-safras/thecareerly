@@ -5,7 +5,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { MapPinHouse } from "lucide-react";
+import { MapPin, MapPinHouse } from "lucide-react";
 
 export default function LocationPill({
   label,
@@ -19,7 +19,7 @@ export default function LocationPill({
   onChange: (v: string) => void;
 }) {
   return (
-    <PillButton icon={MapPinHouse} label={label}>
+    <PillButton icon={MapPin} label={label}>
       <DropdownMenuLabel>Location</DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuRadioGroup value={value} onValueChange={onChange}>

@@ -130,7 +130,7 @@ export function AnimatedIconButton({
         data-state={isInactive ? "inactive" : "active"}
         disabled={isInactive}
         className={`rounded-full shadow-md ${
-          isInactive ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
+          isInactive ? "opacity-80 cursor-not-allowed" : "cursor-pointer"
         } ${className ?? ""}`}
         style={{ width: size, height: size, padding: 0 }}
       >

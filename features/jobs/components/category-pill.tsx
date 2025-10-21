@@ -23,7 +23,7 @@ export default function CategoryPill({
       : onChange([...value, item]);
 
   return (
-    <PillButton icon={Shapes} label={label}>
+    <PillButton icon={Shapes} label={label} className="h-8">
       <DropdownMenuLabel>Categories</DropdownMenuLabel>
       <DropdownMenuSeparator />
       {items.map((item, idx) => (

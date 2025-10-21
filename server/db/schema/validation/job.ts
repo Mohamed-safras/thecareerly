@@ -1,4 +1,4 @@
-import { DatetimeLocalRegex } from "@/lib/common/validate";
+import { DatetimeLocalRegex } from "@/lib/common/validate-date";
 import { z as zod } from "zod";
 
 const objectId = zod
@@ -27,16 +27,16 @@ export const SelectionProcessSchema = zod.object({
 
 export const CreateJobSchema = zod.object({
   title: zod.string().min(1),
-  employmentType: zod.string().optional(),
-  workPreference: zod.string().optional(),
-  jobSeniority: zod.string().optional(),
-  minimumQualificationLevel: zod.string().optional(),
+  employmentType: zod.string(),
+  workPreference: zod.string(),
+  jobSeniority: zod.string(),
+  minimumQualificationLevel: zod.string(),
 
   facilities: zod.array(zod.string()).default([]),
   skills: zod.array(zod.string()).default([]),
 
-  description: zod.string().optional(),
-  location: zod.string().optional(),
+  description: zod.string(),
+  location: zod.string(),
 
   salary: SalarySchema.default({}),
 
@@ -48,7 +48,6 @@ export const CreateJobSchema = zod.object({
       zod.string().datetime(), // RFC 3339 (e.g., 2025-09-15T09:00:00Z)
       zod.date(), // already a Date (server-side callers)
     ])
-    .optional()
     .transform((v) => {
       if (!v) return undefined;
       if (v instanceof Date) return v;
@@ -58,8 +57,8 @@ export const CreateJobSchema = zod.object({
       message: "Invalid datetime",
     }),
 
-  companyName: zod.string().optional(),
-  companySite: zod.string().url().optional(),
+  organizationName: zod.string(),
+  organizationSite: zod.string(),
 
   questions: zod.array(QuestionSchema).default([]),
   selectionProcess: zod.array(SelectionProcessSchema).default([]),
@@ -72,12 +71,11 @@ export const CreateJobSchema = zod.object({
   teamId: objectId,
 
   // server-side fields
-  status: zod.enum(["open", "hold", "closed", "draft"]).default("open"),
+  status: zod.enum(["OPEN", "HOLD", "DRAFT", "CLOSED"]).default("OPEN"),
   complianceStatus: zod
-    .enum(["pending", "approved", "flagged"])
-    .default("pending"),
+    .enum(["PENDING", "APPROVED", "FLAGGED"])
+    .default("PENDING"),
 
-  // free-form JSONs
   ai_content: zod.any().default({}),
   selectedPlatforms: zod.any().default({}),
 });

@@ -1,77 +1,110 @@
-import { axiosClient } from "@/lib/http/axios-client";
-import { AIPromptInput } from "@/types/gen-AI";
 import { JobForm } from "@/types/job-form";
-import { useMemo, useState } from "react";
-import axios from "axios";
+import { useMemo, useState, useCallback } from "react";
 import { toast } from "sonner";
 import { extractStatusAndMessage } from "@/lib/error/error-message-extractor";
-import { GENERATE_JD } from "@/constents/router-links";
+import { GENERATE_JOB_DESCRIPTION_API } from "@/constents/router-links";
+import { AIPromptInput } from "@/types/gen-AI";
+import { useAppDispatch } from "@/store/hooks";
+import { setForm as setFormMerge } from "@/store/slice/jobs-slice";
+import { AI_AGENT_SERVICE_ENDPOINTS } from "@/constents/api-end-points";
 
-const useAIGenerateJobDescription = (form: JobForm) => {
+const useAIGenerateJobDescription = ({
+  title,
+  location,
+  employmentType,
+  workPreference,
+  minimumQualificationLevel,
+  jobSeniority,
+  facilities,
+}: JobForm) => {
+  const dispatch = useAppDispatch();
   const [generating, setGenerating] = useState(false);
-  const [jobDescriptionOutput, setJobDescriptionOutput] = useState<
-    string | undefined
-  >("");
   const [error, setError] = useState<string | null>(null);
 
   const aiPromptInputs: AIPromptInput = useMemo(
     () => ({
-      title: form.title?.trim() || "",
-      benefits: form.facilities,
-      description: form.description?.trim() || "",
+      title,
+      location,
+      employmentType,
+      workPreference,
+      qualification: minimumQualificationLevel,
+      seniority: jobSeniority,
+      facilities,
+      applyUrl: process.env.NEXT_PUBLIC_ORG_WEB_SITE!,
     }),
-    [form.title, form.description, form.facilities]
+    [
+      title,
+      facilities,
+      location,
+      employmentType,
+      workPreference,
+      minimumQualificationLevel,
+      jobSeniority,
+    ]
   );
 
-  async function generateJobDescription() {
-    if (!aiPromptInputs.title) return;
+  const generateJobDescription = useCallback(async () => {
+    console.log(GENERATE_JOB_DESCRIPTION_API);
+
+    if (!aiPromptInputs.title) {
+      toast.error("Job title is required");
+      return;
+    }
 
     setGenerating(true);
     setError(null);
 
     try {
-      const { data } = await axiosClient.post<{ type: string; text: string }>(
-        GENERATE_JD,
-        { payload: aiPromptInputs }
+      const response = await fetch(
+        AI_AGENT_SERVICE_ENDPOINTS.GENERATE_JOB_DESCRIPTION,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ payload: aiPromptInputs }),
+        }
       );
 
-      setJobDescriptionOutput(data.text || "");
+      if (!response.ok || !response.body) {
+        throw new Error("Failed to connect to AI server");
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let result = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        result += chunk;
+        dispatch(setFormMerge({ description: result }));
+      }
+
       toast.success("Job description generated successfully");
     } catch (err: unknown) {
       const { status, message } = extractStatusAndMessage(err);
 
-      if (status === 429) {
-        console.log("return 429");
-        // Try to read Retry-After if present (Axios lower-cases headers)
-        const retryAfter = axios.isAxiosError(err)
-          ? Number(err.response?.headers?.["retry-after"])
-          : NaN;
-
-        if (Number.isFinite(retryAfter) && retryAfter > 0) {
-          const msg = `Rate limit hit. Try again in ~${retryAfter} seconds.`;
-          setError(msg);
-          toast.error(msg);
-        } else {
-          const msg = "Rate limit hit. Please wait a bit and retry.";
-          setError(msg);
-          toast.error(msg);
-        }
+      let errorMsg: string;
+      if (status === 408 || message?.includes("timeout")) {
+        errorMsg = "Request timed out. Please try again.";
       } else if (status && status >= 400 && status < 500) {
-        const msg = message || "Request failed.";
-        setError(msg);
+        errorMsg = message || "Invalid request. Please check your inputs.";
+      } else if (status && status >= 500) {
+        errorMsg = "Server error. Please try again later.";
       } else {
-        const msg = "Failed to generate job description";
-        setError(msg);
-        toast.error(msg);
+        errorMsg = message || "Failed to generate job description";
       }
+
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setGenerating(false);
     }
-  }
+  }, [aiPromptInputs, dispatch]);
 
   return {
     generating,
-    jobDescriptionOutput,
     generateJobDescription,
     error,
   };

@@ -4,8 +4,8 @@ export function getEmailDomain(email?: string | null): string {
   return at === -1 ? "" : email.slice(at + 1).toLowerCase();
 }
 
-export function getOrgAllowlist(): string[] {
-  return (process.env.NEXT_PUBLIC_ORG_DOMAIN ?? "")
+export function getOrgAllowlist(orgDomain: string): string[] {
+  return (orgDomain ?? "")
     .split(",")
     .map((domain) => domain.trim().toLowerCase())
     .filter(Boolean);
@@ -14,5 +14,5 @@ export function getOrgAllowlist(): string[] {
 export function isOrgEmail(email?: string | null): boolean {
   const domain = getEmailDomain(email);
   if (!domain) return false;
-  return getOrgAllowlist().includes(domain);
+  return getOrgAllowlist(domain).includes(domain);
 }

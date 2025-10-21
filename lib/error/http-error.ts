@@ -1,10 +1,20 @@
 export class HttpError extends Error {
   status: number;
   details?: unknown;
+
   constructor(status: number, message: string, details?: unknown) {
     super(message);
     this.status = status;
     this.details = details;
+    this.name = new.target.name;
+
+    // Fix prototype chain
+    Object.setPrototypeOf(this, new.target.prototype);
+
+    // Capture stack trace (Node.js only)
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor);
+    }
   }
 }
 
@@ -41,6 +51,13 @@ export class ConflictError extends HttpError {
 export class UnprocessableEntityError extends HttpError {
   constructor(message = "Unprocessable Entity", details?: unknown) {
     super(422, message, details);
+  }
+}
+
+export class ValidationError extends UnprocessableEntityError {
+  constructor(message: string, details?: unknown) {
+    super(message, details);
+    this.name = "ValidationError";
   }
 }
 

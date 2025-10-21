@@ -1,12 +1,9 @@
-import { NextRequest } from "next/server";
 import { isFile, toBuffer } from "@/lib/common/file";
 import { safeParseJSON } from "@/lib/common/json";
-import { isObjectId, parseDatetimeLocal } from "@/lib/common/validate";
-import { BadRequestError } from "@/lib/error/http-error";
+
 import { CreateJobSchema } from "@/server/db/schema/validation/job";
 import { FilePayload } from "@/types/file-payload";
 import { ParsedJob } from "@/types/parse-job";
-import { User } from "@prisma/client";
 
 export async function parseJobForm(
   formData: FormData,
@@ -28,26 +25,30 @@ export async function parseJobForm(
       preview: (formData.get("posterPreview") as string) ?? undefined,
     };
   }
+
+  const status = (formData.get("status") as string) || "DRAFT";
   // Scalars (keep loose; Zod will validate/transform)
   const body: Record<string, unknown> = {
-    title: (formData.get("title") as string) ?? "",
-    employmentType: (formData.get("employmentType") as string) ?? undefined,
-    workPreference: (formData.get("workPreference") as string) ?? undefined,
-    jobSeniority: (formData.get("jobSeniority") as string) ?? undefined,
-    minimumQualificationLevel:
-      (formData.get("minimumQualificationLevel") as string) ?? undefined,
-    description: (formData.get("description") as string) ?? undefined,
-    location: (formData.get("location") as string) ?? undefined,
+    title: formData.get("title") as string,
+    employmentType: formData.get("employmentType") as string,
+    workPreference: formData.get("workPreference") as string,
+    jobSeniority: formData.get("jobSeniority") as string,
+    minimumQualificationLevel: formData.get(
+      "minimumQualificationLevel"
+    ) as string,
+    description: formData.get("description") as string,
+    location: formData.get("location") as string,
     // keep as string; Zod will coerce to Date
-    scheduleDate: (formData.get("scheduleDate") as string) || new Date(),
-    companyName: (formData.get("companyName") as string) ?? undefined,
-    companySite: (formData.get("companySite") as string) ?? "",
+    scheduleDate: formData.get("scheduleDate") as string,
+    organizationName: formData.get("organizationName") as string,
+    // Handle empty string for organizationSite - convert to undefined for optional URL field
+    organizationSite: formData.get("organizationSite") as string,
     posterFileId: (formData.get("posterFileId") as string) ?? null,
     posterPreview: (formData.get("posterPreview") as string) ?? null,
     userId,
     teamId,
-    status: (formData.get("status") as string) ?? "open",
-    complianceStatus: (formData.get("complianceStatus") as string) ?? "pending",
+    status,
+    complianceStatus: (formData.get("complianceStatus") as string) ?? "PENDING",
   };
   // JSON / array fields (may arrive as strings)
   const facilities = safeParseJSON<string[]>(formData.get("facilities"), []);

@@ -4,53 +4,65 @@ import { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 import {
   API_AUTH,
-  CONNECT_CANDIDATE_lOGIN,
-  CONNECT_CANDIDATE_SIGNUP,
-  CONNECT_EMPLOYEE_LOGIN,
+  CONNECT_ORGANIZATION_LOGIN,
+  CONNECT_MEMBER_LOGIN,
   FORBIDDEN,
   HOME,
+  CONNECT_ORGANIZATION_CREATE,
 } from "./constents/router-links";
-
-import { wantsCandidate, wantsEmployee } from "./lib/route/route-helper";
+import { TeamRole } from "@prisma/client";
+import { ROLES } from "./lib/role";
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  console.log(pathname);
-
+  // Allow public routes and static assets
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith(API_AUTH) ||
-    pathname.startsWith("/api/linkedin") ||
-    pathname === CONNECT_CANDIDATE_lOGIN ||
-    pathname === CONNECT_CANDIDATE_SIGNUP ||
-    pathname === CONNECT_EMPLOYEE_LOGIN ||
+    pathname.startsWith("/images") ||
+    pathname.startsWith("/public") ||
+    pathname === CONNECT_ORGANIZATION_CREATE ||
+    pathname === CONNECT_ORGANIZATION_LOGIN ||
+    pathname === CONNECT_MEMBER_LOGIN ||
     pathname === FORBIDDEN ||
-    pathname === HOME
+    pathname === HOME ||
+    pathname.includes("favicon.ico")
   ) {
     return NextResponse.next();
   }
 
-  if (!wantsEmployee(pathname) && !wantsCandidate(pathname)) {
-    return NextResponse.next();
-  }
+  const token = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+    cookieName: "session-token",
+  });
 
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-
+  // Redirect to forbidden if no token
   if (!token) {
-    const url = new URL(HOME, req.url);
-    console.log(url);
-    url.searchParams.set("callbackUrl", pathname);
-    return NextResponse.redirect(url);
+    const forbiddenUrl = new URL(FORBIDDEN, req.url);
+    // forbiddenUrl.searchParams.set("callbackUrl", pathname);
+    console.log("No token - redirecting to forbidden");
+    return NextResponse.redirect(forbiddenUrl);
   }
 
-  const utype = (token as { utype?: "Employee" | "Candidate" }).utype;
+  const roles = (token as { roles?: TeamRole[] }).roles;
 
-  if (wantsEmployee(pathname) && utype !== "Employee") {
-    return NextResponse.redirect(new URL(FORBIDDEN, req.url));
-  }
-  if (wantsCandidate(pathname) && utype !== "Candidate") {
-    return NextResponse.redirect(new URL(FORBIDDEN, req.url));
+  // Check if user has any valid role
+  const hasValidRole =
+    roles &&
+    roles.length > 0 &&
+    roles.some(
+      (role) =>
+        role === ROLES.ORGANIZATION_SUPER_ADMIN ||
+        role === ROLES.TEAM_ADMIN ||
+        role === ROLES.TEAM_MEMBER ||
+        role === ROLES.GUEST
+    );
+
+  if (!hasValidRole) {
+    console.log("Invalid or missing roles - redirecting to forbidden");
+    return NextResponse.redirect(new URL("/forbidden", req.url));
   }
 
   return NextResponse.next();

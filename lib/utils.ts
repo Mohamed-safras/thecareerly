@@ -10,17 +10,17 @@ export function oneLine(s: string) {
   return s.replace(/\s+/g, " ").trim();
 }
 
-export function slugify(s: string) {
-  return s
+export function slugify(value: string) {
+  return value
     .toLowerCase()
     .trim()
     .replace(/[\s_]+/g, "-")
     .replace(/[^a-z0-9-]/g, "");
 }
 
-export function clampString(s: string | undefined, max: number): string {
-  if (!s) return "";
-  return s.length > max ? s.slice(0, max) : s;
+export function clampString(value: string | undefined, max: number): string {
+  if (!value) return "";
+  return value.length > max ? value.slice(0, max) : value;
 }
 
 export function isComboItemArray(value: unknown): value is ComboItem[] {
@@ -33,4 +33,17 @@ export function isComboItemArray(value: unknown): value is ComboItem[] {
         typeof (item as ComboItem).value === "string"
     )
   );
+}
+
+export function createQueryString(
+  params: Record<string, string>,
+  searchParams?: URLSearchParams
+) {
+  const newSearchParams = new URLSearchParams(searchParams?.toString());
+
+  Object.entries(params).forEach(([key, value]) => {
+    newSearchParams.set(key, value);
+  });
+
+  return newSearchParams.toString();
 }

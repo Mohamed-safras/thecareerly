@@ -35,11 +35,9 @@ import { payPeriodTypeValue } from "@/types/pay-period";
 import { currencyOptionTypeValue } from "@/types/currency-option";
 import TypeaheadLocation from "@/components/type-ahead-location";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { setFieldError } from "@/store/slice/form-error-slice";
 import type { JobForm } from "@/types/job-form";
 import { JOB_FORM, JOB_TITLE_OPTIONS } from "@/constents/local-store-values";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FORM_ID } from "@/constents/job-form";
 
 const BasicInfo: React.FC = () => {
   const [titleOptions, setTitleOptions] = useState<ComboItem[]>([]);
@@ -47,7 +45,7 @@ const BasicInfo: React.FC = () => {
 
   const dispatch = useAppDispatch();
 
-  const jobForm = useAppSelector(({ jobForm }) => jobForm);
+  const { jobForm } = useAppSelector(({ jobs }) => jobs);
   const { byForm } = useAppSelector(({ formErrors }) => formErrors);
 
   const {
@@ -108,6 +106,7 @@ const BasicInfo: React.FC = () => {
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
     const stored = localStoreGet<JobForm>(JOB_FORM, jobForm);
+    console.log(stored);
     dispatch(replaceForm(stored));
     setHydrated(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -176,12 +175,12 @@ const BasicInfo: React.FC = () => {
                 className={`w-full bg-transparent`}
                 contentClassName="w-full"
               />
-              {byForm?.createJob?.title && (
+              {byForm?.create_basic_info?.title && (
                 <Alert variant="destructive" className="h-fit text-sm p-2">
                   <AlertCircle className="h-4 w-4" />
 
                   <AlertDescription>
-                    {byForm?.createJob?.title}
+                    {byForm?.create_basic_info?.title}
                   </AlertDescription>
                 </Alert>
               )}
@@ -190,7 +189,7 @@ const BasicInfo: React.FC = () => {
             <TypeaheadLocation
               value={location}
               onChange={(v) => dispatch(setFormMerge({ location: v }))}
-              fieldError={byForm?.createJob?.location}
+              fieldError={byForm?.create_basic_info?.location}
             />
           </div>
 
@@ -219,12 +218,12 @@ const BasicInfo: React.FC = () => {
                   ))}
                 </SelectContent>
               </Select>
-              {byForm?.createJob?.workPreference && (
+              {byForm?.create_basic_info?.workPreference && (
                 <Alert variant="destructive" className="h-fit text-sm p-2">
                   <AlertCircle className="h-4 w-4" />
 
                   <AlertDescription>
-                    {byForm?.createJob?.workPreference}
+                    {byForm?.create_basic_info?.workPreference}
                   </AlertDescription>
                 </Alert>
               )}
@@ -252,12 +251,12 @@ const BasicInfo: React.FC = () => {
                   ))}
                 </SelectContent>
               </Select>
-              {byForm?.createJob?.employementType && (
+              {byForm?.create_basic_info?.employmentType && (
                 <Alert variant="destructive" className="h-fit text-sm p-2">
                   <AlertCircle className="h-4 w-4" />
 
                   <AlertDescription>
-                    {byForm?.createJob?.employementType}
+                    {byForm?.create_basic_info?.employmentType}
                   </AlertDescription>
                 </Alert>
               )}
@@ -287,12 +286,12 @@ const BasicInfo: React.FC = () => {
                   ))}
                 </SelectContent>
               </Select>
-              {byForm?.createJob?.jobSeniority && (
+              {byForm?.create_basic_info?.jobSeniority && (
                 <Alert variant="destructive" className="h-fit text-sm p-2">
                   <AlertCircle className="h-4 w-4" />
 
                   <AlertDescription>
-                    {byForm?.createJob?.jobSeniority}
+                    {byForm?.create_basic_info?.jobSeniority}
                   </AlertDescription>
                 </Alert>
               )}
@@ -329,12 +328,12 @@ const BasicInfo: React.FC = () => {
                   ))}
                 </SelectContent>
               </Select>
-              {byForm?.createJob?.minimumQualificationLevel && (
+              {byForm?.create_basic_info?.minimumQualificationLevel && (
                 <Alert variant="destructive" className="h-fit text-sm p-2">
                   <AlertCircle className="h-4 w-4" />
 
                   <AlertDescription>
-                    {byForm?.createJob?.minimumQualificationLevel}
+                    {byForm?.create_basic_info?.minimumQualificationLevel}
                   </AlertDescription>
                 </Alert>
               )}

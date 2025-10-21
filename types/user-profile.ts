@@ -1,9 +1,11 @@
-import { UserType } from "./user-type";
+import { TeamRole } from "@prisma/client";
 
-export type UserProfile = {
+export interface UserProfile {
+  id: string | null;
   name?: string | null;
   email?: string | null;
-  avatar?: string | Blob | null;
-  // add app-specific fields if you load them (e.g., role)
-  userType?: UserType;
-};
+  avatar?: string | null;
+  roles?: TeamRole[];
+  organizationId?: string | null;
+  teamId?: string | null;
+}

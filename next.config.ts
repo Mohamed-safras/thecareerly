@@ -7,7 +7,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: `www.${process.env.NEXT_PUBLIC_ORG_DOMAIN!}`,
+        hostname: "images.unsplash.com",
+        port: "",
+        pathname: "/**",
       },
     ],
   },

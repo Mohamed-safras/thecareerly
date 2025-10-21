@@ -16,13 +16,13 @@ const uid = () => Math.random().toString(36).slice(2, 9);
 
 const HiringProcesses = () => {
   const dispatch = useAppDispatch();
-  const form = useAppSelector((s) => s.jobForm as JobForm);
+  const { jobForm } = useAppSelector(({ jobs }) => jobs);
 
   const addProcess = () =>
     dispatch(
       setFormMerge({
         selectionProcess: [
-          ...form.selectionProcess,
+          ...jobForm.selectionProcess,
           { id: uid(), name: "", description: "" },
         ],
       })
@@ -31,7 +31,7 @@ const HiringProcesses = () => {
   const remove = (id: string) =>
     dispatch(
       setFormMerge({
-        selectionProcess: form.selectionProcess.filter(
+        selectionProcess: jobForm.selectionProcess.filter(
           (process) => process.id !== id
         ),
       })
@@ -40,7 +40,7 @@ const HiringProcesses = () => {
   const patch = (id: string, changes: Partial<SelectionProcess>) =>
     dispatch(
       setFormMerge({
-        selectionProcess: form.selectionProcess.map((process) =>
+        selectionProcess: jobForm.selectionProcess.map((process) =>
           process.id === id ? { ...process, ...changes } : process
         ),
       })
@@ -53,12 +53,12 @@ const HiringProcesses = () => {
     dispatch(
       setFormMerge({
         selectionProcess: (() => {
-          const i = form.selectionProcess.findIndex(
+          const i = jobForm.selectionProcess.findIndex(
             (process) => process.id === id
           );
-          if (i < 0) return form.selectionProcess;
-          const copy = { ...form.selectionProcess[i], id: uid() };
-          const next = [...form.selectionProcess];
+          if (i < 0) return jobForm.selectionProcess;
+          const copy = { ...jobForm.selectionProcess[i], id: uid() };
+          const next = [...jobForm.selectionProcess];
           next.splice(i + 1, 0, copy);
           return next;
         })(),
@@ -66,27 +66,27 @@ const HiringProcesses = () => {
     );
 
   useEffect(() => {
-    const stored = localStoreGet<JobForm>(JOB_FORM, form);
+    const stored = localStoreGet<JobForm>(JOB_FORM, jobForm);
     dispatch(replaceForm(stored));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     localStoreSet<JobForm>(JOB_FORM, {
-      ...form,
-      selectionProcess: form.selectionProcess,
+      ...jobForm,
+      selectionProcess: jobForm.selectionProcess,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form.selectionProcess]);
+  }, [jobForm.selectionProcess]);
 
   return (
     <div>
       <ScrollArea className="max-h-[600px] overflow-y-scroll ">
-        {form.selectionProcess.length > 0 && (
+        {jobForm.selectionProcess.length > 0 && (
           <Card className="overflow-hidden">
             <CardContent>
               <SortableList<SelectionProcess>
-                items={form.selectionProcess}
+                items={jobForm.selectionProcess}
                 getId={(process) => process.id}
                 onReorder={handleReorder}
                 className="grid gap-2"

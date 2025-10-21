@@ -20,7 +20,7 @@ export function useGeneratePoster({
   title,
   posterNotes,
   posterVibe,
-  companyName,
+
   brandColorHex,
 }: JobForm) {
   const [busyPoster, setBusyPoster] = useState(false);
@@ -34,9 +34,8 @@ export function useGeneratePoster({
       posterNotes,
       posterVibe,
       brandColorHex,
-      companyName,
     }),
-    [title, posterNotes, posterVibe, brandColorHex, companyName]
+    [title, posterNotes, posterVibe, brandColorHex]
   );
 
   async function generatePoster() {

@@ -1,4 +1,3 @@
-// lib/axios-client.ts
 import axios, {
   AxiosError,
   AxiosInstance,
@@ -7,7 +6,6 @@ import axios, {
   AxiosHeaders,
 } from "axios";
 import axiosRetry, { isNetworkError } from "axios-retry";
-import { toast } from "sonner";
 
 export interface ApiErrorPayload {
   message?: string;
@@ -22,14 +20,13 @@ interface AxiosRetryMeta {
   retryCount?: number;
 }
 
-// Extend config to track retry + toast state
+// Extend config to track retry state
 interface RetryableConfig extends InternalAxiosRequestConfig {
   __retryCount?: number;
-  __toastedOnce?: boolean;
   "axios-retry"?: AxiosRetryMeta;
 }
 
-function extractMessage(
+export function extractMessage(
   data: ApiErrorPayload | string | null,
   status?: number
 ): string {
@@ -50,7 +47,6 @@ export const axiosClient: AxiosInstance = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-// ----- Request interceptor -----
 axiosClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
     const isFormData =
@@ -66,7 +62,6 @@ axiosClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ----- Retry rules -----
 function isRetryableStatus(status?: number) {
   if (!status) return false;
   return status >= 500; // only 5xx
@@ -102,7 +97,6 @@ axiosRetry(axiosClient, {
   },
 });
 
-// Will another retry happen?
 function anotherRetryScheduled(
   error: AxiosError<ApiErrorPayload, RetryableConfig>
 ): boolean {
@@ -120,7 +114,6 @@ function anotherRetryScheduled(
   return willRetry && current < maxRetries;
 }
 
-// ----- Response interceptor: toast only on final failure -----
 axiosClient.interceptors.response.use(
   (response: AxiosResponse): AxiosResponse => response,
   (error: AxiosError<ApiErrorPayload, RetryableConfig>) => {
@@ -130,15 +123,6 @@ axiosClient.interceptors.response.use(
     // Suppress toast if another retry is pending
     if (anotherRetryScheduled(error)) {
       return Promise.reject(error);
-    }
-
-    // Final failure -> toast once
-    if (typeof window !== "undefined" && cfg.__toastedOnce !== true) {
-      cfg.__toastedOnce = true;
-      const status = error.response?.status;
-      const data = error.response?.data ?? null;
-      const msg = extractMessage(data, status);
-      toast.error(msg);
     }
 
     return Promise.reject(error);

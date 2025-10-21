@@ -1,100 +1,49 @@
-// app/components/jobs-opening-header.tsx
 "use client";
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { FileDown, FolderPlus } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { CREATE_JOB } from "@/constents/router-links";
+import { CirclePlus, Import } from "lucide-react";
+import { getJobsPath } from "@/constents/router-links";
+import { useAppSelector } from "@/store/hooks";
+import Link from "next/link";
 
 type Props = {
-  title?: string;
-  openCount: number;
-  holdCount: number;
-  closeCount: number;
-  draftCount: number;
   onImport?: () => void;
   className?: string;
 };
 
-export default function JobsOpeningHeader({
-  title = "Jobs Opening",
-  openCount,
-  holdCount,
-  closeCount,
-  draftCount,
-  onImport,
-  className,
-}: Props) {
-  const router = useRouter();
-  return (
-    <div className={cn("w-full px-4 py-3 mb-4", "", className)}>
-      <div className="flex items-center justify-between gap-4 flex-wrap">
-        <div className="flex flex-wrap flex-col min-w-0">
-          <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+export default function JobsOpeningHeader({ onImport, className }: Props) {
+  const { user } = useAppSelector(({ user }) => user);
 
-          <div className="mt-1 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-            <StatusChip
-              colorClass="bg-emerald-500"
-              label="Open"
-              count={openCount}
-            />
-            <StatusChip
-              colorClass="bg-amber-500"
-              label="Hold"
-              count={holdCount}
-            />
-            <StatusChip
-              colorClass="bg-rose-500"
-              label="Close"
-              count={closeCount}
-            />
-            <StatusChip
-              colorClass="bg-slate-400"
-              label="Draft"
-              count={draftCount}
-            />
-          </div>
-        </div>
-        <div className="flex flex-1 items-center justify-end gap-2 flex-wrap">
+  const jobsPath = getJobsPath(user?.organizationId, user?.teamId);
+
+  return (
+    <div className={cn("w-full py-3 mb-4", className)}>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        {/* Buttons: stack on xs, row on sm+ */}
+        <div className="flex flex-col sm:flex-row flex-1 items-stretch sm:items-center justify-end gap-2">
           <Button
-            variant="secondary"
-            className="h-8 rounded-lg bg-slate-400 shadow-sm hover:bg-slate-500 transition-all"
+            className="relative inline-flex w-full sm:w-fit overflow-hidden rounded-lg p-[1px] focus:outline-none bg-transparent border-1 hover:bg-transparent"
             onClick={onImport}
           >
-            <FileDown className="mr-2 h-4 w-4" />
-            Import
+            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#272A3C_0%,#6971A2_50%,#272A3C_100%)]" />
+            <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg light:bg-[#161A31] dark:bg-background px-7 py-2 text-sm font-semibold text-white backdrop-blur-3xl gap-2">
+              <Import className="h-4 w-4" />
+              Import
+            </span>
           </Button>
-
-          <Button
-            className="h-8 rounded-lg bg-emerald-700 text-white hover:bg-emerald-700/90"
-            onClick={() => router.push(CREATE_JOB)}
-          >
-            <FolderPlus className="mr-2 h-4 w-4" />
-            Create Job
-          </Button>
+          <Link href={jobsPath ? `${jobsPath}/create` : "#"}>
+            <Button className="relative inline-flex w-full sm:w-fit overflow-hidden rounded-lg p-[1px] focus:outline-none bg-transparent border-0 hover:bg-transparent">
+              <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#272A3C_0%,#6971A2_50%,#272A3C_100%)]" />
+              <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-[#161A31] px-7 py-2 text-sm font-semibold text-white backdrop-blur-3xl gap-2">
+                <CirclePlus className="h-4 w-4" />
+                Create New Job
+              </span>
+            </Button>
+          </Link>
         </div>
       </div>
-    </div>
-  );
-}
-
-function StatusChip({
-  colorClass,
-  label,
-  count,
-}: {
-  colorClass: string;
-  label: string;
-  count: number;
-}) {
-  return (
-    <div className="flex items-center gap-2">
-      <span className={cn("h-1.5 w-1.5 rounded-full", colorClass)} />
-      <span className="whitespace-nowrap">
-        {label} <span className="font-medium text-foreground">{count}</span>
-      </span>
     </div>
   );
 }

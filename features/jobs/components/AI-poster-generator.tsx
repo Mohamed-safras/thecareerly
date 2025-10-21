@@ -35,7 +35,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 const MAX_FILES = 3;
 
 const AIPosterGenerator: React.FC = () => {
-  const form = useAppSelector((s) => s.jobForm);
+  const { jobForm } = useAppSelector(({ jobs }) => jobs);
   const dispatch = useAppDispatch();
 
   // Generic file handler (up to 3 reference images)
@@ -55,8 +55,7 @@ const AIPosterGenerator: React.FC = () => {
     setSampleImages, // from your hook
     generatePoster,
     clearPoster,
-    clearError,
-  } = useGeneratePoster(form);
+  } = useGeneratePoster(jobForm);
 
   // keep your undo stack
   const history = useUndoRedo<string>({ capacity: 100 });
@@ -88,14 +87,14 @@ const AIPosterGenerator: React.FC = () => {
   }
 
   function handleUndo() {
-    const prev = history.undo(form.posterNotes ?? "");
-    if (prev !== form.posterNotes)
+    const prev = history.undo(jobForm.posterNotes ?? "");
+    if (prev !== jobForm.posterNotes)
       dispatch(setFormMerge({ posterNotes: prev }));
   }
 
   function handleRedo() {
-    const next = history.redo(form.posterNotes ?? "");
-    if (next !== form.posterNotes)
+    const next = history.redo(jobForm.posterNotes ?? "");
+    if (next !== jobForm.posterNotes)
       dispatch(setFormMerge({ posterNotes: next }));
   }
 
@@ -110,7 +109,7 @@ const AIPosterGenerator: React.FC = () => {
         <div className="space-y-1">
           <Label>Brand Color (hex)</Label>
           <Input
-            value={form.brandColorHex || ""}
+            value={jobForm.brandColorHex || ""}
             onChange={(e) =>
               dispatch(setFormMerge({ brandColorHex: e.target.value }))
             }
@@ -120,7 +119,7 @@ const AIPosterGenerator: React.FC = () => {
         <div className="space-y-1.5">
           <Label htmlFor="poster-vibe">Poster vibe</Label>
           <Select
-            value={(form.posterVibe as AllowedVibesTypeValue) || undefined}
+            value={(jobForm.posterVibe as AllowedVibesTypeValue) || undefined}
             onValueChange={(v) => {
               const pv = isPosterVibe(v) ? v : ""; // narrow to PosterVibe
               dispatch(setFormMerge({ posterVibe: pv }));
@@ -265,11 +264,11 @@ const AIPosterGenerator: React.FC = () => {
 
         <div className="relative">
           <MarkdownEditor
-            value={form.posterNotes}
+            value={jobForm.posterNotes}
             onChange={(v) => {
               // optional undo
-              if (!busyPoster && (form.posterNotes ?? "") !== v) {
-                history.record(form.posterNotes ?? "");
+              if (!busyPoster && (jobForm.posterNotes ?? "") !== v) {
+                history.record(jobForm.posterNotes ?? "");
               }
               dispatch(setFormMerge({ posterNotes: v }));
             }}

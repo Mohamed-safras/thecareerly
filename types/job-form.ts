@@ -5,20 +5,20 @@ import { SelectionProcess } from "@/types/selection-process";
 export type JobForm = {
   title: string;
   location: string;
-  employmentType?: string;
-  workPreference?: string;
-  jobSeniority?: string;
-  minimumQualificationLevel?: string;
+  department: string;
+  employmentType: string;
+  workPreference: string;
+  jobSeniority: string;
+  minimumQualificationLevel: string;
   facilities: string[]; // array of facility keys
-  description?: string;
-
+  description: string;
   salary: {
     min?: string;
     max?: string;
     currency?: string;
     payPeriod?: string;
   };
-  scheduleDate?: string; // datetime-local
+  scheduleDate: string; // datetime-local
   aiPrompt?: string;
   includeMultimedia?: boolean;
   platforms: string[];

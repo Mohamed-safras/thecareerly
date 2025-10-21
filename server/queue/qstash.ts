@@ -12,9 +12,9 @@ export async function enqueueSocialQStash(
     job: {
       id: string;
       title: string;
-      description: string | null;
-      company_name: string | null;
-      company_site: string;
+      description: string;
+      organizationName: string;
+      organizationSite: string;
     };
     platforms: string[];
   },

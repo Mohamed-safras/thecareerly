@@ -9,42 +9,33 @@ import { Forward, Heart, SquareArrowOutUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
+import ORGANAIZATION_LOGO from "@/data/assets/1moretime_logo.jpg";
 
 export interface PreviewPanelProps {
   compact?: boolean;
 }
 
 const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
-  const {
-    title,
-    location,
-    minimumQualificationLevel,
-    employmentType,
-    workPreference,
-    salary,
-    description,
-  } = useAppSelector((selector) => selector.jobForm);
+  const { jobForm } = useAppSelector(({ jobs }) => jobs);
 
   return (
     <div className={`${compact ? "space-y-2" : "space-y-6"} p-4 border`}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         <div className="col-span-2">
           <h3 className="truncate text-base font-semibold md:text-lg">
-            {title || "Untitled Role"}
+            {jobForm.title || "Untitled Role"}
           </h3>
 
           <div className="flex gap-2">
-            {process.env.NEXT_PUBLIC_ORG_LOGO && (
-              <div className="flex items-center justify-center h-10 w-10 rounded border bg-background overflow-hidden">
-                <Image
-                  src={process.env.NEXT_PUBLIC_ORG_LOGO}
-                  alt="logo"
-                  width={100}
-                  height={100}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            )}
+            <div className="flex items-center justify-center h-10 w-10 rounded border bg-background overflow-hidden">
+              <Image
+                src={`/data/assets/1moretime_logo.jpg`}
+                alt="logo"
+                width={100}
+                height={100}
+                className="w-full h-full object-cover"
+              />
+            </div>
 
             {process.env.NEXT_PUBLIC_ORG_WEB_SITE && (
               <Link
@@ -52,7 +43,7 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
                 href={process.env.NEXT_PUBLIC_ORG_WEB_SITE! ?? ""}
                 className="flex items-center gap-2 text-sm text-primary"
               >
-                {process.env.NEXT_PUBLIC_ORG_NAME}
+                {process.env.NEXT_PUBLIC_APP_NAME}
                 <SquareArrowOutUpRight className="w-3 h-3" />
               </Link>
             )}
@@ -61,13 +52,13 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
           <div className="flex flex-wrap flex-col mt-2">
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant="secondary">
-                {location && location?.length > 50
-                  ? `${location?.slice(0, 40)}...`
-                  : location || "Location TBD"}
+                {jobForm.location && jobForm.location?.length > 50
+                  ? `${jobForm.location?.slice(0, 40)}...`
+                  : jobForm.location || "Location TBD"}
               </Badge>
               <span className="text-muted-foreground">-</span>
               <Badge variant="secondary">
-                {workPreference || "Work Arrangement TDB"}
+                {jobForm.workPreference || "Work Arrangement TDB"}
               </Badge>
             </div>
             <div className="flex flex-wrap items-center gap-2 mt-1">
@@ -99,25 +90,28 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
       </div>
 
       <div className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
-        <SqureCard title="Education" value={minimumQualificationLevel} />
-        <SqureCard title="Work Level" value={workPreference} />
-        <SqureCard title="Employe Type" value={employmentType} />
-        {salary.min && (
+        <SqureCard
+          title="Education"
+          value={jobForm.minimumQualificationLevel}
+        />
+        <SqureCard title="Work Level" value={jobForm.workPreference} />
+        <SqureCard title="Employe Type" value={jobForm.employmentType} />
+        {jobForm.salary.min && (
           <SqureCard
             title="Offer Salary"
             value={
-              (salary.min || salary.max) &&
-              `${salary.currency} ${salary.min} - ${salary.currency} ${salary.max}`
+              (jobForm.salary.min || jobForm.salary.max) &&
+              `${jobForm.salary.currency} ${jobForm.salary.min} - ${jobForm.salary.currency} ${jobForm.salary.max}`
             }
           >
-            <Badge>{salary.payPeriod}</Badge>
+            <Badge>{jobForm.salary.payPeriod}</Badge>
           </SqureCard>
         )}
       </div>
 
-      {description ? (
+      {jobForm.description ? (
         <MarkdownEditor.Markdown
-          source={description}
+          source={jobForm.description}
           style={{
             fontSize: "14px",
             lineHeight: "1.6",
@@ -128,18 +122,6 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
       ) : (
         <p className="text-sm">No description yet.</p>
       )}
-
-      {/* <div className="flex flex-wrap gap-2">
-        {platforms?.map((p) => (
-          <Badge key={p} variant="outline" className="gap-1">
-            {platformMeta[p]?.icon}
-            <span>{platformMeta[p]?.label}</span>
-          </Badge>
-        ))}
-        {platforms?.length === 0 && (
-          <Badge variant="outline">No platforms selected</Badge>
-        )}
-      </div> */}
     </div>
   );
 };

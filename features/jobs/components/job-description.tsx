@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import MarkdownEditor from "@/components/markdowneditor";
 import { AnimatedIconButton } from "@/components/animatediconbutton";
@@ -9,24 +9,25 @@ import useAIGenerateJobDescription from "@/hooks/use-ai-generate-Job-description
 import { useUndoRedo } from "@/hooks/use-undo-redo";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setForm as setFormMerge } from "@/store/slice/jobs-slice";
-import { RotateCcw, RotateCw, Sparkles } from "lucide-react";
+import { AlertCircle, RotateCcw, RotateCw, Sparkles } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import AIPosterGenerator from "./AI-poster-generator";
-import { JobForm } from "@/types/job-form";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { setFieldErrors } from "@/store/slice/form-error-slice";
+import { FORM_ID } from "@/constents/job-form";
 
 const JobDescription = () => {
   const dispatch = useAppDispatch();
-  const form = useAppSelector(({ jobForm }) => jobForm as JobForm);
+  const { jobForm } = useAppSelector(({ jobs }) => jobs);
+  const { byForm } = useAppSelector(({ formErrors }) => formErrors);
 
-  const { description } = form;
+  const { description } = jobForm;
 
-  const lastAppliedRef = useRef<string | null>(null); // avoid re-applying same text
-
-  const { generating, jobDescriptionOutput, generateJobDescription } =
-    useAIGenerateJobDescription(form);
+  const { generating, generateJobDescription } =
+    useAIGenerateJobDescription(jobForm);
 
   const history = useUndoRedo<string>({ capacity: 100 });
 
@@ -41,17 +42,9 @@ const JobDescription = () => {
   }
 
   function handleGenerateClick() {
-    history.record(description ?? "");
+    dispatch(setFormMerge({ description: "" }));
     generateJobDescription();
   }
-
-  useEffect(() => {
-    if (!generating && jobDescriptionOutput) {
-      if (lastAppliedRef.current === jobDescriptionOutput) return; // avoid reapply
-      lastAppliedRef.current = jobDescriptionOutput;
-      dispatch(setFormMerge({ description: jobDescriptionOutput }));
-    }
-  }, [generating, jobDescriptionOutput, dispatch]);
 
   return (
     <ScrollArea className="max-h-[600px] overflow-y-scroll">
@@ -85,10 +78,23 @@ const JobDescription = () => {
             </Button>
           </div>
 
-          <div className="relative" id="description">
+          <div className="relative mb-2" id="description">
             <MarkdownEditor
               value={description}
               onChange={(v) => {
+                if (!v) {
+                  dispatch(
+                    setFieldErrors({
+                      formId: FORM_ID + "_job_decription",
+                      errors: [
+                        {
+                          path: "description",
+                          message: "description is required",
+                        },
+                      ],
+                    })
+                  );
+                }
                 if (!generating && (description ?? "") !== v) {
                   history.record(description ?? "");
                 }
@@ -103,19 +109,31 @@ const JobDescription = () => {
               </div>
             )}
 
-            <div className="absolute right-12 bottom-18">
-              <AnimatedIconButton
-                label={generating ? "Generating…" : "Rewrite with AI"}
-                icon={<Sparkles className="h-4 w-4" />}
-                animation="bounce"
-                scaleDelta={0.01}
-                yDelta={1}
-                tiltDeg={2}
-                onClick={handleGenerateClick}
-                disabled={generating}
-              />
-            </div>
+            {!generating && (
+              <div className="absolute right-12 bottom-18 z-10">
+                <AnimatedIconButton
+                  label={generating ? "Generating…" : "Rewrite with AI"}
+                  icon={<Sparkles className="h-4 w-4" />}
+                  animation="bounce"
+                  scaleDelta={0.01}
+                  yDelta={1}
+                  tiltDeg={2}
+                  onClick={handleGenerateClick}
+                  disabled={generating}
+                />
+              </div>
+            )}
           </div>
+
+          {byForm?.create_job_description?.description && (
+            <Alert variant="destructive" className="h-fit text-sm  p-2">
+              <AlertCircle className="h-4 w-4" />
+
+              <AlertDescription>
+                {byForm.create_job_description.description}
+              </AlertDescription>
+            </Alert>
+          )}
         </div>
 
         <div className="border p-4 space-y-2">
@@ -126,7 +144,7 @@ const JobDescription = () => {
               </Label>
               <div id="include-multimedia" className="flex items-center gap-2">
                 <Switch
-                  checked={form.includeMultimedia}
+                  checked={jobForm.includeMultimedia}
                   onCheckedChange={(v) =>
                     dispatch(setFormMerge({ includeMultimedia: v }))
                   }
@@ -138,7 +156,7 @@ const JobDescription = () => {
             </div>
           </div>
 
-          {form.includeMultimedia && <AIPosterGenerator />}
+          {jobForm.includeMultimedia && <AIPosterGenerator />}
         </div>
       </div>
     </ScrollArea>
