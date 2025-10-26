@@ -1,0 +1,89 @@
+{
+  "info": {
+    "name": "Jobs API",
+    "_postman_id": "f3e6a2f1-1234-5678-9abc-def123456789",
+    "description": "Postman collection for creating Jobs in Next.js API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Job",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "title", "value": "Software Engineer", "type": "text" },
+            { "key": "employmentType", "value": "Full-time", "type": "text" },
+            { "key": "workPreference", "value": "Remote", "type": "text" },
+            { "key": "jobSeniority", "value": "Mid-level", "type": "text" },
+            {
+              "key": "minimumQualificationLevel",
+              "value": "Bachelor's Degree",
+              "type": "text"
+            },
+            {
+              "key": "facilities",
+              "value": "[\"healthcare\",\"remote-work\"]",
+              "type": "text"
+            },
+            {
+              "key": "description",
+              "value": "Develop and maintain web applications",
+              "type": "text"
+            },
+            {
+              "key": "location",
+              "value": "Colombo, Sri Lanka",
+              "type": "text"
+            },
+            {
+              "key": "salary",
+              "value": "{\"min\":\"1000\",\"max\":\"2000\",\"currency\":\"USD\",\"payPeriod\":\"monthly\"}",
+              "type": "text"
+            },
+            { "key": "schedule", "value": "2025-09-15T09:00", "type": "text" },
+            {
+              "key": "platforms",
+              "value": "[\"LinkedIn\",\"Indeed\"]",
+              "type": "text"
+            },
+            { "key": "companyName", "value": "Acentura", "type": "text" },
+            {
+              "key": "companySite",
+              "value": "https://acentura.com",
+              "type": "text"
+            },
+            {
+              "key": "questions",
+              "value": "[{\"prompt\":\"Why do you want this role?\",\"required\":true}]",
+              "type": "text"
+            },
+            {
+              "key": "selectionProcess",
+              "value": "[{\"order\":1,\"title\":\"HR Screening\"},{\"order\":2,\"title\":\"Technical Interview\"}]",
+              "type": "text"
+            },
+            { "key": "userId", "value": "YOUR_USER_OBJECT_ID", "type": "text" },
+            { "key": "teamId", "value": "YOUR_TEAM_OBJECT_ID", "type": "text" },
+            { "key": "status", "value": "open", "type": "text" },
+            { "key": "complianceStatus", "value": "pending", "type": "text" },
+            { "key": "ai_content", "value": "{}", "type": "text" },
+            { "key": "social_media_posts", "value": "{}", "type": "text" },
+            { "key": "logo", "type": "file", "src": "" },
+            { "key": "poster", "type": "file", "src": "" }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/jobs",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "jobs"]
+        }
+      },
+      "response": []
+    }
+  ]
+}

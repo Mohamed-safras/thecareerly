@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Check, ChevronsUpDown, Plus, X } from "lucide-react";
-import { cn } from "@/lib/utils/utils";
+import { cn, slugify } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -48,14 +48,6 @@ type ComboboxProps = {
   matchTriggerWidth?: boolean;
   clearable?: boolean;
 };
-
-function slugify(s: string) {
-  return s
-    .toLowerCase()
-    .trim()
-    .replace(/[\s_]+/g, "-")
-    .replace(/[^a-z0-9-]/g, "");
-}
 
 export function Combobox({
   id,

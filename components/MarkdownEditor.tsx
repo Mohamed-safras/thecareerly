@@ -8,7 +8,7 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
 });
 
 type MarkDownEditorProps = {
-  value: string;
+  value?: string;
   onChange: (v: string) => void;
   placeholder?: string;
   height?: number;

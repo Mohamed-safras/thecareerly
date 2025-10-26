@@ -7,17 +7,17 @@ import { SearchForm } from "@/components/search-form";
 
 export type BreadcrumbItem = { label: string; link: string };
 
-export default function HiringShell({
+export default function HeaderShell({
   children,
   breadCrumpPage,
   breadCrumbsItems,
 }: {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   breadCrumpPage: string;
-  breadCrumbsItems: BreadcrumbItem[];
+  breadCrumbsItems?: BreadcrumbItem[];
 }) {
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b [--header-height:calc(--spacing(14))]">
+    <div className="min-h-screen w-full [--header-height:calc(--spacing(14))]">
       <SiteHeader>
         <SideHeaderBreadCrumb
           breadCrumpPage={breadCrumpPage}

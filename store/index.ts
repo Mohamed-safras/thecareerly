@@ -1,11 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import jobFormReducer from "../features/jobs/jobs-slice";
+import jobsReducer from "@/store/slice/jobs-slice";
+import errorFormReducer from "@/store/slice/form-error-slice";
+import userReducer from "@/store/slice/user-slice";
+import logger from "redux-logger";
 
 export const store = configureStore({
   reducer: {
-    jobForm: jobFormReducer,
+    user: userReducer,
+    jobs: jobsReducer,
+    formErrors: errorFormReducer,
   },
-  // middleware, devTools defaults are fine
+  devTools: process.env.NODE_ENV !== "production",
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

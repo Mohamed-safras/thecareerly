@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
 type AnimatedIconButtonProps = {
-  onClick: () => void;
+  onClick?: () => void;
   icon: React.ReactNode;
   label: string;
   busy?: boolean;
@@ -102,7 +102,7 @@ export function AnimatedIconButton({
 
   const handleClick = () => {
     if (isInactive) return;
-    onClick();
+    if (onClick) onClick();
   };
 
   return (
@@ -130,7 +130,7 @@ export function AnimatedIconButton({
         data-state={isInactive ? "inactive" : "active"}
         disabled={isInactive}
         className={`rounded-full shadow-md ${
-          isInactive ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
+          isInactive ? "opacity-80 cursor-not-allowed" : "cursor-pointer"
         } ${className ?? ""}`}
         style={{ width: size, height: size, padding: 0 }}
       >

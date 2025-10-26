@@ -7,14 +7,14 @@ export const platformMeta: Record<
   string,
   { label: string; icon: React.ReactNode }
 > = {
-  linkedin: { label: "LinkedIn", icon: <Linkedin className="h-4 w-4" /> },
-  twitter: { label: "X / Twitter", icon: <Twitter className="h-4 w-4" /> },
-  instagram: { label: "Instagram", icon: <Instagram className="h-4 w-4" /> },
-  facebook: { label: "Facebook", icon: <Facebook className="h-4 w-4" /> },
+  LINKEDIN: { label: "LinkedIn", icon: <Linkedin className="h-4 w-4" /> },
+  TWITTER: { label: "X / Twitter", icon: <Twitter className="h-4 w-4" /> },
+  INSTAGRAM: { label: "Instagram", icon: <Instagram className="h-4 w-4" /> },
+  FACEBOOK: { label: "Facebook", icon: <Facebook className="h-4 w-4" /> },
 };
 
 export interface PlatformsProps {
-  platforms: string[];
+  platforms?: string[];
   togglePlatform: (platform: string) => void;
 }
 
@@ -22,10 +22,10 @@ const Platforms: React.FC<PlatformsProps> = ({ platforms, togglePlatform }) => {
   return (
     <div className="space-y-2">
       <Label>Post to Platforms</Label>
-      <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:grid-cols-4">
         {Object.entries(platformMeta).map(([key, meta]) => {
           const id = `platform-${key}`;
-          const checked = platforms.includes(key);
+          const checked = platforms?.includes(key);
           return (
             <div
               key={key}

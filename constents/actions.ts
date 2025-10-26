@@ -1,0 +1,8 @@
+export enum ACTIONS {
+  CREATE = "CREATE",
+  UPDATE = "UPDATE",
+  PUBLISH = "PUBLISH",
+  DRAFT = "DRAFT",
+  OPEN = "OPEN",
+  CLOSED = "CLOSED",
+}

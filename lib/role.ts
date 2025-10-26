@@ -1,0 +1,10 @@
+export const TEAM_ROLES = {
+  TEAM_ADMIN: "TEAM_ADMIN",
+  TEAM_MEMBER: "TEAM_MEMBER",
+  GUEST: "GUEST",
+} as const;
+
+export const ORGANIZATION_ROLES = {
+  SUPER_ADMIN: "SUPER_ADMIN",
+  BILLING_ADMIN: "BILLING_ADMIN",
+} as const;
