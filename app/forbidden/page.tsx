@@ -1,8 +1,7 @@
 // app/403/page.tsx
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { ShieldAlert } from "lucide-react";
-import { HOME } from "@/constents/router-links";
+import { LOGIN } from "@/constents/router-links";
 
 export default function ForbiddenPage() {
   return (
@@ -32,10 +31,10 @@ export default function ForbiddenPage() {
             className="relative z-10 overflow-hidden px-12 py-2 rounded-lg cursor-pointer text-base tracking-widest font-bold my-3 border border-border bg-background text-foreground group transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 w-fit"
             aria-label="Go to homepage"
           >
-            <Link href={HOME}>
+            <Link href={LOGIN}>
               <span className="absolute left-0 top-0 w-0 h-full z-[-1] transition-all duration-200 ease-in-out group-hover:w-full group-focus:w-full bg-muted"></span>
               <span className="relative z-10 transition-colors duration-200 group-hover:text-foreground group-focus:text-foreground">
-                Go Home
+                Sign in
               </span>
             </Link>
           </button>
@@ -53,7 +52,7 @@ export default function ForbiddenPage() {
           </button>
         </div>
 
-        <div className="mt-6 rounded-lg bg-muted text-xs text-muted-foreground">
+        <div className="mt-6 rounded-lg  text-xs text-muted-foreground">
           <p className="font-medium">Request details</p>
           <p className="mt-1">
             If you contact support, include the time of the error and the page

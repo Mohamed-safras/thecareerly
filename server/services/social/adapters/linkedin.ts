@@ -15,13 +15,13 @@ function getLinkedInEnv() {
 // get a media URN, and include it in the UGC post body.
 
 export const linkedInAdapter: SocialAdapter = {
-  key: "linkedin",
+  key: "LINKEDIN",
   async publish(data: PublishPayload, tok): Promise<SocialResult> {
     const { token, orgId } = getLinkedInEnv();
 
     if (!token) {
       return {
-        platform: "linkedin",
+        platform: "LINKEDIN",
         ok: false,
         message: "LINKEDIN_ACCESS_TOKEN is not set",
       };
@@ -29,7 +29,7 @@ export const linkedInAdapter: SocialAdapter = {
 
     if (!orgId) {
       return {
-        platform: "linkedin",
+        platform: "LINKEDIN",
         ok: false,
         message: "LINKEDIN_ORG_ID is not set",
       };
@@ -64,7 +64,7 @@ export const linkedInAdapter: SocialAdapter = {
       );
 
       return {
-        platform: "linkedin",
+        platform: "LINKEDIN",
         ok: true,
         status: res.status,
         statusText: res.statusText,
@@ -74,7 +74,7 @@ export const linkedInAdapter: SocialAdapter = {
     } catch (error) {
       console.log(error);
       return {
-        platform: "linkedin",
+        platform: "LINKEDIN",
         ok: false,
         message: error instanceof Error ? error.message : "Unknown error",
       };

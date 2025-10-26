@@ -1,76 +1,65 @@
 import { ConflictError } from "@/lib/error/http-error";
 import { prisma } from "@/lib/prisma";
-import { ROLES } from "@/lib/role";
+import { ORGANIZATION_ROLES, TEAM_ROLES } from "@/lib/role";
+import { slugify } from "@/lib/utils";
 import { hashPassword } from "@/server/auth/crypto";
+import { getUniqueSlug } from "./get-unique-slug.service";
 
 export async function createOrganization({
   organizationEmail,
   organizationName,
   password,
   confirmPassword,
-  phone,
 }: {
   organizationEmail: string;
   organizationName: string;
   password: string;
   confirmPassword: string;
-  phone: string;
 }): Promise<{
   organizationId: string;
   userId: string;
-  teamId: string;
 }> {
   if (password !== confirmPassword) {
     throw new ConflictError("Passwords do not match");
   }
 
-  const [existingOrg, existingEmailOrg, existingUser, existingPhoneUser] =
+  const [existingOrgByEmail, existingOrgBySlug, existingUser] =
     await Promise.all([
       prisma.organization.findUnique({
-        where: { name: organizationName.toLowerCase() },
+        where: { primaryEmail: organizationEmail },
       }),
-      prisma.organization.findUnique({ where: { email: organizationEmail } }),
+      prisma.organization.findUnique({
+        where: { slug: slugify(organizationName) },
+      }),
       prisma.user.findUnique({ where: { email: organizationEmail } }),
-      prisma.user.findUnique({ where: { phone } }),
     ]);
 
-  if (existingOrg) {
-    throw new ConflictError("Organization already exists");
-  }
-
-  if (existingEmailOrg) {
+  if (existingOrgByEmail)
     throw new ConflictError("Organization with this email already exists");
-  }
 
-  if (existingUser) {
-    throw new ConflictError("Organization with this email already exists");
-  }
+  if (existingOrgBySlug)
+    throw new ConflictError("Organization name is already taken");
 
-  if (existingPhoneUser) {
-    throw new ConflictError(
-      "Organization with this phone number already exists"
-    );
-  }
+  if (existingUser)
+    throw new ConflictError("A user with this email already exists");
 
   const passwordHash = await hashPassword(password);
-
   const emailDomain = organizationEmail.split("@")[1];
 
   let organizationId: string;
   let userId: string;
-  let teamId: string;
 
   const result = await prisma.$transaction(async (transaction) => {
-    const superAdminUser = await transaction.user.create({
+    const user = await transaction.user.create({
       data: {
-        name: `${organizationName} SUPER_ADMIN`,
+        name: `${organizationName.toUpperCase()}_${
+          ORGANIZATION_ROLES.SUPER_ADMIN
+        }`,
         email: organizationEmail,
         isActive: true,
-        phone,
       },
     });
-
-    userId = superAdminUser.id;
+    userId = user.id;
 
     await transaction.localCredential.create({
       data: {
@@ -79,45 +68,30 @@ export async function createOrganization({
       },
     });
 
+    const baseSlug = slugify(organizationName);
+    const uniqueSlug = await getUniqueSlug(baseSlug);
+
     const organization = await transaction.organization.create({
       data: {
         name: organizationName,
-        email: organizationEmail,
-        domainAllowlist: [emailDomain],
+        primaryEmail: organizationEmail,
+        domain: emailDomain,
         createdByUserId: userId,
+        slug: uniqueSlug,
       },
     });
-
     organizationId = organization.id;
 
-    const defaultTeam = await transaction.team.create({
+    await transaction.organizationUser.create({
       data: {
-        name: "Default Team",
-        description: `This is the default team created for the organization ${organizationName}.`,
         organizationId,
-      },
-    });
-
-    teamId = defaultTeam.id;
-
-    await transaction.teamUser.create({
-      data: {
         userId,
-        teamId,
-        joinedAt: new Date(),
-        role: ROLES.ORGANIZATION_SUPER_ADMIN,
+        role: "SUPER_ADMIN",
       },
     });
 
-    await transaction.user.update({
-      where: { id: userId },
-      data: { defaultTeamId: teamId },
-    });
-
-    await transaction.organizationProfile.create({
-      data: {
-        userId,
-      },
+    await transaction.userProfile.create({
+      data: { userId },
     });
 
     await transaction.auditLog.create({
@@ -135,7 +109,7 @@ export async function createOrganization({
       },
     });
 
-    return { organizationId, userId, teamId };
+    return { organizationId, userId };
   });
 
   console.log("Created organization with ID:", result.organizationId);

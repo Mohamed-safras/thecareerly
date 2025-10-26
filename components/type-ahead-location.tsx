@@ -17,11 +17,6 @@ import { mapNominatim } from "@/lib/geo/place";
 import { Place } from "@/types/place";
 import { Label } from "./ui/label";
 import { Alert, AlertDescription } from "./ui/alert";
-import { useSelector } from "react-redux";
-import { selectFormFieldError } from "@/store/form-errors/form-error-selectors";
-
-import { useAppDispatch } from "@/store/hooks";
-import { setFieldError } from "@/store/slice/form-error-slice";
 
 const nominatim = axios.create({
   baseURL: "https://nominatim.openstreetmap.org",

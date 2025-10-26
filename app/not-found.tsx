@@ -4,9 +4,8 @@ import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Head from "next/head";
 import { gsap } from "gsap"; // 👈 Import GSAP
-import { Search } from "lucide-react";
 import Link from "next/link";
-import { HOME } from "@/constents/router-links";
+import { LOGIN } from "@/constents/router-links";
 
 // Use currentColor for strokes/fills so SVG adapts to parent text color
 const COLORS = {
@@ -845,12 +844,12 @@ export default function NotFound() {
 
               <button
                 className="relative z-10 overflow-hidden px-12 py-2 rounded-lg cursor-pointer text-base tracking-widest font-bold my-3 border border-border bg-background text-foreground group transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 w-fit"
-                aria-label="Go to homepage"
+                aria-label="Go to Login"
               >
-                <Link href={HOME}>
+                <Link href={LOGIN}>
                   <span className="absolute left-0 top-0 w-0 h-full z-[-1] transition-all duration-200 ease-in-out group-hover:w-full group-focus:w-full bg-muted"></span>
                   <span className="relative z-10 transition-colors duration-200 group-hover:text-foreground group-focus:text-foreground">
-                    Home
+                    Sign in
                   </span>
                 </Link>
               </button>

@@ -5,21 +5,31 @@ import { extractStatusAndMessage } from "@/lib/error/error-message-extractor";
 import { GENERATE_JOB_DESCRIPTION_API } from "@/constents/router-links";
 import { AIPromptInput } from "@/types/gen-AI";
 import { useAppDispatch } from "@/store/hooks";
-import { setForm as setFormMerge } from "@/store/slice/jobs-slice";
 import { AI_AGENT_SERVICE_ENDPOINTS } from "@/constents/api-end-points";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+
+interface AIGenerateJobDescriptionProps {
+  jobForm: JobForm;
+  setFormMerge: ActionCreatorWithPayload<Partial<JobForm>>;
+}
 
 const useAIGenerateJobDescription = ({
-  title,
-  location,
-  employmentType,
-  workPreference,
-  minimumQualificationLevel,
-  jobSeniority,
-  facilities,
-}: JobForm) => {
+  jobForm,
+  setFormMerge,
+}: AIGenerateJobDescriptionProps) => {
   const dispatch = useAppDispatch();
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const {
+    title,
+    location,
+    employmentType,
+    workPreference,
+    minimumQualificationLevel,
+    jobSeniority,
+    facilities,
+  } = jobForm;
 
   const aiPromptInputs: AIPromptInput = useMemo(
     () => ({

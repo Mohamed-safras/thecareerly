@@ -1,19 +1,33 @@
 import { AuthStatus } from "@/types/auth-status";
-import { UserProfile } from "@/types/user-profile";
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
-import { TeamRole } from "@prisma/client";
 
-interface SessionUser {
+// Import types for team/organization users
+export type TeamUserType = {
+  team?: {
+    id?: string;
+    organizationId?: string;
+    organization?: { id?: string };
+  };
+  role?: string;
+};
+
+export type OrganizationUserType = {
+  organization?: { id?: string };
+  role?: string;
+};
+
+export type UserProfile = {
   id: string;
   name?: string | null;
   email?: string | null;
-  image?: string | null;
-  roles?: TeamRole[];
+  avatar?: string | null;
   organizationId?: string | null;
   teamId?: string | null;
-}
+  teamUsers?: TeamUserType[];
+  organizationUsers?: OrganizationUserType[];
+};
 
 export type UserState = {
   status: AuthStatus;
@@ -31,7 +45,6 @@ export const hydrateUserFromSession = createAsyncThunk(
   "user/hydrateFromSession",
   async () => {
     const session: Session | null = await getSession();
-
     return session;
   }
 );
@@ -65,16 +78,18 @@ const userSlice = createSlice({
         const session = payload;
 
         if (session?.user) {
-          const sessionUser = session.user as SessionUser;
+          // Log for debugging
+          console.log("hydrateUserFromSession - session.user:", session.user);
 
           state.user = {
-            id: sessionUser?.id ?? null,
-            name: sessionUser?.name ?? null,
-            email: sessionUser?.email ?? null,
-            avatar: sessionUser?.image ?? null,
-            roles: sessionUser?.roles ?? [],
-            organizationId: sessionUser?.organizationId ?? null,
-            teamId: sessionUser?.teamId ?? null,
+            id: session.user.id ?? null,
+            name: session.user.name ?? null,
+            email: session.user.email ?? null,
+            avatar: session.user.image ?? null,
+            organizationId: session.user.organizationId ?? null,
+            teamId: session.user.teamId ?? null,
+            teamUsers: session.user.teamUsers ?? [],
+            organizationUsers: session.user.organizationUsers ?? [],
           };
           state.isAuthenticated = true;
           state.status = "authenticated";

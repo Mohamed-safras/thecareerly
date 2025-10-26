@@ -1,5 +1,5 @@
 const API_SERVICES = {
-  AUTH_SERVICE: "http://localhost:3000/api/auth-service",
+  AUTH_SERVICE: "http://localhost:3000/api/auth",
   AI_AGENT_SERVICE: "http://localhost:3001/api/ai-agent-service",
   RECRUITMENT_SERVICE: "http://localhost:3002/api/recruitment-service",
 };
@@ -16,6 +16,6 @@ export const RECRUITMENT_SERVICE_ENDPOINTS = {
 };
 
 export const AUTH_SERVICE_ENDPOINTS = {
-  CREATE_ORGANIZATIONUSER: `${API_SERVICES.AUTH_SERVICE}/connect/organization/create`,
-  GET_API_TOKEN: `${API_SERVICES.AUTH_SERVICE}/auth/get-api-token`,
+  CREATE_ORGANIZATION: `${API_SERVICES.AUTH_SERVICE}/connect/organization/create`,
+  GET_API_TOKEN: `${API_SERVICES.AUTH_SERVICE}/get-api-token`,
 };

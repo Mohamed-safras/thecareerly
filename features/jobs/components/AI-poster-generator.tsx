@@ -1,8 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setForm as setFormMerge } from "@/store/slice/jobs-slice";
+import { useAppDispatch } from "@/store/hooks";
 import { useGeneratePoster } from "@/hooks/use-generate-poster";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,11 +30,20 @@ import { useFileHandler } from "@/hooks/use-file-handler";
 import { AllowedVibesTypeValue, isPosterVibe } from "@/types/poster";
 import { ALLOWED_VIBES_TYPES } from "@/constents/basic-info-options";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { JobForm } from "@/types/job-form";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 const MAX_FILES = 3;
 
-const AIPosterGenerator: React.FC = () => {
-  const { jobForm } = useAppSelector(({ jobs }) => jobs);
+export interface AIPosterGeneratorProps {
+  jobForm: JobForm;
+  setFormMerge: ActionCreatorWithPayload<Partial<JobForm>>;
+}
+
+const AIPosterGenerator = ({
+  jobForm,
+  setFormMerge,
+}: AIPosterGeneratorProps) => {
   const dispatch = useAppDispatch();
 
   // Generic file handler (up to 3 reference images)

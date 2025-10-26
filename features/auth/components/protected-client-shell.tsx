@@ -4,18 +4,52 @@ import React, { ReactNode, useEffect, useMemo, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAppSelector } from "@/store/hooks";
 import { selectUserAuth } from "@/store/selectors/userSelectors";
-import { Loader, ShieldCheck } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { TeamRole } from "@prisma/client";
 
-type Props = {
+import AccessCheck from "@/components/access-check";
+
+type AllowedRole = string;
+
+type ProtectedClientShellProps = {
   children: ReactNode;
   loginUrl: string;
   forbiddenUrl: string;
-  allowedRoles?: TeamRole[];
+  allowedRoles?: AllowedRole[];
   requireTeamId?: string;
   requireOrgId?: string;
 };
+
+type TeamUserType = {
+  team?: {
+    id?: string;
+    organizationId?: string;
+    organization?: { id?: string };
+  };
+  role?: string;
+};
+
+type OrganizationUserType = {
+  organization?: { id?: string };
+  role?: string;
+};
+
+type UserWithSchemaType = {
+  teamUsers?: TeamUserType[];
+  organizationUsers?: OrganizationUserType[];
+  organizationId?: string | null;
+  teamId?: string | null;
+};
+
+function getSafeCallbackUrl(url: string): string {
+  if (
+    url.startsWith("/") &&
+    !url.startsWith("//") &&
+    !url.startsWith("/\\") &&
+    !url.includes("://")
+  ) {
+    return url;
+  }
+  return "/";
+}
 
 export default function ProtectedClientShell({
   children,
@@ -24,70 +58,98 @@ export default function ProtectedClientShell({
   allowedRoles,
   requireTeamId,
   requireOrgId,
-}: Props) {
+}: ProtectedClientShellProps) {
   const router = useRouter();
   const pathname = usePathname();
   const redirectingRef = useRef(false);
 
   const { user, isAuthenticated, status } = useAppSelector(selectUserAuth);
 
+  const safeCallbackUrl = useMemo(
+    () => getSafeCallbackUrl(pathname),
+    [pathname]
+  );
   const loginHref = useMemo(
-    () => `${loginUrl}?callbackUrl=${encodeURIComponent(pathname)}`,
-    [loginUrl, pathname]
+    () => `${loginUrl}?callbackUrl=${encodeURIComponent(safeCallbackUrl)}`,
+    [loginUrl, safeCallbackUrl]
   );
 
-  type TeamUser = {
-    team?: {
-      id?: string;
-      organizationId?: string;
-      organization?: { id?: string };
-    };
-    role?: string;
-  };
-  type UserWithTeams = {
-    roles?: TeamRole[];
-    teamUsers?: TeamUser[];
-    organizationId?: string | null;
-    teamId?: string | null;
-  };
-
-  const userWithTeams = useMemo(() => user as unknown as UserWithTeams, [user]);
-  const userRoles = useMemo(
-    () => (userWithTeams?.roles ?? []) as TeamRole[],
-    [userWithTeams]
-  );
-  const teamUsers = useMemo(
-    () => (userWithTeams?.teamUsers ?? []) as TeamUser[],
-    [userWithTeams]
-  );
-
-  const hasRequiredRole = useMemo(
+  const userWithSchema: UserWithSchemaType = useMemo(
     () =>
-      !allowedRoles || userRoles.some((role) => allowedRoles.includes(role)),
-    [userRoles, allowedRoles]
+      user
+        ? (user as UserWithSchemaType)
+        : { teamUsers: [], organizationUsers: [] },
+    [user]
   );
 
-  const isTeamMember = useMemo(
+  const teamUserList = useMemo(
+    () => userWithSchema?.teamUsers ?? [],
+    [userWithSchema]
+  );
+
+  const organizationUserList = useMemo(
+    () => userWithSchema?.organizationUsers ?? [],
+    [userWithSchema]
+  );
+
+  // Extract all user roles as strings
+  const allUserRoles: string[] = useMemo(
+    () => [
+      ...teamUserList
+        .map((teamUser) => teamUser.role)
+        .filter((role): role is string => typeof role === "string"),
+      ...organizationUserList
+        .map((organizationUser) => organizationUser.role)
+        .filter((role): role is string => typeof role === "string"),
+    ],
+    [teamUserList, organizationUserList]
+  );
+
+  // Debug logs for troubleshooting
+  React.useEffect(() => {
+    console.log("ProtectedClientShell - user:", user);
+    console.log("ProtectedClientShell - teamUserList:", teamUserList);
+    console.log(
+      "ProtectedClientShell - organizationUserList:",
+      organizationUserList
+    );
+    console.log("ProtectedClientShell - allUserRoles:", allUserRoles);
+    console.log("ProtectedClientShell - allowedRoles:", allowedRoles);
+  }, [user, teamUserList, organizationUserList, allUserRoles, allowedRoles]);
+
+  // Check if user has any allowed role
+  const userHasAllowedRole = useMemo(
+    () =>
+      !allowedRoles || allUserRoles.some((role) => allowedRoles.includes(role)),
+    [allUserRoles, allowedRoles]
+  );
+
+  // Check team membership
+  const userIsTeamMember = useMemo(
     () =>
       !requireTeamId ||
-      teamUsers.some((teamUser) => teamUser.team?.id === requireTeamId) ||
-      !!(userWithTeams?.teamId && userWithTeams.teamId === requireTeamId),
-    [teamUsers, requireTeamId, userWithTeams]
+      teamUserList.some((teamUser) => teamUser.team?.id === requireTeamId) ||
+      !!(userWithSchema?.teamId && userWithSchema.teamId === requireTeamId),
+    [teamUserList, requireTeamId, userWithSchema]
   );
 
-  const isOrgMember = useMemo(
+  // Check organization membership
+  const userIsOrganizationMember = useMemo(
     () =>
       !requireOrgId ||
-      teamUsers.some(
+      teamUserList.some(
         (teamUser) =>
           teamUser.team?.organizationId === requireOrgId ||
           teamUser.team?.organization?.id === requireOrgId
       ) ||
+      organizationUserList.some(
+        (organizationUser) => organizationUser.organization?.id === requireOrgId
+      ) ||
       !!(
-        userWithTeams?.organizationId &&
-        userWithTeams.organizationId === requireOrgId
+        userWithSchema?.organizationId &&
+        userWithSchema.organizationId === requireOrgId
       ),
-    [teamUsers, requireOrgId, userWithTeams]
+    [teamUserList, organizationUserList, requireOrgId, userWithSchema]
   );
 
   useEffect(() => {
@@ -100,19 +162,19 @@ export default function ProtectedClientShell({
       return;
     }
 
-    if (!hasRequiredRole) {
+    if (!userHasAllowedRole) {
       redirectingRef.current = true;
       router.replace(forbiddenUrl);
       return;
     }
 
-    if (!isTeamMember) {
+    if (!userIsTeamMember) {
       redirectingRef.current = true;
       router.replace(forbiddenUrl);
       return;
     }
 
-    if (!isOrgMember) {
+    if (!userIsOrganizationMember) {
       redirectingRef.current = true;
       router.replace(forbiddenUrl);
       return;
@@ -120,36 +182,24 @@ export default function ProtectedClientShell({
   }, [
     status,
     isAuthenticated,
-    hasRequiredRole,
-    isTeamMember,
-    isOrgMember,
+    userHasAllowedRole,
+    userIsTeamMember,
+    userIsOrganizationMember,
     loginHref,
     forbiddenUrl,
     router,
   ]);
 
   if (status === "idle" || status === "loading") {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background px-4">
-        <Card className="w-full max-w-md rounded-2xl border p-6 shadow-sm text-center">
-          <div className="flex flex-col items-center">
-            <ShieldCheck className="h-8 w-8 text-primary" aria-hidden="true" />
-            <h2 className="mt-3 text-lg font-semibold">Checking access</h2>
-            <div
-              className="mt-4 flex items-center gap-2 text-sm text-muted-foreground"
-              role="status"
-              aria-live="polite"
-            >
-              <Loader className="h-5 w-5 motion-safe:animate-spin" />
-              <span>Verifying your session and permissions…</span>
-            </div>
-          </div>
-        </Card>
-      </div>
-    );
+    return <AccessCheck />;
   }
 
-  if (!isAuthenticated || !hasRequiredRole || !isTeamMember || !isOrgMember)
+  if (
+    !isAuthenticated ||
+    !userHasAllowedRole ||
+    !userIsTeamMember ||
+    !userIsOrganizationMember
+  )
     return null;
 
   return <>{children}</>;

@@ -1,8 +1,10 @@
-export const ROLES = {
-  ORGANIZATION_SUPER_ADMIN: "ORGANIZATION_SUPER_ADMIN",
+export const TEAM_ROLES = {
   TEAM_ADMIN: "TEAM_ADMIN",
   TEAM_MEMBER: "TEAM_MEMBER",
   GUEST: "GUEST",
 } as const;
 
-export type RoleType = (typeof ROLES)[keyof typeof ROLES];
+export const ORGANIZATION_ROLES = {
+  SUPER_ADMIN: "SUPER_ADMIN",
+  BILLING_ADMIN: "BILLING_ADMIN",
+} as const;

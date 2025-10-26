@@ -12,68 +12,65 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Eye, Rocket, Sparkles } from "lucide-react";
-import SchedulePanel from "@/features/jobs/components/schedule&publish-job";
+import SchedulePanel from "@/features/jobs/components/publish-job";
 import Stepper from "@/components/stepper";
 import JobDescription from "@/features/jobs/components/job-description";
 import PreviewPanel from "@/features/jobs/components/preview-job";
 import BasicInfo from "@/features/jobs/components/basci-info";
 import ScreeningQuestions from "@/features/jobs/components/screen-questions";
-import { jobPostingSteps } from "@/constents/stepper-item";
-import { EMPLOYEE, JOBS } from "@/constents/router-links";
+import { editJobPostingSteps } from "@/constents/stepper-item";
 import HiringProcesses from "@/features/jobs/components/hiring-processes";
 import HeaderShell from "@/features/jobs/components/hiring-shell";
-import { useSubmitForm } from "@/hooks/use-save-job";
+import { useSubmitJobForm } from "@/hooks/use-submit-form";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { replaceForm } from "@/store/slice/jobs-slice";
+import { getJobsPath } from "@/lib/utils";
+import { goNext, goPrev, goTo } from "@/lib/form-validation/job-form";
+import { UPDATE_JOB_FORM } from "@/constents/local-store-values";
+import {
+  setUpdateForm as setFormMerge,
+  replaceUpdateForm as replaceForm,
+  toggleUpdatePlatform as togglePlatformAction,
+} from "@/store/slice/jobs-slice";
+import { redirect } from "next/navigation";
 
 interface EditJobProps {
   id: string;
 }
 
 export default function EditJob({ id }: EditJobProps) {
-  console.log("Editing job with ID:", id);
-  const { validateStep } = useSubmitForm();
+  const [currentStep, setCurrentStep] = React.useState(1);
+  const { user } = useAppSelector(({ user }) => user);
 
-  const { jobs } = useAppSelector(({ jobs }) => jobs);
+  const { jobs } = useAppSelector(({ jobs }) => jobs); // not fetch from here fetch job with the id
+  const { updateJobForm } = useAppSelector(({ jobs }) => jobs);
   const dispatch = useAppDispatch();
 
-  const [currentStep, setCurrentStep] = React.useState(1);
-  const total = jobPostingSteps.length;
+  const total = editJobPostingSteps.length;
 
-  const goPrev = () => setCurrentStep((step) => Math.max(1, step - 1));
+  const jobsPath = user && getJobsPath(user.organizationId, user.teamId);
 
-  const goNext = () => {
-    const errors = validateStep(currentStep);
-    if (errors.length > 0) return;
-
-    setCurrentStep((step) => Math.min(total, step + 1));
-  };
-
-  const goTo = (index: number) => {
-    const errors = validateStep(currentStep);
-    if (errors.length > 0 && index > currentStep) return;
-    setCurrentStep(index);
-  };
-
+  const { validateStep } = useSubmitJobForm({
+    jobForm: updateJobForm,
+    formErrorType: UPDATE_JOB_FORM,
+  });
   useEffect(() => {
-    const editJob = jobs.filter((job) => job.id === id)[0];
-    console.log("Found job to edit:", editJob);
-    if (editJob) {
-      dispatch(
-        replaceForm({
-          ...editJob,
-        })
-      );
+    const findJob = jobs.find((job) => job.id === id);
+    console.log("Found Job for Edit:", findJob);
+    if (!findJob) {
+      redirect("/not-found");
     }
+
+    dispatch(
+      replaceForm({
+        ...findJob,
+      })
+    );
   }, [id, dispatch, jobs]);
 
   return (
     <HeaderShell
       breadCrumpPage="Edit Job"
-      breadCrumbsItems={[
-        { label: "Employee", link: EMPLOYEE },
-        { label: "Jobs", link: JOBS },
-      ]}
+      breadCrumbsItems={[{ label: "Jobs", link: jobsPath ? jobsPath : "#" }]}
     >
       <motion.div
         initial={{ opacity: 0, y: 8 }}
@@ -85,9 +82,11 @@ export default function EditJob({ id }: EditJobProps) {
         <div className="relative min-[1280px]:col-span-3">
           <div className="min-[1280px]:sticky min-[1280px]:top-15 p-2 sm:p-4 space-y-4 sm:space-y-6 border rounded-xl sm:rounded-2xl shadow-sm h-fit bg-card">
             <Stepper
-              steps={jobPostingSteps}
+              steps={editJobPostingSteps}
               currentStep={currentStep}
-              onGoTo={goTo}
+              validateStep={validateStep}
+              setCurrentStep={setCurrentStep}
+              goTo={goTo}
             />
           </div>
         </div>
@@ -155,13 +154,47 @@ export default function EditJob({ id }: EditJobProps) {
             </CardHeader>
 
             <CardContent>
-              {currentStep === 1 && <BasicInfo />}
-              {currentStep === 2 && <JobDescription />}
-              {currentStep === 3 && <ScreeningQuestions />}
-              {currentStep === 4 && <HiringProcesses />}
-              {currentStep === 5 && <PreviewPanel />}
+              {currentStep === 1 && (
+                <BasicInfo
+                  jobForm={updateJobForm}
+                  formType={UPDATE_JOB_FORM}
+                  setFormMerge={setFormMerge}
+                  replaceForm={replaceForm}
+                  formErrorType={UPDATE_JOB_FORM}
+                />
+              )}
+              {currentStep === 2 && (
+                <JobDescription
+                  jobForm={updateJobForm}
+                  setFormMerge={setFormMerge}
+                  formErrorType={UPDATE_JOB_FORM}
+                />
+              )}
+              {currentStep === 3 && (
+                <ScreeningQuestions
+                  jobForm={updateJobForm}
+                  formType={UPDATE_JOB_FORM}
+                  setFormMerge={setFormMerge}
+                  replaceForm={replaceForm}
+                />
+              )}
+              {currentStep === 4 && (
+                <HiringProcesses
+                  jobForm={updateJobForm}
+                  formType={UPDATE_JOB_FORM}
+                  setFormMerge={setFormMerge}
+                  replaceForm={replaceForm}
+                />
+              )}
+              {currentStep === 5 && <PreviewPanel jobForm={updateJobForm} />}
               {currentStep === 6 && (
-                <SchedulePanel setCurrentStep={setCurrentStep} />
+                <SchedulePanel
+                  setCurrentStep={setCurrentStep}
+                  jobForm={updateJobForm}
+                  setFormMerge={setFormMerge}
+                  togglePlatformAction={togglePlatformAction}
+                  formErrorType={UPDATE_JOB_FORM}
+                />
               )}
             </CardContent>
 
@@ -169,7 +202,7 @@ export default function EditJob({ id }: EditJobProps) {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={goPrev}
+                onClick={() => goPrev(setCurrentStep)}
                 disabled={currentStep === 1}
               >
                 <ChevronLeft className="mr-1 h-4 w-4" /> Previous
@@ -181,7 +214,9 @@ export default function EditJob({ id }: EditJobProps) {
               <Button
                 variant="ghost"
                 className="min-w-24"
-                onClick={goNext}
+                onClick={() =>
+                  goNext(currentStep, total, validateStep, setCurrentStep)
+                }
                 disabled={currentStep === total}
               >
                 Next <ChevronRight className="ml-1 h-4 w-4" />

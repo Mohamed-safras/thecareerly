@@ -12,50 +12,43 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Eye, Rocket, Sparkles } from "lucide-react";
-import SchedulePanel from "@/features/jobs/components/schedule&publish-job";
+import SchedulePanel from "@/features/jobs/components/publish-job";
 import HorizontalStepper from "@/components/stepper";
 import JobDescription from "@/features/jobs/components/job-description";
 import PreviewPanel from "@/features/jobs/components/preview-job";
 import BasicInfo from "@/features/jobs/components/basci-info";
 import ScreeningQuestions from "@/features/jobs/components/screen-questions";
-import { jobPostingSteps } from "@/constents/stepper-item";
-import { EMPLOYEE, getJobsPath } from "@/constents/router-links";
+import { createJobPostingSteps } from "@/constents/stepper-item";
 import HiringProcesses from "@/features/jobs/components/hiring-processes";
 import HeaderShell from "@/features/jobs/components/hiring-shell";
-import { useSubmitForm } from "@/hooks/use-save-job";
+import { useSubmitJobForm } from "@/hooks/use-submit-form";
 import { useAppSelector } from "@/store/hooks";
+import { getJobsPath } from "@/lib/utils";
+import { CREATE_JOB_FORM } from "@/constents/local-store-values";
+import {
+  setCreateForm as setFormMerge,
+  replaceCreateForm as replaceForm,
+  toggleCreatePlatform as togglePlatformAction,
+} from "@/store/slice/jobs-slice";
+
+import { goNext, goPrev, goTo } from "@/lib/form-validation/job-form";
 
 export default function CreateJob() {
-  const { validateStep } = useSubmitForm();
+  const [currentStep, setCurrentStep] = React.useState(1);
+  const total = createJobPostingSteps.length;
+
   const { user } = useAppSelector(({ user }) => user);
+  const { createJobForm } = useAppSelector(({ jobs }) => jobs);
 
   const jobsPath = getJobsPath(user?.organizationId, user?.teamId);
-
-  const [currentStep, setCurrentStep] = React.useState(1);
-  const total = jobPostingSteps.length;
-
-  const goPrev = () => setCurrentStep((step) => Math.max(1, step - 1));
-
-  const goNext = () => {
-    const errors = validateStep(currentStep);
-    if (errors.length > 0) return;
-
-    setCurrentStep((step) => Math.min(total, step + 1));
-  };
-
-  const goTo = (index: number) => {
-    const errors = validateStep(currentStep);
-    if (errors.length > 0 && index > currentStep) return;
-    setCurrentStep(index);
-  };
-
+  const { validateStep } = useSubmitJobForm({
+    jobForm: createJobForm,
+    formErrorType: CREATE_JOB_FORM,
+  });
   return (
     <HeaderShell
       breadCrumpPage="Create"
-      breadCrumbsItems={[
-        { label: "Employee", link: EMPLOYEE },
-        { label: "Jobs", link: jobsPath ? jobsPath : "#" },
-      ]}
+      breadCrumbsItems={[{ label: "Jobs", link: jobsPath ? jobsPath : "#" }]}
     >
       <motion.div
         initial={{ opacity: 0, y: 8 }}
@@ -66,9 +59,11 @@ export default function CreateJob() {
         <div className="relative min-[1280px]:col-span-3">
           <div className="min-[1280px]:sticky min-[1280px]:top-15 p-2 sm:p-4 space-y-4 sm:space-y-6 border rounded-xl sm:rounded-2xl shadow-sm h-fit bg-card">
             <HorizontalStepper
-              steps={jobPostingSteps}
+              steps={createJobPostingSteps}
               currentStep={currentStep}
-              onGoTo={goTo}
+              validateStep={validateStep}
+              setCurrentStep={setCurrentStep}
+              goTo={goTo}
             />
           </div>
         </div>
@@ -136,13 +131,47 @@ export default function CreateJob() {
             </CardHeader>
 
             <CardContent>
-              {currentStep === 1 && <BasicInfo />}
-              {currentStep === 2 && <JobDescription />}
-              {currentStep === 3 && <ScreeningQuestions />}
-              {currentStep === 4 && <HiringProcesses />}
-              {currentStep === 5 && <PreviewPanel />}
+              {currentStep === 1 && (
+                <BasicInfo
+                  jobForm={createJobForm}
+                  formType={CREATE_JOB_FORM}
+                  setFormMerge={setFormMerge}
+                  replaceForm={replaceForm}
+                  formErrorType={CREATE_JOB_FORM}
+                />
+              )}
+              {currentStep === 2 && (
+                <JobDescription
+                  jobForm={createJobForm}
+                  setFormMerge={setFormMerge}
+                  formErrorType={CREATE_JOB_FORM}
+                />
+              )}
+              {currentStep === 3 && (
+                <ScreeningQuestions
+                  jobForm={createJobForm}
+                  formType={CREATE_JOB_FORM}
+                  setFormMerge={setFormMerge}
+                  replaceForm={replaceForm}
+                />
+              )}
+              {currentStep === 4 && (
+                <HiringProcesses
+                  jobForm={createJobForm}
+                  formType={CREATE_JOB_FORM}
+                  setFormMerge={setFormMerge}
+                  replaceForm={replaceForm}
+                />
+              )}
+              {currentStep === 5 && <PreviewPanel jobForm={createJobForm} />}
               {currentStep === 6 && (
-                <SchedulePanel setCurrentStep={setCurrentStep} />
+                <SchedulePanel
+                  setCurrentStep={setCurrentStep}
+                  jobForm={createJobForm}
+                  setFormMerge={setFormMerge}
+                  togglePlatformAction={togglePlatformAction}
+                  formErrorType={CREATE_JOB_FORM}
+                />
               )}
             </CardContent>
 
@@ -150,7 +179,7 @@ export default function CreateJob() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={goPrev}
+                onClick={() => goPrev(setCurrentStep)}
                 disabled={currentStep === 1}
               >
                 <ChevronLeft className="mr-1 h-4 w-4" /> Previous
@@ -162,7 +191,9 @@ export default function CreateJob() {
               <Button
                 variant="ghost"
                 className="min-w-24"
-                onClick={goNext}
+                onClick={() =>
+                  goNext(currentStep, total, validateStep, setCurrentStep)
+                }
                 disabled={currentStep === total}
               >
                 Next <ChevronRight className="ml-1 h-4 w-4" />

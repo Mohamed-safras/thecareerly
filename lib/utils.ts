@@ -47,3 +47,15 @@ export function createQueryString(
 
   return newSearchParams.toString();
 }
+
+/**
+ * Returns the jobs path for a given organizationId and teamId.
+ * Usage: getJobsPath(organizationId, teamId)
+ */
+export function getJobsPath(
+  organizationId?: string | null,
+  teamId?: string | null
+) {
+  if (!organizationId || !teamId) return null;
+  return `/organization/${organizationId}/team/${teamId}/jobs`;
+}

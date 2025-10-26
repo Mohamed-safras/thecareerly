@@ -7,10 +7,10 @@ export const platformMeta: Record<
   string,
   { label: string; icon: React.ReactNode }
 > = {
-  linkedin: { label: "LinkedIn", icon: <Linkedin className="h-4 w-4" /> },
-  twitter: { label: "X / Twitter", icon: <Twitter className="h-4 w-4" /> },
-  instagram: { label: "Instagram", icon: <Instagram className="h-4 w-4" /> },
-  facebook: { label: "Facebook", icon: <Facebook className="h-4 w-4" /> },
+  LINKEDIN: { label: "LinkedIn", icon: <Linkedin className="h-4 w-4" /> },
+  TWITTER: { label: "X / Twitter", icon: <Twitter className="h-4 w-4" /> },
+  INSTAGRAM: { label: "Instagram", icon: <Instagram className="h-4 w-4" /> },
+  FACEBOOK: { label: "Facebook", icon: <Facebook className="h-4 w-4" /> },
 };
 
 export interface PlatformsProps {

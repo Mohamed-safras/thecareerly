@@ -1,6 +1,19 @@
-import { TeamRole } from "@prisma/client";
 import "next-auth";
 import "next-auth/jwt";
+
+export type TeamUserType = {
+  team?: {
+    id?: string;
+    organizationId?: string;
+    organization?: { id?: string };
+  };
+  role?: string;
+};
+
+export type OrganizationUserType = {
+  organization?: { id?: string };
+  role?: string;
+};
 
 declare module "next-auth" {
   interface Session {
@@ -9,9 +22,10 @@ declare module "next-auth" {
       name?: string | null;
       email?: string | null;
       image?: string | null;
-      roles: TeamRole[];
       organizationId?: string | null;
       teamId?: string | null;
+      teamUsers?: TeamUserType[];
+      organizationUsers?: OrganizationUserType[];
     };
   }
 
@@ -20,17 +34,19 @@ declare module "next-auth" {
     name?: string | null;
     email?: string | null;
     image?: string | null;
-    roles: TeamRole[];
     organizationId?: string | null;
     teamId?: string | null;
+    teamUsers?: TeamUserType[];
+    organizationUsers?: OrganizationUserType[];
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
     uid: string;
-    roles: TeamRole[];
     organizationId?: string | null;
     teamId?: string | null;
+    teamUsers?: TeamUserType[];
+    organizationUsers?: OrganizationUserType[];
   }
 }

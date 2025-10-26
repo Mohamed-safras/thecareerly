@@ -11,6 +11,15 @@ import { Metadata } from "next";
 import JobDetailsSidebar from "@/features/jobs/job-details-sidebar";
 import { Job } from "@/features/jobs/components/job-posting-card";
 import JobsStatusBar from "@/features/jobs/components/jobs-status";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 type Props = {
   params: { id: string };
@@ -32,25 +41,38 @@ const Jobs = () => {
   };
 
   return (
-    <HeaderShell
-      breadCrumpPage="Jobs"
-      breadCrumbsItems={[{ label: "Employee", link: EMPLOYEE }]}
-    >
-      <div className="mx-auto max-w-8xl p-4">
-        <JobsOpeningHeader />
-        <JobFiltersBar />
-        <JobsStatusBar />
-        <JobList onJobClick={handleJobClick} />
+    <div className="mx-auto max-w-8xl p-4">
+      <JobsOpeningHeader />
+      <JobFiltersBar />
+      <JobsStatusBar />
+      <JobList onJobClick={handleJobClick} />
 
-        {selectedJob && (
-          <JobDetailsSidebar
-            isOpen={isSidebarOpen}
-            onClose={() => setIsSidebarOpen(false)}
-            job={selectedJob}
-          />
-        )}
-      </div>
-    </HeaderShell>
+      {selectedJob && (
+        <JobDetailsSidebar
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+          job={selectedJob}
+        />
+      )}
+
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious href="#" />
+          </PaginationItem>
+
+          <PaginationItem>
+            <PaginationLink href="#">1</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext href="#" />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </div>
   );
 };
 

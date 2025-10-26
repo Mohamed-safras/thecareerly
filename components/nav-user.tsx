@@ -28,17 +28,22 @@ import {
 import { ModeToggle } from "./mode-toggle";
 import { UserProfile } from "@/types/user-profile";
 import { signOut as authSignOut } from "next-auth/react";
-import { HOME } from "@/constents/router-links";
 import { useAppDispatch } from "@/store/hooks";
 import { clearUser } from "@/store/slice/user-slice";
+import { LOGIN } from "@/constents/router-links";
 
 export function NavUser(user: UserProfile | null) {
   const { isMobile } = useSidebar();
   const dispatch = useAppDispatch();
-  const { avatar, name, email } = user ?? { avatar: "", name: "", email: "" };
+  const { id, avatar, name, email } = user ?? {
+    id: "",
+    avatar: "",
+    name: "",
+    email: "",
+  };
 
   const signOut = () => {
-    authSignOut({ callbackUrl: HOME });
+    authSignOut({ callbackUrl: LOGIN });
     dispatch(clearUser());
   };
 

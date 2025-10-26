@@ -14,7 +14,6 @@ import { Combobox, type ComboItem } from "@/components/combobox";
 import { localStoreGet, localStoreSet } from "@/lib/common/localstore";
 import { isComboItemArray, slugify } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { replaceForm, setForm as setFormMerge } from "@/store/slice/jobs-slice";
 import { employmentTypeValue } from "@/types/employment";
 import { workPreferenceTypeValue } from "@/types/work-arrangments";
 import { AlertCircle } from "lucide-react";
@@ -36,16 +35,30 @@ import { currencyOptionTypeValue } from "@/types/currency-option";
 import TypeaheadLocation from "@/components/type-ahead-location";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import type { JobForm } from "@/types/job-form";
-import { JOB_FORM, JOB_TITLE_OPTIONS } from "@/constents/local-store-values";
+import { JOB_TITLE_OPTIONS } from "@/constents/local-store-values";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
-const BasicInfo: React.FC = () => {
+export interface BasicInfoProps {
+  jobForm: JobForm;
+  formType: string;
+  setFormMerge: ActionCreatorWithPayload<Partial<JobForm>>;
+  replaceForm: ActionCreatorWithPayload<JobForm>;
+  formErrorType: string;
+}
+
+const BasicInfo = ({
+  jobForm,
+  formType,
+  setFormMerge,
+  replaceForm,
+  formErrorType,
+}: BasicInfoProps) => {
   const [titleOptions, setTitleOptions] = useState<ComboItem[]>([]);
   const [titlesHydrated, setTitlesHydrated] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
 
-  const { jobForm } = useAppSelector(({ jobs }) => jobs);
   const { byForm } = useAppSelector(({ formErrors }) => formErrors);
 
   const {
@@ -105,7 +118,7 @@ const BasicInfo: React.FC = () => {
   // Form hydration & persistence (unchanged)
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
-    const stored = localStoreGet<JobForm>(JOB_FORM, jobForm);
+    const stored = localStoreGet<JobForm>(formType, jobForm);
     console.log(stored);
     dispatch(replaceForm(stored));
     setHydrated(true);
@@ -114,7 +127,7 @@ const BasicInfo: React.FC = () => {
 
   useEffect(() => {
     if (!hydrated) return;
-    localStoreSet<JobForm>(JOB_FORM, {
+    localStoreSet<JobForm>(formType, {
       ...jobForm,
       title,
       employmentType,
@@ -175,12 +188,12 @@ const BasicInfo: React.FC = () => {
                 className={`w-full bg-transparent`}
                 contentClassName="w-full"
               />
-              {byForm?.create_basic_info?.title && (
+              {byForm?.[`${formErrorType}_basic_info`]?.title && (
                 <Alert variant="destructive" className="h-fit text-sm p-2">
                   <AlertCircle className="h-4 w-4" />
 
                   <AlertDescription>
-                    {byForm?.create_basic_info?.title}
+                    {byForm?.[`${formErrorType}_basic_info`]?.title}
                   </AlertDescription>
                 </Alert>
               )}
@@ -189,7 +202,7 @@ const BasicInfo: React.FC = () => {
             <TypeaheadLocation
               value={location}
               onChange={(v) => dispatch(setFormMerge({ location: v }))}
-              fieldError={byForm?.create_basic_info?.location}
+              fieldError={byForm?.[`${formErrorType}_basic_info`]?.location}
             />
           </div>
 
@@ -218,12 +231,12 @@ const BasicInfo: React.FC = () => {
                   ))}
                 </SelectContent>
               </Select>
-              {byForm?.create_basic_info?.workPreference && (
+              {byForm?.[`${formErrorType}_basic_info`]?.workPreference && (
                 <Alert variant="destructive" className="h-fit text-sm p-2">
                   <AlertCircle className="h-4 w-4" />
 
                   <AlertDescription>
-                    {byForm?.create_basic_info?.workPreference}
+                    {byForm?.[`${formErrorType}_basic_info`]?.workPreference}
                   </AlertDescription>
                 </Alert>
               )}
@@ -251,12 +264,12 @@ const BasicInfo: React.FC = () => {
                   ))}
                 </SelectContent>
               </Select>
-              {byForm?.create_basic_info?.employmentType && (
+              {byForm?.[`${formErrorType}_basic_info`]?.employmentType && (
                 <Alert variant="destructive" className="h-fit text-sm p-2">
                   <AlertCircle className="h-4 w-4" />
 
                   <AlertDescription>
-                    {byForm?.create_basic_info?.employmentType}
+                    {byForm?.[`${formErrorType}_basic_info`]?.employmentType}
                   </AlertDescription>
                 </Alert>
               )}
@@ -286,12 +299,12 @@ const BasicInfo: React.FC = () => {
                   ))}
                 </SelectContent>
               </Select>
-              {byForm?.create_basic_info?.jobSeniority && (
+              {byForm?.[`${formErrorType}_basic_info`]?.jobSeniority && (
                 <Alert variant="destructive" className="h-fit text-sm p-2">
                   <AlertCircle className="h-4 w-4" />
 
                   <AlertDescription>
-                    {byForm?.create_basic_info?.jobSeniority}
+                    {byForm?.[`${formErrorType}_basic_info`]?.jobSeniority}
                   </AlertDescription>
                 </Alert>
               )}
@@ -328,12 +341,16 @@ const BasicInfo: React.FC = () => {
                   ))}
                 </SelectContent>
               </Select>
-              {byForm?.create_basic_info?.minimumQualificationLevel && (
+              {byForm?.[`${formErrorType}_basic_info`]
+                ?.minimumQualificationLevel && (
                 <Alert variant="destructive" className="h-fit text-sm p-2">
                   <AlertCircle className="h-4 w-4" />
 
                   <AlertDescription>
-                    {byForm?.create_basic_info?.minimumQualificationLevel}
+                    {
+                      byForm?.[`${formErrorType}_basic_info`]
+                        ?.minimumQualificationLevel
+                    }
                   </AlertDescription>
                 </Alert>
               )}

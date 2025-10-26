@@ -6,16 +6,19 @@ import {
 } from "@reduxjs/toolkit";
 import type { JobForm } from "@/types/job-form";
 import { localStoreGet, localStoreSet } from "@/lib/common/localstore";
-import { JOB_FORM } from "@/constents/local-store-values";
+import {
+  CREATE_JOB_FORM,
+  UPDATE_JOB_FORM,
+} from "@/constents/local-store-values";
 import { Job } from "@/features/jobs/components/job-posting-card";
 import { axiosClient, extractMessage } from "@/lib/http/axios-client";
 import { RECRUITMENT_SERVICE_ENDPOINTS } from "@/constents/api-end-points";
-import { Axios, AxiosError } from "axios";
-import { da, he } from "date-fns/locale";
+import { AxiosError } from "axios";
 import { getApiTokenWithSession } from "@/server/services/auth/get-api-token.service";
 
 interface JobsState {
-  jobForm: JobForm;
+  createJobForm: JobForm;
+  updateJobForm: JobForm;
   jobs: Job[];
   loading: boolean;
   hasMore: boolean;
@@ -124,7 +127,7 @@ export const fetchJobs = createAsyncThunk(
   }
 );
 
-export const saveJob = createAsyncThunk(
+export const createJob = createAsyncThunk(
   "jobs/createJob",
   async (
     { formData, token }: { formData: FormData; token: string },
@@ -165,6 +168,11 @@ export const saveJob = createAsyncThunk(
   }
 );
 
+export const updateJob = createAsyncThunk(
+  "jobs/updateJob",
+  async ({ formData, token }: { formData: FormData; token: string }) => {}
+);
+
 const defaultForm: JobForm = {
   title: "",
   employmentType: "",
@@ -203,12 +211,17 @@ function normalize(input: unknown): JobForm {
   return base;
 }
 
-const jobFormInitialState: JobForm = normalize(
-  localStoreGet<JobForm>(JOB_FORM, defaultForm)
+const createJobFormInitialState: JobForm = normalize(
+  localStoreGet<JobForm>(CREATE_JOB_FORM, defaultForm)
+);
+
+const updateJobFormInitialState: JobForm = normalize(
+  localStoreGet<JobForm>(UPDATE_JOB_FORM, defaultForm)
 );
 
 const initialState: JobsState = {
-  jobForm: jobFormInitialState,
+  createJobForm: createJobFormInitialState,
+  updateJobForm: updateJobFormInitialState,
   jobs: [],
   loading: false,
   hasMore: true,
@@ -225,38 +238,72 @@ const jobsSlice = createSlice({
   name: "jobs",
   initialState,
   reducers: {
-    setForm: (state, action: PayloadAction<Partial<JobForm>>) => {
-      state.jobForm = { ...state.jobForm, ...action.payload };
-      localStoreSet(JOB_FORM, state.jobForm);
+    setCreateForm: (state, action: PayloadAction<Partial<JobForm>>) => {
+      state.createJobForm = { ...state.createJobForm, ...action.payload };
+      localStoreSet(CREATE_JOB_FORM, state.createJobForm);
     },
 
-    replaceForm: (state, action: PayloadAction<JobForm>) => {
+    setUpdateForm: (state, action: PayloadAction<Partial<JobForm>>) => {
+      state.updateJobForm = { ...state.updateJobForm, ...action.payload };
+      localStoreSet(CREATE_JOB_FORM, state.updateJobForm);
+    },
+
+    replaceCreateForm: (state, action: PayloadAction<JobForm>) => {
       const normalizedForm = normalize(action.payload);
-      state.jobForm = normalizedForm;
-      localStoreSet(JOB_FORM, normalizedForm);
+      state.createJobForm = normalizedForm;
+      localStoreSet(CREATE_JOB_FORM, normalizedForm);
     },
 
-    setField: <K extends keyof JobForm>(
+    replaceUpdateForm: (state, action: PayloadAction<JobForm>) => {
+      const normalizedForm = normalize(action.payload);
+      state.updateJobForm = normalizedForm;
+      localStoreSet(UPDATE_JOB_FORM, normalizedForm);
+    },
+
+    setCreateJobFormField: <K extends keyof JobForm>(
       state: Draft<JobsState>,
       action: PayloadAction<{ key: K; value: JobForm[K] }>
     ) => {
       const { key, value } = action.payload;
-      (state.jobForm as JobForm)[key] = value;
-      localStoreSet(JOB_FORM, state.jobForm);
+      (state.createJobForm as JobForm)[key] = value;
+      localStoreSet(CREATE_JOB_FORM, state.createJobForm);
     },
 
-    togglePlatform: (state, action: PayloadAction<string>) => {
+    setUpdateJobFormField: <K extends keyof JobForm>(
+      state: Draft<JobsState>,
+      action: PayloadAction<{ key: K; value: JobForm[K] }>
+    ) => {
+      const { key, value } = action.payload;
+      (state.updateJobForm as JobForm)[key] = value;
+      localStoreSet(UPDATE_JOB_FORM, state.updateJobForm);
+    },
+
+    toggleCreatePlatform: (state, action: PayloadAction<string>) => {
       const key = action.payload;
-      const has = state.jobForm.platforms?.includes(key);
-      state.jobForm.platforms = has
-        ? state.jobForm.platforms.filter((k) => k !== key)
-        : [...(state.jobForm.platforms ?? []), key];
-      localStoreSet(JOB_FORM, state.jobForm);
+      const has = state.createJobForm.platforms?.includes(key);
+      state.createJobForm.platforms = has
+        ? state.createJobForm.platforms.filter((k) => k !== key)
+        : [...(state.createJobForm.platforms ?? []), key];
+      localStoreSet(CREATE_JOB_FORM, state.createJobForm);
     },
 
-    resetForm: (state) => {
-      state.jobForm = { ...defaultForm };
-      localStoreSet(JOB_FORM, state.jobForm);
+    toggleUpdatePlatform: (state, action: PayloadAction<string>) => {
+      const key = action.payload;
+      const has = state.updateJobForm.platforms?.includes(key);
+      state.updateJobForm.platforms = has
+        ? state.updateJobForm.platforms.filter((k) => k !== key)
+        : [...(state.updateJobForm.platforms ?? []), key];
+      localStoreSet(UPDATE_JOB_FORM, state.updateJobForm);
+    },
+
+    resetCreateForm: (state) => {
+      state.createJobForm = { ...defaultForm };
+      localStoreSet(CREATE_JOB_FORM, state.createJobForm);
+    },
+
+    resetUpdateForm: (state) => {
+      state.updateJobForm = { ...defaultForm };
+      localStoreSet(UPDATE_JOB_FORM, state.updateJobForm);
     },
 
     resetJobs: (state) => {
@@ -294,12 +341,12 @@ const jobsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(saveJob.pending, (state) => {
+      .addCase(createJob.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.requestInProgress = true;
       })
-      .addCase(saveJob.fulfilled, (state, action) => {
+      .addCase(createJob.fulfilled, (state, action) => {
         state.loading = false;
         state.requestInProgress = false;
 
@@ -313,10 +360,10 @@ const jobsSlice = createSlice({
           }
         }
 
-        state.jobForm = { ...defaultForm };
-        localStoreSet(JOB_FORM, state.jobForm);
+        state.createJobForm = { ...defaultForm };
+        localStoreSet(CREATE_JOB_FORM, state.createJobForm);
       })
-      .addCase(saveJob.rejected, (state, action) => {
+      .addCase(createJob.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
         state.requestInProgress = false;
@@ -383,11 +430,16 @@ const jobsSlice = createSlice({
 });
 
 export const {
-  setForm,
-  replaceForm,
-  setField,
-  togglePlatform,
-  resetForm,
+  setCreateForm,
+  setUpdateForm,
+  replaceCreateForm,
+  replaceUpdateForm,
+  setCreateJobFormField,
+  setUpdateJobFormField,
+  toggleCreatePlatform,
+  toggleUpdatePlatform,
+  resetCreateForm,
+  resetUpdateForm,
   resetJobs,
   clearError,
   addPrefetchedPage,

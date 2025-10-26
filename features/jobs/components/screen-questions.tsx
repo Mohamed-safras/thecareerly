@@ -10,17 +10,27 @@ import { Plus } from "lucide-react";
 import SortableList from "@/components/sortable-list";
 import QuestionRow from "@/features/jobs/components/question-row";
 import { Question } from "@/types/question";
-import { replaceForm, setForm as setFormMerge } from "@/store/slice/jobs-slice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { localStoreGet, localStoreSet } from "@/lib/common/localstore";
 import { JobForm } from "@/types/job-form";
-import { JOB_FORM } from "@/constents/local-store-values";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 const uid = () => Math.random().toString(36).slice(2, 9);
 
-export default function ScreeningQuestions() {
+export interface ScreeningQuestionsProps {
+  jobForm: JobForm;
+  formType: string;
+  setFormMerge: ActionCreatorWithPayload<Partial<JobForm>>;
+  replaceForm: ActionCreatorWithPayload<JobForm>;
+}
+
+export default function ScreeningQuestions({
+  jobForm,
+  formType,
+  setFormMerge,
+  replaceForm,
+}: ScreeningQuestionsProps) {
   const dispatch = useAppDispatch();
-  const { jobForm } = useAppSelector(({ jobs }) => jobs);
 
   const addQuestion = () =>
     dispatch(
@@ -68,13 +78,13 @@ export default function ScreeningQuestions() {
     dispatch(setFormMerge({ questions: next }));
 
   useEffect(() => {
-    const stored = localStoreGet<JobForm>(JOB_FORM, jobForm);
+    const stored = localStoreGet<JobForm>(formType, jobForm);
     dispatch(replaceForm(stored));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    localStoreSet<JobForm>(JOB_FORM, {
+    localStoreSet<JobForm>(formType, {
       ...jobForm,
       questions: jobForm.questions,
     });

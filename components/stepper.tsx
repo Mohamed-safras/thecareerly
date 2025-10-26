@@ -1,13 +1,23 @@
+import { FieldError } from "@/types/form-errors";
 import { CheckCircle2 } from "lucide-react";
 
 export default function Stepper({
+  validateStep,
+  setCurrentStep,
   steps,
   currentStep,
-  onGoTo,
+  goTo,
 }: {
-  steps: Readonly<{ title: string }[]>;
   currentStep: number;
-  onGoTo: (i: number) => void;
+  steps: Readonly<{ title: string }[]>;
+  validateStep: (step: number) => FieldError[];
+  setCurrentStep: (value: React.SetStateAction<number>) => void;
+  goTo: (
+    goTo: number,
+    currentStep: number,
+    validateStep: (step: number) => FieldError[],
+    setCurrentStep: (value: React.SetStateAction<number>) => void
+  ) => void;
 }) {
   return (
     <div className="w-full max-[1279px]:max-w-5xl max-[1279px]:m-auto max-[1279px]:overflow-x-scroll min-[1280px]:overflow-x-auto no-scrollbar">
@@ -27,7 +37,9 @@ export default function Stepper({
             >
               <button
                 type="button"
-                onClick={() => onGoTo(stepNo)}
+                onClick={() =>
+                  goTo(stepNo, currentStep, validateStep, setCurrentStep)
+                }
                 className={`group flex items-center gap-2 rounded-full border px-3 py-1.5 transition-colors ${
                   active
                     ? "border-primary bg-pr text-primary"

@@ -24,6 +24,7 @@ import {
 import { useRouter } from "next/navigation";
 import { createQueryString } from "@/lib/utils";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { useAppSelector } from "@/store/hooks";
 
 interface JobDetailsSidebarProps {
   isOpen: boolean;
@@ -37,12 +38,15 @@ const JobDetailsSidebar = ({
   job,
 }: JobDetailsSidebarProps) => {
   const router = useRouter();
+  const { user } = useAppSelector(({ user }) => user);
 
   const handleEdit = () => {
     const queryString = createQueryString({
       id: job.id,
     });
-    router.replace(`/connect/employee/jobs/edit?${queryString}`);
+    router.replace(
+      `/organization/${user?.organizationId}/team/${user?.teamId}/jobs/edit?${queryString}`
+    );
   };
 
   return (

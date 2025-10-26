@@ -1,10 +1,8 @@
 import React from "react";
 import ProtectedClientShell from "@/features/auth/components/protected-client-shell";
-import { ROLES } from "@/lib/role";
-import {
-  CONNECT_ORGANIZATION_LOGIN,
-  FORBIDDEN,
-} from "@/constents/router-links";
+import { TEAM_ROLES, ORGANIZATION_ROLES } from "@/lib/role";
+import { LOGIN, FORBIDDEN } from "@/constents/router-links";
+import HeaderShell from "@/features/jobs/components/hiring-shell";
 
 type Props = {
   children: React.ReactNode;
@@ -16,16 +14,12 @@ export default async function OrganizationLayout({ children, params }: Props) {
 
   return (
     <ProtectedClientShell
-      allowedRoles={[
-        ROLES.ORGANIZATION_SUPER_ADMIN,
-        ROLES.TEAM_ADMIN,
-        ROLES.TEAM_MEMBER,
-      ]}
+      allowedRoles={[ORGANIZATION_ROLES.SUPER_ADMIN, TEAM_ROLES.TEAM_ADMIN]}
       requireOrgId={organizationId}
-      loginUrl={CONNECT_ORGANIZATION_LOGIN}
+      loginUrl={LOGIN}
       forbiddenUrl={FORBIDDEN}
     >
-      {children}
+      <HeaderShell breadCrumpPage="Teams">{children}</HeaderShell>
     </ProtectedClientShell>
   );
 }

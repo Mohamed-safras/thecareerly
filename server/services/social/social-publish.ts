@@ -58,9 +58,9 @@ export async function postToSocialIfSelected({
 
   const supported = new Set<SocialPlatformKey>([
     "website",
-    "linkedin",
-    "facebook",
-    "x",
+    "LINKEDIN",
+    "FACEBOOK",
+    "X",
   ]);
 
   const tasks = platforms.map(async (pRaw) => {

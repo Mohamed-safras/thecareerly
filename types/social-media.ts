@@ -1,6 +1,6 @@
 import { FilePayload } from "@/types/file-payload";
 
-export type SocialPlatformKey = "website" | "linkedin" | "x" | "facebook";
+export type SocialPlatformKey = "website" | "LINKEDIN" | "X" | "FACEBOOK";
 
 export type PublishPayload = {
   title: string;

@@ -1,22 +1,32 @@
 import SortableList from "@/components/sortable-list";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppDispatch } from "@/store/hooks";
 import { JobForm } from "@/types/job-form";
 import { SelectionProcess } from "@/types/selection-process";
-import { replaceForm, setForm as setFormMerge } from "@/store/slice/jobs-slice";
 import React, { useEffect } from "react";
 import HiringProcess from "@/features/jobs/components/hiring-process";
 import { localStoreGet, localStoreSet } from "@/lib/common/localstore";
-import { JOB_FORM } from "@/constents/local-store-values";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 const uid = () => Math.random().toString(36).slice(2, 9);
 
-const HiringProcesses = () => {
+export interface HiringProcessProps {
+  jobForm: JobForm;
+  formType: string;
+  setFormMerge: ActionCreatorWithPayload<Partial<JobForm>>;
+  replaceForm: ActionCreatorWithPayload<JobForm>;
+}
+
+const HiringProcesses = ({
+  jobForm,
+  formType,
+  setFormMerge,
+  replaceForm,
+}: HiringProcessProps) => {
   const dispatch = useAppDispatch();
-  const { jobForm } = useAppSelector(({ jobs }) => jobs);
 
   const addProcess = () =>
     dispatch(
@@ -66,13 +76,13 @@ const HiringProcesses = () => {
     );
 
   useEffect(() => {
-    const stored = localStoreGet<JobForm>(JOB_FORM, jobForm);
+    const stored = localStoreGet<JobForm>(formType, jobForm);
     dispatch(replaceForm(stored));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    localStoreSet<JobForm>(JOB_FORM, {
+    localStoreSet<JobForm>(formType, {
       ...jobForm,
       selectionProcess: jobForm.selectionProcess,
     });

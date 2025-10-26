@@ -7,10 +7,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { organizationSignUpSchema } from "@/lib/form-validation/sign-up-form-schema";
 import { axiosClient } from "@/lib/http/axios-client";
-import {
-  CONNECT_ORGANIZATION_CREATE,
-  CONNECT_ORGANIZATION_LOGIN,
-} from "@/constents/router-links";
+import { LOGIN } from "@/constents/router-links";
 import { AUTH_SERVICE_ENDPOINTS } from "@/constents/api-end-points";
 
 type FormValues = z.infer<typeof organizationSignUpSchema>;
@@ -24,15 +21,18 @@ export default function useOrganizationSignUp() {
       organizationEmail: "",
       password: "",
       confirmPassword: "",
-      phone: "+224567820123",
     },
     mode: "onTouched",
   });
 
   const onSubmit = async (formValues: FormValues) => {
+    console.log(
+      "Submitting organization sign-up form with values:",
+      formValues
+    );
     try {
       const response = await axiosClient.post(
-        AUTH_SERVICE_ENDPOINTS.CREATE_ORGANIZATIONUSER,
+        AUTH_SERVICE_ENDPOINTS.CREATE_ORGANIZATION,
         formValues
       );
 
@@ -40,12 +40,37 @@ export default function useOrganizationSignUp() {
         toast.success(
           `${response.data.message} please login into your account...`
         );
-        router.replace(CONNECT_ORGANIZATION_LOGIN);
+        router.replace(LOGIN);
+      } else {
+        toast.error("Unexpected response from server.");
+        console.error("Unexpected response:", response);
       }
     } catch (error) {
-      console.log("Error during organization sign-up:", error);
+      // Axios error with response
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error &&
+        error.response &&
+        typeof error.response === "object" &&
+        error.response !== null &&
+        "data" in error.response &&
+        error.response.data &&
+        typeof error.response.data === "object" &&
+        error.response.data !== null &&
+        "message" in error.response.data
+      ) {
+        toast.error(String(error.response.data.message));
+        console.error("API error:", error.response.data);
+      } else {
+        toast.error(
+          "Failed to create organization account. Please try again later."
+        );
+        console.error("Unknown error:", error);
+      }
     }
   };
+
   return {
     form,
     onSubmit,

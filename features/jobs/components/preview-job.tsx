@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { useAppSelector } from "@/store/hooks";
 import { Badge } from "@/components/ui/badge";
 import MarkdownEditor from "@uiw/react-md-editor";
 import { Forward, Heart, SquareArrowOutUpRight } from "lucide-react";
@@ -9,15 +8,14 @@ import { Forward, Heart, SquareArrowOutUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import ORGANAIZATION_LOGO from "@/data/assets/1moretime_logo.jpg";
+import { JobForm } from "@/types/job-form";
 
 export interface PreviewPanelProps {
   compact?: boolean;
+  jobForm: JobForm;
 }
 
-const PreviewPanel: React.FC<PreviewPanelProps> = ({ compact }) => {
-  const { jobForm } = useAppSelector(({ jobs }) => jobs);
-
+const PreviewPanel = ({ compact, jobForm }: PreviewPanelProps) => {
   return (
     <div className={`${compact ? "space-y-2" : "space-y-6"} p-4 border`}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">

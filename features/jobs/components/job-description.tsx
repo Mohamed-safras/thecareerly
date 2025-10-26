@@ -8,7 +8,6 @@ import CircleSpinner from "@/components/circlespinner";
 import useAIGenerateJobDescription from "@/hooks/use-ai-generate-Job-description";
 import { useUndoRedo } from "@/hooks/use-undo-redo";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setForm as setFormMerge } from "@/store/slice/jobs-slice";
 import { AlertCircle, RotateCcw, RotateCw, Sparkles } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -18,16 +17,29 @@ import AIPosterGenerator from "./AI-poster-generator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { setFieldErrors } from "@/store/slice/form-error-slice";
 import { FORM_ID } from "@/constents/job-form";
+import { JobForm } from "@/types/job-form";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
-const JobDescription = () => {
+export interface JobDescriptionProps {
+  jobForm: JobForm;
+  setFormMerge: ActionCreatorWithPayload<Partial<JobForm>>;
+  formErrorType: string;
+}
+
+const JobDescription = ({
+  jobForm,
+  setFormMerge,
+  formErrorType,
+}: JobDescriptionProps) => {
   const dispatch = useAppDispatch();
-  const { jobForm } = useAppSelector(({ jobs }) => jobs);
   const { byForm } = useAppSelector(({ formErrors }) => formErrors);
 
   const { description } = jobForm;
 
-  const { generating, generateJobDescription } =
-    useAIGenerateJobDescription(jobForm);
+  const { generating, generateJobDescription } = useAIGenerateJobDescription({
+    jobForm,
+    setFormMerge,
+  });
 
   const history = useUndoRedo<string>({ capacity: 100 });
 
@@ -125,12 +137,12 @@ const JobDescription = () => {
             )}
           </div>
 
-          {byForm?.create_job_description?.description && (
+          {byForm?.[`${formErrorType}_job_description`]?.description && (
             <Alert variant="destructive" className="h-fit text-sm  p-2">
               <AlertCircle className="h-4 w-4" />
 
               <AlertDescription>
-                {byForm.create_job_description.description}
+                {byForm[`${formErrorType}_job_description`].description}
               </AlertDescription>
             </Alert>
           )}
@@ -150,13 +162,15 @@ const JobDescription = () => {
                   }
                 />
                 <span className="text-sm text-muted-foreground">
-                  Logos, banners, videos
+                  Logos, banners
                 </span>
               </div>
             </div>
           </div>
 
-          {jobForm.includeMultimedia && <AIPosterGenerator />}
+          {jobForm.includeMultimedia && (
+            <AIPosterGenerator jobForm={jobForm} setFormMerge={setFormMerge} />
+          )}
         </div>
       </div>
     </ScrollArea>

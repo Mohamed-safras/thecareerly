@@ -5,4 +5,4 @@ export const jobStatus = {
   DRAFT: "bg-slate-400",
 };
 
-export const FORM_ID = "create";
+export const FORM_ID = "JOB_FORM";
