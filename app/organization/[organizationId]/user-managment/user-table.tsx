@@ -17,9 +17,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   ArrowUpDown,
   ChevronDown,
+  CircleAlert,
+  CloudUpload,
+  Copy,
   Filter,
+  KeyRound,
   MoreHorizontal,
   PlusCircle,
+  Trash2,
+  User,
+  UserPen,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -45,22 +52,17 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const data: User[] = [
   {
-    id: "m5gr84i9",
-    name: "Mohamed Safras",
-    email: "ken99@example.com",
-    dateAdded: "July 20, 2023",
-    lastActive: "1 hour ago",
-    role: ["team admin", "member"],
-    avatarUrl:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=687",
-  },
-  {
     id: "3u1reuv4",
     name: "Abe",
-    email: "Abe45@example.com",
+    email: "abe45@asentic.com",
     dateAdded: "July 20, 2023",
     lastActive: "5 minutes ago",
     role: ["member"],
@@ -70,17 +72,17 @@ const data: User[] = [
   {
     id: "derv1ws0",
     name: "Monserrat",
-    email: "Monserrat44@example.com",
+    email: "Monserrat44@asentic.com",
     dateAdded: "July 20, 2023",
     lastActive: "2 hours ago",
-    role: ["team admin", "member"],
+    role: ["member"],
     avatarUrl:
       "https://images.unsplash.com/photo-1681084421455-ccdb9478d802?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387",
   },
   {
     id: "5kma53ae",
     name: "Silas",
-    email: "Silas22@example.com",
+    email: "Silas22@asentic.com",
     dateAdded: "July 20, 2023",
     lastActive: "1 hour ago",
     role: ["team admin"],
@@ -90,7 +92,7 @@ const data: User[] = [
   {
     id: "bhqecj4p",
     name: "Carmella",
-    email: "carmella@example.com",
+    email: "carmella@asentic.com",
     dateAdded: "July 20, 2023",
     lastActive: "2 hours ago",
     role: ["member"],
@@ -99,69 +101,69 @@ const data: User[] = [
   },
   {
     id: "bhqecj3p",
-    name: "Carmella",
-    email: "carmella@example.com",
+    name: "Josha",
+    email: "josha@asentic.com",
     dateAdded: "July 20, 2023",
     lastActive: "2 hours ago",
-    role: ["team admin", "member", "super admin"],
+    role: ["super admin"],
     avatarUrl:
       "https://images.unsplash.com/photo-1720501828093-c792c10e3f0b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=573",
   },
 
   {
     id: "bhqecj3p",
-    name: "Carmella",
-    email: "carmella@example.com",
+    name: "Cammill",
+    email: "cammill@asentic.com",
     dateAdded: "July 20, 2023",
     lastActive: "2 hours ago",
-    role: ["team admin", "member", "super admin"],
+    role: ["member"],
     avatarUrl:
       "https://plus.unsplash.com/premium_photo-1663047504447-d54e624ef2d5?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387",
   },
   {
     id: "bhqecj3p",
-    name: "Carmella",
-    email: "carmella@example.com",
+    name: "Calcia",
+    email: "calcia@asentic.com",
     dateAdded: "July 20, 2023",
     lastActive: "2 hours ago",
-    role: ["team admin", "member", "super admin"],
+    role: ["member"],
     avatarUrl:
       "https://plus.unsplash.com/premium_photo-1690397038570-7ec0cacb37f2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=870",
   },
   {
     id: "bh1ecj42",
-    name: "Carmella",
-    email: "carmella@example.com",
+    name: "Elli",
+    email: "elli@asentic.com",
     dateAdded: "July 20, 2023",
     lastActive: "2 hours ago",
     avatarUrl:
       "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=461",
-    role: ["team admin"],
+    role: ["member"],
   },
   {
     id: "bhqec23p",
-    name: "Carmella",
-    email: "carmella@example.com",
+    name: "Williams",
+    email: "williams@asentic.com",
     dateAdded: "July 20, 2023",
     lastActive: "2 hours ago",
-    role: ["super admin"],
+    role: ["member"],
     avatarUrl:
       "https://images.unsplash.com/photo-1663550910415-9e7fc1f7eb2b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=687",
   },
   {
     id: "bh12cj4c",
-    name: "Carmella",
-    email: "carmella@example.com",
+    name: "John Doe",
+    email: "john@asentic.com",
     dateAdded: "July 20, 2023",
     lastActive: "2 hours ago",
-    role: ["team admin"],
+    role: ["member"],
     avatarUrl:
       "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170",
   },
   {
     id: "bh12aj4p",
-    name: "Carmella",
-    email: "carmella@example.com",
+    name: "Sarah",
+    email: "sarah@asentic.com",
     dateAdded: "July 20, 2023",
     lastActive: "2 hours ago",
     role: ["team admin"],
@@ -170,11 +172,11 @@ const data: User[] = [
   },
   {
     id: "bh22aj4p",
-    name: "Carmella",
-    email: "carmella@example.com",
+    name: "Ann",
+    email: "ann@asentic.com",
     dateAdded: "July 20, 2023",
     lastActive: "2 hours ago",
-    role: ["team admin"],
+    role: ["team admin", "member", "super admin"],
     avatarUrl:
       "https://images.unsplash.com/photo-1659982821258-f55151f18790?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=687",
   },
@@ -215,32 +217,80 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "name",
-    header: () => {
-      return <Button variant="ghost">User name</Button>;
-    },
+    header: () => <div>User name</div>,
     cell: ({ row }) => {
       const name = row.original.name;
       const avatarUrl = row.original.avatarUrl;
+      const email = row.original.email;
+      const roles = row.original.role;
+      const lastActive = row.original.lastActive;
+      const dateAdded = row.original.dateAdded;
+
       return (
-        <div className="flex items-center gap-2">
-          <Avatar className="h-8 w-8 rounded-full">
-            {avatarUrl ? (
-              <AvatarImage
-                src={avatarUrl}
-                alt={name || "User Avatar"}
-                className="object-cover"
-              />
-            ) : null}
-            <AvatarFallback className="rounded-full">
-              {name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")
-                .toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <span className="">{name}</span>
-        </div>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="flex items-center gap-2">
+              <Avatar className="h-8 w-8 rounded-full">
+                {avatarUrl ? (
+                  <AvatarImage
+                    src={avatarUrl}
+                    alt={name || "User Avatar"}
+                    className="object-cover"
+                  />
+                ) : null}
+                <AvatarFallback className="rounded-full">
+                  {name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <span className="cursor-pointer">{name}</span>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent
+            className="min-w-[220px] bg-background border text-foreground"
+            side="top"
+            background="background"
+          >
+            <div className="flex items-center gap-3 mb-2">
+              <Avatar className="h-10 w-10 rounded-full">
+                {avatarUrl ? (
+                  <AvatarImage
+                    src={avatarUrl}
+                    alt={name || "User Avatar"}
+                    className="object-cover"
+                  />
+                ) : null}
+                <AvatarFallback className="rounded-full">
+                  {name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <div className="text-lg font-semibold">{name}</div>
+                <div className="text-sm text-muted-foreground">{email}</div>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-1 mb-1">
+              {roles.map((role) => (
+                <Badge key={role} variant="default" className="capitalize">
+                  {role}
+                </Badge>
+              ))}
+            </div>
+            <div className="text-xs text-muted-foreground">
+              Last active: {lastActive}
+            </div>
+            <div className="text-xs text-muted-foreground">
+              Added: {dateAdded}
+            </div>
+          </TooltipContent>
+        </Tooltip>
       );
     },
   },
@@ -248,12 +298,12 @@ export const columns: ColumnDef<User>[] = [
     accessorKey: "email",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
+        <div
+          className="flex items-center gap-2 cursor-pointer"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email <ArrowUpDown />
-        </Button>
+          <span>Email</span> <ArrowUpDown className="w-4 h-4" />
+        </div>
       );
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
@@ -276,9 +326,10 @@ export const columns: ColumnDef<User>[] = [
     filterFn: (row, columnId, filterValue: string[]) => {
       if (!filterValue || filterValue.length === 0) return true;
       const values = row.getValue(columnId) as string[];
-      // Show row if any role matches any selected filter
       return filterValue.some((filter) =>
-        values.map((v) => v.toLowerCase()).includes(filter.toLowerCase())
+        values
+          .map((value) => value.toLowerCase())
+          .includes(filter.toLowerCase())
       );
     },
   },
@@ -317,14 +368,49 @@ export const columns: ColumnDef<User>[] = [
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(user.email)}
             >
-              Copy Email
+              <Copy className="w-4 h-4" />
+              <span>Copy Email</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View user</DropdownMenuItem>
+            <DropdownMenuItem>
+              <User className="w-4 h-4" />
+              <span>View profile</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <UserPen className="w-4 h-4" />
+              <span>Edit details</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <KeyRound className="w-4 h-4" />
+              <span>Change Permission</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <CloudUpload className="w-4 h-4" />
+              <span> Export details</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center gap-2">
+              <Trash2 className="w-4 h-4" />
+              <span>Delete user</span>
+              <span className="ml-auto flex">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span>
+                      <CircleAlert className="w-4 h-4 text-destructive cursor-pointer" />
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    className="bg-destructive text-destructive-foreground border-destructive"
+                    side="bottom"
+                    background="destructive"
+                  >
+                    <span>This will permanently delete the user.</span>
+                  </TooltipContent>
+                </Tooltip>
+              </span>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -395,12 +481,15 @@ export function UserTable() {
           placeholder="Search by name or email..."
           value={globalFilter ?? ""}
           onChange={handleSearchChange}
-          className="max-w-full md:max-w-sm"
+          className="max-w-full md:max-w-sm mr-2"
         />
         <div className="flex flex-row gap-2 md:ml-auto">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
+              <Button
+                variant="outline"
+                className="text-muted-foreground ml-auto"
+              >
                 Columns <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
@@ -427,7 +516,7 @@ export function UserTable() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-2">
+              <Button variant="outline" className="text-muted-foreground ml-2">
                 <Filter /> Filters
               </Button>
             </DropdownMenuTrigger>

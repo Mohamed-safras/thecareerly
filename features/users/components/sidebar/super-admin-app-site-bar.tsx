@@ -151,7 +151,7 @@ const SuperAdminAppSideBar = () => {
             url: jobsPath ? `${jobsPath}/create` : "#",
           },
           {
-            title: "Job Posts",
+            title: "View Jobs",
             url: jobsPath ? `${jobsPath}` : "#",
           },
         ],
