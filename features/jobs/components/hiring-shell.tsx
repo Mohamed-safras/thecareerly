@@ -9,21 +9,20 @@ export type BreadcrumbItem = { label: string; link: string };
 
 export default function HeaderShell({
   children,
-  breadCrumpPage,
+  breadCrumbPage,
   breadCrumbsItems,
 }: {
   children?: React.ReactNode;
-  breadCrumpPage: string;
+  breadCrumbPage: string;
   breadCrumbsItems?: BreadcrumbItem[];
 }) {
   return (
     <div className="min-h-screen w-full [--header-height:calc(--spacing(14))]">
       <SiteHeader>
         <SideHeaderBreadCrumb
-          breadCrumpPage={breadCrumpPage}
+          breadCrumpPage={breadCrumbPage}
           breadCrumpItems={breadCrumbsItems}
         />
-        <SearchForm className="w-full sm:ml-auto sm:w-auto" />
       </SiteHeader>
       {children}
     </div>

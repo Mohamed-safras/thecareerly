@@ -23,7 +23,7 @@ export default async function TeamLayout({ children, params }: Props) {
       loginUrl={LOGIN}
       forbiddenUrl={FORBIDDEN}
     >
-      <HeaderShell breadCrumpPage="Jobs">{children}</HeaderShell>
+      <HeaderShell breadCrumbPage="Jobs">{children}</HeaderShell>
     </ProtectedClientShell>
   );
 }

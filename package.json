@@ -36,6 +36,7 @@
     "@redis/json": "^5.8.2",
     "@reduxjs/toolkit": "^2.8.2",
     "@shadcn/ui": "^0.0.4",
+    "@tanstack/react-table": "^8.21.3",
     "@tiptap/react": "^3.3.0",
     "@tiptap/starter-kit": "^3.3.0",
     "@uiw/react-md-editor": "^4.0.8",
