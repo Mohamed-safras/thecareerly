@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 
 import KV from "@/features/jobs/components/kv";
-import { jobStatus } from "@/constents/job-form";
+import { jobStatus } from "@/constents/action-colors";
 import StatisticPill from "@/features/jobs/components/statistic-pill";
 import { JobForm } from "@/types/job-form";
 

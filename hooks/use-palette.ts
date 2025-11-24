@@ -8,7 +8,10 @@ const PALETTE_STORAGE_KEY = "app-palette";
 export type PaletteType =
   | "black-white-palette"
   | "blue-palette"
-  | "indigo-palette";
+  | "indigo-palette"
+  | "rose-palette"
+  | "red-palette"
+  | "claude-palette";
 
 const defaultPalette: PaletteType = "black-white-palette";
 
@@ -16,6 +19,9 @@ const removeClassList = [
   "black-white-palette",
   "blue-palette",
   "indigo-palette",
+  "rose-palette",
+  "red-palette",
+  "claude-palette",
 ];
 
 export function usePalette() {

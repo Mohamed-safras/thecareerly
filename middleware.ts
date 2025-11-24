@@ -7,21 +7,8 @@ import {
   CONNECT_ORGANIZATION_NEW,
   LOGIN,
 } from "./constents/router-links";
-import { ORGANIZATION_ROLES, TEAM_ROLES } from "./lib/role";
-
-type TeamUserType = {
-  team?: {
-    id?: string;
-    organizationId?: string;
-    organization?: { id?: string };
-  };
-  role?: string;
-};
-
-type OrganizationUserType = {
-  organization?: { id?: string };
-  role?: string;
-};
+import { OrganizationRole, TeamRole } from "./lib/role";
+import { OrganizationUserType, TeamUserType } from "./types/user-profile";
 
 type TokenType = {
   teamUsers?: TeamUserType[];
@@ -51,8 +38,6 @@ export async function middleware(req: NextRequest) {
     cookieName: "session-token",
   })) as TokenType | null;
 
-  console.log("Middleware - Token:", token);
-
   // Redirect to login if no token
   if (!token) {
     const loginUrl = new URL(LOGIN, req.url);
@@ -69,14 +54,17 @@ export async function middleware(req: NextRequest) {
   console.log("Middleware - Organization Roles:", organizationRoles);
 
   const validOrgRoles: string[] = [
-    ORGANIZATION_ROLES.SUPER_ADMIN,
-    ORGANIZATION_ROLES.BILLING_ADMIN,
+    OrganizationRole.ORG_ADMIN,
+    OrganizationRole.BILLING_ADMIN,
   ];
 
   const validTeamRoles: string[] = [
-    TEAM_ROLES.TEAM_ADMIN,
-    TEAM_ROLES.TEAM_MEMBER,
-    TEAM_ROLES.GUEST,
+    TeamRole.TEAM_ADMIN,
+    TeamRole.TEAM_MEMBER,
+    TeamRole.GUEST,
+    TeamRole.INTERVIEWER,
+    TeamRole.RECRUITER,
+    TeamRole.HIRING_MANAGER,
   ];
 
   // Check if user has any valid role

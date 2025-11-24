@@ -45,6 +45,24 @@ const themePresets: ThemePreset[] = [
     palette: "indigo-palette",
     thumbnail: "https://placehold.co/100x50/4F46E5/FFFFFF?text=indigo+powder",
   },
+  {
+    id: "rose-palette",
+    name: "Rose",
+    palette: "rose-palette",
+    thumbnail: "https://placehold.co/100x50/FF2056/FFFFFF?text=rose",
+  },
+  {
+    id: "red-palette",
+    name: "Red",
+    palette: "red-palette",
+    thumbnail: "https://placehold.co/100x50/E7000B/FFFFFF?text=red",
+  },
+  {
+    id: "claude-palette",
+    name: "Claude",
+    palette: "claude-palette",
+    thumbnail: "https://placehold.co/100x50/B44929/FFFFFF?text=claude",
+  },
 ];
 
 export function PaletteSwitcher() {

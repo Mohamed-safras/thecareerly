@@ -4,20 +4,9 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import { login } from "@/server/services/auth/login.service";
 import type { JWT } from "next-auth/jwt";
+import { OrganizationUserType, TeamUserType } from "@/types/user-profile";
 
 // Team and Organization user types
-interface TeamUserType {
-  team?: {
-    id?: string;
-    organizationId?: string;
-    organization?: { id?: string };
-  };
-  role?: string;
-}
-interface OrganizationUserType {
-  organization?: { id?: string };
-  role?: string;
-}
 
 // Extended user type for NextAuth
 interface ExtendedUser extends User {
@@ -29,6 +18,7 @@ interface ExtendedUser extends User {
   image?: string;
   name?: string;
   email?: string;
+  phone?: string;
 }
 
 // Extended JWT type for NextAuth
@@ -41,6 +31,7 @@ interface ExtendedJWT extends JWT {
   image?: string;
   name?: string;
   email?: string;
+  phone?: string;
 }
 
 export const authOptions: NextAuthOptions = {
@@ -76,6 +67,7 @@ export const authOptions: NextAuthOptions = {
             teamUsers: user.teamUsers ?? [],
             organizationUsers: user.organizationUsers ?? [],
             image: user.image,
+            phone: user.phone,
           } as ExtendedUser;
         } catch {
           return null;

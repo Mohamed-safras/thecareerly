@@ -1,33 +1,8 @@
 import { AuthStatus } from "@/types/auth-status";
+import { UserProfile } from "@/types/user-profile";
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
-
-// Import types for team/organization users
-export type TeamUserType = {
-  team?: {
-    id?: string;
-    organizationId?: string;
-    organization?: { id?: string };
-  };
-  role?: string;
-};
-
-export type OrganizationUserType = {
-  organization?: { id?: string };
-  role?: string;
-};
-
-export type UserProfile = {
-  id: string;
-  name?: string | null;
-  email?: string | null;
-  avatar?: string | null;
-  organizationId?: string | null;
-  teamId?: string | null;
-  teamUsers?: TeamUserType[];
-  organizationUsers?: OrganizationUserType[];
-};
 
 export type UserState = {
   status: AuthStatus;
@@ -90,6 +65,7 @@ const userSlice = createSlice({
             teamId: session.user.teamId ?? null,
             teamUsers: session.user.teamUsers ?? [],
             organizationUsers: session.user.organizationUsers ?? [],
+            phone: session.user.phone,
           };
           state.isAuthenticated = true;
           state.status = "authenticated";

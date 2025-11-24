@@ -7,8 +7,6 @@ import z from "zod";
 import { LoginFormScheama } from "@/lib/form-validation/login-form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { LOGIN } from "@/constents/router-links";
-import { useDispatch } from "react-redux";
 import { hydrateUserFromSession } from "@/store/slice/user-slice";
 import { useAppDispatch } from "@/store/hooks";
 

@@ -11,14 +11,17 @@ datasource db {
  * ENUMS
  * ---------------------------------*/
 enum OrganizationRole {
-  SUPER_ADMIN
   BILLING_ADMIN
+  ORG_ADMIN
 }
 
 enum TeamRole {
   TEAM_ADMIN
   TEAM_MEMBER
   GUEST
+  INTERVIEWER
+  RECRUITER
+  HIRING_MANAGER
 }
 
 enum JobStatus {
@@ -26,12 +29,14 @@ enum JobStatus {
   HOLD
   DRAFT
   CLOSED
+  ARCHIVED
 }
 
 enum ComplianceStatus {
   PENDING
   APPROVED
   FLAGGED
+  REJECTED
 }
 
 enum SocialPlatform {
@@ -50,6 +55,8 @@ enum NotificationType {
   APPLICATION_SUBMITTED
   APPLICATION_STATUS_CHANGED
   GENERAL
+  INTERVIEW_SCHEDULED
+  OFFER_EXTENDED
 }
 
 enum ApplicationStatus {
@@ -58,21 +65,25 @@ enum ApplicationStatus {
   SHORTLISTED
   REJECTED
   HIRED
+  WITHDRAWN
+  OFFERED
 }
 
 enum MediaType {
   IMAGE
   VIDEO
+  DOCUMENT
 }
 
 /* ---------------------------------
- * EMBEDDED TYPES
+ * EMBEDDED TYPES (Used for static, self-contained data)
  * ---------------------------------*/
 type Address {
   street String
   city   String
   state  String
   zip    String
+  country String
 }
 
 type Salary {
@@ -80,19 +91,7 @@ type Salary {
   max       Float?
   currency  String?
   payPeriod String?
-}
-
-type Question {
-  prompt   String
-  required Boolean?
-  type     String?
-  options  String[]
-}
-
-type SelectionProcess {
-  order       Int     @default(0)
-  title       String
-  description String?
+  benefits  String[]
 }
 
 type ThemeConfig {
@@ -102,45 +101,67 @@ type ThemeConfig {
   fontFamily      String?
   logoUrl         String?
   bannerUrl       String?
-  layoutVariant   String?   
-  headerLinks     Json? 
+  layoutVariant   String?
+  headerLinks     Json?
   footerLinks     Json?
   customCss       String?
+  darkModeEnabled Boolean?
 }
 
 /* ---------------------------------
  * AUTH & USERS
  * ---------------------------------*/
 model User {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  name            String?
-  email           String   @unique
-  image           String?
-  phone           String?
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
-  isActive        Boolean  @default(true)
-  defaultTeamId   String?  @db.ObjectId @map("default_team_id")
+  id                      String    @id @default(auto()) @map("_id") @db.ObjectId
+  name                    String?
+  email                   String    @unique
+  image                   String?
+  phone                   String?
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+  isActive                Boolean  @default(true)
+  region                  String?
+  department              String?
+  designation             String?
+  lastLoginAt             DateTime? @map("last_login_at")
+  isTwoFactorAuthEnabled  Boolean? @default(false)
 
-  accounts             Account[]
-  sessions             Session[]
-  teamUsers            TeamUser[]
-  organizationUsers    OrganizationUser[]
-  profile              UserProfile?
-  jobs                 Job[]    @relation("UserCreatedJobs")
-  updatedJobs          Job[]    @relation("JobUpdatedByUser")
-  localCredential      LocalCredential?
-  notifications        Notification[]
-  applicationsProcessed Application[] @relation("HRProcessedApplications")
-  auditLogs            AuditLog[] @relation("UserAuditLogs")
-  createdOrganizations Organization[]
+  accounts                Account[]
+  sessions                Session[]
+  teamUsers               TeamUser[]
+  organizationUsers       OrganizationUser[]
+  profile                 UserProfile?
+  jobs                    Job[]    @relation("UserCreatedJobs")
+  updatedJobs             Job[]    @relation("JobUpdatedByUser")
+  localCredential         LocalCredential?
+  notifications           Notification[]
+  applicationsProcessed   Application[] @relation("HRProcessedApplications")
+  auditLogs               AuditLog[] @relation("UserAuditLogs")
+  createdOrganizations    Organization[]
+  permissions             UserPermission[]
 
   @@map("users")
 }
 
+model UserPermission {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String  @db.ObjectId @map("user_id")
+  module      String
+  canView     Boolean @default(false)
+  canCreate   Boolean @default(false)
+  canEdit     Boolean @default(false)
+  canDelete   Boolean @default(false)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, module]) // Added unique constraint for clarity
+  @@map("user_permissions")
+}
+
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String  @db.ObjectId @map("user_id")
+  userId            String? @db.ObjectId @map("user_id")
+  candidateId       String? @db.ObjectId @map("candidate_id")
   type              String
   provider          String
   providerAccountId String  @map("provider_account_id")
@@ -152,109 +173,139 @@ model Account {
   idToken           String? @map("id_token")
   sessionState      String? @map("session_state")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  candidate Candidate? @relation(fields: [candidateId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
 }
 
 model Session {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  sessionToken String   @unique @map("session_token")
-  userId       String   @db.ObjectId @map("user_id")
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String    @unique @map("session_token")
+  userId       String    @db.ObjectId @map("user_id")
+  candidateId  String?   @db.ObjectId @map("candidate_id")
   expires      DateTime
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  candidate    Candidate?  @relation(fields: [candidateId], references: [id], onDelete: Cascade)
 
+  // Scaling Improvement: TTL Index for automatic cleanup
+  @@index([expires])
   @@map("sessions")
 }
 
 model VerificationToken {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
   identifier String
-  token      String   @unique
+  token      String    @unique
   expires    DateTime
 
   @@unique([identifier, token])
+  // Scaling Improvement: TTL Index for automatic cleanup
+  @@index([expires])
   @@map("verification_tokens")
 }
 
 model LocalCredential {
   id           String @id @default(auto()) @map("_id") @db.ObjectId
-  userId       String @unique @db.ObjectId @map("user_id")
+  userId       String? @unique @db.ObjectId @map("user_id")
+  candidateId  String? @unique @db.ObjectId @map("candidate_id")
   passwordHash String @map("password_hash")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  candidate Candidate? @relation(fields: [candidateId], references: [id], onDelete: Cascade)
 
   @@map("local_credentials")
 }
 
-/* Candidate Model (The Applicant) - NEW */
+/* ---------------------------------
+ * CANDIDATE AUTH & PROFILE
+ * ---------------------------------*/
 model Candidate {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  email         String   @unique
-  name          String?
-  phone         String?
-  currentRole   String?
-  linkedinUrl   String?
-  resumeUrl     String?
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId    String    @db.ObjectId @map("organization_id")
+  email             String    @unique
+  name              String?
+  phone             String?
+  currentRole       String?
+  linkedinUrl       String?
+  resumeUrl         String?
+  skills            String[]
+  experienceYears   Int?
+  portfolioUrl      String?
+  currentCompany    String?
+  rating            Float?
+  preferredLocation String[]
+  source            String?
+  status            ApplicationStatus?
+  notes             String?
+  tags              String[]
+  recruiterId       String?   @db.ObjectId @map("recruiter_id")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
 
+  organization Organization @relation(fields: [organizationId], references: [id])
   applications Application[]
+  localCredential LocalCredential?
+  accounts Account[]
+  sessions Session[]
 
+  @@index([organizationId])
   @@map("candidates")
 }
 
 /* ---------------------------------
- * ORGANIZATIONS & TENANCY
+ * ORGANIZATIONS & TENANCY (Sharding Key Candidate: organizationId)
  * ---------------------------------*/
 model Organization {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  name            String
-  slug            String?   @unique
-  primaryEmail    String?  @unique
-  domain          String?  @unique
-  subdomain       String?
-  domainVerified  Boolean  @default(false)
-  createdByUserId String   @db.ObjectId @map("created_by_user_id")
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
-  logo            String?
-  industry        String?
-  address         Address?
-  website         String?
-  
-  teams          Team[]
-  organizationUsers OrganizationUser[] // NEW: Link to org-level users/roles
-  socialAccounts SocialAccount[]
-  createdBy      User @relation(fields: [createdByUserId], references: [id])
-  auditLogs      AuditLog[] @relation("OrgAuditLogs")
-  jobs           Job[]    @relation("OrganizationJobs")
-  applications   Application[]
-  notifications  Notification[]
-  themeConfig    ThemeConfig? @map("theme_config")
-  careerPages    CareerPage[]
-  media          OrganizationMedia[]
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  slug              String?   @unique
+  primaryEmail      String?   @unique
+  domain            String?   @unique
+  subdomain         String?
+  domainVerified    Boolean   @default(false)
+  createdByUserId   String   @db.ObjectId @map("created_by_user_id")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  logo              String?
+  industry          String?
+  address           Address?
+  website           String?
+  region            String?
+  employeeCount     Int?
+  verified          Boolean @default(false)
+  subscriptionPlan  String?
+
+  teams               Team[]
+  organizationUsers   OrganizationUser[]
+  socialAccounts      SocialAccount[]
+  createdBy           User @relation(fields: [createdByUserId], references: [id])
+  auditLogs           AuditLog[] @relation("OrgAuditLogs")
+  jobs                Job[]    @relation("OrganizationJobs")
+  applications        Application[]
+  notifications       Notification[]
+  themeConfig         ThemeConfig? @map("theme_config")
+  careerPages         CareerPage[]
+  media               OrganizationMedia[]
+  candidates          Candidate[]
 
   @@map("organizations")
 }
 
-/* Organization-level Admin Roles - NEW */
 model OrganizationUser {
-  id             String           @id @default(auto()) @map("_id") @db.ObjectId
-  organizationId String           @db.ObjectId @map("organization_id")
-  userId         String           @db.ObjectId @map("user_id")
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String         @db.ObjectId @map("organization_id")
+  userId         String         @db.ObjectId @map("user_id")
   role           OrganizationRole
-
-  organization Organization @relation(fields: [organizationId], references: [id])
-  user         User         @relation(fields: [userId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  user           User         @relation(fields: [userId], references: [id])
 
   @@unique([organizationId, userId])
   @@map("organization_users")
 }
 
-/* Teams & roles within org */
 model Team {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   name           String
@@ -264,7 +315,7 @@ model Team {
   updatedAt      DateTime @updatedAt @map("updated_at")
 
   organization Organization @relation(fields: [organizationId], references: [id])
-  users          TeamUser[] // Users belonging to this team
+  users        TeamUser[]
   jobs         Job[]
   applications Application[] @relation("TeamProcessedApplications")
 
@@ -288,15 +339,20 @@ model TeamUser {
   @@map("team_users")
 }
 
-model UserProfile { // RENAMED FROM OrganizationProfile
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @unique @db.ObjectId @map("user_id")
-  phone     String?
-  location  String?
-  website   String?
-  about     String?
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+model UserProfile {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String    @unique @db.ObjectId @map("user_id")
+  bio             String?
+  skills          String[]
+  experienceYears Int? @map("experience_years")
+  linkedInUrl     String?
+  portfolioUrl    String?
+  phone           String?
+  location        String?
+  website         String?
+  about           String?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
 
   user User @relation(fields: [userId], references: [id])
 
@@ -306,62 +362,97 @@ model UserProfile { // RENAMED FROM OrganizationProfile
 /* ---------------------------------
  * RECRUITMENT & JOBS
  * ---------------------------------*/
-model Job {
-  id                      String             @id @default(auto()) @map("_id") @db.ObjectId
-  title                   String
-  employmentType          String?            @map("employment_type")
-  workPreference          String?            @map("work_preference")
-  seniority               String?            @map("job_seniority")
-  minimumQualificationLvl String?            @map("minimum_qualification_lvl")
-  skills                  String[]
-  facilities              String[]
-  description             String
-  location                String?
-  salary                  Salary?
-  schedule                DateTime?
-  platforms               String[]
-  posterFileId            String?            @map("poster_file_id")
-  posterPreview           String?            @map("poster_preview")
-  organizationId          String             @db.ObjectId @map("organization_id")
-  organizationName        String             @map("organization_name")
-  organizationSite        String             @map("organization_site")
-  questions               Question[]
-  organization            Organization       @relation("OrganizationJobs", fields: [organizationId], references: [id])
-  selectionProcess        SelectionProcess[] @map("selection_process")
-  userId                  String             @db.ObjectId @map("user_id") // Creator/Owner
-  teamId                  String             @db.ObjectId @map("team_id")
-  createdAt               DateTime           @default(now()) @map("created_at")
-  closedAt                DateTime?          @map("closed_at")
-  updatedAt               DateTime           @updatedAt @map("updated_at")
-  deletedAt               DateTime?          @map("deleted_at")
-  status                  JobStatus          @default(DRAFT)
-  aiContent               Json?              @map("ai_content")
-  complianceStatus        ComplianceStatus   @default(PENDING) @map("compliance_status")
-  candidatesApplied       Int?               @map("candidates_applied")
-  completedInterviews     Int?               @map("completed_interviews")
-  updatedByUserId         String?            @db.ObjectId @map("updated_by_user_id")
 
-  createdBy   User         @relation("UserCreatedJobs", fields: [userId], references: [id])
-  updatedBy   User?        @relation("JobUpdatedByUser", fields: [updatedByUserId], references: [id])
-  team        Team         @relation(fields: [teamId], references: [id])
-  socialPosts SocialPost[]
-  applications Application[]
-  analytics   JobAnalytics?
+// Scaling Improvement: Decoupled to reduce Job document size and allow independent updates
+model JobQuestion {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  jobId      String    @db.ObjectId @map("job_id")
+  prompt     String
+  required   Boolean?
+  type       String?
+  options    String[]
+  order      Int       @default(0)
+
+  job Job @relation("JobQuestions", fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+  @@map("job_questions")
+}
+
+// Scaling Improvement: Decoupled to reduce Job document size and allow independent updates
+model JobSelectionProcess {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  jobId          String    @db.ObjectId @map("job_id")
+  order          Int       @default(0)
+  title          String
+  description    String?
+  interviewerIds String[]  @map("interviewer_ids") // Array of User IDs
+
+  job Job @relation("JobSelectionProcess", fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+  @@map("job_selection_processes")
+}
+
+model Job {
+  id                        String             @id @default(auto()) @map("_id") @db.ObjectId
+  title                     String
+  employmentType            String?            @map("employment_type")
+  workPreference            String?            @map("work_preference")
+  seniority                 String?            @map("job_seniority")
+  minimumQualificationLvl   String?            @map("minimum_qualification_lvl")
+  skills                    String[]
+  facilities                String[]
+  description               String
+  location                  String?
+  salary                    Salary?
+  schedule                  DateTime?
+  platforms                 String[]
+  posterFileId              String?            @map("poster_file_id")
+  posterPreview             String?            @map("poster_preview")
+  organizationId            String             @db.ObjectId @map("organization_id")
+  organizationName          String             @map("organization_name")
+  organizationSite          String             @map("organization_site")
+  userId                    String             @db.ObjectId @map("user_id")
+  teamId                    String             @db.ObjectId @map("team_id")
+  createdAt                 DateTime           @default(now()) @map("created_at")
+  closedAt                  DateTime?          @map("closed_at")
+  updatedAt                 DateTime           @updatedAt @map("updated_at")
+  deletedAt                 DateTime?          @map("deleted_at")
+  status                    JobStatus          @default(DRAFT)
+  aiContent                 Json?              @map("ai_content")
+  complianceStatus          ComplianceStatus   @default(PENDING) @map("compliance_status")
+  candidatesApplied         Int?               @map("candidates_applied")
+  completedInterviews       Int?               @map("completed_interviews")
+  updatedByUserId           String?            @db.ObjectId @map("updated_by_user_id")
+
+  // Relations to Decoupled Models
+  questions                 JobQuestion[]      @relation("JobQuestions")
+  selectionProcess          JobSelectionProcess[] @relation("JobSelectionProcess")
+
+  organization              Organization       @relation("OrganizationJobs", fields: [organizationId], references: [id])
+  createdBy                 User               @relation("UserCreatedJobs", fields: [userId], references: [id])
+  updatedBy                 User?              @relation("JobUpdatedByUser", fields: [updatedByUserId], references: [id])
+  team                      Team               @relation(fields: [teamId], references: [id])
+  socialPosts               SocialPost[]
+  applications              Application[]
+  analytics                 JobAnalytics?
 
   @@index([status])
   @@index([title])
   @@index([teamId])
-  @@index([teamId, status])
-  @@index([organizationId])
+  // Scaling Improvement: Critical compound index for dashboard/list queries
+  @@index([organizationId, status])
+  @@index([organizationId, teamId, status])
   @@map("jobs")
 }
 
 model JobAnalytics {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  jobId     String   @unique @db.ObjectId @map("job_id")
-  views     Int      @default(0)
-  clicks    Int      @default(0)
-  shares    Int      @default(0)
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  jobId     String    @unique @db.ObjectId @map("job_id")
+  views     Int       @default(0)
+  clicks    Int       @default(0)
+  shares    Int       @default(0)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -372,18 +463,18 @@ model JobAnalytics {
 
 /* Applications */
 model Application {
-  id                  String            @id @default(auto()) @map("_id") @db.ObjectId
-  candidateId         String            @db.ObjectId @map("candidate_id") // UPDATED: Now required, links to the Candidate model
-  processedByUserId   String?           @db.ObjectId @map("processed_by_user_id") // HR User (made optional as candidate submits it)
-  teamId              String            @db.ObjectId @map("team_id")              // Team responsible for processing
-  jobId               String            @db.ObjectId @map("job_id")
-  organizationId      String            @db.ObjectId @map("organization_id")
-  status              ApplicationStatus @default(SUBMITTED)
+  id                  String              @id @default(auto()) @map("_id") @db.ObjectId
+  candidateId         String              @db.ObjectId @map("candidate_id")
+  processedByUserId   String?             @db.ObjectId @map("processed_by_user_id")
+  teamId              String              @db.ObjectId @map("team_id")
+  jobId               String              @db.ObjectId @map("job_id")
+  organizationId      String              @db.ObjectId @map("organization_id")
+  status              ApplicationStatus   @default(SUBMITTED)
   resumeUrl           String?
   coverLetter         String?
   notes               String?
-  createdAt           DateTime          @default(now()) @map("created_at")
-  updatedAt           DateTime          @updatedAt @map("updated_at")
+  createdAt           DateTime            @default(now()) @map("created_at")
+  updatedAt           DateTime            @updatedAt @map("updated_at")
 
   candidate       Candidate @relation(fields: [candidateId], references: [id])
   processedByUser User?     @relation("HRProcessedApplications", fields: [processedByUserId], references: [id])
@@ -391,9 +482,9 @@ model Application {
   job             Job       @relation(fields: [jobId], references: [id])
   organization    Organization @relation(fields: [organizationId], references: [id])
 
-  // Ensures a candidate only applies to a specific job once
   @@unique([candidateId, jobId])
-  @@index([organizationId])
+  // Scaling Improvement: Compound index for Org/Team-scoped status filtering
+  @@index([organizationId, teamId, status])
   @@map("applications")
 }
 
@@ -446,7 +537,7 @@ model SocialAccount {
   updatedAt      DateTime       @updatedAt @map("updated_at")
 
   organization Organization @relation(fields: [organizationId], references: [id])
-  posts        SocialPost[]
+  posts          SocialPost[]
 
   @@unique([organizationId, platform, accountId])
   @@map("social_accounts")
@@ -484,6 +575,7 @@ model Notification {
   user User @relation(fields: [userId], references: [id])
   organization Organization? @relation(fields: [organizationId], references: [id])
 
+  @@index([userId, read]) // For fetching unread notifications quickly
   @@map("notifications")
 }
 
@@ -496,9 +588,13 @@ model AuditLog {
   entityId       String?
   details        Json?
   createdAt      DateTime @default(now()) @map("created_at")
+  // Optional field to use for TTL cleanup/archiving of very old logs
+  archiveAfter   DateTime? @map("archive_after")
 
-  user          User?          @relation("UserAuditLogs", fields: [userId], references: [id])
-  organization  Organization?  @relation("OrgAuditLogs", fields: [organizationId], references: [id])
+  user           User?          @relation("UserAuditLogs", fields: [userId], references: [id])
+  organization   Organization?  @relation("OrgAuditLogs", fields: [organizationId], references: [id])
 
+  // Scaling Improvement: Compound index for common query pattern (viewing org logs by time)
+  @@index([organizationId, createdAt])
   @@map("audit_logs")
 }

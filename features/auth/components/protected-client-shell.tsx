@@ -6,6 +6,7 @@ import { useAppSelector } from "@/store/hooks";
 import { selectUserAuth } from "@/store/selectors/userSelectors";
 
 import AccessCheck from "@/components/access-check";
+import { OrganizationUserType, TeamUserType } from "@/types/user-profile";
 
 type AllowedRole = string;
 
@@ -16,20 +17,6 @@ type ProtectedClientShellProps = {
   allowedRoles?: AllowedRole[];
   requireTeamId?: string;
   requireOrgId?: string;
-};
-
-type TeamUserType = {
-  team?: {
-    id?: string;
-    organizationId?: string;
-    organization?: { id?: string };
-  };
-  role?: string;
-};
-
-type OrganizationUserType = {
-  organization?: { id?: string };
-  role?: string;
 };
 
 type UserWithSchemaType = {
@@ -105,17 +92,17 @@ export default function ProtectedClientShell({
     [teamUserList, organizationUserList]
   );
 
-  // Debug logs for troubleshooting
-  React.useEffect(() => {
-    console.log("ProtectedClientShell - user:", user);
-    console.log("ProtectedClientShell - teamUserList:", teamUserList);
-    console.log(
-      "ProtectedClientShell - organizationUserList:",
-      organizationUserList
-    );
-    console.log("ProtectedClientShell - allUserRoles:", allUserRoles);
-    console.log("ProtectedClientShell - allowedRoles:", allowedRoles);
-  }, [user, teamUserList, organizationUserList, allUserRoles, allowedRoles]);
+  // // Debug logs for troubleshooting
+  // React.useEffect(() => {
+  //   console.log("ProtectedClientShell - user:", user);
+  //   console.log("ProtectedClientShell - teamUserList:", teamUserList);
+  //   console.log(
+  //     "ProtectedClientShell - organizationUserList:",
+  //     organizationUserList
+  //   );
+  //   console.log("ProtectedClientShell - allUserRoles:", allUserRoles);
+  //   console.log("ProtectedClientShell - allowedRoles:", allowedRoles);
+  // }, [user, teamUserList, organizationUserList, allUserRoles, allowedRoles]);
 
   // Check if user has any allowed role
   const userHasAllowedRole = useMemo(

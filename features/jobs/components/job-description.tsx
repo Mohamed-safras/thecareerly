@@ -16,7 +16,6 @@ import { Switch } from "@/components/ui/switch";
 import AIPosterGenerator from "./AI-poster-generator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { setFieldErrors } from "@/store/slice/form-error-slice";
-import { FORM_ID } from "@/constents/job-form";
 import { JobForm } from "@/types/job-form";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
@@ -97,7 +96,8 @@ const JobDescription = ({
                 if (!v) {
                   dispatch(
                     setFieldErrors({
-                      formId: FORM_ID + "_job_decription",
+                      // need to change this to a constant
+                      formId: "create_job_description",
                       errors: [
                         {
                           path: "description",

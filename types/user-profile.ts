@@ -1,3 +1,5 @@
+import { UserPermission } from "@prisma/client";
+
 export type TeamUserType = {
   team?: {
     id?: string;
@@ -13,25 +15,20 @@ export type OrganizationUserType = {
 };
 
 export type UserProfile = {
-  id?: string;
-  name?: string | null;
-  email?: string | null;
+  id: string;
+  name: string | null;
+  email: string | null;
   avatar?: string | null;
   roles?: string[];
   organizationId?: string | null;
   teamId?: string | null;
   teamUsers?: TeamUserType[];
   organizationUsers?: OrganizationUserType[];
+  lastUpdated?: string;
+  lastActive?: string;
+  status?: string;
+  permissions?: UserPermission[];
+  phone?: string;
+  bio?: string;
+  skills?: string[];
 };
-
-export interface SessionUser {
-  id: string;
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-  roles?: string[];
-  organizationId?: string | null;
-  teamId?: string | null;
-  teamUsers?: TeamUserType[];
-  organizationUsers?: OrganizationUserType[];
-}
