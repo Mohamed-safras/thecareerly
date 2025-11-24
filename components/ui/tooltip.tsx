@@ -38,11 +38,12 @@ function TooltipTrigger({
 function TooltipContent({
   className,
   sideOffset = 0,
-  background,
+  tooltipPrimitiveCustomClassName,
+
   children,
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Content> & {
-  background?: string;
+  tooltipPrimitiveCustomClassName?: string;
 }) {
   return (
     <TooltipPrimitive.Portal>
@@ -58,10 +59,10 @@ function TooltipContent({
         {children}
         <TooltipPrimitive.Arrow
           className={`${
-            background
-              ? `bg-${background} fill-${background}`
+            tooltipPrimitiveCustomClassName
+              ? `${tooltipPrimitiveCustomClassName}`
               : "bg-primary fill-primary"
-          } z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]`}
+          }  z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]`}
         />
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>

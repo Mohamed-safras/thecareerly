@@ -1,5 +1,8 @@
 import { FieldError } from "@/types/form-errors";
 import { CheckCircle2 } from "lucide-react";
+import React from "react";
+
+type StepperOrientation = "horizontal" | "vertical";
 
 export default function Stepper({
   validateStep,
@@ -7,6 +10,8 @@ export default function Stepper({
   steps,
   currentStep,
   goTo,
+  className,
+  orientation = "vertical",
 }: {
   currentStep: number;
   steps: Readonly<{ title: string }[]>;
@@ -18,10 +23,34 @@ export default function Stepper({
     validateStep: (step: number) => FieldError[],
     setCurrentStep: (value: React.SetStateAction<number>) => void
   ) => void;
+  className?: string;
+  orientation?: StepperOrientation; // New prop for explicit control
 }) {
+  // --- Tailwind Class Utilities ---
+
+  const isVertical = orientation === "vertical";
+  const isHorizontal = orientation === "horizontal";
+
+  // Classes for the inner container (flex layout)
+  const innerContainerClasses = isVertical
+    ? "flex flex-col gap-0"
+    : "flex flex-row justify-start gap-8 min-w-max"; // Key Change: Re-introduced min-w-max for overflow
+
+  // Classes for each step wrapper
+  const stepWrapperClasses = isVertical
+    ? "flex flex-col items-start"
+    : "flex flex-col items-start relative shrink-0";
+
+  // --- Render Component ---
+
   return (
-    <div className="w-full max-[1279px]:max-w-5xl max-[1279px]:m-auto max-[1279px]:overflow-x-scroll min-[1280px]:overflow-x-auto no-scrollbar">
-      <div className="relative flex flex-col max-[1279px]:flex-row max-[1279px]:justify-center max-[1279px]:gap-8 min-[1280px]:flex-col min-[1280px]:gap-0 max-[1279px]:min-w-max">
+    <div
+      // Key Change: Added overflow-x-scroll to the outer div for horizontal scroll
+      className={`w-full no-scrollbar ${className} ${
+        isHorizontal ? "overflow-x-scroll" : "overflow-x-hidden"
+      }`}
+    >
+      <div className={`relative ${innerContainerClasses}`}>
         {steps.map((s, idx) => {
           const stepNo = idx + 1;
           const done = stepNo < currentStep;
@@ -29,12 +58,7 @@ export default function Stepper({
           const isLast = idx === steps.length - 1;
 
           return (
-            <div
-              key={s.title}
-              className={`flex flex-col items-start max-[1279px]:relative max-[1279px]:shrink-0 ${
-                !isLast ? "max-[1279px]:pr-0" : ""
-              }`}
-            >
+            <div key={s.title} className={stepWrapperClasses}>
               <button
                 type="button"
                 onClick={() =>
@@ -42,7 +66,7 @@ export default function Stepper({
                 }
                 className={`group flex items-center gap-2 rounded-full border px-3 py-1.5 transition-colors ${
                   active
-                    ? "border-primary bg-pr text-primary"
+                    ? "border-primary bg-primary/10 text-primary"
                     : done
                     ? "border-muted bg-muted/40 text-foreground"
                     : "border-muted text-muted-foreground"
@@ -64,14 +88,15 @@ export default function Stepper({
                 </span>
               </button>
 
-              {/* vertical connector (mobile & above 1280px) */}
+              {/* Connector Line Logic (Dynamic based on orientation) */}
               {!isLast && (
-                <div className="max-[1279px]:hidden min-[1280px]:inline-block ml-6 h-8 w-1 bg-primary rounded" />
-              )}
-
-              {/* horizontal connector (up to 1279px) */}
-              {!isLast && (
-                <div className="absolute hidden max-[1279px]:inline-block min-[1280px]:hidden h-1 w-8 bg-primary rounded top-1/2 -translate-y-1/2 left-full translate-x-0" />
+                <div
+                  className={`bg-primary rounded ${
+                    isVertical
+                      ? "ml-6 h-8 w-1" // Vertical connector
+                      : "absolute h-1 w-8 top-1/2 -translate-y-1/2 left-full translate-x-0" // Horizontal connector
+                  }`}
+                />
               )}
             </div>
           );

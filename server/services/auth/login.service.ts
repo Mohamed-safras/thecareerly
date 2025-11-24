@@ -45,5 +45,6 @@ export async function login(email: string, password: string) {
     teamUsers: user.teamUsers ?? [],
     organizationUsers: user.organizationUsers ?? [],
     image: user.image,
+    phone: user.phone,
   };
 }

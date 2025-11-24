@@ -2,11 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import jobsReducer from "@/store/slice/jobs-slice";
 import errorFormReducer from "@/store/slice/form-error-slice";
 import userReducer from "@/store/slice/user-slice";
+import userOnboardingReducer from "@/store/slice/user-onboarding-slice";
 import logger from "redux-logger";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    onboarding: userOnboardingReducer,
     jobs: jobsReducer,
     formErrors: errorFormReducer,
   },

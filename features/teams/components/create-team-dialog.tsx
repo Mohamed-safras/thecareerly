@@ -12,15 +12,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator"; // Assuming you have a Separator component
-import { Search, UserPlus, X } from "lucide-react"; // Icons for search and dropdown
+import { PlusCircle, Search, UserPlus, X } from "lucide-react"; // Icons for search and dropdown
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"; // Avatar component
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"; // Select component for roles
 
 interface TeamMemberItemProps {
   name: string;
@@ -60,26 +53,15 @@ const TeamMemberItem = ({
         <p className="text-xs text-gray-500">{email}</p>
       </div>
     </div>
-    {/* Role Dropdown - uses Select component */}
-    {/* <Select defaultValue={role}>
-      <SelectTrigger className="w-fit border-none shadow-none px-2 py-0 h-auto text-sm text-gray-600 dark:text-gray-400">
-        <SelectValue placeholder={role} />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="owner">Owner</SelectItem>
-        <SelectItem value="editor">Editor</SelectItem>
-        <SelectItem value="viewer">Viewer</SelectItem>
-      </SelectContent>
-    </Select> */}
 
-    <button
+    <Button
       type="button"
       className="ml-2 p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
       aria-label={`Remove ${name}`}
       onClick={onRemove}
     >
       <X className="w-5 h-5 text-gray-400" />
-    </button>
+    </Button>
   </div>
 );
 
@@ -89,9 +71,8 @@ export function CreateTeamDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">
-          Create team
-          <UserPlus />
+        <Button className="max-sm:w-full shadow-lg hover:shadow-xl">
+          <PlusCircle className="h-4 w-4 mr-2" /> Create Team
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg p-6">
@@ -195,14 +176,9 @@ export function CreateTeamDialog() {
 
         {/* Footer Section */}
         <DialogFooter className="flex flex-row justify-between items-center w-full gap-4">
-          <div>
-            <Button
-              variant="ghost"
-              className="text-sm font-medium text-gray-500 hover:text-gray-700"
-            >
-              Reset to default
-            </Button>
-          </div>
+          <Button variant="secondary" className="text-sm font-medium mr-auto">
+            Reset to default
+          </Button>
 
           <div className="flex items-center gap-3">
             <DialogClose asChild>

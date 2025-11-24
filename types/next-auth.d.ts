@@ -1,19 +1,6 @@
 import "next-auth";
 import "next-auth/jwt";
-
-export type TeamUserType = {
-  team?: {
-    id?: string;
-    organizationId?: string;
-    organization?: { id?: string };
-  };
-  role?: string;
-};
-
-export type OrganizationUserType = {
-  organization?: { id?: string };
-  role?: string;
-};
+import { OrganizationUserType, TeamUserType } from "./user-profile";
 
 declare module "next-auth" {
   interface Session {
@@ -26,6 +13,7 @@ declare module "next-auth" {
       teamId?: string | null;
       teamUsers?: TeamUserType[];
       organizationUsers?: OrganizationUserType[];
+      phone?: string;
     };
   }
 

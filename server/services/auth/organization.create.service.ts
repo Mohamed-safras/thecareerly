@@ -1,6 +1,6 @@
 import { ConflictError } from "@/lib/error/http-error";
 import { prisma } from "@/lib/prisma";
-import { ORGANIZATION_ROLES, TEAM_ROLES } from "@/lib/role";
+import { OrganizationRole } from "@/lib/role";
 import { slugify } from "@/lib/utils";
 import { hashPassword } from "@/server/auth/crypto";
 import { getUniqueSlug } from "./get-unique-slug.service";
@@ -52,9 +52,7 @@ export async function createOrganization({
   const result = await prisma.$transaction(async (transaction) => {
     const user = await transaction.user.create({
       data: {
-        name: `${organizationName.toUpperCase()}_${
-          ORGANIZATION_ROLES.SUPER_ADMIN
-        }`,
+        name: `${organizationName.toUpperCase()}_${OrganizationRole.ORG_ADMIN}`,
         email: organizationEmail,
         isActive: true,
       },
@@ -86,7 +84,7 @@ export async function createOrganization({
       data: {
         organizationId,
         userId,
-        role: "SUPER_ADMIN",
+        role: OrganizationRole.ORG_ADMIN,
       },
     });
 

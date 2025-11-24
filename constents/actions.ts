@@ -5,4 +5,8 @@ export enum ACTIONS {
   DRAFT = "DRAFT",
   OPEN = "OPEN",
   CLOSED = "CLOSED",
+  ACTIVE = "ACTIVE",
+  ARCHIVED = "ARCHIVED",
+  NEW = "NEW",
+  HOLD = "HOLD",
 }

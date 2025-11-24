@@ -1,21 +1,6 @@
 "use client";
 import React from "react";
 import { useAppSelector } from "@/store/hooks";
-import Link from "next/link";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { CreateTeamDialog } from "@/features/teams/components/create-team-dialog";
 
 const Page = () => {
   const user = useAppSelector((state) => state.user.user);
@@ -42,8 +27,6 @@ const Page = () => {
       ) : (
         <p>No user data found.</p>
       )}
-
-      <CreateTeamDialog />
     </div>
   );
 };

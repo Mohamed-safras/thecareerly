@@ -1,6 +1,6 @@
 import React from "react";
 import ProtectedClientShell from "@/features/auth/components/protected-client-shell";
-import { ORGANIZATION_ROLES } from "@/lib/role";
+import { OrganizationRole } from "@/lib/role";
 import { LOGIN, FORBIDDEN } from "@/constents/router-links";
 
 type Props = {
@@ -13,7 +13,7 @@ export default async function OrganizationLayout({ children, params }: Props) {
 
   return (
     <ProtectedClientShell
-      allowedRoles={[ORGANIZATION_ROLES.SUPER_ADMIN]}
+      allowedRoles={[OrganizationRole.ORG_ADMIN]}
       requireOrgId={organizationId}
       loginUrl={LOGIN}
       forbiddenUrl={FORBIDDEN}

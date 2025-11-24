@@ -31,11 +31,12 @@ import { signOut as authSignOut } from "next-auth/react";
 import { useAppDispatch } from "@/store/hooks";
 import { clearUser } from "@/store/slice/user-slice";
 import { LOGIN } from "@/constents/router-links";
+import { useRouter } from "next/navigation";
 
 export function NavUser(user: UserProfile | null) {
   const { isMobile } = useSidebar();
   const dispatch = useAppDispatch();
-  const { id, avatar, name, email } = user ?? {
+  const { avatar, name, email } = user ?? {
     id: "",
     avatar: "",
     name: "",
@@ -46,6 +47,8 @@ export function NavUser(user: UserProfile | null) {
     authSignOut({ callbackUrl: LOGIN });
     dispatch(clearUser());
   };
+
+  const router = useRouter();
 
   return (
     <SidebarMenu>
@@ -105,9 +108,11 @@ export function NavUser(user: UserProfile | null) {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => router.replace("/connect/profile")}
+              >
                 <BadgeCheck />
-                Account
+                Account Settings
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard />
