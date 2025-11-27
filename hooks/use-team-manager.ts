@@ -136,7 +136,7 @@ export const useTeamManager = () => {
           const lastActiveMatch =
             user.lastActive?.toLowerCase().includes(search) ?? false;
           const dateAddedMatch =
-            user.dateAdded?.toLowerCase().includes(search) ?? false;
+            user.lastUpdated?.toLowerCase().includes(search) ?? false;
 
           return (
             nameMatch ||

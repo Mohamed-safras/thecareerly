@@ -13,7 +13,7 @@ export default function Page() {
   }
 
   if (isAuthenticated && user) {
-    redirect("/connect");
+    redirect("/connect/profile");
   }
 
   redirect(LOGIN);

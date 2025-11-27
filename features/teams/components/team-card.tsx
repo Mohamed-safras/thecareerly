@@ -96,12 +96,15 @@ const TeamCard = ({
 }: TeamCardProps) => {
   const statusBadge = getStatusBadge(status);
   return (
-    <div className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all flex flex-col h-full">
-      <div className="flex items-center p-3">
-        {/* Team Name and Icon */}
-        <div className="flex items-center gap-2 w-full">
+    <div className="group rounded-xl border bg-card shadow-sm hover:shadow-hover transition-all duration-300 flex flex-col h-full overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center p-4 border-b bg-gradient-to-r from-card to-muted/30">
+        <div className="flex items-center gap-3 flex-1 min-w-0">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0 shadow-md">
+            <Users className="h-5 w-5 text-primary-foreground" />
+          </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-muted-foreground">
+            <p className="text-base font-semibold text-foreground truncate">
               {teamName.length > 20 ? `${teamName.slice(0, 20)}...` : teamName}
             </p>
           </div>
@@ -112,13 +115,13 @@ const TeamCard = ({
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className="h-8 w-8 p-0 ml-auto flex-shrink-0"
+              className="h-8 w-8 p-0 ml-auto flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
             >
               <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="w-48">
             <DropdownMenuItem onClick={() => copyToClipboard(id)}>
               <Copy className="w-4 h-4 mr-2" />
               <span>Copy Team ID</span>
@@ -148,73 +151,76 @@ const TeamCard = ({
       </div>
 
       {/* Card Content */}
-      <div className="p-3 flex-grow flex flex-col justify-between">
-        <div className="space-y-2 mb-2">
+      <div className="p-4 flex-grow flex flex-col justify-between">
+        <div className="space-y-3 mb-3">
           {/* Status Badge */}
           <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center">
-              <IdCard className="w-4 h-4 mr-2 text-muted-foreground" />
-              <span className="font-normal text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <IdCard className="w-4 h-4 text-muted-foreground" />
+              <span className="font-medium text-muted-foreground">
                 Team Status
               </span>
             </div>
 
             <Badge
-              variant={"outline"}
-              className={`rounded-full shadow-sm px-2 py-0.5 text-xs font-medium `}
+              variant="outline"
+              className={`rounded-full shadow-sm px-3 py-1 text-xs font-semibold border transition-all duration-200 ${statusBadge.color}`}
             >
-              <statusBadge.Icon
-                className={`h-4 w-4 mr-1 ${statusBadge.color}`}
-              />
-              <span className="text-muted-foreground">{statusBadge.label}</span>
+              <statusBadge.Icon className="h-3.5 w-3.5 mr-1.5" />
+              <span>{statusBadge.label}</span>
             </Badge>
           </div>
 
           {/* Details Grid */}
-          <div className="grid grid-cols-2 gap-y-2 gap-x-1 text-sm">
-            <div className="flex items-center">
-              <Users className="h-4 w-4 mr-2 text-muted-foreground" />
-              <span className="text-muted-foreground font-normal">
-                Team Members
+          <div className="grid grid-cols-2 gap-3 text-sm">
+            <div className="flex flex-col p-3 rounded-lg bg-muted/50 border border-border/50 transition-all hover:bg-muted hover:border-primary/20">
+              <div className="flex items-center gap-2 mb-1">
+                <Users className="h-4 w-4" />
+                <span className="text-xs text-muted-foreground font-medium">
+                  Members
+                </span>
+              </div>
+              <span className="text-xl font-bold text-foreground">
+                {teamUser.length}
               </span>
             </div>
-            <span className="text-right text-muted-foreground">
-              {teamUser.length}
-            </span>
 
             {jobCount && (
-              <>
-                <div className="flex items-center">
-                  <Briefcase className="w-4 h-4 mr-2 text-muted-foreground" />
-                  <span className="text-muted-foreground font-normal">
-                    Team Jobs
+              <div className="flex flex-col p-3 rounded-lg bg-muted/50 border border-border/50 transition-all hover:bg-muted hover:border-primary/20">
+                <div className="flex items-center gap-2 mb-1">
+                  <Briefcase className="w-4 h-4" />
+                  <span className="text-xs text-muted-foreground font-medium">
+                    Jobs
                   </span>
                 </div>
-                <span className="text-right text-muted-foreground">
+                <span className="text-xl font-bold text-foreground">
                   {jobCount}
                 </span>
-              </>
+              </div>
             )}
           </div>
         </div>
 
-        {/* Footer: Manager and Activity */}
+        {/* Footer: Team Members */}
         <div className="pt-3 border-t flex items-center justify-between text-xs">
-          {/* Manager Avatar and Name */}
-
-          <div className="*:data-[slot=avatar]:ring-background flex -space-x-2 *:data-[slot=avatar]:ring-2">
+          <div className="flex -space-x-2">
             {teamUser.slice(0, 7).map((user) => (
-              <Avatar className="h-7 w-7" key={user.id}>
+              <Avatar
+                className="h-8 w-8 ring-2 ring-card border border-border transition-transform hover:scale-110 hover:z-10"
+                key={user.id}
+              >
                 <AvatarImage
                   className="object-cover"
                   src={user?.avatar ?? undefined}
                   alt={user?.name ?? undefined}
                 />
-                <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
+                <AvatarFallback className="text-xs bg-gradient-to-br from-primary/20 to-accent/20">
+                  {user?.name?.charAt(0)}
+                </AvatarFallback>
               </Avatar>
             ))}
             {teamUser.length > 7 && (
-              <div className="h-7 w-7 flex items-center justify-center rounded-full bg-muted text-sm font-semibold text-muted-foreground ring-2 ring-background">
+              <div className="h-8 w-8 flex items-center justify-center rounded-full bg-muted text-xs font-semibold text-muted-foreground ring-2 ring-card border border-border">
                 +{teamUser.length - 7}
               </div>
             )}

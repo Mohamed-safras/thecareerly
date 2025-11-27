@@ -1,47 +1,139 @@
-// components/user-profile/BioSection.tsx
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { UserProfile } from "@/types/user-profile";
-import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Badge } from "@/components/ui/badge";
+import { X } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+
+const bioSchema = z.object({
+  bio: z.string().max(500, "Bio must be less than 500 characters").optional(),
+  jobTitle: z.string().optional(),
+});
+
+type BioFormValues = z.infer<typeof bioSchema>;
 
 interface BioSectionProps {
-  user: UserProfile | null;
+  preferences: {
+    bio?: string;
+    jobTitle?: string;
+    skills: string[];
+  };
 }
 
-export const BioSection = ({ user }: BioSectionProps) => {
-  return (
-    <div className="space-y-4">
-      <div>
-        <Label className="text-sm font-medium">Bio</Label>
-        <Textarea
-          placeholder="Tell us about yourself..."
-          defaultValue={user?.bio}
-          className="mt-1 min-h-[100px]"
-        />
-      </div>
+export const BioSection = ({ preferences }: BioSectionProps) => {
+  const [skills, setSkills] = useState<string[]>(preferences.skills);
+  const [newSkill, setNewSkill] = useState("");
 
-      <div>
-        <div className="flex justify-between items-center mb-2">
-          <Button size="sm" variant="ghost">
-            <Plus className="w-4 h-4 mr-1" />
-            {user?.skills ? "Add more" : "Add Your skills"}
-          </Button>
+  const form = useForm<BioFormValues>({
+    resolver: zodResolver(bioSchema),
+    defaultValues: {
+      bio: preferences?.bio,
+      jobTitle: preferences?.jobTitle,
+    },
+  });
+
+  const onSubmit = (data: BioFormValues) => {
+    toast.success("Bio updated");
+    console.log(data, skills);
+  };
+
+  const addInterest = () => {
+    if (newSkill && !skills?.includes(newSkill)) {
+      setSkills([...skills, newSkill]);
+      setNewSkill("");
+    }
+  };
+
+  const removeInterest = (interest: string) => {
+    setSkills(skills?.filter((i) => i !== interest));
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="jobTitle"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Job Title</FormLabel>
+              <FormControl>
+                <Input placeholder="Your current role" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="bio"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>About You</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Tell us about yourself..."
+                  className="resize-none min-h-[120px]"
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription>
+                Brief description for your profile (max 500 characters)
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="space-y-3">
+          <FormLabel>Interests & Skills</FormLabel>
+          <div className="flex flex-wrap gap-2">
+            {skills?.map((skill) => (
+              <Badge key={skill} variant="secondary" className="gap-1 pr-1">
+                {skill}
+                <button
+                  type="button"
+                  onClick={() => removeInterest(skill)}
+                  className="ml-1 hover:bg-destructive/20 rounded-full p-0.5"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </Badge>
+            ))}
+          </div>
+          <div className="flex gap-2">
+            <Input
+              placeholder="Add an interest..."
+              value={newSkill}
+              onChange={(e) => setNewSkill(e.target.value)}
+              onKeyPress={(e) =>
+                e.key === "Enter" && (e.preventDefault(), addInterest())
+              }
+            />
+            <Button type="button" variant="outline" onClick={addInterest}>
+              Add
+            </Button>
+          </div>
         </div>
-        {user?.skills && (
-          <>
-            <Label className="text-sm font-medium">Skills/Interests</Label>
-            <div className="flex flex-wrap gap-2">
-              {user?.skills?.map((tag) => (
-                <Badge key={tag} variant="secondary">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          </>
-        )}
-      </div>
-    </div>
+
+        <div className="flex justify-end pt-2">
+          <Button type="submit">Save Changes</Button>
+        </div>
+      </form>
+    </Form>
   );
 };

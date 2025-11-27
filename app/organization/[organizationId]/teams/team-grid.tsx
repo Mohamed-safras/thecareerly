@@ -37,15 +37,15 @@ export function TeamGrid() {
   return (
     <div className="w-full">
       {/* Header and Controls */}
-      <div className="flex flex-col md:flex-row md:items-center py-4 gap-2">
+      <div className="flex flex-col md:flex-row md:items-center py-4 gap-3">
         {/* Search Input */}
-        <div className="flex relative items-center w-full md:max-w-md border rounded-lg px-2 py-0">
-          <Search className="absolute left-3 w-4 h-4 text-muted-foreground" />
+        <div className="flex relative items-center w-full md:max-w-md border rounded-lg px-2 py-0 group">
+          <Search className="absolute left-3 w-4 h-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
           <Input
             placeholder="Search by team name, user, email, role..."
             value={searchInput}
             onChange={onSearchChange}
-            className="w-full ml-7 border-none outline-none bg-transparent shadow-none p-0"
+            className="w-full ml-7 border-none outline-none bg-transparent shadow-none p-0 focus-visible:ring-0"
           />
         </div>
 
@@ -55,10 +55,15 @@ export function TeamGrid() {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className="text-muted-foreground flex items-center justify-center max-sm:justify-start max-sm:w-full"
+                className="text-muted-foreground flex items-center justify-center max-sm:w-full hover:bg-muted/50 transition-colors"
               >
                 <Filter className="h-4 w-4 mr-2" />
                 Filter by Status
+                {statusFilter.length > 0 && (
+                  <span className="ml-2 px-2 py-0.5 text-xs font-semibold rounded-full bg-primary text-primary-foreground">
+                    {statusFilter.length}
+                  </span>
+                )}
                 <ChevronDown className="ml-1 h-4 w-4 opacity-50" />
               </Button>
             </DropdownMenuTrigger>
@@ -101,18 +106,20 @@ export function TeamGrid() {
       </div>
 
       {/* Team Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
         {loading && teams.length === 0 ? (
           // initial loading full placeholder
           <div className="col-span-full h-80 flex flex-col items-center justify-center">
-            <Loader className="h-5 w-5 animate-spin " />
+            <Loader className="h-8 w-8 animate-spin text-primary" />
             <p className="text-base font-medium mt-2">Loading teams...</p>
           </div>
         ) : !loading && isEmpty ? (
-          <div className="col-span-full h-80 flex flex-col items-center justify-center rounded-xl ">
-            <Layers3 className="h-8 w-8 mb-2" />
+          <div className="col-span-full h-80 flex flex-col items-center justify-center rounded-xl">
+            <Layers3 className="h-8 w-8 mb-2 text-muted-foreground" />
             <p className="text-lg font-medium">No teams found.</p>
-            <p className="text-sm">Try adjusting your search or filters.</p>
+            <p className="text-sm text-muted-foreground">
+              Try adjusting your search or filters.
+            </p>
           </div>
         ) : (
           filteredTeams.map((team) => <TeamCard key={team.id} {...team} />)
@@ -134,7 +141,7 @@ export function TeamGrid() {
           <Button
             variant="outline"
             onClick={handleLoadMore}
-            className="w-full sm:w-auto my-4 text-sm rounded-full"
+            className="w-full sm:w-auto my-4 text-sm rounded-full hover:bg-muted/50 hover:border-primary/50 transition-all duration-200"
           >
             Load more teams
           </Button>

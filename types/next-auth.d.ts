@@ -6,11 +6,11 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string;
-      name?: string | null;
-      email?: string | null;
-      image?: string | null;
-      organizationId?: string | null;
-      teamId?: string | null;
+      name?: string;
+      email?: string;
+      image?: string;
+      organizationId?: string;
+      teamId?: string;
       teamUsers?: TeamUserType[];
       organizationUsers?: OrganizationUserType[];
       phone?: string;
@@ -19,11 +19,11 @@ declare module "next-auth" {
 
   interface User {
     id: string;
-    name?: string | null;
-    email?: string | null;
-    image?: string | null;
-    organizationId?: string | null;
-    teamId?: string | null;
+    name?: string;
+    email?: string;
+    image?: string;
+    organizationId?: string;
+    teamId?: string;
     teamUsers?: TeamUserType[];
     organizationUsers?: OrganizationUserType[];
   }
@@ -32,8 +32,8 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
   interface JWT {
     uid: string;
-    organizationId?: string | null;
-    teamId?: string | null;
+    organizationId?: string;
+    teamId?: string;
     teamUsers?: TeamUserType[];
     organizationUsers?: OrganizationUserType[];
   }

@@ -2,18 +2,17 @@
 "use client";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { UserProfile } from "@/types/user-profile";
 
-import { Pencil, X } from "lucide-react";
+import { Camera, X } from "lucide-react";
 import { useState } from "react";
 
 interface AvatarSectionProps {
-  user: UserProfile | null;
+  avatar: { url?: string | null; name?: string | null };
 }
 
-export const AvatarSection = ({ user }: AvatarSectionProps) => {
-  const [avatarSrc, setAvatarSrc] = useState<string | null>(user?.avatar || "");
-
+export const AvatarSection = ({ avatar }: AvatarSectionProps) => {
+  const [avatarSrc, setAvatarSrc] = useState<string | null>(avatar.url || null);
+  console.log(avatarSrc);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -42,29 +41,31 @@ export const AvatarSection = ({ user }: AvatarSectionProps) => {
         <div className="relative group">
           <Avatar className="h-28 w-28 md:h-32 md:w-32 ring-4 ring-background shadow-xl">
             <AvatarImage
-              src={avatarSrc ? avatarSrc : ""}
+              src={avatarSrc || ""}
               alt="Profile"
               className="object-cover"
             />
             <AvatarFallback className="text-3xl font-semibold bg-muted">
-              {user?.name?.slice(0, 1)}
+              {avatar?.name?.slice(0, 1)}
             </AvatarFallback>
           </Avatar>
+          <div className="absolute inset-0 flex items-center justify-center bg-primary/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+            <label
+              htmlFor="avatar-upload"
+              className="rounded-full p-2 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-lg hover:bg-primary/90"
+            >
+              <Camera className="h-8 w-8 text-white" />
+              <input
+                id="avatar-upload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+            </label>
+          </div>
 
           {/* Edit Button (Pencil) - Bottom Right */}
-          <label
-            htmlFor="avatar-upload"
-            className="absolute bottom-2 right-0 bg-primary text-primary-foreground rounded-full p-2 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-lg hover:bg-primary/90"
-          >
-            <Pencil className="w-4 h-4" />
-            <input
-              id="avatar-upload"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleFileChange}
-            />
-          </label>
 
           {/* Optional: Long press or right-click to remove */}
           {avatarSrc && (
