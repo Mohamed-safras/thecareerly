@@ -16,12 +16,12 @@ export type OrganizationUserType = {
 
 export type UserProfile = {
   id: string;
-  name: string | null;
-  email: string | null;
-  avatar?: string | null;
+  name?: string;
+  email?: string;
+  avatar?: string;
   roles?: string[];
-  organizationId?: string | null;
-  teamId?: string | null;
+  organizationId?: string;
+  teamId?: string;
   teamUsers?: TeamUserType[];
   organizationUsers?: OrganizationUserType[];
   lastUpdated?: string;

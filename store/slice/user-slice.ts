@@ -57,12 +57,12 @@ const userSlice = createSlice({
           console.log("hydrateUserFromSession - session.user:", session.user);
 
           state.user = {
-            id: session.user.id ?? null,
-            name: session.user.name ?? null,
-            email: session.user.email ?? null,
-            avatar: session.user.image ?? null,
-            organizationId: session.user.organizationId ?? null,
-            teamId: session.user.teamId ?? null,
+            id: session.user.id,
+            name: session.user.name,
+            email: session.user.email,
+            avatar: session.user.image,
+            organizationId: session.user.organizationId,
+            teamId: session.user.teamId,
             teamUsers: session.user.teamUsers ?? [],
             organizationUsers: session.user.organizationUsers ?? [],
             phone: session.user.phone,

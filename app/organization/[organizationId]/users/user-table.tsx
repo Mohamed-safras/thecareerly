@@ -14,13 +14,7 @@ import {
   Table as ReactTableInstance,
 } from "@tanstack/react-table";
 import { useSidebar } from "@/components/ui/sidebar";
-import {
-  Archive,
-  BriefcaseBusiness,
-  ChevronDown,
-  Trash,
-  Trash2,
-} from "lucide-react";
+import { ChevronDown, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -201,8 +195,6 @@ export function UserTable() {
   const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
   const [editUser, setEditUser] = useState<boolean>(true);
 
-  const { open, state } = useSidebar();
-
   const handleSidebarClose = (): void => {
     setIsUserPopUpOpen(false);
     setSelectedUser(null);
@@ -271,60 +263,55 @@ export function UserTable() {
       />
 
       {/* Responsive Table Wrapper */}
-      <div
-        style={{
-          maxWidth: `100vw`,
-          transition: "margin-left 0.3s ease",
-        }}
-        className="rounded-md border overflow-x-auto bg-background"
-      >
-        <Table className="min-w-full text-sm">
-          {/* Key to forcing table width */}
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
+      <div className="rounded-md border overflow-x-auto bg-background w-full">
+        <div className="min-w-full inline-block align-middle">
+          <Table className="w-full text-sm">
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
                   ))}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
 
       {/* Pagination */}
@@ -405,7 +392,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
       placeholder="Search by name or email..."
       value={globalFilter ?? ""}
       onChange={onSearchChange}
-      className="max-w-full md:max-w-sm" // Takes full width on mobile, constrained on desktop
+      className="max-w-full md:max-w-sm"
     />
 
     <div className="flex flex-row gap-2 ml-auto flex-wrap sm:flex-nowrap">
@@ -470,9 +457,7 @@ interface TablePaginationProps {
 
 const TablePagination: React.FC<TablePaginationProps> = ({ table }) => (
   <div className="flex items-center justify-end space-x-2 py-4 flex-wrap">
-    {/* Allows items to wrap */}
     <div className="text-muted-foreground flex-1 text-sm text-center sm:text-left">
-      {/* Stretches on mobile, centers text */}
       {table.getFilteredSelectedRowModel().rows.length} of{" "}
       {table.getFilteredRowModel().rows.length} row(s) selected.
     </div>
