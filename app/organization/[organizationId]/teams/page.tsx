@@ -5,7 +5,7 @@ import HeaderShell from "@/features/jobs/components/hiring-shell";
 const TeamPage = () => {
   return (
     <HeaderShell
-      breadCrumbPage="Team management"
+      breadCrumbPage="Teams"
       breadCrumbsItems={[{ label: "Organization", link: "#" }]}
     >
       <TeamManagment />

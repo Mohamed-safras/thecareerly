@@ -59,3 +59,11 @@ export function getJobsPath(
   if (!organizationId || !teamId) return null;
   return `/organization/${organizationId}/team/${teamId}/jobs`;
 }
+
+export function getTeamsPath(organizationId?: string) {
+  return `/organization/${organizationId}/teams`;
+}
+
+export function getUsersPath(organizationId?: string) {
+  return `/organization/${organizationId}/users`;
+}

@@ -29,17 +29,14 @@ const AddUser = () => {
     <Dialog>
       <DialogTrigger asChild>
         <Button className="ml-auto">
-          <PlusCircle /> Create new user
+          <PlusCircle /> Add New User
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-xl p-6">
         <DialogHeader className="text-left">
           <DialogTitle className="text-xl font-semibold">
-            Create a new user
+            Add a new user
           </DialogTitle>
-          <DialogDescription className="text-sm text-muted-foreground">
-            Fill in the details below to create a new user.
-          </DialogDescription>
         </DialogHeader>
         <HorizontalStepper
           steps={createUserSteps}

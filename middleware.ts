@@ -8,11 +8,11 @@ import {
   LOGIN,
 } from "./constents/router-links";
 import { OrganizationRole, TeamRole } from "./lib/role";
-import { OrganizationUserType, TeamUserType } from "./types/user-profile";
+import { OrganizationUser, TeamUser } from "./types/user-profile";
 
 type TokenType = {
-  teamUsers?: TeamUserType[];
-  organizationUsers?: OrganizationUserType[];
+  teamUsers?: TeamUser[];
+  organizationUsers?: OrganizationUser[];
 };
 
 export async function middleware(req: NextRequest) {

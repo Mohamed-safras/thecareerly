@@ -21,9 +21,7 @@ export default function ForbiddenPage() {
           <li>
             Your session expired or you’re signed in with the wrong account.
           </li>
-          <li>
-            You’re trying to access a resource from another organization/team.
-          </li>
+          <li>You’re trying to access an unauthorized resource.</li>
         </ul>
 
         <div className="mt-6 flex justify-between flex-wrap gap-3">

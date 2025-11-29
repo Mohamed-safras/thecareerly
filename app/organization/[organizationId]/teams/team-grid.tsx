@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { CreateTeamDialog } from "@/features/teams/components/create-team-dialog";
 import TeamCard from "@/features/teams/components/team-card";
 import { useTeamManager } from "@/hooks/use-team-manager";
+import React from "react";
 
 export function TeamGrid() {
   const {
@@ -35,17 +36,15 @@ export function TeamGrid() {
   const isEmpty = !loading && filteredTeams.length === 0;
 
   return (
-    <div className="w-full">
-      {/* Header and Controls */}
+    <React.Fragment>
       <div className="flex flex-col md:flex-row md:items-center py-4 gap-3">
-        {/* Search Input */}
-        <div className="flex relative items-center w-full md:max-w-md border rounded-lg px-2 py-0 group">
-          <Search className="absolute left-3 w-4 h-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
+        <div className="flex relative bg-input items-center w-full md:max-w-md border rounded-lg px-2 py-0 group">
+          <Search className="absolute bg-transparent left-3 w-4 h-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
           <Input
             placeholder="Search by team name, user, email, role..."
             value={searchInput}
             onChange={onSearchChange}
-            className="w-full ml-7 border-none outline-none bg-transparent shadow-none p-0 focus-visible:ring-0"
+            className="w-full ml-7 border-none outline-none shadow-none p-0"
           />
         </div>
 
@@ -106,7 +105,7 @@ export function TeamGrid() {
       </div>
 
       {/* Team Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2">
         {loading && teams.length === 0 ? (
           // initial loading full placeholder
           <div className="col-span-full h-80 flex flex-col items-center justify-center">
@@ -135,7 +134,7 @@ export function TeamGrid() {
             disabled
           >
             <Loader className="h-4 w-4 mr-1 animate-spin" />
-            Loading more teams...
+            Loading more...
           </Button>
         ) : page < totalPages ? (
           <Button
@@ -143,11 +142,11 @@ export function TeamGrid() {
             onClick={handleLoadMore}
             className="w-full sm:w-auto my-4 text-sm rounded-full hover:bg-muted/50 hover:border-primary/50 transition-all duration-200"
           >
-            Load more teams
+            Load more
           </Button>
         ) : null}
       </div>
-    </div>
+    </React.Fragment>
   );
 }
 
