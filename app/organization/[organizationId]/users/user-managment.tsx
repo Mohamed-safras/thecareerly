@@ -5,10 +5,7 @@ import { UserTable } from "./user-table";
 const UserManagement = () => {
   return (
     <section className="py-2 px-6">
-      <h1 className="text-2xl font-semibold mb-2">User Management</h1>
-      <p className="text-muted-foreground">
-        Manage your team members and their account permissions here.
-      </p>
+      <h1 className="text-2xl font-semibold">Your Users</h1>
 
       <UserTable />
     </section>

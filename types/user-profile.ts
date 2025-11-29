@@ -1,6 +1,6 @@
 import { UserPermission } from "@prisma/client";
 
-export type TeamUserType = {
+export type TeamUser = {
   team?: {
     id?: string;
     organizationId?: string;
@@ -9,7 +9,7 @@ export type TeamUserType = {
   role?: string;
 };
 
-export type OrganizationUserType = {
+export type OrganizationUser = {
   organization?: { id?: string };
   role?: string;
 };
@@ -22,8 +22,8 @@ export type UserProfile = {
   roles?: string[];
   organizationId?: string;
   teamId?: string;
-  teamUsers?: TeamUserType[];
-  organizationUsers?: OrganizationUserType[];
+  teamUsers?: TeamUser[];
+  organizationUsers?: OrganizationUser[];
   lastUpdated?: string;
   lastActive?: string;
   status?: string;

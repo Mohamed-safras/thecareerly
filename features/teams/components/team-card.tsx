@@ -96,7 +96,7 @@ const TeamCard = ({
 }: TeamCardProps) => {
   const statusBadge = getStatusBadge(status);
   return (
-    <div className="group rounded-xl border bg-card shadow-sm hover:shadow-hover transition-all duration-300 flex flex-col h-full overflow-hidden">
+    <div className="group rounded-lg border bg-card shadow-xs hover:shadow-hover transition-all duration-300 flex flex-col h-full overflow-hidden">
       {/* Header */}
       <div className="flex items-center p-4 border-b bg-gradient-to-r from-card to-muted/30">
         <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -104,7 +104,7 @@ const TeamCard = ({
             <Users className="h-5 w-5 text-primary-foreground" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-base font-semibold text-foreground truncate">
+            <p className="text-base font-semibold text-foreground">
               {teamName.length > 20 ? `${teamName.slice(0, 20)}...` : teamName}
             </p>
           </div>
@@ -154,7 +154,7 @@ const TeamCard = ({
       <div className="p-4 flex-grow flex flex-col justify-between">
         <div className="space-y-3 mb-3">
           {/* Status Badge */}
-          <div className="flex items-center justify-between text-sm">
+          {/* <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-2">
               <IdCard className="w-4 h-4 text-muted-foreground" />
               <span className="font-medium text-muted-foreground">
@@ -169,7 +169,7 @@ const TeamCard = ({
               <statusBadge.Icon className="h-3.5 w-3.5 mr-1.5" />
               <span>{statusBadge.label}</span>
             </Badge>
-          </div>
+          </div> */}
 
           {/* Details Grid */}
           <div className="grid grid-cols-2 gap-3 text-sm">

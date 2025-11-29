@@ -8,7 +8,7 @@ export const SectionCard = ({
   title: string;
   children: React.ReactNode;
 }) => (
-  <Card>
+  <Card className="shadow-none">
     <CardHeader>
       <h2 className="text-lg font-semibold">{title}</h2>
     </CardHeader>

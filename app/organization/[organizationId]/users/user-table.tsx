@@ -14,7 +14,7 @@ import {
   Table as ReactTableInstance,
 } from "@tanstack/react-table";
 import { useSidebar } from "@/components/ui/sidebar";
-import { ChevronDown, Trash2 } from "lucide-react";
+import { ChevronDown, Search, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -388,12 +388,15 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
   uniqueAccessTags,
 }) => (
   <div className="flex flex-col md:flex-row md:items-center py-4 gap-3">
-    <Input
-      placeholder="Search by name or email..."
-      value={globalFilter ?? ""}
-      onChange={onSearchChange}
-      className="max-w-full md:max-w-sm"
-    />
+    <div className="flex relative bg-input items-center w-full md:max-w-md border rounded-lg px-2 py-0 group">
+      <Search className="absolute bg-transparent left-3 w-4 h-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
+      <Input
+        placeholder="Search by name or email..."
+        value={globalFilter ?? ""}
+        onChange={onSearchChange}
+        className="w-full ml-7 border-none outline-none shadow-none p-0"
+      />
+    </div>
 
     <div className="flex flex-row gap-2 ml-auto flex-wrap sm:flex-nowrap">
       <DropdownMenu>

@@ -22,13 +22,16 @@ import { TeamSwitcher } from "@/components/team-switcher";
 
 import { NavSecondary } from "@/components/nav-secondary";
 import { useAppSelector } from "@/store/hooks";
-import { getJobsPath } from "@/lib/utils";
+import { getJobsPath, getTeamsPath, getUsersPath } from "@/lib/utils";
 import AppSideBar from "./app-site-bar";
 
 const SuperAdminAppSideBar = () => {
   const { user } = useAppSelector(({ user }) => user);
   const jobsPath = getJobsPath(user?.organizationId, user?.teamId);
+  const teamsPath = user && getTeamsPath(user.organizationId);
+  const userAccounts = user && getUsersPath(user.organizationId);
 
+  console.log("jobsPath", jobsPath);
   const data = {
     teams: [
       {
@@ -40,11 +43,6 @@ const SuperAdminAppSideBar = () => {
         name: "Acme Corp.",
         logo: AudioWaveform,
         plan: "Startup",
-      },
-      {
-        name: "Evil Corp.",
-        logo: Command,
-        plan: "Free",
       },
     ],
     menu: [
@@ -72,7 +70,7 @@ const SuperAdminAppSideBar = () => {
         items: [
           {
             title: "All Accounts",
-            url: "#",
+            url: userAccounts ? userAccounts : "#",
           },
           {
             title: "Pending Invitations",
@@ -110,7 +108,7 @@ const SuperAdminAppSideBar = () => {
         items: [
           {
             title: "All Teams",
-            url: "#",
+            url: teamsPath ? teamsPath : "#",
           },
           {
             title: "Team Templates",
