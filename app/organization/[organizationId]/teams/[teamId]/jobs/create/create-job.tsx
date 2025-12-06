@@ -37,7 +37,7 @@ export default function CreateJob() {
   const [currentStep, setCurrentStep] = React.useState(1);
   const total = createJobPostingSteps.length;
 
-  const { user } = useAppSelector(({ user }) => user);
+  const { user } =;
   const { createJobForm } = useAppSelector(({ jobs }) => jobs);
 
   const jobsPath = getJobsPath(user?.organizationId, user?.teamId);

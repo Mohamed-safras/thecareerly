@@ -13,7 +13,7 @@ type Props = {
 };
 
 export default function JobsOpeningHeader({ onImport, className }: Props) {
-  const { user } = useAppSelector(({ user }) => user);
+  const { user } = useAppSelector(({ auth }) => auth);
 
   const jobsPath = getJobsPath(user?.organizationId, user?.teamId);
 

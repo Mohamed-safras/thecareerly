@@ -6,7 +6,7 @@ import { useAppSelector } from "@/store/hooks";
 import { redirect } from "next/navigation";
 
 export default function Page() {
-  const { user, isAuthenticated, status } = useAppSelector(({ user }) => user);
+  const { user, isAuthenticated, status } = useAppSelector(({ auth }) => auth);
 
   if (status === "idle" || status === "loading") {
     return <AccessCheck />;

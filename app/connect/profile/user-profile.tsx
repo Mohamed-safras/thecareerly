@@ -9,7 +9,7 @@ import { SectionCard } from "@/features/users/components/user-profile/section-ca
 import { useAppSelector } from "@/store/hooks";
 
 export const UserProfilePage = () => {
-  const { user } = useAppSelector(({ user }) => user);
+  const { user } = useAppSelector(({ auth }) => auth);
 
   const avatar = { url: user?.avatar, name: user?.name };
 
