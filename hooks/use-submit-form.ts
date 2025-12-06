@@ -5,7 +5,6 @@ import { setFieldErrors } from "@/store/slice/form-error-slice";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { createJob, updateJob } from "@/store/slice/jobs-slice";
-import { getApiTokenWithSession } from "@/server/services/auth/get-api-token.service";
 import { AxiosError } from "axios";
 import { extractMessage } from "@/lib/http/axios-client";
 import { getJobsPath } from "@/lib/utils";
@@ -26,7 +25,7 @@ export function useSubmitJobForm({
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const { user } = useAppSelector(({ user }) => user);
+  const { user } = useAppSelector(({ auth }) => auth);
   const jobsPath = user && getJobsPath(user.organizationId, user.teamId);
   const { loading, error } = useAppSelector(({ jobs }) => jobs);
 
@@ -170,7 +169,7 @@ export function useSubmitJobForm({
     formData.append("postingType", postingType);
 
     try {
-      const token = await getApiTokenWithSession();
+      const token = "dad";
 
       const result = await dispatch(
         submissionType === ACTIONS.CREATE

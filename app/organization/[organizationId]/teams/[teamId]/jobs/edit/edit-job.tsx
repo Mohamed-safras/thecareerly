@@ -39,7 +39,7 @@ interface EditJobProps {
 
 export default function EditJob({ id }: EditJobProps) {
   const [currentStep, setCurrentStep] = React.useState(1);
-  const { user } = useAppSelector(({ user }) => user);
+  const { user } = useAppSelector(({ auth }) => auth);
 
   const { jobs } = useAppSelector(({ jobs }) => jobs); // not fetch from here fetch job with the id
   const { updateJobForm } = useAppSelector(({ jobs }) => jobs);

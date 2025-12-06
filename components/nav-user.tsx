@@ -27,15 +27,15 @@ import {
 } from "@/components/ui/sidebar";
 import { ModeToggle } from "./mode-toggle";
 import { UserProfile } from "@/types/user-profile";
-import { signOut as authSignOut } from "next-auth/react";
 import { useAppDispatch } from "@/store/hooks";
-import { clearUser } from "@/store/slice/user-slice";
-import { LOGIN } from "@/constents/router-links";
+import { clearUser } from "@/store/slice/auth-slice";
 import { useRouter } from "next/navigation";
-
+import { useAuth } from "@/hooks/use-auth";
 export function NavUser(user: UserProfile | null) {
   const { isMobile } = useSidebar();
   const dispatch = useAppDispatch();
+  const auth = useAuth();
+
   const { avatar, name, email } = user ?? {
     id: "",
     avatar: "",
@@ -44,7 +44,7 @@ export function NavUser(user: UserProfile | null) {
   };
 
   const signOut = () => {
-    authSignOut({ callbackUrl: LOGIN });
+    auth.logout();
     dispatch(clearUser());
   };
 

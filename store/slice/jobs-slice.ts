@@ -14,7 +14,6 @@ import { Job } from "@/features/jobs/components/job-posting-card";
 import { axiosClient, extractMessage } from "@/lib/http/axios-client";
 import { RECRUITMENT_SERVICE_ENDPOINTS } from "@/constents/api-end-points";
 import { AxiosError } from "axios";
-import { getApiTokenWithSession } from "@/server/services/auth/get-api-token.service";
 
 interface JobsState {
   createJobForm: JobForm;
@@ -73,7 +72,7 @@ export const fetchJobs = createAsyncThunk(
     }
 
     const requestPromise = (async () => {
-      const token = await getApiTokenWithSession();
+      const token = "weqwe";
       console.log("page and limit", page, limit);
       try {
         const { data: jobResponse } = await axiosClient.get(

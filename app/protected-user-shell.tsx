@@ -7,34 +7,32 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { LOGIN, FORBIDDEN } from "@/constents/router-links";
 import ProtectedClientShell from "@/features/auth/components/protected-client-shell";
 import { TeamRole, OrganizationRole } from "@/lib/role";
-import { useAppSelector } from "@/store/hooks";
 import { UserProfile } from "@/types/user-profile";
 import SuperAdminAppSideBar from "@/components/sidebar/super-admin-app-site-bar";
 import AppSideBar from "@/components/sidebar/app-site-bar";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function ProtectedUserClientShell({
   children,
 }: {
   children: ReactNode;
 }) {
-  const { user } = useAppSelector(({ user }) => user);
+  const { user } = useAuth();
 
+  console.log("ProtectedUserClientShell user:", user?.roles);
   function getUserRoles(user: UserProfile | null) {
-    return [
-      ...(user?.teamUsers?.map((user) => user.role).filter(Boolean) ?? []),
-      ...(user?.organizationUsers?.map((user) => user.role).filter(Boolean) ??
-        []),
-    ];
+    return [...(user?.roles ?? [])];
   }
 
   let SidebarComponent: React.JSX.Element | null = null; // default
 
   const roles = getUserRoles(user);
+  console.log("ProtectedUserClientShell roles:", roles);
 
-  if (roles.includes(OrganizationRole.ORG_ADMIN)) {
+  if (roles.includes(OrganizationRole.ORGANIZATION_ADMIN)) {
     SidebarComponent = <SuperAdminAppSideBar />;
   } else if (
-    roles.includes(OrganizationRole.ORG_ADMIN) &&
+    roles.includes(OrganizationRole.ORGANIZATION_ADMIN) &&
     roles.includes(TeamRole.TEAM_ADMIN)
   ) {
     SidebarComponent = <AppSideBar />;
@@ -43,7 +41,7 @@ export default function ProtectedUserClientShell({
   return (
     <ProtectedClientShell
       allowedRoles={[
-        OrganizationRole.ORG_ADMIN,
+        OrganizationRole.ORGANIZATION_ADMIN,
         TeamRole.TEAM_ADMIN,
         TeamRole.TEAM_MEMBER,
       ]}

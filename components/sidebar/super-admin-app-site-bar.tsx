@@ -4,7 +4,6 @@ import {
   AudioWaveform,
   BriefcaseBusiness,
   Calendar,
-  Command,
   CreditCard,
   FileText,
   GalleryVerticalEnd,
@@ -26,7 +25,7 @@ import { getJobsPath, getTeamsPath, getUsersPath } from "@/lib/utils";
 import AppSideBar from "./app-site-bar";
 
 const SuperAdminAppSideBar = () => {
-  const { user } = useAppSelector(({ user }) => user);
+  const { user } = useAppSelector(({ auth }) => auth);
   const jobsPath = getJobsPath(user?.organizationId, user?.teamId);
   const teamsPath = user && getTeamsPath(user.organizationId);
   const userAccounts = user && getUsersPath(user.organizationId);

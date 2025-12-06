@@ -1,13 +1,11 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Badge } from "@/components/ui/badge";
 import { Job } from "./components/job-posting-card";
 import { Pencil, Trash2 } from "lucide-react";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
@@ -38,7 +36,7 @@ const JobDetailsSidebar = ({
   job,
 }: JobDetailsSidebarProps) => {
   const router = useRouter();
-  const { user } = useAppSelector(({ user }) => user);
+  const { user } = useAppSelector(({ auth }) => auth);
 
   const handleEdit = () => {
     const queryString = createQueryString({

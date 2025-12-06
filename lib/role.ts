@@ -8,6 +8,6 @@ export enum TeamRole {
 }
 
 export enum OrganizationRole {
-  ORG_ADMIN = "ORG_ADMIN",
-  BILLING_ADMIN = "BILLING_ADMIN",
+  ORGANIZATION_ADMIN = "organization-admin",
+  BILLING_ADMIN = "billing-admin",
 }
