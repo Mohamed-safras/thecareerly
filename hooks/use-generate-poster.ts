@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { axiosClient } from "@/lib/http/axios-client";
+import { axiosClient } from "@/lib/axios/axios-client";
 import type { JobForm, PosterPayload } from "@/types/job-form";
 import { normalizePosterVibe } from "@/types/poster";
 import axios from "axios";

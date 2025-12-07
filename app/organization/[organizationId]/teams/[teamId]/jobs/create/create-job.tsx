@@ -32,12 +32,13 @@ import {
 } from "@/store/slice/jobs-slice";
 
 import { goNext, goPrev, goTo } from "@/lib/form-validation/job-form";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function CreateJob() {
   const [currentStep, setCurrentStep] = React.useState(1);
   const total = createJobPostingSteps.length;
 
-  const { user } =;
+  const { user } = useAuth();
   const { createJobForm } = useAppSelector(({ jobs }) => jobs);
 
   const jobsPath = getJobsPath(user?.organizationId, user?.teamId);

@@ -1,7 +1,7 @@
 // hooks/use-auto-search.ts
 import { useEffect, useRef, useState } from "react";
 import { AxiosError, AxiosInstance } from "axios";
-import { isAxiosCanceled } from "@/lib/http/is-axios-canceled";
+import { isAxiosCanceled } from "@/lib/axios/is-axios-canceled";
 
 export type AutoSearchOptions<T> = {
   client: AxiosInstance;

@@ -6,13 +6,14 @@ import {
   ApiErrorPayload,
   axiosClient,
   extractMessage,
-} from "@/lib/http/axios-client";
+} from "@/lib/axios/axios-client";
 
 export type AuthState = {
   status: AuthStatus;
   isAuthenticated: boolean;
   user: UserProfile | null;
   error: string | null;
+  tokenExpiresAt: number | null;
 };
 
 const initialState: AuthState = {
@@ -20,6 +21,7 @@ const initialState: AuthState = {
   isAuthenticated: false,
   user: null,
   error: null,
+  tokenExpiresAt: null,
 };
 
 export const loginUser = createAsyncThunk(
@@ -35,18 +37,17 @@ export const loginUser = createAsyncThunk(
         password,
       });
 
-      console.log("Raw response:", response);
-      console.log("Response data:", response.data);
+      const userData = response.data?.data?.user;
+      const expiresIn = response.data?.data?.expiresIn;
 
-      // Store token expiry for display
-      if (response.data.expiresIn) {
-        localStorage.setItem(
-          "token_expires_in",
-          response.data.expiresIn.toString()
-        );
+      if (!userData || !userData.id) {
+        throw new Error("Invalid response: missing user data");
       }
 
-      return response;
+      return {
+        user: userData,
+        expiresIn,
+      };
     } catch (error) {
       console.log("Login error:", error);
       const axiosError = error as AxiosError;
@@ -54,7 +55,6 @@ export const loginUser = createAsyncThunk(
         axiosError.response?.data as string | ApiErrorPayload | null,
         axiosError.response?.status
       );
-
       return rejectWithValue(message);
     }
   }
@@ -66,7 +66,18 @@ export const hydrateUserFromSession = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosClient.post("/api/auth/refresh");
-      return response.data.user;
+
+      const userData = response.data?.data?.user;
+      const expiresIn = response.data?.data?.expiresIn;
+
+      if (!userData) {
+        throw new Error("No user data in refresh response");
+      }
+
+      return {
+        user: userData,
+        expiresIn,
+      };
     } catch (error) {
       const axiosError = error as AxiosError;
       const message = extractMessage(
@@ -82,14 +93,25 @@ export const hydrateUserFromSession = createAsyncThunk(
 export const logoutUser = createAsyncThunk("user/logout", async () => {
   try {
     await axiosClient.post("/api/auth/logout");
-    localStorage.removeItem("token_expires_in");
     return null;
-  } catch {
-    // Still clear local state even if API call fails
-    localStorage.removeItem("token_expires_in");
+  } catch (error) {
+    console.error("Logout API error:", error);
     return null;
   }
 });
+
+// Check auth status (called on app init)
+export const checkAuthStatus = createAsyncThunk(
+  "auth/checkStatus",
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      // Try to refresh to verify session
+      return await dispatch(hydrateUserFromSession()).unwrap();
+    } catch (error) {
+      return rejectWithValue("Not authenticated");
+    }
+  }
+);
 
 const authSlice = createSlice({
   name: "auth",
@@ -107,13 +129,19 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.status = "unauthenticated";
       state.error = null;
+      state.tokenExpiresAt = null;
     },
 
     setAuthLoading: (state) => {
       state.status = "loading";
     },
+
     clearError: (state) => {
       state.error = null;
+    },
+
+    updateTokenExpiry: (state, action: PayloadAction<number>) => {
+      state.tokenExpiresAt = Date.now() + action.payload * 1000;
     },
   },
   extraReducers: (builder) => {
@@ -124,92 +152,80 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        // Get the actual data from the action payload
-        const { data } = action.payload;
+        const { user, expiresIn } = action.payload;
 
-        console.log("Login fulfilled, processing data:", data);
-
-        // Check if we have user data
-        if (!data || !data.data || !data.data.user) {
-          console.error("No user data in response:", data);
-          state.user = null;
-          state.isAuthenticated = false;
-          state.status = "unauthenticated";
-          state.error = "No user data received from server";
-          return;
-        }
-
-        const userData = data.data.user;
-
-        console.log("User data:", userData);
-
-        // Check if user has required fields
-        if (!userData.id) {
-          console.error("User missing id:", userData);
-          state.user = null;
-          state.isAuthenticated = false;
-          state.status = "unauthenticated";
-          state.error = "Invalid user data: missing id";
-          return;
-        }
-
-        // Set user state
         state.user = {
-          id: userData.id,
-          name: userData.name || userData.username || "",
-          email: userData.email || "",
-          avatar: userData.image,
-          roles: userData.roles || [],
-          organizationId: userData.organizationId,
-          teamId: userData.teamId,
-          teamUsers: userData.teamUsers ?? [],
-          organizationUsers: userData.organizationUsers ?? [],
-          phone: userData.phone,
+          id: user.id,
+          name: user.name || user.username || "",
+          email: user.email || "",
+          avatar: user.image,
+          roles: user.roles || [],
+          organizationId: user.organizationId,
+          teamId: user.teamId,
+          phone: user.phone,
         };
         state.isAuthenticated = true;
         state.status = "authenticated";
         state.error = null;
 
-        console.log("User state set successfully");
+        if (expiresIn) {
+          state.tokenExpiresAt = Date.now() + expiresIn * 1000;
+        }
       })
       .addCase(loginUser.rejected, (state, action) => {
-        console.error("Login rejected:", action.payload);
         state.user = null;
         state.isAuthenticated = false;
         state.status = "unauthenticated";
         state.error = action.payload as string;
+        state.tokenExpiresAt = null;
       })
       .addCase(hydrateUserFromSession.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(hydrateUserFromSession.fulfilled, (state, { payload }) => {
-        if (payload) {
-          state.user = {
-            id: payload.id,
-            name: payload.name || payload.username,
-            email: payload.email,
-            avatar: payload.image,
-            roles: payload.roles,
-            organizationId: payload.organizationId,
-            teamId: payload.teamId,
-            teamUsers: payload.teamUsers ?? [],
-            organizationUsers: payload.organizationUsers ?? [],
-            phone: payload.phone,
-          };
-          state.isAuthenticated = true;
-          state.status = "authenticated";
-        } else {
-          state.user = null;
-          state.isAuthenticated = false;
-          state.status = "unauthenticated";
-        }
+      .addCase(hydrateUserFromSession.fulfilled, (state, action) => {
+        const { user, expiresIn } = action.payload;
+
+        state.user = {
+          id: user.id,
+          name: user.name || user.username,
+          email: user.email,
+          avatar: user.image,
+          roles: user.roles || [],
+          organizationId: user.organizationId,
+          teamId: user.teamId,
+          phone: user.phone,
+        };
+        state.isAuthenticated = true;
+        state.status = "authenticated";
         state.error = null;
+
+        if (expiresIn) {
+          state.tokenExpiresAt = Date.now() + expiresIn * 1000;
+        }
       })
       .addCase(hydrateUserFromSession.rejected, (state) => {
         state.user = null;
         state.isAuthenticated = false;
         state.status = "unauthenticated";
+        state.tokenExpiresAt = null;
       })
+
+      // Check auth status
+      .addCase(checkAuthStatus.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(checkAuthStatus.fulfilled, (state) => {
+        // Already handled by hydrateUserFromSession
+        state.status = "authenticated";
+      })
+      .addCase(checkAuthStatus.rejected, (state) => {
+        state.user = null;
+        state.isAuthenticated = false;
+        state.status = "unauthenticated";
+        state.tokenExpiresAt = null;
+      })
+
+      // Logout
       .addCase(logoutUser.pending, (state) => {
         state.status = "loading";
       })
@@ -218,16 +234,23 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.status = "unauthenticated";
         state.error = null;
+        state.tokenExpiresAt = null;
       })
       .addCase(logoutUser.rejected, (state) => {
         // Clear state even on error
         state.user = null;
         state.isAuthenticated = false;
         state.status = "unauthenticated";
+        state.tokenExpiresAt = null;
       });
   },
 });
 
-export const { setUser, clearUser, setAuthLoading, clearError } =
-  authSlice.actions;
+export const {
+  setUser,
+  clearUser,
+  setAuthLoading,
+  clearError,
+  updateTokenExpiry,
+} = authSlice.actions;
 export default authSlice.reducer;

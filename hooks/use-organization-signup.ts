@@ -6,7 +6,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { organizationSignUpSchema } from "@/lib/form-validation/sign-up-form-schema";
-import { axiosClient } from "@/lib/http/axios-client";
+import { axiosClient } from "@/lib/axios/axios-client";
 import { LOGIN } from "@/constents/router-links";
 import { AUTH_SERVICE_ENDPOINTS } from "@/constents/api-end-points";
 

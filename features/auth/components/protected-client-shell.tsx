@@ -5,14 +5,17 @@ import { usePathname, useRouter } from "next/navigation";
 
 import AccessCheck from "@/components/access-check";
 import { useAuth } from "@/hooks/use-auth";
+import { useAppDispatch } from "@/store/hooks";
+import { checkAuthStatus } from "@/store/slice/auth-slice";
 
 type ProtectedClientShellProps = {
   children: ReactNode;
-  loginUrl: string;
-  forbiddenUrl: string;
+  loginUrl?: string;
+  forbiddenUrl?: string;
   allowedRoles?: string[];
-  requireTeamId?: string;
-  requireOrgId?: string;
+  requireTeamId?: boolean;
+  requireOrgId?: boolean;
+  requireAll?: boolean; // If true, user must have ALL allowedRoles
 };
 
 function getSafeCallbackUrl(url: string): string {
@@ -29,65 +32,103 @@ function getSafeCallbackUrl(url: string): string {
 
 export default function ProtectedClientShell({
   children,
-  loginUrl,
-  forbiddenUrl,
+  loginUrl = "/login",
+  forbiddenUrl = "/forbidden",
   allowedRoles,
+  requireTeamId = false,
+  requireOrgId = false,
+  requireAll = false,
 }: ProtectedClientShellProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const dispatch = useAppDispatch();
   const redirectingRef = useRef(false);
 
   const { user, isAuthenticated, status } = useAuth();
-  console.log("isAuthenticated:", isAuthenticated);
-  console.log("ProtectedClientShell user:", user);
+
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(checkAuthStatus());
+    }
+  }, [dispatch, status]);
+
   const safeCallbackUrl = useMemo(
     () => getSafeCallbackUrl(pathname),
     [pathname]
   );
+
   const loginHref = useMemo(
-    () => `${loginUrl}?callbackUrl=${encodeURIComponent(safeCallbackUrl)}`,
+    () => `${loginUrl}?redirect=${encodeURIComponent(safeCallbackUrl)}`,
     [loginUrl, safeCallbackUrl]
   );
 
   // Extract all user roles as strings
-  const getUserRoles: string[] = useMemo(() => [...(user?.roles ?? [])], []);
+  const userRoles = useMemo(() => user?.roles ?? [], [user?.roles]);
 
   // Check if user has any allowed role
-  const userHasAllowedRole = useMemo(
-    () =>
-      !allowedRoles || getUserRoles.some((role) => allowedRoles.includes(role)),
-    [getUserRoles, allowedRoles]
-  );
+  const userHasAllowedRole = useMemo(() => {
+    if (!allowedRoles || allowedRoles.length === 0) return true;
+
+    if (requireAll) {
+      return allowedRoles.every((role) => userRoles.includes(role));
+    } else {
+      return userRoles.some((role) => allowedRoles.includes(role));
+    }
+  }, [userRoles, allowedRoles, requireAll]);
+
+  const hasRequiredTeamId = useMemo(() => {
+    if (!requireTeamId) return true;
+    return !!user?.teamId;
+  }, [requireTeamId, user?.teamId]);
+
+  const hasRequiredOrgId = useMemo(() => {
+    if (!requireOrgId) return true;
+    return !!user?.organizationId;
+  }, [requireOrgId, user?.organizationId]);
+
+  // Combined access check
+  const hasAccess = useMemo(() => {
+    return (
+      isAuthenticated &&
+      userHasAllowedRole &&
+      hasRequiredTeamId &&
+      hasRequiredOrgId
+    );
+  }, [
+    isAuthenticated,
+    userHasAllowedRole,
+    hasRequiredTeamId,
+    hasRequiredOrgId,
+  ]);
 
   useEffect(() => {
     if (redirectingRef.current) return;
     if (status === "idle" || status === "loading") return;
 
+    // Not authenticated - redirect to login
     if (!isAuthenticated) {
+      console.log("User not authenticated, redirecting to login");
       redirectingRef.current = true;
       router.replace(loginHref);
       return;
     }
 
-    if (!userHasAllowedRole) {
+    // Authenticated but lacks required access - redirect to forbidden
+    if (!hasAccess) {
+      console.log("User lacks required access, redirecting to forbidden");
       redirectingRef.current = true;
       router.replace(forbiddenUrl);
       return;
     }
-  }, [
-    status,
-    isAuthenticated,
-    userHasAllowedRole,
-    loginHref,
-    forbiddenUrl,
-    router,
-  ]);
+  }, [status, isAuthenticated, hasAccess, loginHref, forbiddenUrl, router]);
 
   if (status === "idle" || status === "loading") {
     return <AccessCheck />;
   }
 
-  if (!isAuthenticated || !userHasAllowedRole) return null;
+  if (!hasAccess) {
+    return null;
+  }
 
   return <>{children}</>;
 }

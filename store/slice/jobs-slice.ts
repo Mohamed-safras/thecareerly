@@ -11,7 +11,7 @@ import {
   UPDATE_JOB_FORM,
 } from "@/constents/local-store-values";
 import { Job } from "@/features/jobs/components/job-posting-card";
-import { axiosClient, extractMessage } from "@/lib/http/axios-client";
+import { axiosClient, extractMessage } from "@/lib/axios/axios-client";
 import { RECRUITMENT_SERVICE_ENDPOINTS } from "@/constents/api-end-points";
 import { AxiosError } from "axios";
 

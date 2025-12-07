@@ -1,85 +1,99 @@
 // middleware.ts
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import {
-  API_AUTH,
-  FORBIDDEN,
-  CONNECT_ORGANIZATION_NEW,
-  LOGIN,
-} from "./constents/router-links";
-import { OrganizationRole, TeamRole } from "./lib/role";
+import { LOGIN, FORBIDDEN } from "./constents/router-links";
+import { publicRoutes } from "./lib/route-config";
+import { Roles } from "./lib/role";
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Allow public routes and static assets
-  if (
-    pathname.startsWith("/_next") ||
-    pathname.startsWith(API_AUTH) ||
-    pathname.startsWith("/api/auth") ||
-    pathname.startsWith("/images") ||
-    pathname.startsWith("/public") ||
-    pathname === CONNECT_ORGANIZATION_NEW ||
-    pathname === LOGIN ||
-    pathname === FORBIDDEN ||
-    pathname.includes("favicon.ico")
-  ) {
+  // 1. Check for Public Routes
+  // We use `some` to allow for prefix matching (e.g. /public/* or /images/*)
+  // or exact matches for specific pages.
+  const isPublic = publicRoutes.some((route) => {
+    // Exact match
+    if (pathname === route) return true;
+    // Prefix match for folders (assumes routes like /images vs /images/logo.png)
+    // Be careful not to match partial words (e.g. /log match /login) unless intended.
+    // Ideally use explicit prefixes like "/" for root or check slashes.
+    if (route.startsWith("/") && route !== "/") {
+      return pathname.startsWith(route);
+    }
+    return false;
+  });
+
+  if (isPublic) {
     return NextResponse.next();
   }
 
+  // 2. Token Validation
   const accessToken = req.cookies.get("access_token");
   const refreshToken = req.cookies.get("refresh_token");
 
+  // No tokens -> Redirect to login
   if (!accessToken && !refreshToken) {
     const loginUrl = new URL(LOGIN, req.url);
+    // Optional: Add `?next=` param to redirect back after login
+    // loginUrl.searchParams.set("next", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  // Allow request if refresh token exists (will be handled by interceptor)
+  // Access token expired/missing but refresh token exists
+  // Handled by client-side interceptors usually, but middleware can allow it
+  // to pass through to let the app try refreshing or redirect if api fails.
+  // For strict security, you might want to force refresh here, but that's complex.
+  // We'll allow it to pass for now as per original logic.
   if (!accessToken && refreshToken) {
     return NextResponse.next();
   }
 
   try {
+    // 3. Decode Token safely
+    const tokenParts = accessToken!.value.split(".");
+    if (tokenParts.length !== 3) {
+      throw new Error("Invalid token format");
+    }
+
     const tokenPayload = JSON.parse(
-      Buffer.from(accessToken!.value.split(".")[1], "base64").toString()
+      Buffer.from(tokenParts[1], "base64").toString()
     );
 
-    console.log("Token payload:", tokenPayload);
+    // Check expiration
+    const now = Math.floor(Date.now() / 1000);
+    if (tokenPayload.exp && tokenPayload.exp < now) {
+      // Token expired.
+      // If we have a refresh token, we might want to let it pass (handled above),
+      // otherwise redirect. Since we are here, we have an access token but it's expired.
+      // Redirecting to login is safer, or rely on client to refresh.
+      // For now, let's redirect to login for explicit security,
+      // user experience might be better if we redirect to a strictly public refresh endpoint if exists.
+      return NextResponse.redirect(new URL(LOGIN, req.url));
+    }
 
     const roles = tokenPayload.realm_access?.roles || [];
-    console.log("User roles from token:", roles);
-    const validOrgRoles: string[] = [
-      OrganizationRole.ORGANIZATION_ADMIN,
-      OrganizationRole.BILLING_ADMIN,
-    ];
 
-    const validTeamRoles: string[] = [
-      TeamRole.TEAM_ADMIN,
-      TeamRole.TEAM_MEMBER,
-      TeamRole.GUEST,
-      TeamRole.INTERVIEWER,
-      TeamRole.RECRUITER,
-      TeamRole.HIRING_MANAGER,
-    ];
+    // 4. Role-Based Access Control
+    // Check if the user has at least one valid role from our system
+    const validRoles = Object.values(Roles);
 
-    const hasValidRole = roles.some(
-      (role: string) =>
-        validOrgRoles.includes(role) || validTeamRoles.includes(role)
+    // We cast to string for comparison as token roles are strings
+    const hasValidRole = roles.some((role: string) =>
+      validRoles.includes(role as Roles)
     );
 
-    console.log("Has valid role:", hasValidRole);
-
     if (!hasValidRole) {
+      console.warn("User has no valid roles:", roles);
       return NextResponse.redirect(new URL(FORBIDDEN, req.url));
     }
 
     return NextResponse.next();
-  } catch {
+  } catch (error) {
+    console.error("Middleware Auth Error:", error);
     return NextResponse.redirect(new URL(LOGIN, req.url));
   }
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|images|public).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"], // Simplified matcher, relies on logic
 };

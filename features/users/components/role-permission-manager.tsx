@@ -16,7 +16,7 @@ import {
   PERMISSION_KEYS,
   PermissionModule,
 } from "@/constents/user-actions";
-import { TeamRole } from "@/lib/role";
+import { Roles } from "@/lib/role";
 import { PermissionTable } from "./permission-table";
 import { useDispatch } from "react-redux";
 import {
@@ -29,16 +29,16 @@ const RolePermissionManager = () => {
   const dispatch = useDispatch();
   const { roleInfo } = useAppSelector(({ onboarding }) => onboarding);
 
-  const availableRoles = useMemo(() => Object.values(TeamRole), []);
+  const availableRoles = useMemo(() => Object.values(Roles), []);
 
   const handleRoleChange = (roleValue: string) => {
-    const role = roleValue as TeamRole;
+    const role = roleValue as Roles;
     dispatch(
       updateRoleInfo({
         role,
         permissions:
           DEFAULT_PERMISSIONS_MAP[role] ||
-          DEFAULT_PERMISSIONS_MAP[TeamRole.TEAM_MEMBER],
+          DEFAULT_PERMISSIONS_MAP[Roles.TEAM_MEMBER],
       })
     );
   };
