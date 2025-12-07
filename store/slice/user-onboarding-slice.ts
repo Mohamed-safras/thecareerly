@@ -1,7 +1,7 @@
 // src/store/slices/userFormSlice.ts
 
 import { RolePermissionsMap } from "@/constents/user-actions";
-import { TeamRole } from "@/lib/role";
+import { Roles } from "@/lib/role";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // --- TYPE DEFINITIONS ---
@@ -12,7 +12,7 @@ interface BasicInfoState {
 }
 
 interface RoleInfoState {
-  role: TeamRole;
+  role: Roles;
   permissions: RolePermissionsMap;
 }
 
@@ -31,8 +31,8 @@ export interface UserFormState {
   onboardingInfo: OnboardingInfoState;
 }
 
-export const DEFAULT_PERMISSIONS_MAP: Record<TeamRole, RolePermissionsMap> = {
-  [TeamRole.TEAM_ADMIN]: {
+export const DEFAULT_PERMISSIONS_MAP: Record<Roles, RolePermissionsMap> = {
+  [Roles.ORGANIZATION_ADMIN]: {
     CANDIDATE: {
       canView: true,
       canCreate: true,
@@ -51,7 +51,12 @@ export const DEFAULT_PERMISSIONS_MAP: Record<TeamRole, RolePermissionsMap> = {
       canEdit: true,
       canDelete: true,
     },
-    REPORT: { canView: true, canCreate: true, canEdit: true, canDelete: true },
+    REPORT: {
+      canView: true,
+      canCreate: true,
+      canEdit: true,
+      canDelete: true,
+    },
     USER_MANAGEMENT: {
       canView: true,
       canCreate: true,
@@ -59,7 +64,7 @@ export const DEFAULT_PERMISSIONS_MAP: Record<TeamRole, RolePermissionsMap> = {
       canDelete: true,
     },
   },
-  [TeamRole.RECRUITER]: {
+  [Roles.RECRUITER]: {
     CANDIDATE: {
       canView: true,
       canCreate: true,
@@ -91,7 +96,7 @@ export const DEFAULT_PERMISSIONS_MAP: Record<TeamRole, RolePermissionsMap> = {
       canDelete: false,
     },
   },
-  [TeamRole.HIRING_MANAGER]: {
+  [Roles.HIRING_MANAGER]: {
     CANDIDATE: {
       canView: true,
       canCreate: false,
@@ -123,7 +128,7 @@ export const DEFAULT_PERMISSIONS_MAP: Record<TeamRole, RolePermissionsMap> = {
       canDelete: false,
     },
   },
-  [TeamRole.INTERVIEWER]: {
+  [Roles.INTERVIEWER]: {
     CANDIDATE: {
       canView: true,
       canCreate: false,
@@ -155,7 +160,7 @@ export const DEFAULT_PERMISSIONS_MAP: Record<TeamRole, RolePermissionsMap> = {
       canDelete: false,
     },
   },
-  [TeamRole.TEAM_MEMBER]: {
+  [Roles.TEAM_MEMBER]: {
     CANDIDATE: {
       canView: true,
       canCreate: false,
@@ -187,7 +192,7 @@ export const DEFAULT_PERMISSIONS_MAP: Record<TeamRole, RolePermissionsMap> = {
       canDelete: false,
     },
   },
-  [TeamRole.GUEST]: {
+  [Roles.GUEST]: {
     CANDIDATE: {
       canView: false,
       canCreate: false,
@@ -229,8 +234,8 @@ const initialUserFormState: UserFormState = {
     phone: "",
   },
   roleInfo: {
-    role: TeamRole.RECRUITER,
-    permissions: DEFAULT_PERMISSIONS_MAP[TeamRole.RECRUITER],
+    role: Roles.RECRUITER,
+    permissions: DEFAULT_PERMISSIONS_MAP[Roles.RECRUITER],
   },
   onboardingInfo: {
     sendInviteEmail: false,

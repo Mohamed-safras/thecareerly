@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { createJob, updateJob } from "@/store/slice/jobs-slice";
 import { AxiosError } from "axios";
-import { extractMessage } from "@/lib/http/axios-client";
+import { extractMessage } from "@/lib/axios/axios-client";
 import { getJobsPath } from "@/lib/utils";
 import { ACTIONS } from "@/constents/actions";
 import { JobForm } from "@/types/job-form";

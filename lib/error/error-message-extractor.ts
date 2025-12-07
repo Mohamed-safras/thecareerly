@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ApiErrorPayload } from "../http/axios-client";
+import { ApiErrorPayload } from "../axios/axios-client";
 
 export function extractStatusAndMessage(err: unknown): {
   status?: number;
