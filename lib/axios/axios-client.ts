@@ -35,7 +35,7 @@ export function extractMessage(
 }
 
 export const axiosClient: AxiosInstance = axios.create({
-  baseURL: "http://localhost:8088/",
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   timeout: 20_000,
   headers: { "Content-Type": "application/json" },
   withCredentials: true, // Important: Send cookies with requests
