@@ -62,7 +62,7 @@ export const loginUser = createAsyncThunk(
 
 // Refresh token and hydrate user
 export const hydrateUserFromSession = createAsyncThunk(
-  "user/hydrateFromSession",
+  "auth/hydrateFromSession",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosClient.post("/api/auth/refresh");
@@ -107,7 +107,7 @@ export const checkAuthStatus = createAsyncThunk(
     try {
       // Try to refresh to verify session
       return await dispatch(hydrateUserFromSession()).unwrap();
-    } catch (error) {
+    } catch {
       return rejectWithValue("Not authenticated");
     }
   }

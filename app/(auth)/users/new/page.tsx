@@ -1,4 +1,4 @@
-import { RegisterOrganization } from "@/components/register-org";
+import { RegisterOrganization } from "@/app/(auth)/users/new/register-org";
 import React from "react";
 
 const page = () => {

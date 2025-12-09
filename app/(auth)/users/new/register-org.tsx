@@ -16,10 +16,12 @@ import {
 } from "@/components/ui/form";
 import { PasswordInput } from "@/components/password-input";
 import useOrganizationSignUp from "@/hooks/use-organization-signup";
-import { FieldGroup } from "./ui/field";
+import { FieldGroup } from "../../../../components/ui/field";
 import { cn } from "@/lib/utils";
 import { ArrowRight, GalleryVerticalEnd } from "lucide-react";
-import CarouselSlides, { CarouselSlide } from "./carousel-slides";
+import CarouselSlides, {
+  CarouselSlide,
+} from "../../../../components/carousel-slides";
 
 const carouselSlides: CarouselSlide[] = [
   {

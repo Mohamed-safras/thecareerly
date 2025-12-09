@@ -1,7 +1,10 @@
-import { UserPermission } from "@prisma/client";
+export type UserPermission = {
+  resource: string;
+  action: string;
+};
 
 export type UserProfile = {
-  id: string;
+  id?: string;
   name?: string;
   email?: string;
   avatar?: string;

@@ -10,14 +10,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
+} from "../../../components/ui/form";
 import useLogin from "@/hooks/use-login";
-import { PasswordInput } from "./password-input";
+import { PasswordInput } from "../../../components/password-input";
 import Link from "next/link";
 import { CONNECT_ORGANIZATION_NEW } from "@/constents/router-links";
-import { FieldGroup } from "./ui/field";
+import { FieldGroup } from "../../../components/ui/field";
 import { ArrowRight, GalleryVerticalEnd } from "lucide-react";
-import CarouselSlides, { CarouselSlide } from "./carousel-slides";
+import CarouselSlides, {
+  CarouselSlide,
+} from "../../../components/carousel-slides";
 
 const carouselSlides: CarouselSlide[] = [
   {

@@ -30,7 +30,6 @@ const SuperAdminAppSideBar = () => {
   const teamsPath = user && getTeamsPath(user.organizationId);
   const userAccounts = user && getUsersPath(user.organizationId);
 
-  console.log("jobsPath", jobsPath);
   const data = {
     teams: [
       {
