@@ -36,12 +36,7 @@ export function NavUser(user: UserProfile | null) {
   const dispatch = useAppDispatch();
   const auth = useAuth();
 
-  const { avatar, name, email } = user ?? {
-    id: "",
-    avatar: "",
-    name: "",
-    email: "",
-  };
+  const { avatar, name, email } = user ?? {};
 
   const signOut = () => {
     auth.logout();
