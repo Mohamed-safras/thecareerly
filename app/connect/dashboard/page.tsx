@@ -4,7 +4,7 @@
 import { useAuth } from "@/hooks/use-auth";
 
 export default function DashboardPage() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   return (
     <>
@@ -26,6 +26,12 @@ export default function DashboardPage() {
               <p>
                 <strong>Team ID:</strong> {user?.teamId}
               </p>
+
+              {user?.roles && (
+                <div>
+                  <strong>Roles:</strong> {user.roles.join(", ")}
+                </div>
+              )}
             </div>
           </div>
         </div>

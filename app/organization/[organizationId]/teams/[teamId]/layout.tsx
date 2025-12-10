@@ -1,26 +1,17 @@
 import React from "react";
 import ProtectedClientShell from "@/features/auth/components/protected-client-shell";
-import { TeamRole, OrganizationRole } from "@/lib/role";
-import { FORBIDDEN, LOGIN } from "@/constents/router-links";
+import { Roles } from "@/lib/role";
 
 type Props = {
   children: React.ReactNode;
   params: { organizationId: string; teamId: string };
 };
 
-export default async function TeamLayout({ children, params }: Props) {
-  const { teamId } = await params;
-
+export default async function TeamLayout({ children }: Props) {
   return (
     <ProtectedClientShell
-      allowedRoles={[
-        OrganizationRole.ORG_ADMIN,
-        TeamRole.TEAM_ADMIN,
-        TeamRole.TEAM_MEMBER,
-      ]}
-      requireTeamId={teamId}
-      loginUrl={LOGIN}
-      forbiddenUrl={FORBIDDEN}
+      allowedRoles={[Roles.ORGANIZATION_ADMIN, Roles.TEAM_MEMBER]}
+      requireTeamId={true}
     >
       {children}
     </ProtectedClientShell>

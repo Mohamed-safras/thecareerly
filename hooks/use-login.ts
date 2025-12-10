@@ -34,7 +34,6 @@ export default function useLogin() {
       toast.success("Login successful!");
       router.replace("/");
     } catch (error) {
-      console.error("Login error:", error);
       toast.error((error as string) || "Login failed");
     }
   };

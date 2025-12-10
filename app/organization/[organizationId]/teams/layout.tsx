@@ -1,4 +1,4 @@
-import ProtectedUserClientShell from "@/app/protected-user-shell";
+import ProtectedClientShell from "@/features/auth/components/protected-client-shell";
 import { ReactNode } from "react";
 
 export default function TeamManagmentLayout({
@@ -6,5 +6,5 @@ export default function TeamManagmentLayout({
 }: {
   children: ReactNode;
 }) {
-  return <ProtectedUserClientShell>{children}</ProtectedUserClientShell>;
+  return <ProtectedClientShell>{children}</ProtectedClientShell>;
 }
