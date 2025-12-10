@@ -7,6 +7,7 @@ import AccessCheck from "@/components/access-check";
 import { useAuth } from "@/hooks/use-auth";
 import { useAppDispatch } from "@/store/hooks";
 import { checkAuthStatus } from "@/store/slice/auth-slice";
+import { FORBIDDEN, LOGIN } from "@/constents/router-links";
 
 type ProtectedClientShellProps = {
   children: ReactNode;
@@ -14,7 +15,7 @@ type ProtectedClientShellProps = {
   forbiddenUrl?: string;
   allowedRoles?: string[];
   requireTeamId?: boolean;
-  requireOrgId?: boolean;
+  requireOrganizationId?: boolean;
   requireAll?: boolean; // If true, user must have ALL allowedRoles
 };
 
@@ -32,11 +33,11 @@ function getSafeCallbackUrl(url: string): string {
 
 export default function ProtectedClientShell({
   children,
-  loginUrl = "/login",
-  forbiddenUrl = "/forbidden",
+  loginUrl = LOGIN,
+  forbiddenUrl = FORBIDDEN,
   allowedRoles,
   requireTeamId = false,
-  requireOrgId = false,
+  requireOrganizationId = false,
   requireAll = false,
 }: ProtectedClientShellProps) {
   const router = useRouter();
@@ -67,6 +68,11 @@ export default function ProtectedClientShell({
 
   // Check if user has any allowed role
   const userHasAllowedRole = useMemo(() => {
+    console.log("Checking user roles against allowed roles", {
+      userRoles,
+      allowedRoles,
+      requireAll,
+    });
     if (!allowedRoles || allowedRoles.length === 0) return true;
 
     if (requireAll) {
@@ -82,9 +88,9 @@ export default function ProtectedClientShell({
   }, [requireTeamId, user?.teamId]);
 
   const hasRequiredOrgId = useMemo(() => {
-    if (!requireOrgId) return true;
+    if (!requireOrganizationId) return true;
     return !!user?.organizationId;
-  }, [requireOrgId, user?.organizationId]);
+  }, [requireOrganizationId, user?.organizationId]);
 
   // Combined access check
   const hasAccess = useMemo(() => {

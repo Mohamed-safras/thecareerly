@@ -1,24 +1,20 @@
 import React from "react";
 import ProtectedClientShell from "@/features/auth/components/protected-client-shell";
-import { OrganizationRole } from "@/lib/role";
-import { LOGIN, FORBIDDEN } from "@/constents/router-links";
+import { Roles } from "@/lib/role";
+import ProtectedUserSideBar from "@/features/auth/components/protected-user-sidebar";
 
 type Props = {
   children: React.ReactNode;
   params: { organizationId: string };
 };
 
-export default async function OrganizationLayout({ children, params }: Props) {
-  const { organizationId } = await params;
-
+export default async function OrganizationLayout({ children }: Props) {
   return (
     <ProtectedClientShell
-      allowedRoles={[OrganizationRole.ORG_ADMIN]}
-      requireOrgId={organizationId}
-      loginUrl={LOGIN}
-      forbiddenUrl={FORBIDDEN}
+      allowedRoles={[Roles.ORGANIZATION_ADMIN]}
+      requireOrganizationId={true}
     >
-      {children}
+      <ProtectedUserSideBar>{children}</ProtectedUserSideBar>
     </ProtectedClientShell>
   );
 }
