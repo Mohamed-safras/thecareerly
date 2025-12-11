@@ -7,6 +7,7 @@ import {
   axiosClient,
   extractMessage,
 } from "@/lib/axios/axios-client";
+import { extractOrganizationData } from "@/lib/utils/organization-utils";
 
 export type AuthState = {
   status: AuthStatus;
@@ -73,6 +74,8 @@ export const hydrateUserFromSession = createAsyncThunk(
       if (!userData) {
         throw new Error("No user data in refresh response");
       }
+
+      console.log("Hydrated user:", userData);
 
       return {
         user: userData,
@@ -153,14 +156,18 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         const { user, expiresIn } = action.payload;
+        const orgData = extractOrganizationData(user.organization);
 
         state.user = {
           id: user.id,
-          name: user.name || user.username || "",
+          name: user.name,
           email: user.email || "",
+          emailVerified: user.emailVerified,
           avatar: user.image,
           roles: user.roles || [],
-          organizationId: user.organizationId,
+          organization: user.organization,
+          organizationId: orgData?.id,
+          organizationName: orgData?.name,
           teamId: user.teamId,
           phone: user.phone,
         };
@@ -184,14 +191,18 @@ const authSlice = createSlice({
       })
       .addCase(hydrateUserFromSession.fulfilled, (state, action) => {
         const { user, expiresIn } = action.payload;
-
+        const orgData = extractOrganizationData(user.organization);
+        console.log("Hydrated user:", user);
         state.user = {
           id: user.id,
           name: user.name || user.username,
           email: user.email,
+          emailVerified: user.emailVerified,
           avatar: user.image,
           roles: user.roles || [],
-          organizationId: user.organizationId,
+          organization: user.organization,
+          organizationId: orgData?.id,
+          organizationName: orgData?.name,
           teamId: user.teamId,
           phone: user.phone,
         };

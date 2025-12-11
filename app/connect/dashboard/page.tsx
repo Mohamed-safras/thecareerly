@@ -21,10 +21,8 @@ export default function DashboardPage() {
                 <strong>User ID:</strong> {user?.id}
               </p>
               <p>
-                <strong>Organization ID:</strong> {user?.organizationId}
-              </p>
-              <p>
-                <strong>Team ID:</strong> {user?.teamId}
+                <strong>Organization:</strong> {user?.organizationName} (
+                {user?.organizationId})
               </p>
 
               {user?.roles && (
