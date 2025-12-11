@@ -2,13 +2,17 @@
 import Link from "next/link";
 import { ShieldAlert } from "lucide-react";
 import { LOGIN } from "@/constents/router-links";
+import { Button } from "@/components/ui/button";
 
 export default function ForbiddenPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-background p-8">
       <div className="w-full max-w-lg rounded-2xl border bg-card p-8 shadow-sm">
         <div className="flex items-center gap-3">
-          <ShieldAlert className="h-6 w-6 text-red-600" aria-hidden="true" />
+          <ShieldAlert
+            className="h-6 w-6 text-destructive"
+            aria-hidden="true"
+          />
           <h1 className="text-2xl font-bold leading-tight">403 — Forbidden</h1>
         </div>
 
@@ -25,7 +29,8 @@ export default function ForbiddenPage() {
         </ul>
 
         <div className="mt-6 flex justify-between flex-wrap gap-3">
-          <button
+          <Button
+            variant={"default"}
             className="relative z-10 overflow-hidden px-12 py-2 rounded-lg cursor-pointer text-base tracking-widest font-bold my-3 border border-border bg-background text-foreground group transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 w-fit"
             aria-label="Go to homepage"
           >
@@ -35,9 +40,9 @@ export default function ForbiddenPage() {
                 Sign in
               </span>
             </Link>
-          </button>
+          </Button>
 
-          <button
+          {/* <button
             className="relative z-10 overflow-hidden px-12 py-2 rounded-lg cursor-pointer text-base tracking-widest font-bold my-3 border border-border bg-background text-foreground group transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 w-fit"
             aria-label="Go to support page"
           >
@@ -47,7 +52,7 @@ export default function ForbiddenPage() {
                 Contact Support
               </span>
             </Link>
-          </button>
+          </button> */}
         </div>
 
         <div className="mt-6 rounded-lg  text-xs text-muted-foreground">
