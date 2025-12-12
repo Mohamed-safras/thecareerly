@@ -12,6 +12,7 @@ export default function AppProviders({ children }: { children: ReactNode }) {
       defaultTheme="system"
       enableSystem
       disableTransitionOnChange
+      storageKey="theme"
     >
       <PaletteInitializer>
         <ReduxProvider>{children}</ReduxProvider>
