@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import AppProviders from "./providers";
 import { Toaster } from "sonner";
+import { ThemeScript } from "@/components/theme-script";
 
 export const metadata: Metadata = {
   title: "thecareerly",
@@ -16,6 +17,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
       <body>
         <AppProviders>{children}</AppProviders>
         <Toaster richColors position="top-center" expand />
