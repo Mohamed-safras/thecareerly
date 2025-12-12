@@ -77,7 +77,7 @@ export const createResponseInterceptor = (axiosClient: AxiosInstance) => {
 
       try {
         // Attempt to refresh the token
-        await axiosClient.post("/api/auth/refresh");
+        await axiosClient.get("/api/auth/refresh");
 
         // Process queued requests
         processQueue(null);
