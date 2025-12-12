@@ -14,12 +14,11 @@ export const UserProfilePage = () => {
   const avatar = { url: user?.avatar, name: user?.name };
 
   const profile = {
-    firstName: user?.name,
-    lastName: user?.name,
+    name: user?.name,
     email: user?.email,
     phone: user?.phone,
     location: "",
-    company: user?.organizationId,
+    company: user?.organizationName,
   };
 
   const preferences = {
