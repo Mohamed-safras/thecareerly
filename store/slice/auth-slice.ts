@@ -66,7 +66,7 @@ export const hydrateUserFromSession = createAsyncThunk(
   "auth/hydrateFromSession",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosClient.post("/api/auth/refresh");
+      const response = await axiosClient.get("/api/auth/refresh");
 
       const userData = response.data?.data?.user;
       const expiresIn = response.data?.data?.expiresIn;
