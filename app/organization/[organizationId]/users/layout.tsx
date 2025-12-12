@@ -1,4 +1,5 @@
-import ProtectedOrganizationClientShell from "@/features/auth/components/protected-user-sidebar";
+import ProtectedClientShell from "@/features/auth/components/protected-client-shell";
+import { Roles } from "@/lib/role";
 import { ReactNode } from "react";
 
 export default function UserManagmentLayout({
@@ -7,8 +8,11 @@ export default function UserManagmentLayout({
   children: ReactNode;
 }) {
   return (
-    <ProtectedOrganizationClientShell>
+    <ProtectedClientShell
+      allowedRoles={[Roles.ORGANIZATION_ADMIN]}
+      requireOrganizationId={true}
+    >
       {children}
-    </ProtectedOrganizationClientShell>
+    </ProtectedClientShell>
   );
 }

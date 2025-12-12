@@ -1,6 +1,5 @@
 import React from "react";
 import ProtectedClientShell from "@/features/auth/components/protected-client-shell";
-import { Roles } from "@/lib/role";
 import ProtectedUserSideBar from "@/features/auth/components/protected-user-sidebar";
 
 type Props = {
@@ -10,10 +9,7 @@ type Props = {
 
 export default async function OrganizationLayout({ children }: Props) {
   return (
-    <ProtectedClientShell
-      allowedRoles={[Roles.ORGANIZATION_ADMIN]}
-      requireOrganizationId={true}
-    >
+    <ProtectedClientShell>
       <ProtectedUserSideBar>{children}</ProtectedUserSideBar>
     </ProtectedClientShell>
   );
