@@ -8,8 +8,13 @@ import { hydrateUserFromSession } from "./slice/auth-slice";
 
 export function ReduxProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    // Hydrate user on app load
-    store.dispatch(hydrateUserFromSession());
+    const auth = store.getState().auth;
+    const isUserLoggedIn =
+      auth.isAuthenticated && auth.status === "authenticated";
+
+    if (isUserLoggedIn) {
+      store.dispatch(hydrateUserFromSession());
+    }
   }, []);
 
   return <Provider store={store}>{children}</Provider>;
