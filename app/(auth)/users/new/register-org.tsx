@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { PasswordInput } from "@/components/password-input";
-import useOrganizationSignUp from "@/hooks/use-organization-signup";
+import useOrganizationRegister from "@/hooks/use-organization-register";
 import { FieldGroup } from "../../../../components/ui/field";
 import { cn } from "@/lib/utils";
 import { ArrowRight, GalleryVerticalEnd } from "lucide-react";
@@ -42,7 +42,7 @@ export function RegisterOrganization({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const { form, onSubmit } = useOrganizationSignUp();
+  const { form, onSubmit } = useOrganizationRegister();
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0">

@@ -8,7 +8,7 @@ import { SocialLinksSection } from "@/features/users/components/user-profile/soc
 import { SectionCard } from "@/features/users/components/user-profile/section-card";
 import { useAppSelector } from "@/store/hooks";
 
-export const UserProfilePage = () => {
+export const AccountSettingsPage = () => {
   const { user } = useAppSelector(({ auth }) => auth);
 
   const avatar = { url: user?.avatar, name: user?.name };
