@@ -6,14 +6,14 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { organizationSignUpSchema } from "@/lib/form-validation/sign-up-form-schema";
-import { axiosClient } from "@/lib/axios/axios-client";
-import { LOGIN } from "@/constents/router-links";
-import { AUTH_SERVICE_ENDPOINTS } from "@/constents/api-end-points";
+import { useAppDispatch } from "@/store/hooks";
+import { registerOrganization } from "@/store/slice/auth-slice";
 
 type FormValues = z.infer<typeof organizationSignUpSchema>;
 
-export default function useOrganizationSignUp() {
+export default function useOrganizationRegister() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const form = useForm<FormValues>({
     resolver: zodResolver(organizationSignUpSchema),
     defaultValues: {
@@ -25,26 +25,32 @@ export default function useOrganizationSignUp() {
     mode: "onTouched",
   });
 
-  const onSubmit = async (formValues: FormValues) => {
+  const onSubmit = async ({
+    organizationName,
+    organizationEmail,
+    password,
+    confirmPassword,
+  }: FormValues) => {
     console.log(
       "Submitting organization sign-up form with values:",
-      formValues
+      organizationName,
+      organizationEmail,
+      password,
+      confirmPassword
     );
     try {
-      const response = await axiosClient.post(
-        AUTH_SERVICE_ENDPOINTS.CREATE_ORGANIZATION,
-        formValues
-      );
+      const result = await dispatch(
+        registerOrganization({
+          organizationName,
+          organizationEmail,
+          password,
+          confirmPassword,
+        })
+      ).unwrap();
 
-      if (response.status === 201 && response.statusText === "Created") {
-        toast.success(
-          `${response.data.message} please login into your account...`
-        );
-        router.replace(LOGIN);
-      } else {
-        toast.error("Unexpected response from server.");
-        console.error("Unexpected response:", response);
-      }
+      console.log("Register result:", result);
+      toast.success("organization register successful!");
+      router.replace("/login");
     } catch (error) {
       // Axios error with response
       if (

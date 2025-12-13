@@ -1,12 +1,10 @@
-// app/profile/page.tsx
-
 import HeaderShell from "@/features/jobs/components/hiring-shell";
-import { UserProfilePage } from "./user-profile";
+import { AccountSettingsPage } from "./account-settings";
 
-export default function ProfilePage() {
+export default function AccountSettings() {
   return (
     <HeaderShell breadCrumbPage="Account Settings">
-      <UserProfilePage />
+      <AccountSettingsPage />
     </HeaderShell>
   );
 }

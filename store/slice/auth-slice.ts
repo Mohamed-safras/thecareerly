@@ -25,6 +25,48 @@ const initialState: AuthState = {
   tokenExpiresAt: null,
 };
 
+export const registerOrganization = createAsyncThunk(
+  "auth/register-organization",
+  async (
+    {
+      organizationName,
+      organizationEmail,
+      password,
+      confirmPassword,
+    }: {
+      organizationName: string;
+      organizationEmail: string;
+      password: string;
+      confirmPassword: string;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      console.log("Attempting register for:", organizationEmail);
+
+      const response = await axiosClient.post(
+        "api/auth/register-organization",
+        {
+          organizationName,
+          organizationEmail,
+          password,
+          confirmPassword,
+        }
+      );
+
+      console.log(response);
+    } catch (error) {
+      console.log("Register error:", error);
+      const axiosError = error as AxiosError;
+      const message = extractMessage(
+        axiosError.response?.data as string | ApiErrorPayload | null,
+        axiosError.response?.status
+      );
+      return rejectWithValue(message);
+    }
+  }
+);
+
 export const loginUser = createAsyncThunk(
   "auth/login",
   async (
