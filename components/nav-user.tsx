@@ -31,6 +31,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { clearUser } from "@/store/slice/auth-slice";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
+import { CONNECT } from "@/constents/router-links";
 export function NavUser(user: UserProfile | null) {
   const { isMobile } = useSidebar();
   const dispatch = useAppDispatch();
@@ -108,7 +109,7 @@ export function NavUser(user: UserProfile | null) {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem
-                onClick={() => router.replace("/connect/profile")}
+                onClick={() => router.replace(`${CONNECT}/account-settings`)}
               >
                 <BadgeCheck />
                 Account Settings

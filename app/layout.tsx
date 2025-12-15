@@ -22,7 +22,7 @@ export default function RootLayout({
       </head>
       <body>
         <AppProviders>{children}</AppProviders>
-        <Toaster richColors position="top-center" expand />
+        <Toaster richColors position="bottom-right" expand />
       </body>
     </html>
   );
