@@ -55,8 +55,8 @@ export function UpcomingInterviews({ interviews }: UpcomingInterviewsProps) {
           </div>
 
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4 text-sm">
-              <span className="flex items-center gap-1.5 text-muted-foreground">
+            <div className="flex items-center gap-1.5 text-sm">
+              <span className="flex text-xs items-center gap-1 text-muted-foreground">
                 <Clock className="h-4 w-4" />
                 {interview.time}
               </span>

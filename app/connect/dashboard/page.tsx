@@ -275,123 +275,119 @@ export default function DashboardPage() {
   const { user } = useAuth();
 
   return (
-    <HeaderShell breadCrumbPage="Dashboard">
-      <div className="min-h-screen">
-        <div className="container mx-auto p-6">
-          <section className="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+    <div className="min-h-screen">
+      <div className="p-6">
+        <section className="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">
+              Good morning, {user?.name}!
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              Here&apos;s what&apos;s happening with your recruitment pipeline
+              today.
+            </p>
+          </div>
+        </section>
+
+        <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
+          {statsData.map((stat, index) => (
+            <StatsCard
+              key={stat.title}
+              title={stat.title}
+              value={stat.value}
+              change={stat.change}
+              changeType={stat.changeType}
+              icon={statsIcons[index]}
+              iconColor={stat.iconColor}
+            />
+          ))}
+        </section>
+
+        {/* Active Jobs */}
+        <section className="mb-4">
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight">
-                Good morning, {user?.name}!
-              </h1>
-              <p className="text-muted-foreground mt-1">
-                Here&apos;s what&apos;s happening with your recruitment pipeline
-                today.
+              <h2 className="text-lg font-semibold">Active Job Pipelines</h2>
+              <p className="text-sm text-muted-foreground">
+                Track candidate progress across roles
               </p>
             </div>
-          </section>
-
-          <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
-            {statsData.map((stat, index) => (
-              <StatsCard
-                key={stat.title}
-                title={stat.title}
-                value={stat.value}
-                change={stat.change}
-                changeType={stat.changeType}
-                icon={statsIcons[index]}
-                iconColor={stat.iconColor}
-              />
+            <Button variant="ghost" size="sm" className="gap-1">
+              View All <ArrowRight className="h-4 w-4" />
+            </Button>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {jobsData.map((job) => (
+              <JobPipelineCard key={job.title} {...job} />
             ))}
-          </section>
+          </div>
+        </section>
 
-          {/* Active Jobs */}
-          <section className="mb-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-lg font-semibold">Active Job Pipelines</h2>
-                <p className="text-sm text-muted-foreground">
-                  Track candidate progress across roles
-                </p>
-              </div>
-              <Button variant="ghost" size="sm" className="gap-1">
-                View All <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {jobsData.map((job) => (
-                <JobPipelineCard key={job.title} {...job} />
-              ))}
-            </div>
-          </section>
-
-          <div className="grid gap-6 lg:grid-cols-3">
-            {/* Left Column - Jobs & Candidates */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* Top Candidates */}
-              <section>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <h2 className="text-lg font-semibold">Top Candidates</h2>
-                    <Badge variant="secondary" className="font-normal">
-                      <TrendingUp className="h-3 w-3 mr-1" />
-                      AI Ranked
-                    </Badge>
-                  </div>
-                  <Button variant="ghost" size="sm" className="gap-1">
-                    View All <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </div>
-                <div className="space-y-3">
-                  {candidatesData.map((candidate) => (
-                    <CandidateCard key={candidate.name} {...candidate} />
-                  ))}
-                </div>
-              </section>
-
-              {/* Activity Feed */}
-              <section className="rounded-xl border bg-card p-5">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold">Recent Activity</h2>
-                  <Button variant="ghost" size="sm" className="text-xs">
-                    See all
-                  </Button>
-                </div>
-                <ActivityFeed activities={activitiesData} />
-              </section>
-            </div>
-
-            {/* Right Column - Activity & Interviews */}
-            <div className="space-y-6">
-              {/* Today's Interviews */}
-              <section className="rounded-xl border bg-card p-5">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h2 className="text-lg font-semibold">
-                      Today&apos;s Interviews
-                    </h2>
-                    <p className="text-sm text-muted-foreground">
-                      {interviewsData.length} scheduled
-                    </p>
-                  </div>
-                  <Badge variant="outline" className="font-normal">
-                    <Calendar className="h-3 w-3 mr-1" />
-                    Dec 15
+        <div className="grid gap-6 lg:grid-cols-3">
+          {/* Left Column - Jobs & Candidates */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Top Candidates */}
+            <section>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <h2 className="text-lg font-semibold">Top Candidates</h2>
+                  <Badge variant="secondary" className="font-normal">
+                    <TrendingUp className="h-3 w-3 mr-1" />
+                    AI Ranked
                   </Badge>
                 </div>
-                <UpcomingInterviews interviews={interviewsData} />
-              </section>
+                <Button variant="ghost" size="sm" className="gap-1">
+                  View All <ArrowRight className="h-4 w-4" />
+                </Button>
+              </div>
+              <div className="space-y-3">
+                {candidatesData.map((candidate) => (
+                  <CandidateCard key={candidate.name} {...candidate} />
+                ))}
+              </div>
+            </section>
 
-              {/* Source Analytics */}
-              <section className="rounded-xl border bg-card p-5">
-                <h2 className="text-lg font-semibold mb-4">
-                  Candidate Sources
-                </h2>
-                <SourceAnalytics sources={sourcesData} totalCandidates={1486} />
-              </section>
-            </div>
+            {/* Activity Feed */}
+            <section className="rounded-xl border bg-card p-5">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold">Recent Activity</h2>
+                <Button variant="ghost" size="sm" className="text-xs">
+                  See all
+                </Button>
+              </div>
+              <ActivityFeed activities={activitiesData} />
+            </section>
+          </div>
+
+          {/* Right Column - Activity & Interviews */}
+          <div className="space-y-6">
+            {/* Today's Interviews */}
+            <section className="rounded-xl border bg-card p-5">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h2 className="text-lg font-semibold">
+                    Today&apos;s Interviews
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    {interviewsData.length} scheduled
+                  </p>
+                </div>
+                <Badge variant="outline" className="font-normal">
+                  <Calendar className="h-3 w-3 mr-1" />
+                  Dec 15
+                </Badge>
+              </div>
+              <UpcomingInterviews interviews={interviewsData} />
+            </section>
+
+            {/* Source Analytics */}
+            <section className="rounded-xl border bg-card p-5">
+              <h2 className="text-lg font-semibold mb-4">Candidate Sources</h2>
+              <SourceAnalytics sources={sourcesData} totalCandidates={1486} />
+            </section>
           </div>
         </div>
       </div>
-    </HeaderShell>
+    </div>
   );
 }
