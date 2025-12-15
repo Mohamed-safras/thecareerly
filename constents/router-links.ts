@@ -10,7 +10,7 @@ export const LOGIN = "/login";
 export const CONNECT_ORGANIZATION_NEW = "/users/new";
 
 export const CONNECT_EMPLOYEE_DASHBOARD = "/connect/dashboard";
-export const EMPLOYEE = "/connect";
+export const CONNECT = "/connect";
 
 export const GENERATE_JD = "/api/employee/generate-jd";
 
