@@ -35,22 +35,22 @@ const activityConfig: Record<
   interview: {
     icon: Calendar,
     color: "text-status-new",
-    bgColor: "bg-status-new-bg",
+    bgColor: "bg-status-new-bg", //need to change
   },
   hired: {
     icon: CheckCircle2,
     color: "text-status-active",
-    bgColor: "bg-status-active-bg",
+    bgColor: "bg-status-active-bg", //need to change
   },
   rejected: {
     icon: XCircle,
     color: "text-destructive",
-    bgColor: "bg-destructive/10",
+    bgColor: "bg-destructive/10", //need to change
   },
   reviewed: {
     icon: Star,
     color: "text-status-hold",
-    bgColor: "bg-status-hold-bg",
+    bgColor: "bg-status-hold-bg", //need to change
   },
   offer: { icon: FileText, color: "text-primary", bgColor: "bg-primary/10" },
 };

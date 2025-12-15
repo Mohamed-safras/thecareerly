@@ -2,24 +2,23 @@
 "use client";
 
 import { useAuth } from "@/hooks/use-auth";
-import { StatsCard } from "./stats-card";
+import { StatsCard } from "../../../features/dashboard/stats-card";
 import {
   ArrowRight,
   Briefcase,
   Calendar,
-  Plus,
   Send,
   TrendingUp,
   Users,
 } from "lucide-react";
 import HeaderShell from "@/features/jobs/components/hiring-shell";
 import { Button } from "@/components/ui/button";
-import { JobPipelineCard } from "./job-pipeline-card";
+import { JobPipelineCard } from "../../../features/dashboard/job-pipeline-card";
 import { Badge } from "@/components/ui/badge";
-import { CandidateCard } from "./candidate-card";
-import { UpcomingInterviews } from "./upcoming-interviews";
-import { SourceAnalytics } from "./source-analytics";
-import { ActivityFeed } from "./activity-feed";
+import { CandidateCard } from "../../../features/dashboard/candidate-card";
+import { UpcomingInterviews } from "../../../features/dashboard/upcoming-interviews";
+import { SourceAnalytics } from "../../../features/dashboard/source-analytics";
+import { ActivityFeed } from "../../../features/dashboard/activity-feed";
 
 export const statsData = [
   {
