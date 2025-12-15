@@ -276,7 +276,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen">
-      <div className="container mx-auto p-6">
+      <div className="p-6">
         <section className="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">
