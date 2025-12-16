@@ -33,21 +33,21 @@ export const statsData = [
     value: "1,847",
     change: "+127 this month",
     changeType: "positive" as const,
-    iconColor: "text-primary",
+    iconColor: "text-status-new",
   },
   {
     title: "Interviews Scheduled",
     value: 38,
     change: "12 this week",
     changeType: "neutral" as const,
-    iconColor: "text-primary",
+    iconColor: "text-status-hold",
   },
   {
     title: "Offers Sent",
     value: 7,
     change: "+2 from last week",
     changeType: "positive" as const,
-    iconColor: "text-primary",
+    iconColor: "text-status-active",
   },
 ];
 
@@ -305,7 +305,7 @@ export default function DashboardPage() {
 
         {/* Active Jobs */}
         <section className="mb-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-2">
             <div>
               <h2 className="text-lg font-semibold">Active Job Pipelines</h2>
               <p className="text-sm text-muted-foreground">
