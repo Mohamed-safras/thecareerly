@@ -25,7 +25,7 @@ export function UpcomingInterviews({ interviews }: UpcomingInterviewsProps) {
       {interviews.map((interview) => (
         <div
           key={interview.id}
-          className="group rounded-xl border bg-card p-4 transition-all duration-200 hover:shadow-md hover:border-primary/20"
+          className="group rounded-xl border bg-card p-4 transition-all duration-200 hover:shadow-md"
         >
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3">

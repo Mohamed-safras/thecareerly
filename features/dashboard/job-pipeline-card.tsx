@@ -27,21 +27,17 @@ export function JobPipelineCard({
   const totalInPipeline = stages.reduce((acc, stage) => acc + stage.count, 0);
 
   return (
-    <div className="group rounded-xl border bg-card p-5 transition-all duration-300 hover:shadow-md hover:border-primary/20">
+    <div className="group rounded-xl border bg-card p-5 transition-all duration-300 hover:shadow-md">
       <div className="flex items-start justify-between mb-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
-              {title}
+              {title.length > 30 ? title.slice(0, 30) + "..." : title}
             </h3>
-            {isUrgent && (
-              <Badge variant="destructive" className="text-xs px-2 py-0">
-                Urgent
-              </Badge>
-            )}
           </div>
           <p className="text-sm text-muted-foreground">{department}</p>
         </div>
+
         <Badge variant="secondary" className="font-normal">
           <Users className="h-3 w-3 mr-1" />
           {applicants}
@@ -57,6 +53,11 @@ export function JobPipelineCard({
           <Clock className="h-3 w-3" />
           {daysOpen} days open
         </span>
+        {isUrgent && (
+          <Badge variant="destructive" className="text-xs px-2 py-0">
+            Urgent
+          </Badge>
+        )}
       </div>
 
       {/* Pipeline visualization */}
