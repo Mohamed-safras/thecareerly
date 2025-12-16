@@ -95,6 +95,19 @@ export const jobsData = [
       { name: "Offer", count: 5, color: "bg-status-active" },
     ],
   },
+  {
+    title: "Python Engineer",
+    department: "Engineering",
+    location: "San Francisco, CA",
+    applicants: 7,
+    daysOpen: 11,
+    stages: [
+      { name: "Applied", count: 2, color: "bg-muted-foreground" },
+      { name: "Screening", count: 1, color: "bg-primary" },
+      { name: "Interview", count: 3, color: "bg-status-new" },
+      { name: "Offer", count: 1, color: "bg-status-active" },
+    ],
+  },
 ];
 
 export const candidatesData = [
@@ -166,9 +179,9 @@ export const interviewsData = [
           "https://images.unsplash.com/photo-1720501828093-c792c10e3f0b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=573",
       },
       {
-        name: "Mike Chen",
+        name: "Lisa Wang",
         avatar:
-          "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop",
+          "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&h=50&fit=crop",
       },
     ],
   },
@@ -335,9 +348,9 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-6 lg:grid-cols-7">
           {/* Left Column - Jobs & Candidates */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-4 space-y-6">
             {/* Top Candidates */}
             <section>
               <div className="flex items-center justify-between mb-4">
@@ -372,7 +385,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Right Column - Activity & Interviews */}
-          <div className="space-y-6">
+          <div className="space-y-6 lg:col-span-3">
             {/* Today's Interviews */}
             <section className="rounded-xl border bg-card p-5">
               <div className="flex items-center justify-between mb-4">
