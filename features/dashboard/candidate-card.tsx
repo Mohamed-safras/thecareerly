@@ -67,7 +67,7 @@ export function CandidateCard({
         </div>
       </div>
 
-      <div className="flex flex-col items-end gap-2">
+      <div className="sm:flex flex-col items-end gap-2 hidden">
         <div className="text-right">
           <p className="text-xs text-muted-foreground">Match</p>
           <p

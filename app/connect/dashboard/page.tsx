@@ -11,7 +11,6 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
-import HeaderShell from "@/features/jobs/components/hiring-shell";
 import { Button } from "@/components/ui/button";
 import { JobPipelineCard } from "../../../features/dashboard/job-pipeline-card";
 import { Badge } from "@/components/ui/badge";
@@ -27,27 +26,31 @@ export const statsData = [
     change: "+3 this week",
     changeType: "positive" as const,
     iconColor: "text-primary",
-  },
-  {
-    title: "Total Candidates",
-    value: "1,847",
-    change: "+127 this month",
-    changeType: "positive" as const,
-    iconColor: "text-status-new",
+    icon: Briefcase,
   },
   {
     title: "Interviews Scheduled",
     value: 38,
     change: "12 this week",
     changeType: "neutral" as const,
-    iconColor: "text-status-hold",
+    iconColor: "text-status-active",
+    icon: Calendar,
+  },
+  {
+    title: "Total Candidates",
+    value: 1847,
+    change: "+127 this month",
+    changeType: "positive" as const,
+    iconColor: "text-status-new",
+    icon: Users,
   },
   {
     title: "Offers Sent",
     value: 7,
     change: "+2 from last week",
     changeType: "positive" as const,
-    iconColor: "text-status-active",
+    iconColor: "text-status-hold",
+    icon: Send,
   },
 ];
 
@@ -90,6 +93,19 @@ export const jobsData = [
       { name: "Screening", count: 18, color: "bg-primary" },
       { name: "Interview", count: 12, color: "bg-status-new" },
       { name: "Offer", count: 5, color: "bg-status-active" },
+    ],
+  },
+  {
+    title: "Python Engineer",
+    department: "Engineering",
+    location: "San Francisco, CA",
+    applicants: 7,
+    daysOpen: 11,
+    stages: [
+      { name: "Applied", count: 2, color: "bg-muted-foreground" },
+      { name: "Screening", count: 1, color: "bg-primary" },
+      { name: "Interview", count: 3, color: "bg-status-new" },
+      { name: "Offer", count: 1, color: "bg-status-active" },
     ],
   },
 ];
@@ -157,11 +173,15 @@ export const interviewsData = [
         avatar:
           "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop",
       },
-      { name: "Anna Lee" },
       {
-        name: "Mike Chen",
+        name: "Anna Lee",
         avatar:
-          "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop",
+          "https://images.unsplash.com/photo-1720501828093-c792c10e3f0b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=573",
+      },
+      {
+        name: "Lisa Wang",
+        avatar:
+          "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&h=50&fit=crop",
       },
     ],
   },
@@ -180,7 +200,11 @@ export const interviewsData = [
         avatar:
           "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&h=50&fit=crop",
       },
-      { name: "Tom Davis" },
+      {
+        name: "Tom Davis",
+        avatar:
+          "https://images.unsplash.com/photo-1720501828093-c792c10e3f0b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=573",
+      },
     ],
   },
   {
@@ -269,7 +293,6 @@ export const activitiesData = [
     time: "1d ago",
   },
 ];
-const statsIcons = [Briefcase, Users, Calendar, Send];
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -280,7 +303,7 @@ export default function DashboardPage() {
         <section className="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">
-              Good morning, {user?.name}!
+              Hi, {user?.name}!
             </h1>
             <p className="text-muted-foreground mt-1">
               Here&apos;s what&apos;s happening with your recruitment pipeline
@@ -290,17 +313,19 @@ export default function DashboardPage() {
         </section>
 
         <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
-          {statsData.map((stat, index) => (
-            <StatsCard
-              key={stat.title}
-              title={stat.title}
-              value={stat.value}
-              change={stat.change}
-              changeType={stat.changeType}
-              icon={statsIcons[index]}
-              iconColor={stat.iconColor}
-            />
-          ))}
+          {statsData.map(
+            ({ title, value, change, changeType, icon, iconColor }) => (
+              <StatsCard
+                key={title}
+                title={title}
+                value={value}
+                change={change}
+                changeType={changeType}
+                icon={icon}
+                iconColor={iconColor}
+              />
+            )
+          )}
         </section>
 
         {/* Active Jobs */}
@@ -323,9 +348,9 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-6 lg:grid-cols-7">
           {/* Left Column - Jobs & Candidates */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-4 space-y-6">
             {/* Top Candidates */}
             <section>
               <div className="flex items-center justify-between mb-4">
@@ -360,7 +385,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Right Column - Activity & Interviews */}
-          <div className="space-y-6">
+          <div className="space-y-6 lg:col-span-3">
             {/* Today's Interviews */}
             <section className="rounded-xl border bg-card p-5">
               <div className="flex items-center justify-between mb-4">
@@ -374,7 +399,11 @@ export default function DashboardPage() {
                 </div>
                 <Badge variant="outline" className="font-normal">
                   <Calendar className="h-3 w-3 mr-1" />
-                  Dec 15
+                  {new Date().toLocaleDateString("en-us", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
                 </Badge>
               </div>
               <UpcomingInterviews interviews={interviewsData} />

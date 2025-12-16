@@ -25,7 +25,7 @@ export function UpcomingInterviews({ interviews }: UpcomingInterviewsProps) {
       {interviews.map((interview) => (
         <div
           key={interview.id}
-          className="group rounded-xl border bg-card p-4 transition-all duration-200 hover:shadow-md hover:border-primary/20"
+          className="group rounded-xl border bg-card p-4 transition-all duration-200 hover:shadow-md"
         >
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3">
@@ -40,7 +40,7 @@ export function UpcomingInterviews({ interviews }: UpcomingInterviewsProps) {
               </Avatar>
               <div>
                 <h4 className="font-medium">{interview.candidate}</h4>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground md:truncate">
                   {interview.role}
                 </p>
               </div>
@@ -86,7 +86,7 @@ export function UpcomingInterviews({ interviews }: UpcomingInterviewsProps) {
 
             {/* Interviewers */}
             <div className="flex -space-x-2">
-              {interview.interviewers.slice(0, 3).map((interviewer, i) => (
+              {interview.interviewers.slice(0, 2).map((interviewer, i) => (
                 <Avatar key={i} className="h-7 w-7 ring-2 ring-background">
                   <AvatarImage
                     src={interviewer.avatar}
@@ -100,9 +100,9 @@ export function UpcomingInterviews({ interviews }: UpcomingInterviewsProps) {
                   </AvatarFallback>
                 </Avatar>
               ))}
-              {interview.interviewers.length > 3 && (
+              {interview.interviewers.length > 2 && (
                 <div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted text-[10px] font-medium ring-2 ring-background">
-                  +{interview.interviewers.length - 3}
+                  +{interview.interviewers.length - 2}
                 </div>
               )}
             </div>
