@@ -22,6 +22,18 @@
   /* Fallback colors (optional, but ensures colors exist if no palette class is applied) */
   --background: oklch(100% 0.00011 271.152);
   --foreground: oklch(0.2542 0.0111 254.038);
+
+  --status-active: hsl(142 76% 36%);
+  --status-active-bg: 142 76% 95%; /* No hsl() here */
+
+  --status-archived: hsl(215 20% 65%);
+  --status-archived-bg: 215 20% 95%;
+
+  --status-new: hsl(262 83% 58%);
+  --status-new-bg: 262 83% 95%;
+
+  --status-hold: hsl(38 92% 50%);
+  --status-hold-bg: 38 92% 95%;
 }
 
 /* =========================================================
@@ -782,6 +794,18 @@
   --shadow-blur: var(--shadow-blur);
   --shadow-opacity: var(--shadow-opacity);
   --color-shadow-color: var(--shadow-color);
+
+  /* Status Text Colors */
+  --color-status-active: var(--status-active);
+  --color-status-archived: var(--status-archived);
+  --color-status-new: var(--status-new);
+  --color-status-hold: var(--status-hold);
+
+  /* Status Background Colors (using hsl for raw channels) */
+  --color-status-active-bg: hsl(var(--status-active-bg));
+  --color-status-archived-bg: hsl(var(--status-archived-bg));
+  --color-status-new-bg: hsl(var(--status-new-bg));
+  --color-status-hold-bg: hsl(var(--status-hold-bg));
 }
 
 /* =========================================================

@@ -26,7 +26,7 @@ export function CandidateCard({
   matchScore,
 }: CandidateCardProps) {
   return (
-    <div className="group flex items-center gap-4 rounded-lg border bg-card p-4 transition-all duration-200 hover:bg-muted/30 hover:border-primary/20">
+    <div className="group flex items-center gap-4 rounded-lg border bg-card p-4 transition-all duration-200 hover:bg-muted/30">
       <Avatar className="h-12 w-12 ring-2 ring-background">
         <AvatarImage src={avatar} alt={name} className="object-cover" />
         <AvatarFallback className="bg-primary/10 text-primary font-semibold">
@@ -76,6 +76,8 @@ export function CandidateCard({
               matchScore >= 85
                 ? "text-status-active"
                 : matchScore >= 70
+                ? "text-status-archived"
+                : matchScore >= 50
                 ? "text-status-hold"
                 : "text-muted-foreground"
             )}
