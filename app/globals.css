@@ -29,11 +29,8 @@
   --status-archived: hsl(215 20% 65%);
   --status-archived-bg: 215 20% 95%;
 
-  --status-new: hsl(262 83% 58%);
-  --status-new-bg: 262 83% 95%;
-
-  /* --status-hold: hsl(38 92% 50%);
-  --status-hold-bg: 38 92% 95%; */
+  --status-new: hsl(199 89% 60%);
+  --status-new-bg: 199 89% 97%;
 
   --status-hold: hsl(38 92% 50%);
   --status-hold-bg: 38 92% 95%;

@@ -69,6 +69,7 @@ export const PersonalInfoSection = ({ profile }: PersonalInfoSectionProps) => {
           />
 
           <FormField
+            disabled
             control={form.control}
             name="email"
             render={({ field }) => (
@@ -119,6 +120,7 @@ export const PersonalInfoSection = ({ profile }: PersonalInfoSectionProps) => {
 
         <FormField
           control={form.control}
+          disabled
           name="company"
           render={({ field }) => (
             <FormItem>
