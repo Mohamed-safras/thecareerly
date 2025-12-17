@@ -1,21 +1,21 @@
-import { cn } from "@/lib/utils";
+"use client";
+
+import { Progress } from "@/components/ui/progress";
 
 interface Source {
   name: string;
   candidates: number;
   percentage: number;
-  color: string;
-}
-
-interface SourceAnalyticsProps {
-  sources: Source[];
-  totalCandidates: number;
+  color?: string;
 }
 
 export function SourceAnalytics({
   sources,
   totalCandidates,
-}: SourceAnalyticsProps) {
+}: {
+  sources: Source[];
+  totalCandidates: number;
+}) {
   return (
     <div className="space-y-4">
       <div className="flex items-baseline justify-between">
@@ -27,23 +27,16 @@ export function SourceAnalytics({
         {sources.map((source) => (
           <div key={source.name} className="space-y-2">
             <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center gap-2">
-                <span className="font-medium">{source.name}</span>
-              </div>
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <span>{source.candidates}</span>
-                <span className="text-xs">({source.percentage}%)</span>
-              </div>
+              <span className="font-medium">{source.name}</span>
+              <span className="text-muted-foreground">
+                {source.candidates} ({source.percentage}%)
+              </span>
             </div>
-            <div className="relative h-2 overflow-hidden rounded-full bg-muted">
-              <div
-                className={cn(
-                  "h-full rounded-full transition-all duration-500",
-                  source.color
-                )}
-                style={{ width: `${source.percentage}%` }}
-              />
-            </div>
+
+            <Progress
+              value={source.percentage}
+              indicatorClassName={source.color}
+            />
           </div>
         ))}
       </div>
