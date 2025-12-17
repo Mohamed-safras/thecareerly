@@ -2,14 +2,20 @@
 
 import * as React from "react";
 import * as ProgressPrimitive from "@radix-ui/react-progress";
-
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+
+interface ProgressProps
+  extends React.ComponentProps<typeof ProgressPrimitive.Root> {
+  indicatorClassName?: string;
+}
 
 function Progress({
   className,
   value,
+  indicatorClassName,
   ...props
-}: React.ComponentProps<typeof ProgressPrimitive.Root>) {
+}: ProgressProps) {
   return (
     <ProgressPrimitive.Root
       data-slot="progress"
@@ -19,11 +25,23 @@ function Progress({
       )}
       {...props}
     >
-      <ProgressPrimitive.Indicator
-        data-slot="progress-indicator"
-        className="bg-card-foreground dark:bg-primary-foreground h-full w-full flex-1 transition-all"
-        style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
-      />
+      <ProgressPrimitive.Indicator asChild>
+        <motion.div
+          className={cn(
+            "h-full w-full flex-1",
+            indicatorClassName ||
+              "bg-card-foreground dark:bg-primary-foreground"
+          )}
+          initial={{ x: "-100%" }}
+          whileInView={{ x: `-${100 - (value || 0)}%` }}
+          viewport={{ once: true }}
+          transition={{
+            duration: 1,
+            ease: "circOut",
+            delay: 0.2,
+          }}
+        />
+      </ProgressPrimitive.Indicator>
     </ProgressPrimitive.Root>
   );
 }
