@@ -7,6 +7,7 @@ import {
   ArrowRight,
   Briefcase,
   Calendar,
+  LayoutDashboard,
   Send,
   TrendingUp,
   Users,
@@ -18,6 +19,13 @@ import { CandidateCard } from "../../../features/dashboard/candidate-card";
 import { UpcomingInterviews } from "../../../features/dashboard/upcoming-interviews";
 import { SourceAnalytics } from "../../../features/dashboard/source-analytics";
 import { ActivityFeed } from "../../../features/dashboard/activity-feed";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { HiringFunnel } from "@/features/dashboard/hiring-funnel";
+import { TimeToHire } from "@/features/dashboard/time-to-hire";
+import { WeeklyTrends } from "@/features/dashboard/weekly-trends";
+import { DiversityMetrics } from "@/features/dashboard/diversity-metrics";
+import { TeamPerformance } from "@/features/dashboard/team-performance";
+import { OpenPositions } from "@/features/dashboard/open-positions";
 
 export const statsData = [
   {
@@ -294,6 +302,146 @@ export const activitiesData = [
   },
 ];
 
+export const funnelData = [
+  {
+    name: "Applications",
+    count: 1847,
+    percentage: 100,
+    conversionRate: undefined,
+  },
+  { name: "Screened", count: 892, percentage: 48, conversionRate: 48 },
+  { name: "Interviewed", count: 234, percentage: 13, conversionRate: 26 },
+  { name: "Offered", count: 47, percentage: 3, conversionRate: 20 },
+  { name: "Hired", count: 23, percentage: 1, conversionRate: 49 },
+];
+
+export const timeToHireMetrics = [
+  {
+    label: "Screen to Interview",
+    value: "4.2 days",
+    change: -12,
+    target: "5 days",
+  },
+  {
+    label: "Interview to Offer",
+    value: "8.7 days",
+    change: -8,
+    target: "10 days",
+  },
+  {
+    label: "Offer to Acceptance",
+    value: "3.1 days",
+    change: 5,
+    target: "3 days",
+  },
+];
+
+export const teamPerformanceData = [
+  {
+    name: "Sarah Mitchell",
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+    role: "Senior Recruiter",
+    hires: 8,
+    interviews: 24,
+    responseTime: "2h avg",
+  },
+  {
+    name: "James Wilson",
+    avatar:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+    role: "Technical Recruiter",
+    hires: 6,
+    interviews: 31,
+    responseTime: "1.5h avg",
+  },
+  {
+    name: "Emily Chen",
+    avatar:
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
+    role: "Recruiter",
+    hires: 5,
+    interviews: 19,
+    responseTime: "3h avg",
+  },
+  {
+    name: "Michael Brown",
+    avatar:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
+    role: "HR Manager",
+    hires: 4,
+    interviews: 12,
+    responseTime: "4h avg",
+  },
+];
+
+export const weeklyTrendsData = [
+  { day: "Mon", applications: 42, interviews: 8, offers: 2 },
+  { day: "Tue", applications: 58, interviews: 12, offers: 1 },
+  { day: "Wed", applications: 67, interviews: 15, offers: 3 },
+  { day: "Thu", applications: 51, interviews: 9, offers: 2 },
+  { day: "Fri", applications: 73, interviews: 11, offers: 4 },
+  { day: "Sat", applications: 24, interviews: 3, offers: 0 },
+  { day: "Sun", applications: 18, interviews: 2, offers: 1 },
+];
+
+export const diversityData = [
+  { category: "Women", percentage: 42, change: 5, color: "stroke-primary" },
+  {
+    category: "Underrepresented",
+    percentage: 28,
+    change: 3,
+    color: "stroke-status-new",
+  },
+  {
+    category: "Veterans",
+    percentage: 8,
+    change: 1,
+    color: "stroke-status-active",
+  },
+  {
+    category: "Other",
+    percentage: 22,
+    change: -2,
+    color: "stroke-muted-foreground",
+  },
+];
+
+export const openPositionsData = [
+  {
+    title: "Senior Frontend Engineer",
+    department: "Engineering",
+    location: "Remote",
+    applicants: 156,
+    daysOpen: 12,
+    priority: "high" as const,
+  },
+  {
+    title: "Product Manager",
+    department: "Product",
+    location: "New York, NY",
+    applicants: 89,
+    daysOpen: 8,
+    priority: "high" as const,
+  },
+  {
+    title: "Data Scientist",
+    department: "Analytics",
+    location: "San Francisco, CA",
+    applicants: 67,
+    daysOpen: 21,
+    priority: "medium" as const,
+  },
+  {
+    title: "UX Designer",
+    department: "Design",
+    location: "Remote",
+    applicants: 45,
+    daysOpen: 5,
+    priority: "low" as const,
+  },
+];
+
 export default function DashboardPage() {
   const { user } = useAuth();
 
@@ -328,94 +476,185 @@ export default function DashboardPage() {
           )}
         </section>
 
-        {/* Active Jobs */}
-        <section className="mb-4">
-          <div className="flex items-center justify-between mb-2">
-            <div>
-              <h2 className="text-lg font-semibold">Active Job Pipelines</h2>
-              <p className="text-sm text-muted-foreground">
-                Track candidate progress across roles
-              </p>
-            </div>
-            <Button variant="ghost" size="sm" className="gap-1">
-              View All <ArrowRight className="h-4 w-4" />
-            </Button>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {jobsData.map((job) => (
-              <JobPipelineCard key={job.title} {...job} />
-            ))}
-          </div>
-        </section>
+        <Tabs defaultValue="overview" className="mb-8">
+          <TabsList className="mb-6">
+            <TabsTrigger value="overview" className="gap-2">
+              <LayoutDashboard className="h-4 w-4" />
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="gap-2">
+              <TrendingUp className="h-4 w-4" />
+              Analytics
+            </TabsTrigger>
+          </TabsList>
 
-        <div className="grid gap-6 lg:grid-cols-7">
-          {/* Left Column - Jobs & Candidates */}
-          <div className="lg:col-span-4 space-y-6">
-            {/* Top Candidates */}
-            <section>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <h2 className="text-lg font-semibold">Top Candidates</h2>
-                  <Badge variant="secondary" className="font-normal">
-                    <TrendingUp className="h-3 w-3 mr-1" />
-                    AI Ranked
-                  </Badge>
+          {/* Overview Tab */}
+          <TabsContent value="overview" className="space-y-6">
+            {/* Active Jobs */}
+            <section className="mb-4">
+              <div className="flex items-center justify-between mb-2">
+                <div>
+                  <h2 className="text-lg font-semibold">
+                    Active Job Pipelines
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    Track candidate progress across roles
+                  </p>
                 </div>
                 <Button variant="ghost" size="sm" className="gap-1">
                   View All <ArrowRight className="h-4 w-4" />
                 </Button>
               </div>
-              <div className="space-y-3">
-                {candidatesData.map((candidate) => (
-                  <CandidateCard key={candidate.name} {...candidate} />
+              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                {jobsData.map((job) => (
+                  <JobPipelineCard key={job.title} {...job} />
                 ))}
               </div>
             </section>
 
-            {/* Activity Feed */}
-            <section className="rounded-xl border bg-card p-5">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold">Recent Activity</h2>
-                <Button variant="ghost" size="sm" className="text-xs">
-                  See all
-                </Button>
-              </div>
-              <ActivityFeed activities={activitiesData} />
-            </section>
-          </div>
+            <div className="grid gap-6 lg:grid-cols-7">
+              {/* Left Column - Jobs & Candidates */}
+              <div className="lg:col-span-4 space-y-6">
+                {/* Top Candidates */}
+                <section>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <h2 className="text-lg font-semibold">Top Candidates</h2>
+                      <Badge variant="secondary" className="font-normal">
+                        <TrendingUp className="h-3 w-3 mr-1" />
+                        AI Ranked
+                      </Badge>
+                    </div>
+                    <Button variant="ghost" size="sm" className="gap-1">
+                      View All <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <div className="space-y-3">
+                    {candidatesData.map((candidate) => (
+                      <CandidateCard key={candidate.name} {...candidate} />
+                    ))}
+                  </div>
+                </section>
 
-          {/* Right Column - Activity & Interviews */}
-          <div className="space-y-6 lg:col-span-3">
-            {/* Today's Interviews */}
-            <section className="rounded-xl border bg-card p-5">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h2 className="text-lg font-semibold">
-                    Today&apos;s Interviews
-                  </h2>
-                  <p className="text-sm text-muted-foreground">
-                    {interviewsData.length} scheduled
-                  </p>
+                {/* Activity Feed */}
+                <section className="rounded-xl border bg-card p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-semibold">Recent Activity</h2>
+                    <Button variant="ghost" size="sm" className="text-xs">
+                      See all
+                    </Button>
+                  </div>
+                  <ActivityFeed activities={activitiesData} />
+                </section>
+              </div>
+
+              {/* Right Column - Activity & Interviews */}
+              <div className="space-y-6 lg:col-span-3">
+                {/* Today's Interviews */}
+                <section className="rounded-xl border bg-card p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h2 className="text-lg font-semibold">
+                        Today&apos;s Interviews
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        {interviewsData.length} scheduled
+                      </p>
+                    </div>
+                    <Badge variant="outline" className="font-normal">
+                      <Calendar className="h-3 w-3 mr-1" />
+                      {new Date().toLocaleDateString("en-us", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </Badge>
+                  </div>
+                  <UpcomingInterviews interviews={interviewsData} />
+                </section>
+
+                {/* anthing can add later */}
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* Analytics Tab */}
+          <TabsContent value="analytics" className="space-y-6">
+            <div className="grid gap-6 lg:grid-cols-3">
+              {/* Left Column */}
+              <div className="lg:col-span-2 space-y-6">
+                {/* Hiring Funnel & Time to Hire */}
+                <div className="grid gap-6 md:grid-cols-2">
+                  <HiringFunnel stages={funnelData} />
+                  <TimeToHire
+                    metrics={timeToHireMetrics}
+                    avgDays={18}
+                    trend="down"
+                  />
                 </div>
-                <Badge variant="outline" className="font-normal">
-                  <Calendar className="h-3 w-3 mr-1" />
-                  {new Date().toLocaleDateString("en-us", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
-                </Badge>
-              </div>
-              <UpcomingInterviews interviews={interviewsData} />
-            </section>
 
-            {/* Source Analytics */}
-            <section className="rounded-xl border bg-card p-5">
-              <h2 className="text-lg font-semibold mb-4">Candidate Sources</h2>
-              <SourceAnalytics sources={sourcesData} totalCandidates={1486} />
-            </section>
-          </div>
-        </div>
+                {/* Weekly Trends & Diversity */}
+                <div className="grid gap-6 md:grid-cols-2">
+                  <WeeklyTrends data={weeklyTrendsData} />
+                  <DiversityMetrics data={diversityData} />
+                </div>
+
+                {/* Team Performance */}
+                <TeamPerformance members={teamPerformanceData} />
+              </div>
+
+              {/* Right Column */}
+              <div className="space-y-6">
+                {/* Open Positions */}
+                <OpenPositions positions={openPositionsData} />
+
+                {/* Source Analytics */}
+                <section className="rounded-xl border bg-card p-5">
+                  <h2 className="text-lg font-semibold mb-4">Top Sources</h2>
+                  <SourceAnalytics
+                    sources={sourcesData}
+                    totalCandidates={1486}
+                  />
+                </section>
+
+                {/* Quick Stats */}
+                <section className="rounded-xl border bg-card p-5">
+                  <h2 className="text-lg font-semibold mb-4">This Month</h2>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+                      <span className="text-sm text-muted-foreground">
+                        Offer Acceptance Rate
+                      </span>
+                      <span className="font-semibold text-status-active">
+                        87%
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+                      <span className="text-sm text-muted-foreground">
+                        Interview to Hire
+                      </span>
+                      <span className="font-semibold">4.2:1</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+                      <span className="text-sm text-muted-foreground">
+                        Cost per Hire
+                      </span>
+                      <span className="font-semibold">$2,340</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+                      <span className="text-sm text-muted-foreground">
+                        Quality of Hire
+                      </span>
+                      <span className="font-semibold text-status-active">
+                        4.6/5
+                      </span>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

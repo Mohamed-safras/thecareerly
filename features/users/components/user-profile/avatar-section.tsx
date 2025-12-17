@@ -33,11 +33,11 @@ export const AvatarSection = ({ avatar }: AvatarSectionProps) => {
       className="relative h-40 md:h-40 bg-cover bg-center rounded-xl overflow-hidden"
       style={{
         backgroundImage:
-          "url('https://images.unsplash.com/photo-1706166483854-67182e829575?ixlib=rb-4.1.0&auto=format&fit=crop&q=80&w=1470')",
+          "url('https://plus.unsplash.com/premium_photo-1764691325995-3a985d3ab88f?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
       }}
     >
       {/* Avatar - Centered at bottom */}
-      <div className="absolute bottom-20  left-1/2 transform -translate-x-1/2 translate-y-1/2">
+      <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 translate-y-1/2">
         <div className="relative group">
           <Avatar className="h-28 w-28 md:h-32 md:w-32 ring-4 ring-background shadow-xl">
             <AvatarImage
