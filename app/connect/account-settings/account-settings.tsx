@@ -29,7 +29,7 @@ export const AccountSettingsPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-muted/20 to-background p-6">
-      <div className=" space-y-6">
+      <div className=" space-y-3">
         <AvatarSection avatar={avatar} />
 
         <SectionCard title="Personal Information">

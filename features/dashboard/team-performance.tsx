@@ -21,7 +21,7 @@ const rankColors = ["text-yellow-500", "text-gray-400", "text-amber-600"];
 
 export function TeamPerformance({ members }: TeamPerformanceProps) {
   return (
-    <Card>
+    <Card className="shadow-none">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-semibold">
           Team Performance

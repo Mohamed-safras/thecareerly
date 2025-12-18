@@ -16,7 +16,7 @@ interface TimeToHireProps {
 
 export function TimeToHire({ metrics, avgDays, trend }: TimeToHireProps) {
   return (
-    <Card>
+    <Card className="shadow-none">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-semibold flex items-center gap-2">
           <Clock className="h-4 w-4 text-primary" />
@@ -72,7 +72,7 @@ export function TimeToHire({ metrics, avgDays, trend }: TimeToHireProps) {
                 </div>
               </div>
               <div className="text-right">
-                <p className="font-semibold">{metric.value}</p>
+                <p className="text-sm font-semibold">{metric.value}</p>
                 <p
                   className={`text-xs ${
                     metric.change < 0

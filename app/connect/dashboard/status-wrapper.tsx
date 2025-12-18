@@ -38,7 +38,7 @@ const StatusWrapper = () => {
     },
   ];
   return (
-    <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
+    <section className="grid gap-3 md:grid-cols-2 lg:grid-cols-4 mb-3">
       {statsData.map(
         ({ title, value, change, changeType, icon, iconColor }) => (
           <StatusCard
