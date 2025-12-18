@@ -30,7 +30,7 @@ export default function ForbiddenPage() {
 
         <div className="mt-6 flex justify-between flex-wrap gap-3">
           <Button
-            variant={"default"}
+            variant="default"
             className="relative z-10 overflow-hidden px-12 py-2 rounded-lg cursor-pointer text-base tracking-widest font-bold my-3 border border-border bg-background text-foreground group transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 w-fit"
             aria-label="Go to homepage"
           >
@@ -53,14 +53,6 @@ export default function ForbiddenPage() {
               </span>
             </Link>
           </button> */}
-        </div>
-
-        <div className="mt-6 rounded-lg  text-xs text-muted-foreground">
-          <p className="font-medium">Request details</p>
-          <p className="mt-1">
-            If you contact support, include the time of the error and the page
-            URL you tried to access.
-          </p>
         </div>
       </div>
     </main>

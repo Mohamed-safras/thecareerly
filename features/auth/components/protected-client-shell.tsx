@@ -68,11 +68,6 @@ export default function ProtectedClientShell({
 
   // Check if user has any allowed role
   const userHasAllowedRole = useMemo(() => {
-    console.log("Checking user roles against allowed roles", {
-      userRoles,
-      allowedRoles,
-      requireAll,
-    });
     if (!allowedRoles || allowedRoles.length === 0) return true;
 
     if (requireAll) {
@@ -82,15 +77,21 @@ export default function ProtectedClientShell({
     }
   }, [userRoles, allowedRoles, requireAll]);
 
+  console.log("has user role", userHasAllowedRole);
+
   const hasRequiredTeamId = useMemo(() => {
     if (!requireTeamId) return true;
     return !!user?.teamId;
   }, [requireTeamId, user?.teamId]);
 
+  console.log("has required team id", hasRequiredTeamId);
+
   const hasRequiredOrgId = useMemo(() => {
     if (!requireOrganizationId) return true;
     return !!user?.organizationId;
   }, [requireOrganizationId, user?.organizationId]);
+
+  console.log("has required organization id", hasRequiredOrgId);
 
   // Combined access check
   const hasAccess = useMemo(() => {

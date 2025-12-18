@@ -19,16 +19,15 @@ import TimeToHireWrapper from "./time-to-hire-wrapper";
 
 export default function DashboardPage() {
   const { user } = useAuth();
-
   return (
     <div className="min-h-screen">
-      <div className="p-6 ">
+      <div className="p-3">
         <section className="mb-3 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">
               Hi, {user?.name}!
             </h1>
-            <p className="text-muted-foreground mt-1">
+            <p className="text-muted-foreground">
               Here&apos;s what&apos;s happening with your recruitment pipeline
               today.
             </p>
@@ -37,26 +36,26 @@ export default function DashboardPage() {
 
         <StatusWrapper />
 
-        <Tabs defaultValue="overview" className="mb-3">
+        <Tabs defaultValue="overview">
           <TabsList className="mb-3">
-            <TabsTrigger value="overview" className="gap-2">
+            <TabsTrigger value="overview" className="gap-3">
               <LayoutDashboard className="h-4 w-4" />
               Overview
             </TabsTrigger>
-            <TabsTrigger value="analytics" className="gap-2">
+            <TabsTrigger value="analytics" className="gap-3">
               <TrendingUp className="h-4 w-4" />
               Analytics
             </TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
-          <TabsContent value="overview" className="space-y-6">
+          <TabsContent value="overview" className="space-y-3">
             {/* Active Jobs */}
             <ActiveJobWrapper />
 
             <div className="grid gap-3 lg:grid-cols-7">
               {/* Left Column - Jobs & Candidates */}
-              <div className="lg:col-span-4 space-y-6">
+              <div className="lg:col-span-4 space-y-3">
                 {/* Top Candidates */}
                 <TopCandidatesWrapper />
 
