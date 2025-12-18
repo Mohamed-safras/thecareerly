@@ -1,447 +1,21 @@
-// app/dashboard/page.tsx
 "use client";
 
 import { useAuth } from "@/hooks/use-auth";
-import { StatsCard } from "../../../features/dashboard/stats-card";
-import {
-  Activity,
-  ArrowRight,
-  Briefcase,
-  Calendar,
-  LayoutDashboard,
-  Send,
-  TrendingUp,
-  Users,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { JobPipelineCard } from "../../../features/dashboard/job-pipeline-card";
-import { Badge } from "@/components/ui/badge";
-import { CandidateCard } from "../../../features/dashboard/candidate-card";
-import { UpcomingInterviews } from "../../../features/dashboard/upcoming-interviews";
-import { SourceAnalytics } from "../../../features/dashboard/source-analytics";
-import { ActivityFeed } from "../../../features/dashboard/activity-feed";
+import { LayoutDashboard, TrendingUp } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { HiringFunnel } from "@/features/dashboard/hiring-funnel";
-import { TimeToHire } from "@/features/dashboard/time-to-hire";
-import { WeeklyTrends } from "@/features/dashboard/weekly-trends";
-import { DiversityMetrics } from "@/features/dashboard/diversity-metrics";
-import { TeamPerformance } from "@/features/dashboard/team-performance";
-import { OpenPositions } from "@/features/dashboard/open-positions";
-
-export const statsData = [
-  {
-    title: "Active Jobs",
-    value: 24,
-    change: "+3 this week",
-    changeType: "positive" as const,
-    iconColor: "text-primary",
-    icon: Briefcase,
-  },
-  {
-    title: "Interviews Scheduled",
-    value: 38,
-    change: "12 this week",
-    changeType: "neutral" as const,
-    iconColor: "text-status-active",
-    icon: Calendar,
-  },
-  {
-    title: "Total Candidates",
-    value: 1847,
-    change: "+127 this month",
-    changeType: "positive" as const,
-    iconColor: "text-status-new",
-    icon: Users,
-  },
-  {
-    title: "Offers Sent",
-    value: 7,
-    change: "+2 from last week",
-    changeType: "positive" as const,
-    iconColor: "text-status-hold",
-    icon: Send,
-  },
-];
-
-export const jobsData = [
-  {
-    title: "Senior Frontend Engineer",
-    department: "Engineering",
-    location: "Remote",
-    applicants: 156,
-    daysOpen: 12,
-    isUrgent: true,
-    stages: [
-      { name: "Applied", count: 89, color: "bg-muted-foreground" },
-      { name: "Screening", count: 34, color: "bg-primary" },
-      { name: "Interview", count: 21, color: "bg-status-new" },
-      { name: "Offer", count: 12, color: "bg-status-active" },
-    ],
-  },
-  {
-    title: "Product Designer",
-    department: "Design",
-    location: "New York, NY",
-    applicants: 89,
-    daysOpen: 8,
-    stages: [
-      { name: "Applied", count: 45, color: "bg-muted-foreground" },
-      { name: "Screening", count: 24, color: "bg-primary" },
-      { name: "Interview", count: 15, color: "bg-status-new" },
-      { name: "Offer", count: 5, color: "bg-status-active" },
-    ],
-  },
-  {
-    title: "DevOps Engineer",
-    department: "Infrastructure",
-    location: "San Francisco, CA",
-    applicants: 67,
-    daysOpen: 21,
-    stages: [
-      { name: "Applied", count: 32, color: "bg-muted-foreground" },
-      { name: "Screening", count: 18, color: "bg-primary" },
-      { name: "Interview", count: 12, color: "bg-status-new" },
-      { name: "Offer", count: 5, color: "bg-status-active" },
-    ],
-  },
-  {
-    title: "Python Engineer",
-    department: "Engineering",
-    location: "San Francisco, CA",
-    applicants: 7,
-    daysOpen: 11,
-    stages: [
-      { name: "Applied", count: 2, color: "bg-muted-foreground" },
-      { name: "Screening", count: 1, color: "bg-primary" },
-      { name: "Interview", count: 3, color: "bg-status-new" },
-      { name: "Offer", count: 1, color: "bg-status-active" },
-    ],
-  },
-];
-
-export const candidatesData = [
-  {
-    name: "Sarah Chen",
-    role: "Senior Frontend Engineer",
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-    rating: 5,
-    stage: "Final Interview",
-    stageColor: "badge-new",
-    appliedDate: "2 days ago",
-    matchScore: 94,
-  },
-  {
-    name: "Marcus Johnson",
-    role: "Product Designer",
-    avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-    rating: 4,
-    stage: "Technical Screen",
-    stageColor: "badge-hold",
-    appliedDate: "5 days ago",
-    matchScore: 87,
-  },
-  {
-    name: "Emily Rodriguez",
-    role: "DevOps Engineer",
-    avatar:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
-    rating: 4,
-    stage: "Offer Extended",
-    stageColor: "badge-active",
-    appliedDate: "1 week ago",
-    matchScore: 91,
-  },
-  {
-    name: "David Kim",
-    role: "Senior Frontend Engineer",
-    avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
-    rating: 3,
-    stage: "Phone Screen",
-    stageColor: "badge-hold",
-    appliedDate: "3 days ago",
-    matchScore: 72,
-  },
-];
-
-export const interviewsData = [
-  {
-    id: "1",
-    candidate: "Sarah Chen",
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-    role: "Senior Frontend Engineer",
-    time: "10:00 AM",
-    duration: "1h",
-    type: "video" as const,
-    interviewers: [
-      {
-        name: "John Smith",
-        avatar:
-          "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop",
-      },
-      {
-        name: "Anna Lee",
-        avatar:
-          "https://images.unsplash.com/photo-1720501828093-c792c10e3f0b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=573",
-      },
-      {
-        name: "Lisa Wang",
-        avatar:
-          "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&h=50&fit=crop",
-      },
-    ],
-  },
-  {
-    id: "2",
-    candidate: "Marcus Johnson",
-    avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-    role: "Product Designer",
-    time: "2:30 PM",
-    duration: "45m",
-    type: "onsite" as const,
-    interviewers: [
-      {
-        name: "Lisa Wang",
-        avatar:
-          "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&h=50&fit=crop",
-      },
-      {
-        name: "Tom Davis",
-        avatar:
-          "https://images.unsplash.com/photo-1720501828093-c792c10e3f0b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=573",
-      },
-    ],
-  },
-  {
-    id: "3",
-    candidate: "Alex Turner",
-    role: "Backend Developer",
-    time: "4:00 PM",
-    duration: "1h",
-    type: "video" as const,
-    interviewers: [
-      { name: "Chris Wong" },
-      {
-        name: "Sam Miller",
-        avatar:
-          "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=50&h=50&fit=crop",
-      },
-    ],
-  },
-];
-
-export const sourcesData = [
-  { name: "LinkedIn", candidates: 523, percentage: 30, color: "bg-primary" },
-  {
-    name: "Referrals",
-    candidates: 298,
-    percentage: 20,
-    color: "bg-primary/75",
-  },
-  {
-    name: "Company Website",
-    candidates: 189,
-    percentage: 23,
-    color: "bg-primary/50",
-  },
-  {
-    name: "Other",
-    candidates: 89,
-    percentage: 16,
-    color: "bg-primary/25",
-  },
-];
-
-export const activitiesData = [
-  {
-    id: "1",
-    type: "hired" as const,
-    candidate: "Emily Rodriguez",
-    avatar:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
-    job: "DevOps Engineer",
-    time: "2h ago",
-  },
-  {
-    id: "2",
-    type: "interview" as const,
-    candidate: "Sarah Chen",
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-    job: "Senior Frontend Engineer",
-    time: "4h ago",
-    description: "Final round with CTO scheduled for tomorrow",
-  },
-  {
-    id: "3",
-    type: "applied" as const,
-    candidate: "James Wilson",
-    job: "Product Manager",
-    time: "5h ago",
-  },
-  {
-    id: "4",
-    type: "offer" as const,
-    candidate: "Lisa Park",
-    avatar:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop",
-    job: "UX Researcher",
-    time: "1d ago",
-  },
-  {
-    id: "5",
-    type: "reviewed" as const,
-    candidate: "Michael Brown",
-    avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
-    job: "Backend Developer",
-    time: "1d ago",
-  },
-];
-
-export const funnelData = [
-  {
-    name: "Applications",
-    count: 1847,
-    percentage: 100,
-    conversionRate: undefined,
-  },
-  { name: "Screened", count: 892, percentage: 48, conversionRate: 48 },
-  { name: "Interviewed", count: 234, percentage: 13, conversionRate: 26 },
-  { name: "Offered", count: 47, percentage: 3, conversionRate: 20 },
-  { name: "Hired", count: 23, percentage: 1, conversionRate: 49 },
-];
-
-export const timeToHireMetrics = [
-  {
-    label: "Screen to Interview",
-    value: "4.2 days",
-    change: -12,
-    target: "5 days",
-  },
-  {
-    label: "Interview to Offer",
-    value: "8.7 days",
-    change: -8,
-    target: "10 days",
-  },
-  {
-    label: "Offer to Acceptance",
-    value: "3.1 days",
-    change: 5,
-    target: "3 days",
-  },
-];
-
-export const teamPerformanceData = [
-  {
-    name: "Sarah Mitchell",
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-    role: "Senior Recruiter",
-    hires: 8,
-    interviews: 24,
-    responseTime: "2h avg",
-  },
-  {
-    name: "James Wilson",
-    avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-    role: "Technical Recruiter",
-    hires: 6,
-    interviews: 31,
-    responseTime: "1.5h avg",
-  },
-  {
-    name: "Emily Chen",
-    avatar:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
-    role: "Recruiter",
-    hires: 5,
-    interviews: 19,
-    responseTime: "3h avg",
-  },
-  {
-    name: "Michael Brown",
-    avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
-    role: "HR Manager",
-    hires: 4,
-    interviews: 12,
-    responseTime: "4h avg",
-  },
-];
-
-export const weeklyTrendsData = [
-  { day: "Mon", applications: 42, interviews: 8, offers: 2 },
-  { day: "Tue", applications: 58, interviews: 12, offers: 1 },
-  { day: "Wed", applications: 67, interviews: 15, offers: 3 },
-  { day: "Thu", applications: 51, interviews: 9, offers: 2 },
-  { day: "Fri", applications: 73, interviews: 11, offers: 4 },
-  { day: "Sat", applications: 24, interviews: 3, offers: 0 },
-  { day: "Sun", applications: 18, interviews: 2, offers: 1 },
-];
-
-export const diversityData = [
-  { category: "Women", percentage: 42, change: 5, color: "stroke-primary" },
-  {
-    category: "Underrepresented",
-    percentage: 28,
-    change: 3,
-    color: "stroke-status-new",
-  },
-  {
-    category: "Veterans",
-    percentage: 8,
-    change: 1,
-    color: "stroke-status-active",
-  },
-  {
-    category: "Other",
-    percentage: 22,
-    change: -2,
-    color: "stroke-muted-foreground",
-  },
-];
-
-export const openPositionsData = [
-  {
-    title: "Senior Frontend Engineer",
-    department: "Engineering",
-    location: "Remote",
-    applicants: 156,
-    daysOpen: 12,
-    priority: "high" as const,
-  },
-  {
-    title: "Product Manager",
-    department: "Product",
-    location: "New York, NY",
-    applicants: 89,
-    daysOpen: 8,
-    priority: "high" as const,
-  },
-  {
-    title: "Data Scientist",
-    department: "Analytics",
-    location: "San Francisco, CA",
-    applicants: 67,
-    daysOpen: 21,
-    priority: "medium" as const,
-  },
-  {
-    title: "UX Designer",
-    department: "Design",
-    location: "Remote",
-    applicants: 45,
-    daysOpen: 5,
-    priority: "low" as const,
-  },
-];
+import ActivityFeedWrapper from "./activity-feed-wrapper";
+import StatusWrapper from "./status-wrapper";
+import ActiveJobWrapper from "./active-job-wrapper";
+import TopCandidatesWrapper from "./top-candidates-wrapper";
+import UpcomingInterviewsWrapper from "./upcoming-interview-wrapper";
+import QuickStatusWrapper from "./quick-status-wrapper";
+import OpenPositionsWrapper from "./open-position-wrapper";
+import SourceAnalyticsWrapper from "./source-analytics-wrapper";
+import DiversityMetricsWrapper from "./diversity-metrics-wrapper";
+import TeamPerformanceWrapper from "./team-preformance-wrapper";
+import WeeklyTrendsWrapper from "./weekly-trends-wrapper";
+import HiringFunnelWrapper from "./hiring-funnel-wrapper";
+import TimeToHireWrapper from "./time-to-hire-wrapper";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -461,21 +35,7 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
-          {statsData.map(
-            ({ title, value, change, changeType, icon, iconColor }) => (
-              <StatsCard
-                key={title}
-                title={title}
-                value={value}
-                change={change}
-                changeType={changeType}
-                icon={icon}
-                iconColor={iconColor}
-              />
-            )
-          )}
-        </section>
+        <StatusWrapper />
 
         <Tabs defaultValue="overview" className="mb-8">
           <TabsList className="mb-6">
@@ -492,90 +52,22 @@ export default function DashboardPage() {
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
             {/* Active Jobs */}
-            <section className="mb-4">
-              <div className="flex items-center justify-between mb-2">
-                <div>
-                  <h2 className="text-lg font-semibold">
-                    Active Job Pipelines
-                  </h2>
-                  <p className="text-sm text-muted-foreground">
-                    Track candidate progress across roles
-                  </p>
-                </div>
-                <Button variant="ghost" size="sm" className="gap-1">
-                  View All <ArrowRight className="h-4 w-4" />
-                </Button>
-              </div>
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {jobsData.map((job) => (
-                  <JobPipelineCard key={job.title} {...job} />
-                ))}
-              </div>
-            </section>
+            <ActiveJobWrapper />
 
             <div className="grid gap-6 lg:grid-cols-7">
               {/* Left Column - Jobs & Candidates */}
               <div className="lg:col-span-4 space-y-6">
                 {/* Top Candidates */}
-                <section>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <h2 className="text-lg font-semibold">Top Candidates</h2>
-                      <Badge variant="secondary" className="font-normal">
-                        <TrendingUp className="h-3 w-3 mr-1" />
-                        AI Ranked
-                      </Badge>
-                    </div>
-                    <Button variant="ghost" size="sm" className="gap-1">
-                      View All <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  <div className="space-y-3">
-                    {candidatesData.map((candidate) => (
-                      <CandidateCard key={candidate.name} {...candidate} />
-                    ))}
-                  </div>
-                </section>
+                <TopCandidatesWrapper />
 
                 {/* Activity Feed */}
-                <section className="rounded-xl border bg-card p-5">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="flex items-center gap-2 text-lg font-semibold">
-                      <Activity className="w-4 h-4 text-primary" /> Recent
-                      Activity
-                    </h2>
-                    <Button variant="ghost" size="sm" className="text-xs">
-                      See all
-                    </Button>
-                  </div>
-                  <ActivityFeed activities={activitiesData} />
-                </section>
+                <ActivityFeedWrapper />
               </div>
 
               {/* Right Column - Activity & Interviews */}
               <div className="space-y-6 lg:col-span-3">
                 {/* Today's Interviews */}
-                <section className="rounded-xl border bg-card p-5">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <h2 className="text-lg font-semibold">
-                        Today&apos;s Interviews
-                      </h2>
-                      <p className="text-sm text-muted-foreground">
-                        {interviewsData.length} scheduled
-                      </p>
-                    </div>
-                    <Badge variant="outline" className="font-normal">
-                      <Calendar className="h-3 w-3 mr-1" />
-                      {new Date().toLocaleDateString("en-us", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
-                    </Badge>
-                  </div>
-                  <UpcomingInterviews interviews={interviewsData} />
-                </section>
+                <UpcomingInterviewsWrapper />
 
                 {/* anthing can add later */}
               </div>
@@ -589,72 +81,28 @@ export default function DashboardPage() {
               <div className="lg:col-span-2 space-y-6">
                 {/* Hiring Funnel & Time to Hire */}
                 <div className="grid gap-6 md:grid-cols-2">
-                  <HiringFunnel stages={funnelData} />
-                  <TimeToHire
-                    metrics={timeToHireMetrics}
-                    avgDays={18}
-                    trend="down"
-                  />
+                  <HiringFunnelWrapper />
+                  <TimeToHireWrapper />
                 </div>
 
                 {/* Weekly Trends & Diversity */}
                 <div className="grid gap-6 md:grid-cols-2">
-                  <WeeklyTrends data={weeklyTrendsData} />
-                  <DiversityMetrics data={diversityData} />
+                  <WeeklyTrendsWrapper />
+                  <DiversityMetricsWrapper />
                 </div>
 
                 {/* Team Performance */}
-                <TeamPerformance members={teamPerformanceData} />
+                <TeamPerformanceWrapper />
               </div>
 
               {/* Right Column */}
               <div className="space-y-6">
                 {/* Open Positions */}
-                <OpenPositions positions={openPositionsData} />
-
+                <OpenPositionsWrapper />
                 {/* Source Analytics */}
-                <section className="rounded-xl border bg-card p-5">
-                  <h2 className="text-lg font-semibold mb-4">Top Sources</h2>
-                  <SourceAnalytics
-                    sources={sourcesData}
-                    totalCandidates={1486}
-                  />
-                </section>
-
+                <SourceAnalyticsWrapper />
                 {/* Quick Stats */}
-                <section className="rounded-xl border bg-card p-5">
-                  <h2 className="text-lg font-semibold mb-4">This Month</h2>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
-                      <span className="text-sm text-muted-foreground">
-                        Offer Acceptance Rate
-                      </span>
-                      <span className="font-semibold text-status-active">
-                        87%
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
-                      <span className="text-sm text-muted-foreground">
-                        Interview to Hire
-                      </span>
-                      <span className="font-semibold">4.2:1</span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
-                      <span className="text-sm text-muted-foreground">
-                        Cost per Hire
-                      </span>
-                      <span className="font-semibold">$2,340</span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
-                      <span className="text-sm text-muted-foreground">
-                        Quality of Hire
-                      </span>
-                      <span className="font-semibold text-status-active">
-                        4.6/5
-                      </span>
-                    </div>
-                  </div>
-                </section>
+                <QuickStatusWrapper />
               </div>
             </div>
           </TabsContent>

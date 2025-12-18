@@ -10,7 +10,7 @@ interface StatsCardProps {
   iconColor?: string;
 }
 
-export function StatsCard({
+export function StatusCard({
   title,
   value,
   change,
