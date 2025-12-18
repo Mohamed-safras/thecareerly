@@ -60,8 +60,8 @@ const ActiveJobWrapper = () => {
     },
   ];
   return (
-    <section className="mb-4">
-      <div className="flex items-center justify-between mb-2">
+    <section className="mb-3">
+      <div className="flex items-center justify-between mb-3">
         <div>
           <h2 className="text-lg font-semibold">Active Job Pipelines</h2>
           <p className="text-sm text-muted-foreground">
@@ -72,7 +72,7 @@ const ActiveJobWrapper = () => {
           View All <ArrowRight className="h-4 w-4" />
         </Button>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         {jobsData.map((job) => (
           <JobPipelineCard key={job.title} {...job} />
         ))}
