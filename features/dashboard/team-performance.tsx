@@ -73,7 +73,7 @@ export function TeamPerformance({ members }: TeamPerformanceProps) {
                   <p className="text-md font-semibold">{member.interviews}</p>
                   <p className="text-sm text-muted-foreground">Interviews</p>
                 </div>
-                <Badge variant="outline" className="text-sm">
+                <Badge variant="outline" className="hidden text-sm sm:flex">
                   {member.responseTime}
                 </Badge>
               </div>
