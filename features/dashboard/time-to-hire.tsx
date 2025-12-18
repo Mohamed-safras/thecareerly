@@ -20,8 +20,11 @@ export function TimeToHire({ metrics, avgDays, trend }: TimeToHireProps) {
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-semibold flex items-center gap-2">
           <Clock className="h-4 w-4 text-primary" />
-          Time to Hire
+          Time To Hire
         </CardTitle>
+        <p className="text-sm text-muted-foreground">
+          Measure how long it takes to fill a role from start to finish
+        </p>
       </CardHeader>
       <CardContent>
         <div className="flex items-center gap-4 mb-6">

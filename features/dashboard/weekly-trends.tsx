@@ -25,6 +25,9 @@ export function WeeklyTrends({ data }: WeeklyTrendsProps) {
           <TrendingUp className="h-4 w-4 text-primary" />
           Weekly Trends
         </CardTitle>
+        <p className="text-sm text-muted-foreground">
+          Track key recruitment metrics and patterns week over week.
+        </p>
       </CardHeader>
       <CardContent>
         {/* Summary Stats */}

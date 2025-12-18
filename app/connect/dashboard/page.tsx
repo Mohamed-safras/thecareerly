@@ -4,6 +4,7 @@
 import { useAuth } from "@/hooks/use-auth";
 import { StatsCard } from "../../../features/dashboard/stats-card";
 import {
+  Activity,
   ArrowRight,
   Briefcase,
   Calendar,
@@ -539,7 +540,10 @@ export default function DashboardPage() {
                 {/* Activity Feed */}
                 <section className="rounded-xl border bg-card p-5">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-semibold">Recent Activity</h2>
+                    <h2 className="flex items-center gap-2 text-lg font-semibold">
+                      <Activity className="w-4 h-4 text-primary" /> Recent
+                      Activity
+                    </h2>
                     <Button variant="ghost" size="sm" className="text-xs">
                       See all
                     </Button>

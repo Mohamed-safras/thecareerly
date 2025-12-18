@@ -21,6 +21,9 @@ export function DiversityMetrics({ data }: DiversityMetricsProps) {
           <Users2 className="h-4 w-4 text-primary" />
           Diversity & Inclusion
         </CardTitle>
+        <p className="text-sm text-muted-foreground">
+          Promote a balanced, equitable, and inclusive workforce
+        </p>
       </CardHeader>
       <CardContent>
         {/* Donut-style visual */}

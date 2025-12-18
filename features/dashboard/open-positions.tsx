@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Clock, Users, Flame } from "lucide-react";
+import { MapPin, Clock, Users, Flame, Briefcase } from "lucide-react";
 
 interface Position {
   title: string;
@@ -26,11 +26,15 @@ export function OpenPositions({ positions }: OpenPositionsProps) {
     <Card>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold">
+          <CardTitle className="text-lg font-semibold flex items-center gap-2">
+            <Briefcase className="h-4 w-4 text-primary" />
             Open Positions
           </CardTitle>
           <Badge variant="secondary">{positions.length} active</Badge>
         </div>
+        <p className="text-sm text-muted-foreground">
+          View all currently available roles in the organization
+        </p>
       </CardHeader>
       <CardContent className="space-y-3">
         {positions.map((position) => (
