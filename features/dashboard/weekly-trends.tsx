@@ -21,7 +21,7 @@ export function WeeklyTrends({ data }: WeeklyTrendsProps) {
   const totalOffers = data.reduce((acc, d) => acc + d.offers, 0);
 
   return (
-    <Card>
+    <Card className="shadow-none">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-semibold flex items-center gap-2">
           <TrendingUp className="h-4 w-4 text-primary" />
@@ -38,16 +38,19 @@ export function WeeklyTrends({ data }: WeeklyTrendsProps) {
             name="Applications"
             value={totalApplications}
             className=" bg-primary/5"
+            icon={Users}
           />
           <SummaryStatusCard
             name="Interviews"
             value={totalInterviews}
             className="bg-status-new/10"
+            icon={FileCheck}
           />
           <SummaryStatusCard
             name="Offers"
             value={totalOffers}
             className="bg-status-active/10"
+            icon={Send}
           />
         </div>
 
@@ -103,10 +106,11 @@ const SummaryStatusCard: React.FC<{
   name: string;
   value: number;
   className?: string;
-}> = ({ name, value, className }) => {
+  icon: React.ElementType;
+}> = ({ name, value, className, icon: Icon }) => {
   return (
     <div className={cn(className, "text-center p-3 rounded-lg")}>
-      <Users className="h-4 w-4 mx-auto mb-1 text-primary" />
+      <Icon className="h-4 w-4 mx-auto mb-1 text-primary" />
       <p className="text-lg font-bold">{value}</p>
       <p className="text-xs text-muted-foreground">{name}</p>
     </div>

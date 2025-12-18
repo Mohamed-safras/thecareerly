@@ -22,8 +22,8 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen">
-      <div className="p-6">
-        <section className="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+      <div className="p-6 ">
+        <section className="mb-3 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">
               Hi, {user?.name}!
@@ -37,8 +37,8 @@ export default function DashboardPage() {
 
         <StatusWrapper />
 
-        <Tabs defaultValue="overview" className="mb-8">
-          <TabsList className="mb-6">
+        <Tabs defaultValue="overview" className="mb-3">
+          <TabsList className="mb-3">
             <TabsTrigger value="overview" className="gap-2">
               <LayoutDashboard className="h-4 w-4" />
               Overview
@@ -54,7 +54,7 @@ export default function DashboardPage() {
             {/* Active Jobs */}
             <ActiveJobWrapper />
 
-            <div className="grid gap-6 lg:grid-cols-7">
+            <div className="grid gap-3 lg:grid-cols-7">
               {/* Left Column - Jobs & Candidates */}
               <div className="lg:col-span-4 space-y-6">
                 {/* Top Candidates */}
@@ -65,7 +65,7 @@ export default function DashboardPage() {
               </div>
 
               {/* Right Column - Activity & Interviews */}
-              <div className="space-y-6 lg:col-span-3">
+              <div className="space-y-3 lg:col-span-3">
                 {/* Today's Interviews */}
                 <UpcomingInterviewsWrapper />
 
@@ -75,18 +75,18 @@ export default function DashboardPage() {
           </TabsContent>
 
           {/* Analytics Tab */}
-          <TabsContent value="analytics" className="space-y-6">
-            <div className="grid gap-6 lg:grid-cols-3">
+          <TabsContent value="analytics" className="space-y-3">
+            <div className="grid gap-3 lg:grid-cols-3">
               {/* Left Column */}
-              <div className="lg:col-span-2 space-y-6">
+              <div className="lg:col-span-2 space-y-3">
                 {/* Hiring Funnel & Time to Hire */}
-                <div className="grid gap-6 md:grid-cols-2">
+                <div className="grid gap-3 md:grid-cols-2">
                   <HiringFunnelWrapper />
                   <TimeToHireWrapper />
                 </div>
 
                 {/* Weekly Trends & Diversity */}
-                <div className="grid gap-6 md:grid-cols-2">
+                <div className="grid gap-3 md:grid-cols-2">
                   <WeeklyTrendsWrapper />
                   <DiversityMetricsWrapper />
                 </div>
@@ -96,7 +96,7 @@ export default function DashboardPage() {
               </div>
 
               {/* Right Column */}
-              <div className="space-y-6">
+              <div className="space-y-3">
                 {/* Open Positions */}
                 <OpenPositionsWrapper />
                 {/* Source Analytics */}

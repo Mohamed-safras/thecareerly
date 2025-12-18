@@ -16,11 +16,11 @@ export function HiringFunnel({ stages }: HiringFunnelProps) {
   const maxCount = Math.max(...stages.map((s) => s.count));
 
   return (
-    <Card>
+    <Card className="shadow-none">
       <CardHeader>
         <CardTitle className="text-lg font-semibold flex items-center gap-2">
           <Workflow className="h-4 w-4 text-primary" />
-          Hiring funnel
+          Hiring Funnel
         </CardTitle>
         <p className="text-sm text-muted-foreground">
           Track candidates through each stage of the recruitment journey

@@ -15,7 +15,7 @@ interface DiversityMetricsProps {
 
 export function DiversityMetrics({ data }: DiversityMetricsProps) {
   return (
-    <Card>
+    <Card className="shadow-none">
       <CardHeader>
         <CardTitle className="text-lg flex items-center gap-2">
           <Users2 className="h-4 w-4 text-primary" />

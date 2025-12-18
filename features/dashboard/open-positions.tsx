@@ -23,7 +23,7 @@ const priorityStyles = {
 
 export function OpenPositions({ positions }: OpenPositionsProps) {
   return (
-    <Card>
+    <Card className="shadow-none">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-semibold flex items-center gap-2">
@@ -72,7 +72,7 @@ export function OpenPositions({ positions }: OpenPositionsProps) {
             <div className="mt-2">
               <Badge
                 variant="outline"
-                className={`text-[10px] ${priorityStyles[position.priority]}`}
+                className={`text-xs ${priorityStyles[position.priority]}`}
               >
                 {position.priority} priority
               </Badge>
