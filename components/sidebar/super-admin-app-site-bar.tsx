@@ -62,7 +62,7 @@ const SuperAdminAppSideBar = () => {
     ],
     organization: [
       {
-        title: "User Management",
+        title: "Organization Users",
         icon: Users,
         url: "#",
         items: [

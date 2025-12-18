@@ -12,10 +12,13 @@ import QuickStatusWrapper from "./quick-status-wrapper";
 import OpenPositionsWrapper from "./open-position-wrapper";
 import SourceAnalyticsWrapper from "./source-analytics-wrapper";
 import DiversityMetricsWrapper from "./diversity-metrics-wrapper";
-import TeamPerformanceWrapper from "./team-preformance-wrapper";
+import RecruiterLeaderboardWrapper from "./recruiter-leaderboard-wrapper";
 import WeeklyTrendsWrapper from "./weekly-trends-wrapper";
 import HiringFunnelWrapper from "./hiring-funnel-wrapper";
 import TimeToHireWrapper from "./time-to-hire-wrapper";
+import { OfferAnalytics } from "@/features/dashboard/offer-analytics";
+import { InterviewMetricsWrapper } from "./interview-matrics-wrapper";
+import DepartmentAnalyticWrapper from "./department-analytics-wrapper";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -65,10 +68,9 @@ export default function DashboardPage() {
 
               {/* Right Column - Activity & Interviews */}
               <div className="space-y-3 lg:col-span-3">
-                {/* Today's Interviews */}
                 <UpcomingInterviewsWrapper />
 
-                {/* anthing can add later */}
+                <OpenPositionsWrapper />
               </div>
             </div>
           </TabsContent>
@@ -81,27 +83,23 @@ export default function DashboardPage() {
                 {/* Hiring Funnel & Time to Hire */}
                 <div className="grid gap-3 md:grid-cols-2">
                   <HiringFunnelWrapper />
-                  <TimeToHireWrapper />
                 </div>
-
-                {/* Weekly Trends & Diversity */}
                 <div className="grid gap-3 md:grid-cols-2">
-                  <WeeklyTrendsWrapper />
-                  <DiversityMetricsWrapper />
+                  <TimeToHireWrapper />
+                  <OfferAnalytics />
                 </div>
 
-                {/* Team Performance */}
-                <TeamPerformanceWrapper />
+                <InterviewMetricsWrapper />
+                <SourceAnalyticsWrapper />
               </div>
 
               {/* Right Column */}
               <div className="space-y-3">
-                {/* Open Positions */}
-                <OpenPositionsWrapper />
-                {/* Source Analytics */}
-                <SourceAnalyticsWrapper />
-                {/* Quick Stats */}
-                <QuickStatusWrapper />
+                <RecruiterLeaderboardWrapper />
+                <DepartmentAnalyticWrapper />
+
+                <WeeklyTrendsWrapper />
+                <DiversityMetricsWrapper />
               </div>
             </div>
           </TabsContent>
