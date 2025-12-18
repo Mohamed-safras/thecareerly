@@ -1,4 +1,4 @@
-# 🚀 TheCareerLy - Automated Job Hiring Agent
+# 🚀 TheCareerly - Automated Job Hiring Agent
 
 An intelligent, automated job hiring platform built with Next.js 15, featuring AI-powered candidate screening, team collaboration, and comprehensive job management capabilities.
 
