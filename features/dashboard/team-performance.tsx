@@ -27,7 +27,7 @@ export function TeamPerformance({ members }: TeamPerformanceProps) {
           Team Performance
         </CardTitle>
         <p className="text-sm text-muted-foreground">
-          This month&apos;s hiring leaders
+          Evaluate how effectively your recruitment team is achieving its goals
         </p>
       </CardHeader>
       <CardContent className="space-y-3">
@@ -59,23 +59,21 @@ export function TeamPerformance({ members }: TeamPerformanceProps) {
 
               <div className="flex-1 min-w-0">
                 <p className="font-medium truncate">{member.name}</p>
-                <p className="text-xs text-muted-foreground">{member.role}</p>
+                <p className="text-sm text-muted-foreground">{member.role}</p>
               </div>
 
               <div className="flex items-center gap-3 text-sm">
                 <div className="text-center">
-                  <p className="font-semibold text-status-active">
+                  <p className="text-md font-semibold text-status-active">
                     {member.hires}
                   </p>
-                  <p className="text-[10px] text-muted-foreground">Hires</p>
+                  <p className="text-sm text-muted-foreground">Hires</p>
                 </div>
                 <div className="text-center">
-                  <p className="font-semibold">{member.interviews}</p>
-                  <p className="text-[10px] text-muted-foreground">
-                    Interviews
-                  </p>
+                  <p className="text-md font-semibold">{member.interviews}</p>
+                  <p className="text-sm text-muted-foreground">Interviews</p>
                 </div>
-                <Badge variant="outline" className="text-xs">
+                <Badge variant="outline" className="text-sm">
                   {member.responseTime}
                 </Badge>
               </div>
