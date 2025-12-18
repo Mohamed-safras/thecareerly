@@ -17,28 +17,7 @@ cd thecareerly
 npm install
 ```
 
-### 3. Setup Environment Variables
-
-Create a `.env` file in the root directory:
-
-```env
-# Database
-DATABASE_URL="postgresql://username:password@localhost:5432/thecareerly"
-
-# Authentication
-JWT_SECRET="your_jwt_secret_key"
-JWT_REFRESH_SECRET="your_jwt_refresh_secret"
-
-# API Configuration
-NEXT_PUBLIC_API_URL="http://localhost:3000/api"
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
-
-# Ollama AI
-OLLAMA_BASE_URL="http://localhost:11434"
-OLLAMA_MODEL="llama2"
-```
-
-### 4. Run Development Server
+### 3. Run Development Server
 
 ```bash
 npm run dev
@@ -73,5 +52,3 @@ This project is private and proprietary.
 For support, please open an issue in the GitHub repository or contact the development team.
 
 ---
-
-**Made with ❤️ using Next.js and AI**
