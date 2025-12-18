@@ -49,6 +49,24 @@ const ActivityFeedWrapper = () => {
       job: "Backend Developer",
       time: "1d ago",
     },
+    {
+      id: "6",
+      type: "offer" as const,
+      candidate: "Michael Brown",
+      avatar:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
+      job: "Backend Developer",
+      time: "1d ago",
+    },
+    {
+      id: "7",
+      type: "offer" as const,
+      candidate: "Lisa Park",
+      avatar:
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop",
+      job: "UX Researcher",
+      time: "1d ago",
+    },
   ];
 
   return (

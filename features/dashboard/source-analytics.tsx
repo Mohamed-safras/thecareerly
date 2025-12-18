@@ -17,13 +17,13 @@ export function SourceAnalytics({
   totalCandidates: number;
 }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <div className="flex items-baseline justify-between">
         <span className="text-2xl font-bold">{totalCandidates}</span>
         <span className="text-sm text-muted-foreground">total candidates</span>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {sources.map((source) => (
           <div key={source.name} className="space-y-2">
             <div className="flex items-center justify-between text-sm">
