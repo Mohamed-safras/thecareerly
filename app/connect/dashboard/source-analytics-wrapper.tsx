@@ -64,7 +64,7 @@ const pieData = sourceData.map((item) => ({
 
 export default function SourceAnalyticsWrapper() {
   return (
-    <Card className="col-span-2">
+    <Card className="col-span-2 shadow-none">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
@@ -106,6 +106,7 @@ export default function SourceAnalyticsWrapper() {
                       backgroundColor: "var(--card)",
                       border: "1px solid var(--border)",
                       borderRadius: "8px",
+                      fontSize: "12px",
                     }}
                     formatter={(value: number) => [
                       value.toLocaleString(),
@@ -151,6 +152,7 @@ export default function SourceAnalyticsWrapper() {
                       backgroundColor: "var(--card)",
                       border: "1px solid var(--border)",
                       borderRadius: "8px",
+                      fontSize: "12px",
                     }}
                     formatter={(value: number, name: string) => {
                       const labels: Record<string, string> = {

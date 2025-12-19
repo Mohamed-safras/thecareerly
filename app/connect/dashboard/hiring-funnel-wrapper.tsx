@@ -29,10 +29,10 @@ const conversionRates = [
 
 export default function HiringFunnelWrapper() {
   return (
-    <Card className="col-span-2">
+    <Card className="col-span-2 shadow-none">
       <CardHeader>
         <CardTitle className="flex items-center gap-3 text-lg font-semibold">
-          <Workflow className="w-4 h-4" />
+          <Workflow className="w-5 h-5" />
           Hiring Funnel Analysis
         </CardTitle>
         <p className="text-sm text-muted-foreground">
@@ -47,7 +47,7 @@ export default function HiringFunnelWrapper() {
               <BarChart
                 layout="vertical"
                 data={funnelData}
-                margin={{ top: 0, right: 30, left: 30, bottom: 0 }}
+                margin={{ top: 10, right: 25, left: 30, bottom: 10 }}
               >
                 <XAxis type="number" hide />
                 <YAxis
@@ -62,6 +62,7 @@ export default function HiringFunnelWrapper() {
                     backgroundColor: "var(--card)",
                     border: "1px solid var(--border)",
                     borderRadius: "8px",
+                    fontSize: "12px",
                   }}
                   formatter={(value: number) => [
                     value.toLocaleString(),

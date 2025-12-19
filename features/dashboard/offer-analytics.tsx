@@ -9,7 +9,13 @@ import {
   CartesianGrid,
 } from "recharts";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, XCircle, Clock, TrendingUp } from "lucide-react";
+import {
+  CheckCircle2,
+  XCircle,
+  Clock,
+  TrendingUp,
+  BadgeCheck,
+} from "lucide-react";
 
 const offerData = [
   { month: "Jul", sent: 12, accepted: 10, declined: 2, pending: 0 },
@@ -34,9 +40,11 @@ export function OfferAnalytics() {
   const acceptanceRate = Math.round((totalAccepted / totalSent) * 100);
 
   return (
-    <Card>
+    <Card className="shadow-none">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold">Offer Analytics</CardTitle>
+        <CardTitle className="text-lg font-semibold">
+          <BadgeCheck /> Offer Analytics
+        </CardTitle>
         <p className="text-sm text-muted-foreground">
           Offer acceptance trends and decline analysis
         </p>
@@ -44,29 +52,29 @@ export function OfferAnalytics() {
       <CardContent>
         {/* Key Metrics */}
         <div className="grid grid-cols-4 gap-3 mb-6">
-          <div className="p-3 rounded-lg bg-primary/10 text-center">
-            <p className="text-lg font-bold">{totalSent}</p>
-            <p className="text-xs text-muted-foreground">Offers Sent</p>
+          <div className="p-3 rounded-lg bg-primary/70 text-center">
+            <p className="text-lg font-bold text-muted">{totalSent}</p>
+            <p className="text-xs text-muted">Offers Sent</p>
           </div>
-          <div className="flex items-center gap-2 p-3 rounded-lg bg-status-active/10">
+          <div className="flex items-center gap-2 p-3 rounded-lg bg-status-active/70">
             <CheckCircle2 className="h-4 w-4 text-status-active" />
             <div>
-              <p className="text-lg font-bold">{totalAccepted}</p>
-              <p className="text-xs text-muted-foreground">Accepted</p>
+              <p className="text-lg font-bold text-muted">{totalAccepted}</p>
+              <p className="text-xs text-muted">Accepted</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10">
+          <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/70">
             <XCircle className="h-4 w-4 text-destructive" />
             <div>
-              <p className="text-lg font-bold">{totalDeclined}</p>
-              <p className="text-xs text-muted-foreground">Declined</p>
+              <p className="text-lg font-bold text-muted">{totalDeclined}</p>
+              <p className="text-xs text-muted">Declined</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 p-3 rounded-lg bg-status-hold/10">
+          <div className="flex items-center gap-2 p-3 rounded-lg bg-status-hold/70">
             <Clock className="h-4 w-4 text-status-hold" />
             <div>
-              <p className="text-lg font-bold">3</p>
-              <p className="text-xs text-muted-foreground">Pending</p>
+              <p className="text-lg font-bold text-muted">3</p>
+              <p className="text-xs text-muted">Pending</p>
             </div>
           </div>
         </div>
@@ -95,6 +103,7 @@ export function OfferAnalytics() {
                   backgroundColor: "var(--card)",
                   border: "1px solid var(--border)",
                   borderRadius: "8px",
+                  fontSize: "12px",
                 }}
               />
               <Area
@@ -104,7 +113,7 @@ export function OfferAnalytics() {
                 stroke="var(--primary)"
                 fill="var(--primary)"
                 name="Sent"
-                opacity="0.6"
+                opacity="0.7"
               />
               <Area
                 type="monotone"
@@ -113,7 +122,7 @@ export function OfferAnalytics() {
                 stroke="var(--status-active)"
                 fill="var(--status-active)"
                 name="Accepted"
-                opacity="0.6"
+                opacity="0.7"
               />
             </AreaChart>
           </ResponsiveContainer>
@@ -135,7 +144,7 @@ export function OfferAnalytics() {
               <div className="text-3xl font-bold">{acceptanceRate}%</div>
               <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-status-active rounded-full"
+                  className="h-full bg-status-active/70 rounded-full"
                   style={{ width: `${acceptanceRate}%` }}
                 />
               </div>

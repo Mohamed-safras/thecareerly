@@ -8,7 +8,6 @@ import StatusWrapper from "./status-wrapper";
 import ActiveJobWrapper from "./active-job-wrapper";
 import TopCandidatesWrapper from "./top-candidates-wrapper";
 import UpcomingInterviewsWrapper from "./upcoming-interview-wrapper";
-import QuickStatusWrapper from "./quick-status-wrapper";
 import OpenPositionsWrapper from "./open-position-wrapper";
 import SourceAnalyticsWrapper from "./source-analytics-wrapper";
 import DiversityMetricsWrapper from "./diversity-metrics-wrapper";

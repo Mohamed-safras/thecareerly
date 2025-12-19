@@ -71,10 +71,10 @@ const rankBg = [
 
 export default function RecruiterLeaderboardWrapper() {
   return (
-    <Card>
+    <Card className="shadow-none">
       <CardHeader>
         <CardTitle className="text-lg font-semibold flex items-center gap-2">
-          <Trophy className="h-5 w-5 text-yellow-500" />
+          <Trophy className="h-5 w-5" />
           Recruiter Leaderboard
         </CardTitle>
         <p className="text-sm text-muted-foreground">
