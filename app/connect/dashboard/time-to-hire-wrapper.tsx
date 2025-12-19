@@ -59,11 +59,11 @@ const timeToHireData = [
 
 export default function TimeToHireWrapper() {
   return (
-    <Card>
+    <Card className="shadow-none">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div>
           <CardTitle className="text-lg font-semibold flex items-center gap-2">
-            <Clock className="h-5 w-5 text-primary" />
+            <Clock className="h-5 w-5" />
             Time to Hire Trends
           </CardTitle>
           <p className="text-sm text-muted-foreground">
@@ -76,7 +76,7 @@ export default function TimeToHireWrapper() {
         </Badge>
       </CardHeader>
       <CardContent>
-        <div className="h-[280px]">
+        <div className="h-[280px] border-1 rounded-lg">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={timeToHireData}
@@ -100,6 +100,7 @@ export default function TimeToHireWrapper() {
                   backgroundColor: "var(--card)",
                   border: "1px solid var(--border)",
                   borderRadius: "8px",
+                  fontSize: "12px",
                 }}
                 formatter={(value: number, name: string) => {
                   const labels: Record<string, string> = {
@@ -130,6 +131,7 @@ export default function TimeToHireWrapper() {
                 dataKey="avgDays"
                 stroke="var(--primary)"
                 strokeWidth={3}
+                opacity="0.7"
                 dot={{ fill: "var(--primary)", strokeWidth: 2, r: 4 }}
                 activeDot={{ r: 6 }}
               />
@@ -138,28 +140,34 @@ export default function TimeToHireWrapper() {
                 dataKey="screenToInterview"
                 stroke="var(--status-new)"
                 strokeWidth={2}
+                opacity="0.7"
                 strokeDasharray="5 5"
-                dot={{ fill: "var(--status-new)", strokeWidth: 2, r: 3 }}
+                dot={{ fill: "var(--status-new)", strokeWidth: 2, r: 4 }}
+                activeDot={{ r: 6 }}
               />
               <Line
                 type="monotone"
                 dataKey="interviewToOffer"
                 stroke="var(--status-hold)"
                 strokeWidth={2}
+                opacity="0.7"
                 strokeDasharray="5 5"
-                dot={{ fill: "var(--status-hold)", strokeWidth: 2, r: 3 }}
+                dot={{ fill: "var(--status-hold)", strokeWidth: 2, r: 4 }}
+                activeDot={{ r: 6 }}
               />
               <Line
                 type="monotone"
                 dataKey="offerToHire"
                 stroke="var(--status-active)"
                 strokeWidth={2}
+                opacity="0.7"
                 strokeDasharray="5 5"
                 dot={{
                   fill: "var(--status-active)",
-                  strokeWidth: 2,
+                  strokeWidth: 3,
                   r: 3,
                 }}
+                activeDot={{ r: 6 }}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -167,21 +175,21 @@ export default function TimeToHireWrapper() {
 
         {/* Current Stats */}
         <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t">
-          <div className="text-center p-2 rounded-lg bg-status-new/10">
-            <p className="text-lg font-bold">4.2d</p>
-            <p className="text-[10px] text-muted-foreground">
+          <div className="text-center p-2 rounded-lg bg-status-new/70">
+            <p className="text-lg font-bold text-muted">4 Day</p>
+            <p className="text-xs font-semibold  text-muted">
               Screen → Interview
             </p>
           </div>
-          <div className="text-center p-2 rounded-lg bg-status-hold/10">
-            <p className="text-lg font-bold">8.7d</p>
-            <p className="text-[10px] text-muted-foreground">
+          <div className="text-center p-2 rounded-lg bg-status-hold/70">
+            <p className="text-lg font-bold text-muted">8 Day</p>
+            <p className="text-xs font-semibold  text-muted">
               Interview → Offer
             </p>
           </div>
-          <div className="text-center p-2 rounded-lg bg-status-active/10">
-            <p className="text-lg font-bold">5.1d</p>
-            <p className="text-[10px] text-muted-foreground">Offer → Hire</p>
+          <div className="text-center p-2 rounded-lg bg-status-active/70">
+            <p className="text-lg font-bold text-muted">5 Day</p>
+            <p className="text-xs font-semibold  text-muted">Offer → Hire</p>
           </div>
         </div>
       </CardContent>

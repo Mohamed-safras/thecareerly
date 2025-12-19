@@ -9,7 +9,7 @@ import {
   Legend,
 } from "recharts";
 import { Badge } from "@/components/ui/badge";
-import { Building2, Users, Clock, Target } from "lucide-react";
+import { Users, Clock, Target, Building } from "lucide-react";
 
 const departmentData = [
   {
@@ -72,10 +72,10 @@ export default function DepartmentAnalyticWrapper() {
   );
 
   return (
-    <Card>
+    <Card className="shadow-none">
       <CardHeader>
         <CardTitle className="text-lg font-semibold flex items-center gap-2">
-          <Building2 className="h-5 w-5 text-primary" />
+          <Building className="h-5 w-5" />
           Department Analytics
         </CardTitle>
         <p className="text-sm text-muted-foreground">
@@ -133,6 +133,7 @@ export default function DepartmentAnalyticWrapper() {
                   backgroundColor: "var(--card)",
                   border: "1px solid var(--border)",
                   borderRadius: "8px",
+                  fontSize: "12px",
                 }}
               />
               <Legend

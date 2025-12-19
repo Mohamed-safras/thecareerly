@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users2, TrendingUp } from "lucide-react";
+import { Users2, TrendingUp, Users } from "lucide-react";
 import { JSX } from "react";
 
 interface DiversityData {
@@ -18,7 +18,7 @@ export function DiversityMetrics({ data }: DiversityMetricsProps) {
     <Card className="shadow-none">
       <CardHeader>
         <CardTitle className="text-lg flex items-center gap-2">
-          <Users2 className="h-4 w-4 text-primary" />
+          <Users className="h-5 w-5" />
           Diversity & Inclusion
         </CardTitle>
         <p className="text-sm text-muted-foreground">

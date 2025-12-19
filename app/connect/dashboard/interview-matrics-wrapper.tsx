@@ -46,10 +46,10 @@ export function InterviewMetricsWrapper() {
   const completionRate = Math.round((totalCompleted / totalScheduled) * 100);
 
   return (
-    <Card className="col-span-2">
+    <Card className="col-span-2 shadow-none">
       <CardHeader>
         <CardTitle className="text-lg font-semibold flex items-center gap-2">
-          <Calendar className="h-5 w-5 text-primary" />
+          <Calendar className="h-5 w-5" />
           Interview Metrics
         </CardTitle>
         <p className="text-sm text-muted-foreground">
@@ -88,7 +88,7 @@ export function InterviewMetricsWrapper() {
           {/* Radar Chart */}
           <div className="flex flex-col items-center">
             <p className="text-sm font-medium mb-2">Avg Candidate Scores</p>
-            <div className="h-[200px] w-full">
+            <div className="h-[220px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart
                   cx="50%"
@@ -111,6 +111,7 @@ export function InterviewMetricsWrapper() {
                       backgroundColor: "var(--card)",
                       border: "1px solid var(--border)",
                       borderRadius: "8px",
+                      fontSize: "12px",
                     }}
                   />
                   <Radar

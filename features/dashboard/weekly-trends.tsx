@@ -24,7 +24,7 @@ export function WeeklyTrends({ data }: WeeklyTrendsProps) {
     <Card className="shadow-none">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-semibold flex items-center gap-2">
-          <TrendingUp className="h-4 w-4 text-primary" />
+          <TrendingUp className="h-5 w-5" />
           Weekly Trends
         </CardTitle>
         <p className="text-sm text-muted-foreground">
