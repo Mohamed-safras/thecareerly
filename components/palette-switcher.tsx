@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import { useTheme } from "next-themes";
 import { usePalette, PaletteType } from "@/hooks/use-palette"; // Import PaletteType
 import { CircleCheck, PaletteIcon } from "lucide-react"; // Import Check and PaletteIcon
 import { Button } from "./ui/button";
