@@ -1,8 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Trophy, Medal, Award, Target, TrendingUp, Clock } from "lucide-react";
+
+import { Trophy, Medal, Award } from "lucide-react";
+import RecruiterLeaderboard from "@/features/dashboard/recruiter-leaderboard";
 
 const recruiterData = [
   {
@@ -59,14 +58,14 @@ const rankIcons = [Trophy, Medal, Award];
 const rankColors = [
   "text-yellow-500",
   "text-gray-400",
-  "text-amber-600",
+  "text-amber-300",
   "text-muted-foreground",
 ];
 const rankBg = [
-  "bg-yellow-500/10",
-  "bg-gray-400/10",
-  "bg-amber-600/10",
-  "bg-muted/30",
+  "bg-yellow-400/30",
+  "bg-gray-400/30",
+  "bg-amber-400/30",
+  "bg-muted",
 ];
 
 export default function RecruiterLeaderboardWrapper() {
@@ -78,91 +77,23 @@ export default function RecruiterLeaderboardWrapper() {
           Recruiter Leaderboard
         </CardTitle>
         <p className="text-sm text-muted-foreground">
-          This month's top performers
+          This month&apos;s top performers
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
         {recruiterData.map((recruiter, index) => {
-          const RankIcon = rankIcons[index] || Award;
-          const progressValue = (recruiter.hires / recruiter.target) * 100;
+          const rankIcon = rankIcons[index] || Award;
+          const rankColor = rankColors[index];
+          const rankBackground = rankBg[index];
 
           return (
-            <div
+            <RecruiterLeaderboard
               key={recruiter.name}
-              className={`p-4 rounded-xl ${rankBg[index]} transition-all hover:scale-[1.01]`}
-            >
-              <div className="flex items-start gap-3">
-                {/* Rank & Avatar */}
-                <div className="relative">
-                  <Avatar className="h-12 w-12 border-2 border-background">
-                    <AvatarImage src={recruiter.avatar} alt={recruiter.name} />
-                    <AvatarFallback>
-                      {recruiter.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div
-                    className={`absolute -top-1 -right-1 h-6 w-6 rounded-full bg-background flex items-center justify-center shadow-sm border`}
-                  >
-                    <RankIcon className={`h-3.5 w-3.5 ${rankColors[index]}`} />
-                  </div>
-                </div>
-
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-semibold">{recruiter.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {recruiter.role}
-                      </p>
-                    </div>
-                    <Badge className="bg-status-active/10 text-status-active border-status-active/20 text-xs">
-                      <TrendingUp className="h-3 w-3 mr-1" />
-                      {recruiter.trend}
-                    </Badge>
-                  </div>
-
-                  {/* Progress to Target */}
-                  <div className="mt-3 space-y-1">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="flex items-center gap-1 text-muted-foreground">
-                        <Target className="h-3 w-3" />
-                        Hires Target
-                      </span>
-                      <span className="font-medium">
-                        {recruiter.hires}/{recruiter.target}
-                      </span>
-                    </div>
-                    <Progress value={progressValue} className="h-2" />
-                  </div>
-
-                  {/* Stats Row */}
-                  <div className="flex items-center gap-4 mt-3 text-xs">
-                    <div className="flex items-center gap-1">
-                      <span className="text-muted-foreground">Interviews:</span>
-                      <span className="font-medium">
-                        {recruiter.interviews}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Clock className="h-3 w-3 text-muted-foreground" />
-                      <span className="font-medium">
-                        {recruiter.responseTime} avg
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-muted-foreground">Rating:</span>
-                      <span className="font-medium text-status-active">
-                        {recruiter.satisfaction}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+              recuiter={recruiter}
+              icon={rankIcon}
+              rankColor={rankColor}
+              rankBackground={rankBackground}
+            />
           );
         })}
       </CardContent>

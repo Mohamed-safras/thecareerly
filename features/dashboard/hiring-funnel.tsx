@@ -1,5 +1,5 @@
 import { Progress } from "@/components/ui/progress";
-import { ArrowDown, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 interface FunnelStage {
   from: string;
