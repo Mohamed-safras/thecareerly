@@ -4,7 +4,7 @@ import { LOGIN } from "./constents/router-links";
 import { publicRoutes } from "./lib/route-config";
 import { getAccessTokenFromCookies } from "./lib/cookie/cookie-utils";
 
-export async function middleware(req: NextRequest) {
+export default function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // 1. Check for Public Routes
