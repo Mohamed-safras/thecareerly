@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { UpcomingInterviews } from "@/features/dashboard/upcoming-interviews";
+import { UpcomingInterviews } from "@/features/dashboard/components/upcoming-interviews";
 import { Calendar } from "lucide-react";
 import React from "react";
 

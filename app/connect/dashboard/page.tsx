@@ -15,7 +15,7 @@ import RecruiterLeaderboardWrapper from "./recruiter-leaderboard-wrapper";
 import WeeklyTrendsWrapper from "./weekly-trends-wrapper";
 import HiringFunnelWrapper from "./hiring-funnel-wrapper";
 import TimeToHireWrapper from "./time-to-hire-wrapper";
-import { OfferAnalytics } from "@/features/dashboard/offer-analytics";
+import { OfferAnalytics } from "@/features/dashboard/components/offer-analytics";
 import { InterviewMetricsWrapper } from "./interview-matrics-wrapper";
 import DepartmentAnalyticWrapper from "./department-analytics-wrapper";
 

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { JobPipelineCard } from "@/features/dashboard/job-pipeline-card";
+import { JobPipelineCard } from "@/features/dashboard/components/job-pipeline-card";
 import { ArrowRight } from "lucide-react";
 import React from "react";
 

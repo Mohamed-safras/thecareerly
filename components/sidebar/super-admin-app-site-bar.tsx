@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   Speech,
   Users,
+  CircleUserRound,
 } from "lucide-react";
 
 import { TeamSwitcher } from "@/components/team-switcher";
@@ -63,7 +64,7 @@ const SuperAdminAppSideBar = () => {
     organization: [
       {
         title: "Organization Users",
-        icon: Users,
+        icon: CircleUserRound,
         url: "#",
         items: [
           {
@@ -101,7 +102,7 @@ const SuperAdminAppSideBar = () => {
       },
       {
         title: "Teams",
-        icon: Group,
+        icon: Users,
         url: "#",
         items: [
           {
@@ -168,6 +169,7 @@ const SuperAdminAppSideBar = () => {
       />
       <NavSecondary
         linearItems={[
+          { title: "Candidates", icon: CircleUserRound, url: "/candidates" },
           { title: "My Referrals", icon: Speech, url: "#" },
           { title: "Career Site", icon: Link, url: "#" },
         ]}

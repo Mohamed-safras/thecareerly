@@ -1,6 +1,6 @@
 import React from "react";
 import { Activity } from "lucide-react";
-import { ActivityFeed } from "@/features/dashboard/activity-feed";
+import { ActivityFeed } from "@/features/dashboard/components/activity-feed";
 import { Button } from "@/components/ui/button";
 
 const ActivityFeedWrapper = () => {

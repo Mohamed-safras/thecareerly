@@ -1,4 +1,4 @@
-import { DiversityMetrics } from "@/features/dashboard/diversity-metrics";
+import { DiversityMetrics } from "@/features/dashboard/components/diversity-metrics";
 import React from "react";
 
 const DiversityMetricsWrapper = () => {

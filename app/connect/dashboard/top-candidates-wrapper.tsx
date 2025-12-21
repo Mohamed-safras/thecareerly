@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CandidateCard } from "@/features/dashboard/candidate-card";
+import { CandidateCard } from "@/features/dashboard/components/candidate-card";
 import { ArrowRight, TrendingUp } from "lucide-react";
 import React from "react";
 

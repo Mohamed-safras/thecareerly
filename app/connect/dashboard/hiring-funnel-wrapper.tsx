@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { Workflow } from "lucide-react";
-import { HiringFunnel } from "@/features/dashboard/hiring-funnel";
-import FunnelChart from "@/features/dashboard/funnel-chart";
+import { HiringFunnel } from "@/features/dashboard/components/hiring-funnel";
+import FunnelChart from "@/features/dashboard/components/funnel-chart";
 
 export default function HiringFunnelWrapper() {
   const funnelData = [
