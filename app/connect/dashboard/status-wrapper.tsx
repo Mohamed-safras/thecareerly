@@ -1,6 +1,6 @@
 import React from "react";
 import { Briefcase, Calendar, Send, Users } from "lucide-react";
-import { StatusCard } from "@/features/dashboard/status-card";
+import { StatusCard } from "@/features/dashboard/components/status-card";
 
 const StatusWrapper = () => {
   const statsData = [

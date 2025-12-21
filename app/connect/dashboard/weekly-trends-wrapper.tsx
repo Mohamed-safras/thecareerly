@@ -1,5 +1,4 @@
-import { WeeklyTrends } from "@/features/dashboard/weekly-trends";
-import React from "react";
+import { WeeklyTrends } from "@/features/dashboard/components/weekly-trends";
 
 const WeeklyTrendsWrapper = () => {
   const weeklyTrendsData = [

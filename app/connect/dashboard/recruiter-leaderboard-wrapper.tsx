@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { Trophy, Medal, Award } from "lucide-react";
-import RecruiterLeaderboard from "@/features/dashboard/recruiter-leaderboard";
+import RecruiterLeaderboard from "@/features/dashboard/components/recruiter-leaderboard";
 
 const recruiterData = [
   {

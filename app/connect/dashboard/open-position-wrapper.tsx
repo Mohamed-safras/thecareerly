@@ -1,4 +1,4 @@
-import { OpenPositions } from "@/features/dashboard/open-positions";
+import { OpenPositions } from "@/features/dashboard/components/open-positions";
 import React from "react";
 
 const OpenPositionsWrapper = () => {
