@@ -1,0 +1,276 @@
+export type Candidate = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  avatar: string;
+  role: string;
+  department: string;
+  experience: string;
+  location: string;
+  salary: string;
+  stage: string;
+  stageColor: string;
+  rating: number;
+  matchScore: number;
+  appliedDate: string;
+  source: string;
+  resume: string;
+  skills: string[];
+  education: string;
+  status: "active" | "hired" | "rejected" | "withdrawn";
+  notes: number;
+  interviews: number;
+};
+
+export const candidatesFullData: Candidate[] = [
+  {
+    id: "1",
+    name: "Sarah Chen",
+    email: "sarah.chen@email.com",
+    phone: "+1 (555) 234-5678",
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+    role: "Senior Frontend Developer",
+    department: "Engineering",
+    experience: "6 years",
+    location: "San Francisco, CA",
+    salary: "$150,000 - $180,000",
+    stage: "Technical Interview",
+    stageColor: "bg-blue-500",
+    rating: 5,
+    matchScore: 95,
+    appliedDate: "2024-12-10",
+    source: "LinkedIn",
+    resume: "sarah_chen_resume.pdf",
+    skills: ["React", "TypeScript", "Node.js", "GraphQL", "AWS"],
+    education: "MS Computer Science, Stanford",
+    status: "active",
+    notes: 3,
+    interviews: 2,
+  },
+  {
+    id: "2",
+    name: "Michael Torres",
+    email: "m.torres@email.com",
+    phone: "+1 (555) 345-6789",
+    avatar:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+    role: "Product Designer",
+    department: "Design",
+    experience: "4 years",
+    location: "New York, NY",
+    salary: "$120,000 - $140,000",
+    stage: "Final Round",
+    stageColor: "bg-purple-500",
+    rating: 4,
+    matchScore: 88,
+    appliedDate: "2024-12-08",
+    source: "Referral",
+    resume: "michael_torres_portfolio.pdf",
+    skills: [
+      "Figma",
+      "Sketch",
+      "User Research",
+      "Prototyping",
+      "Design Systems",
+    ],
+    education: "BFA Design, Parsons",
+    status: "active",
+    notes: 5,
+    interviews: 3,
+  },
+  {
+    id: "3",
+    name: "Emily Watson",
+    email: "emily.w@email.com",
+    phone: "+1 (555) 456-7890",
+    avatar:
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
+    role: "Backend Engineer",
+    department: "Engineering",
+    experience: "5 years",
+    location: "Austin, TX",
+    salary: "$140,000 - $160,000",
+    stage: "HR Screening",
+    stageColor: "bg-yellow-500",
+    rating: 4,
+    matchScore: 82,
+    appliedDate: "2024-12-15",
+    source: "Indeed",
+    resume: "emily_watson_cv.pdf",
+    skills: ["Python", "Django", "PostgreSQL", "Docker", "Kubernetes"],
+    education: "BS Computer Engineering, MIT",
+    status: "active",
+    notes: 1,
+    interviews: 1,
+  },
+  {
+    id: "4",
+    name: "David Kim",
+    email: "david.kim@email.com",
+    phone: "+1 (555) 567-8901",
+    avatar:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+    role: "Data Scientist",
+    department: "Analytics",
+    experience: "7 years",
+    location: "Seattle, WA",
+    salary: "$170,000 - $200,000",
+    stage: "Offer Extended",
+    stageColor: "bg-green-500",
+    rating: 5,
+    matchScore: 92,
+    appliedDate: "2024-12-01",
+    source: "Glassdoor",
+    resume: "david_kim_resume.pdf",
+    skills: ["Python", "TensorFlow", "SQL", "Machine Learning", "Statistics"],
+    education: "PhD Statistics, Berkeley",
+    status: "active",
+    notes: 8,
+    interviews: 4,
+  },
+  {
+    id: "5",
+    name: "Lisa Park",
+    email: "lisa.park@email.com",
+    phone: "+1 (555) 678-9012",
+    avatar:
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop",
+    role: "Marketing Manager",
+    department: "Marketing",
+    experience: "5 years",
+    location: "Los Angeles, CA",
+    salary: "$110,000 - $130,000",
+    stage: "Application Review",
+    stageColor: "bg-gray-500",
+    rating: 3,
+    matchScore: 75,
+    appliedDate: "2024-12-16",
+    source: "Company Website",
+    resume: "lisa_park_cv.pdf",
+    skills: [
+      "SEO",
+      "Content Strategy",
+      "Analytics",
+      "Social Media",
+      "Email Marketing",
+    ],
+    education: "MBA Marketing, UCLA",
+    status: "active",
+    notes: 0,
+    interviews: 0,
+  },
+  {
+    id: "6",
+    name: "James Wilson",
+    email: "j.wilson@email.com",
+    phone: "+1 (555) 789-0123",
+    avatar:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
+    role: "DevOps Engineer",
+    department: "Engineering",
+    experience: "4 years",
+    location: "Denver, CO",
+    salary: "$130,000 - $150,000",
+    stage: "Technical Interview",
+    stageColor: "bg-blue-500",
+    rating: 4,
+    matchScore: 85,
+    appliedDate: "2024-12-12",
+    source: "LinkedIn",
+    resume: "james_wilson_resume.pdf",
+    skills: ["AWS", "Terraform", "CI/CD", "Linux", "Monitoring"],
+    education: "BS Information Systems, CU Boulder",
+    status: "active",
+    notes: 2,
+    interviews: 2,
+  },
+  {
+    id: "7",
+    name: "Anna Martinez",
+    email: "anna.m@email.com",
+    phone: "+1 (555) 890-1234",
+    avatar:
+      "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop",
+    role: "UX Researcher",
+    department: "Design",
+    experience: "3 years",
+    location: "Chicago, IL",
+    salary: "$95,000 - $115,000",
+    stage: "HR Screening",
+    stageColor: "bg-yellow-500",
+    rating: 4,
+    matchScore: 80,
+    appliedDate: "2024-12-14",
+    source: "Referral",
+    resume: "anna_martinez_cv.pdf",
+    skills: ["User Testing", "Surveys", "Analytics", "Interviewing", "Figma"],
+    education: "MA Human-Computer Interaction, CMU",
+    status: "active",
+    notes: 1,
+    interviews: 1,
+  },
+  {
+    id: "8",
+    name: "Robert Johnson",
+    email: "r.johnson@email.com",
+    phone: "+1 (555) 901-2345",
+    avatar:
+      "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop",
+    role: "Engineering Manager",
+    department: "Engineering",
+    experience: "10 years",
+    location: "Boston, MA",
+    salary: "$200,000 - $250,000",
+    stage: "Final Round",
+    stageColor: "bg-purple-500",
+    rating: 5,
+    matchScore: 90,
+    appliedDate: "2024-12-05",
+    source: "Headhunter",
+    resume: "robert_johnson_resume.pdf",
+    skills: [
+      "Leadership",
+      "Agile",
+      "System Design",
+      "Team Building",
+      "Strategy",
+    ],
+    education: "MS Computer Science, Harvard",
+    status: "active",
+    notes: 6,
+    interviews: 3,
+  },
+];
+
+export const stageOptions = [
+  "All Stages",
+  "Application Review",
+  "HR Screening",
+  "Technical Interview",
+  "Final Round",
+  "Offer Extended",
+  "Hired",
+  "Rejected",
+];
+
+export const departmentOptions = [
+  "All Departments",
+  "Engineering",
+  "Design",
+  "Marketing",
+  "Analytics",
+  "Sales",
+  "Operations",
+];
+
+export const sourceOptions = [
+  "All Sources",
+  "LinkedIn",
+  "Indeed",
+  "Glassdoor",
+  "Referral",
+  "Company Website",
+  "Headhunter",
+];
