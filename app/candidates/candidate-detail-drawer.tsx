@@ -25,6 +25,28 @@ interface CandidateDetailDrawerProps {
   onClose: () => void;
 }
 
+// Tab item component for reusability
+const TabItem = ({
+  value,
+  icon: Icon,
+  label,
+}: {
+  value: string;
+  icon: React.ElementType;
+  label: string;
+}) => {
+  return (
+    <TabsTrigger
+      value={value}
+      className="flex-col sm:flex-row text-xs gap-1 px-2 sm:px-3 py-2"
+    >
+      <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
+      <span className="hidden sm:inline">{label}</span>
+      <span className="sm:hidden text-[10px] leading-tight">{label}</span>
+    </TabsTrigger>
+  );
+};
+
 export const CandidateDetailDrawer = ({
   candidate,
   isOpen,
@@ -32,9 +54,18 @@ export const CandidateDetailDrawer = ({
 }: CandidateDetailDrawerProps) => {
   if (!candidate) return null;
 
+  const tabs = [
+    { value: "overview", icon: BarChart3, label: "Overview" },
+    { value: "pipeline", icon: GitBranch, label: "Pipeline" },
+    { value: "evaluations", icon: ClipboardList, label: "Evaluations" },
+    { value: "interviews", icon: Calendar, label: "Interviews" },
+    { value: "messages", icon: MessageSquare, label: "Messages" },
+    { value: "documents", icon: FolderOpen, label: "Docs" },
+  ];
+
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent className="w-full sm:max-w-2xl  p-0 flex flex-col">
+      <SheetContent className="w-full sm:max-w-2xl p-0 flex flex-col">
         {/* Fixed Header */}
         <CandidateDetailHeader candidate={candidate} />
 
@@ -43,31 +74,15 @@ export const CandidateDetailDrawer = ({
           <ScrollArea className="flex-1 h-full">
             <div className="p-3">
               <Tabs defaultValue="overview" className="w-full">
-                <TabsList className="w-full grid grid-cols-6 mb-3">
-                  <TabsTrigger value="overview" className="text-xs gap-1">
-                    <BarChart3 className="h-3 w-3" />
-                    Overview
-                  </TabsTrigger>
-                  <TabsTrigger value="pipeline" className="text-xs gap-1">
-                    <GitBranch className="h-3 w-3" />
-                    Pipeline
-                  </TabsTrigger>
-                  <TabsTrigger value="evaluations" className="text-xs gap-1">
-                    <ClipboardList className="h-3 w-3" />
-                    Evaluations
-                  </TabsTrigger>
-                  <TabsTrigger value="interviews" className="text-xs gap-1">
-                    <Calendar className="h-3 w-3" />
-                    Interviews
-                  </TabsTrigger>
-                  <TabsTrigger value="messages" className="text-xs gap-1">
-                    <MessageSquare className="h-3 w-3" />
-                    Messages
-                  </TabsTrigger>
-                  <TabsTrigger value="documents" className="text-xs gap-1">
-                    <FolderOpen className="h-3 w-3" />
-                    Docs
-                  </TabsTrigger>
+                <TabsList className="w-full grid grid-cols-3 sm:grid-cols-6 mb-3 h-auto gap-1">
+                  {tabs.map((tab) => (
+                    <TabItem
+                      key={tab.value}
+                      value={tab.value}
+                      icon={tab.icon}
+                      label={tab.label}
+                    />
+                  ))}
                 </TabsList>
 
                 {/* Overview Tab */}

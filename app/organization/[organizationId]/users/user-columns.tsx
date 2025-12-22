@@ -85,9 +85,14 @@ export const createColumns = (
                     .toUpperCase() || "U"}
                 </AvatarFallback>
               </Avatar>
-              <span className="font-medium truncate max-w-[120px] hover:underline">
-                {name}
-              </span>
+              <div className="flex items-baseline flex-col">
+                <span className="font-medium truncate max-w-[200px] hover:underline">
+                  {name}
+                </span>
+                <span className=" truncate max-w-[200px] hover:underline">
+                  {email}
+                </span>
+              </div>
             </button>
           </TooltipTrigger>
 
@@ -175,20 +180,6 @@ export const createColumns = (
     },
   },
   {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <div
-          className="flex items-center gap-2 cursor-pointer"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          <span>Email</span> <ArrowUpDown className="w-4 h-4" />
-        </div>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-  },
-  {
     accessorKey: "roles",
     header: "Role",
     cell: ({ row }) => {
@@ -226,7 +217,7 @@ export const createColumns = (
         status && (
           <Badge
             variant="secondary"
-            className={`rounded-full } px-2 py-0.5 capitalize`}
+            className={`rounded-full px-2 py-0.5 capitalize`}
           >
             {status.toLocaleLowerCase()}
           </Badge>
@@ -240,14 +231,6 @@ export const createColumns = (
     cell: ({ row }) => {
       const lastActive = row.getValue("lastActive") as string;
       return <div className="text-right">{lastActive}</div>;
-    },
-  },
-  {
-    accessorKey: "lastUpdated",
-    header: () => <div className="text-right">Last Updated</div>,
-    cell: ({ row }) => {
-      const lastUpdated = row.getValue("lastUpdated") as string;
-      return <div className="text-right">{lastUpdated}</div>;
     },
   },
   {

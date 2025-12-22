@@ -126,7 +126,7 @@ export const DocumentsManager = () => {
   }, {} as Record<string, Document[]>);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -176,11 +176,11 @@ export const DocumentsManager = () => {
             return (
               <div
                 key={doc.id}
-                className="rounded-lg border bg-card p-3 hover:border-primary/50 transition-colors cursor-pointer"
+                className="rounded-lg border bg-card p-3 transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-primary/10">
-                    <FormatIcon className="h-5 w-5 text-primary" />
+                    <FormatIcon className="h-4 w-4 text-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">
@@ -198,7 +198,7 @@ export const DocumentsManager = () => {
       </div>
 
       {/* All Documents */}
-      <div className="space-y-4">
+      <div className="space-y-3">
         {Object.entries(groupedDocs).map(([type, docs]) => (
           <div key={type} className="space-y-2">
             <div className="flex items-center gap-2">
@@ -217,7 +217,7 @@ export const DocumentsManager = () => {
                 return (
                   <div
                     key={doc.id}
-                    className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:border-primary/50 transition-colors group"
+                    className="flex items-center gap-3 p-3 rounded-lg border bg-card transition-colors group"
                   >
                     <div className="p-2 rounded bg-muted">
                       <FormatIcon className="h-4 w-4 text-muted-foreground" />

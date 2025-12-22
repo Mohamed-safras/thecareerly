@@ -33,6 +33,7 @@ import {
   VisibilityState,
   Table as ReactTableInstance,
 } from "@tanstack/react-table";
+import StarRating from "@/components/star-rating";
 
 interface CandidateTableRowProps {
   candidate: Candidate;
@@ -81,25 +82,13 @@ export const CandidateTableRow = ({
         </div>
       </TableCell>
       <TableCell>
-        <Badge
-          variant="secondary"
-          className={`${candidate.stageColor} text-white border-none`}
-        >
+        <Badge variant="outline" className={`rounded-full`}>
           {candidate.stage}
         </Badge>
       </TableCell>
       <TableCell>
         <div className="flex items-center gap-1">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Star
-              key={i}
-              className={`h-4 w-4 ${
-                i < candidate.rating
-                  ? "fill-yellow-400 text-yellow-400"
-                  : "text-muted-foreground/30"
-              }`}
-            />
-          ))}
+          <StarRating rating={candidate.rating} className="h-4 w-4" />
         </div>
       </TableCell>
       <TableCell>

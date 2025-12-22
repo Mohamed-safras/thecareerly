@@ -10,7 +10,6 @@ export type Candidate = {
   location: string;
   salary: string;
   stage: string;
-  stageColor: string;
   rating: number;
   matchScore: number;
   appliedDate: string;
@@ -37,7 +36,6 @@ export const candidatesFullData: Candidate[] = [
     location: "San Francisco, CA",
     salary: "$150,000 - $180,000",
     stage: "Technical Interview",
-    stageColor: "bg-blue-500",
     rating: 5,
     matchScore: 95,
     appliedDate: "2024-12-10",
@@ -62,7 +60,6 @@ export const candidatesFullData: Candidate[] = [
     location: "New York, NY",
     salary: "$120,000 - $140,000",
     stage: "Final Round",
-    stageColor: "bg-purple-500",
     rating: 4,
     matchScore: 88,
     appliedDate: "2024-12-08",
@@ -93,7 +90,6 @@ export const candidatesFullData: Candidate[] = [
     location: "Austin, TX",
     salary: "$140,000 - $160,000",
     stage: "HR Screening",
-    stageColor: "bg-yellow-500",
     rating: 4,
     matchScore: 82,
     appliedDate: "2024-12-15",
@@ -118,7 +114,6 @@ export const candidatesFullData: Candidate[] = [
     location: "Seattle, WA",
     salary: "$170,000 - $200,000",
     stage: "Offer Extended",
-    stageColor: "bg-green-500",
     rating: 5,
     matchScore: 92,
     appliedDate: "2024-12-01",
@@ -143,7 +138,7 @@ export const candidatesFullData: Candidate[] = [
     location: "Los Angeles, CA",
     salary: "$110,000 - $130,000",
     stage: "Application Review",
-    stageColor: "bg-gray-500",
+
     rating: 3,
     matchScore: 75,
     appliedDate: "2024-12-16",
@@ -174,7 +169,7 @@ export const candidatesFullData: Candidate[] = [
     location: "Denver, CO",
     salary: "$130,000 - $150,000",
     stage: "Technical Interview",
-    stageColor: "bg-blue-500",
+
     rating: 4,
     matchScore: 85,
     appliedDate: "2024-12-12",
@@ -199,7 +194,7 @@ export const candidatesFullData: Candidate[] = [
     location: "Chicago, IL",
     salary: "$95,000 - $115,000",
     stage: "HR Screening",
-    stageColor: "bg-yellow-500",
+
     rating: 4,
     matchScore: 80,
     appliedDate: "2024-12-14",
@@ -224,7 +219,7 @@ export const candidatesFullData: Candidate[] = [
     location: "Boston, MA",
     salary: "$200,000 - $250,000",
     stage: "Final Round",
-    stageColor: "bg-purple-500",
+
     rating: 5,
     matchScore: 90,
     appliedDate: "2024-12-05",

@@ -146,7 +146,7 @@ export const CommunicationHistory = () => {
       : mockCommunications.filter((c) => c.type === activeTab);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h3 className="font-semibold">Communication History</h3>
@@ -161,8 +161,8 @@ export const CommunicationHistory = () => {
             <DialogHeader>
               <DialogTitle>Compose Message</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
+            <div className="space-y-3 py-4">
+              <div className="space-y-3">
                 <Label>Type</Label>
                 <Select defaultValue="email">
                   <SelectTrigger>
@@ -232,7 +232,7 @@ export const CommunicationHistory = () => {
           return (
             <div
               key={comm.id}
-              className="rounded-lg border bg-card p-4 space-y-3 hover:border-primary/50 transition-colors cursor-pointer"
+              className="rounded-lg border bg-card p-4 space-y-3 transition-colors cursor-pointer"
             >
               {/* Header */}
               <div className="flex items-start justify-between">
@@ -240,10 +240,10 @@ export const CommunicationHistory = () => {
                   <div
                     className={`p-2 rounded-lg ${
                       comm.type === "email"
-                        ? "bg-blue-100 text-blue-600"
+                        ? "bg-status-archived-bg text-status-archived"
                         : comm.type === "phone"
-                        ? "bg-green-100 text-green-600"
-                        : "bg-yellow-100 text-yellow-600"
+                        ? "bg-status-active-bg text-status-active"
+                        : "bg-status-hold-bg text-status-hold"
                     }`}
                   >
                     <TypeIcon className="h-4 w-4" />
@@ -267,7 +267,7 @@ export const CommunicationHistory = () => {
                   <Badge
                     className={`${
                       statusColors[comm.status]
-                    } text-white border-none text-xs`}
+                    }  border-none text-xs`}
                   >
                     {comm.status.charAt(0).toUpperCase() + comm.status.slice(1)}
                   </Badge>

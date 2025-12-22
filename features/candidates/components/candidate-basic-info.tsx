@@ -9,13 +9,61 @@ export interface CandidateBasicInfoProps {
   candidate: Candidate;
 }
 
+// Card wrapper component
+const InfoCard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <div className="rounded-lg border bg-card p-3 space-y-3">{children}</div>
+  );
+};
+
+// Section header component
+const SectionHeader: React.FC<{
+  children: React.ReactNode;
+  icon?: React.ReactNode;
+}> = ({ children, icon }) => {
+  return (
+    <h4 className="font-medium flex items-center gap-2">
+      {icon}
+      {children}
+    </h4>
+  );
+};
+
+// Contact item component
+const ContactItem: React.FC<{
+  icon: React.ReactNode;
+  value: string;
+  className?: string;
+}> = ({ icon, value, className }) => {
+  return (
+    <div className={`flex items-center gap-3 text-sm ${className || ""}`}>
+      {icon}
+      <span className="break-all">{value}</span>
+    </div>
+  );
+};
+
+// Professional detail item component
+const DetailItem: React.FC<{
+  label: string;
+  value: string;
+}> = ({ label, value }) => {
+  return (
+    <div className="space-y-1">
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p className="text-sm font-medium">{value}</p>
+    </div>
+  );
+};
+
 const CandidateBasicInfo: React.FC<CandidateBasicInfoProps> = ({
   candidate,
 }) => {
   return (
     <React.Fragment>
-      <div className="rounded-lg border bg-card p-3 space-y-3">
-        <div className="flex items-center justify-between">
+      {/* AI Match Score */}
+      <InfoCard>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <span className="font-medium">AI Match Score & Overall Rating</span>
           <span className="text-2xl font-bold text-primary">
             {candidate.matchScore}%
@@ -29,79 +77,73 @@ const CandidateBasicInfo: React.FC<CandidateBasicInfoProps> = ({
         <p className="text-sm text-muted-foreground">
           Based on skills, experience, and role requirements
         </p>
-
         <div className="flex items-center gap-2">
           <StarRating rating={candidate.rating} />
           <span className="text-sm text-muted-foreground ml-2">
             ({candidate.rating}/5)
           </span>
         </div>
-      </div>
+      </InfoCard>
 
       {/* Contact Info */}
-      <div className="rounded-lg border bg-card p-3 space-y-3">
-        <h4 className="font-medium">Contact Information</h4>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="flex items-center gap-3 text-sm">
-            <Mail className="h-4 w-4 text-muted-foreground" />
-            <span>{candidate.email}</span>
-          </div>
-          <div className="flex items-center gap-3 text-sm">
-            <Phone className="h-4 w-4 text-muted-foreground" />
-            <span>{candidate.phone}</span>
-          </div>
-          <div className="flex items-center gap-3 text-sm col-span-2">
-            <MapPin className="h-4 w-4 text-muted-foreground" />
-            <span>{candidate.location}</span>
-          </div>
+      <InfoCard>
+        <SectionHeader>Contact Information</SectionHeader>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <ContactItem
+            icon={
+              <Mail className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+            }
+            value={candidate.email}
+          />
+          <ContactItem
+            icon={
+              <Phone className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+            }
+            value={candidate.phone}
+          />
+          <ContactItem
+            icon={
+              <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+            }
+            value={candidate.location}
+            className="col-span-1 sm:col-span-2"
+          />
         </div>
-      </div>
+      </InfoCard>
 
       {/* Professional Info */}
-      <div className="rounded-lg border bg-card p-3 space-y-3">
-        <h4 className="font-medium">Professional Details</h4>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">Experience</p>
-            <p className="text-sm font-medium">{candidate.experience}</p>
-          </div>
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">Expected Salary</p>
-            <p className="text-sm font-medium">{candidate.salary}</p>
-          </div>
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">Source</p>
-            <p className="text-sm font-medium">{candidate.source}</p>
-          </div>
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">Applied</p>
-            <p className="text-sm font-medium">
-              {new Date(candidate.appliedDate).toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}
-            </p>
-          </div>
+      <InfoCard>
+        <SectionHeader>Professional Details</SectionHeader>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <DetailItem label="Experience" value={candidate.experience} />
+          <DetailItem label="Expected Salary" value={candidate.salary} />
+          <DetailItem label="Source" value={candidate.source} />
+          <DetailItem
+            label="Applied"
+            value={new Date(candidate.appliedDate).toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            })}
+          />
         </div>
-      </div>
+      </InfoCard>
 
       {/* Education */}
-      <div className="rounded-lg border bg-card p-3 space-y-3">
-        <h4 className="font-medium flex items-center gap-2">
-          <GraduationCap className="h-4 w-4" />
+      <InfoCard>
+        <SectionHeader icon={<GraduationCap className="h-4 w-4" />}>
           Education
-        </h4>
+        </SectionHeader>
         <p className="text-sm">{candidate.education}</p>
-      </div>
+      </InfoCard>
 
       {/* Skills */}
-      <div className="rounded-lg border bg-card p-3 space-y-3">
-        <h4 className="font-medium">Skills</h4>
+      <InfoCard>
+        <SectionHeader>Skills</SectionHeader>
         <div className="flex flex-wrap gap-2">
           <SkillsBatch skills={candidate.skills} onClick={() => {}} />
         </div>
-      </div>
+      </InfoCard>
     </React.Fragment>
   );
 };
