@@ -97,9 +97,9 @@ export const PipelineStageManager = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between p-3 border-1 rounded-lg">
         <div>
           <h3 className="font-semibold">Pipeline Progress</h3>
           <p className="text-sm text-muted-foreground">
@@ -131,74 +131,67 @@ export const PipelineStageManager = () => {
       </div>
 
       {/* Pipeline Visual */}
-      <div className="relative">
-        {/* Progress Line */}
-        <div className="absolute top-5 left-5 right-5 h-0.5 bg-muted">
-          <div
-            className="h-full bg-primary transition-all"
-            style={{
-              width: `${
-                ((currentStageIndex + 0.5) / (stages.length - 1)) * 100
-              }%`,
-            }}
-          />
-        </div>
+      <div className="p-3 border-1 rounded-lg">
+        <div className="relative">
+          {/* Progress Line */}
+          <div className="absolute top-5 left-10 right-10 h-0.5 bg-muted">
+            <div
+              className="h-full bg-primary transition-all"
+              style={{
+                width: `${(currentStageIndex / (stages.length - 1)) * 100}%`,
+              }}
+            />
+          </div>
 
-        {/* Stages */}
-        <div className="relative flex justify-between">
-          {stages.map((stage, index) => {
-            const isCompleted = stage.status === "completed";
-            const isCurrent = stage.status === "current";
-            const isUpcoming = stage.status === "upcoming";
+          {/* Stages */}
+          <div className="relative flex justify-between">
+            {stages.map((stage, index) => {
+              const isCompleted = stage.status === "completed";
+              const isCurrent = stage.status === "current";
+              const isUpcoming = stage.status === "upcoming";
 
-            return (
-              <div
-                key={stage.id}
-                className="flex flex-col items-center"
-                style={{ width: `${100 / stages.length}%` }}
-              >
-                {/* Circle */}
+              return (
                 <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
-                    isCompleted
-                      ? "bg-primary border-primary text-primary-foreground"
-                      : isCurrent
-                      ? "bg-background border-primary text-primary"
-                      : "bg-muted border-muted-foreground/30 text-muted-foreground"
-                  }`}
+                  key={stage.id}
+                  className="flex flex-col items-center"
+                  style={{ width: `${100 / stages.length}%` }}
                 >
-                  {isCompleted ? (
-                    <Check className="h-5 w-5" />
-                  ) : isCurrent ? (
-                    <Clock className="h-5 w-5" />
-                  ) : (
-                    <span className="text-sm font-medium">{index + 1}</span>
-                  )}
-                </div>
+                  {/* Circle */}
+                  <div
+                    className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
+                      isCompleted
+                        ? "bg-primary border-primary text-primary-foreground"
+                        : isCurrent
+                        ? "bg-background border-primary text-primary"
+                        : "bg-muted border-muted-foreground/30 text-muted-foreground"
+                    }`}
+                  >
+                    {isCompleted ? (
+                      <Check className="h-5 w-5" />
+                    ) : isCurrent ? (
+                      <Clock className="h-5 w-5" />
+                    ) : (
+                      <span className="text-sm font-medium">{index + 1}</span>
+                    )}
+                  </div>
 
-                {/* Label */}
-                <p
-                  className={`text-xs mt-2 text-center font-medium ${
-                    isCurrent ? "text-primary" : "text-muted-foreground"
-                  }`}
-                >
-                  {stage.name}
-                </p>
-
-                {/* Duration */}
-                {stage.duration && (
-                  <p className="text-[10px] text-muted-foreground mt-0.5">
-                    {stage.duration}
+                  {/* Label */}
+                  <p
+                    className={`text-xs mt-2 text-center font-medium ${
+                      isCurrent ? "text-primary" : "text-muted-foreground"
+                    }`}
+                  >
+                    {stage.name}
                   </p>
-                )}
-              </div>
-            );
-          })}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
       {/* Stage History */}
-      <div className="rounded-lg border bg-card p-4 space-y-3">
+      <div className="rounded-lg border bg-card p-3 space-y-3">
         <h4 className="font-medium text-sm">Stage History</h4>
         <div className="space-y-2">
           {stages
@@ -340,7 +333,7 @@ export const PipelineStageManager = () => {
                   <SelectItem value="custom">
                     Yes, customize rejection email
                   </SelectItem>
-                  <SelectItem value="no">No, don't send email</SelectItem>
+                  <SelectItem value="no">No, don&apos;t send email</SelectItem>
                 </SelectContent>
               </Select>
             </div>

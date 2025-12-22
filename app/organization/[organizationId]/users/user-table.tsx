@@ -13,7 +13,6 @@ import {
   VisibilityState,
   Table as ReactTableInstance,
 } from "@tanstack/react-table";
-import { useSidebar } from "@/components/ui/sidebar";
 import { ChevronDown, Search, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";

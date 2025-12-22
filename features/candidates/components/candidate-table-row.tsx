@@ -21,6 +21,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Candidate } from "../data/mock-data";
+import {
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+  Table as ReactTableInstance,
+} from "@tanstack/react-table";
 
 interface CandidateTableRowProps {
   candidate: Candidate;

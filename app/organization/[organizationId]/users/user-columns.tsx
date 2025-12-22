@@ -3,12 +3,10 @@ import { UserProfile } from "@/types/user-profile";
 import { userStatus } from "@/constents/action-colors";
 import {
   ArrowUpDown,
-  CircleAlert,
   CloudUpload,
   Copy,
   KeyRound,
   MoreHorizontal,
-  Trash2,
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
@@ -26,7 +24,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import React from "react";
 import { USER_STATUS } from "@/constents/user-actions";
 
 // Define the columns as a function that accepts the click handler

@@ -13,10 +13,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Badge } from "@/components/ui/badge";
 import { X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import SkillsBatch from "@/components/skills-batch";
 
 const bioSchema = z.object({
   bio: z.string().max(500, "Bio must be less than 500 characters").optional(),
@@ -57,8 +57,8 @@ export const BioSection = ({ preferences }: BioSectionProps) => {
     }
   };
 
-  const removeInterest = (interest: string) => {
-    setSkills(skills?.filter((i) => i !== interest));
+  const removeInterest = (skill: string) => {
+    setSkills(skills?.filter((i) => i !== skill));
   };
 
   return (
@@ -102,18 +102,18 @@ export const BioSection = ({ preferences }: BioSectionProps) => {
         <div className="space-y-3">
           <FormLabel>Interests & Skills</FormLabel>
           <div className="flex flex-wrap gap-2">
-            {skills?.map((skill) => (
-              <Badge key={skill} variant="secondary" className="gap-1 pr-1">
-                {skill}
-                <button
-                  type="button"
-                  onClick={() => removeInterest(skill)}
-                  className="ml-1 hover:bg-destructive/20 rounded-full p-0.5"
-                >
-                  <X className="h-3 w-3" />
-                </button>
-              </Badge>
-            ))}
+            <SkillsBatch
+              skills={skills}
+              onClick={removeInterest}
+              className="gap-1 pr-1 cursor-pointer"
+            >
+              <button
+                type="button"
+                className="ml-1 rounded-full p-0.5 cursor-pointer"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </SkillsBatch>
           </div>
           <div className="flex gap-2">
             <Input
