@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Calendar,
   Clock,
@@ -135,6 +135,119 @@ const statusConfig = {
   "no-show": { label: "No Show", color: "bg-orange-500", icon: AlertCircle },
 };
 
+// Interviewers component
+const InterviewersList = ({
+  interviewers,
+}: {
+  interviewers: Interview["interviewers"];
+}) => {
+  return (
+    <div className="flex items-center gap-2 flex-wrap">
+      <div className="flex -space-x-2">
+        {interviewers.map((interviewer, i) => (
+          <Avatar
+            key={i}
+            className="h-6 w-6 sm:h-7 sm:w-7 border-2 border-background"
+          >
+            <AvatarImage src={interviewer.avatar} />
+            <AvatarFallback className="text-xs">
+              {interviewer.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")}
+            </AvatarFallback>
+          </Avatar>
+        ))}
+      </div>
+      <span className="text-xs sm:text-sm text-muted-foreground truncate">
+        {interviewers.map((i) => i.name).join(", ")}
+      </span>
+    </div>
+  );
+};
+
+// Interview card header component
+const InterviewCardHeader = ({
+  interview,
+  FormatIcon,
+  isPast = false,
+}: {
+  interview: Interview;
+  FormatIcon: React.ElementType;
+  isPast?: boolean;
+}) => {
+  return (
+    <div className="flex items-start justify-between gap-2">
+      <div className="flex items-start sm:items-center gap-3 flex-1 min-w-0">
+        <div
+          className={`p-2 rounded-lg flex-shrink-0 ${
+            isPast ? "bg-muted" : "bg-primary/10"
+          }`}
+        >
+          <FormatIcon
+            className={`h-4 w-4 sm:h-5 sm:w-5 ${
+              isPast ? "text-muted-foreground" : "text-primary"
+            }`}
+          />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="font-medium text-sm sm:text-base truncate">
+            {interview.type}
+          </p>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-xs sm:text-sm text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <Calendar className="h-3 w-3 flex-shrink-0" />
+              <span>{interview.date}</span>
+            </div>
+            {interview.time && (
+              <div className="flex items-center gap-1">
+                <Clock className="h-3 w-3 flex-shrink-0" />
+                <span>
+                  {interview.time} ({interview.duration})
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      {!isPast && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 flex-shrink-0"
+            >
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>Reschedule</DropdownMenuItem>
+            <DropdownMenuItem>Edit Details</DropdownMenuItem>
+            <DropdownMenuItem className="text-destructive">
+              Cancel Interview
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
+      {isPast && (
+        <Badge
+          className={`${
+            statusConfig[interview.status].color
+          } text-white border-none gap-1 flex-shrink-0 text-xs`}
+        >
+          {React.createElement(statusConfig[interview.status].icon, {
+            className: "h-3 w-3",
+          })}
+          <span className="hidden sm:inline">
+            {statusConfig[interview.status].label}
+          </span>
+        </Badge>
+      )}
+    </div>
+  );
+};
+
 export const InterviewScheduler = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -144,24 +257,27 @@ export const InterviewScheduler = () => {
   const pastInterviews = mockInterviews.filter((i) => i.status !== "scheduled");
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h3 className="font-semibold">Interview Schedule</h3>
-          <p className="text-sm text-muted-foreground">
+          <h3 className="font-semibold text-base sm:text-lg">
+            Interview Schedule
+          </h3>
+          <p className="text-xs sm:text-sm text-muted-foreground">
             {upcomingInterviews.length} upcoming, {pastInterviews.length}{" "}
             completed
           </p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button size="sm" className="gap-2">
+            <Button size="sm" className="gap-2 w-full sm:w-auto">
               <Plus className="h-4 w-4" />
-              Schedule Interview
+              <span className="hidden sm:inline">Schedule Interview</span>
+              <span className="sm:hidden">Schedule</span>
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-md">
+          <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Schedule New Interview</DialogTitle>
             </DialogHeader>
@@ -182,7 +298,7 @@ export const InterviewScheduler = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Date</Label>
                   <Input type="date" />
@@ -234,74 +350,29 @@ export const InterviewScheduler = () => {
       {/* Upcoming Interviews */}
       {upcomingInterviews.length > 0 && (
         <div className="space-y-3">
-          <h4 className="text-sm font-medium text-muted-foreground">
+          <h4 className="text-xs sm:text-sm font-medium text-muted-foreground">
             Upcoming
           </h4>
           {upcomingInterviews.map((interview) => {
             const FormatIcon = formatIcons[interview.format];
-            const StatusConfig = statusConfig[interview.status];
 
             return (
               <div
                 key={interview.id}
-                className="rounded-lg border bg-card p-4 space-y-3"
+                className="rounded-lg border bg-card p-3 sm:p-4 space-y-3"
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10">
-                      <FormatIcon className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <p className="font-medium">{interview.type}</p>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Calendar className="h-3 w-3" />
-                        {interview.date}
-                        <Clock className="h-3 w-3 ml-1" />
-                        {interview.time} ({interview.duration})
-                      </div>
-                    </div>
-                  </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem>Reschedule</DropdownMenuItem>
-                      <DropdownMenuItem>Edit Details</DropdownMenuItem>
-                      <DropdownMenuItem className="text-destructive">
-                        Cancel Interview
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Users className="h-4 w-4 text-muted-foreground" />
-                  <div className="flex -space-x-2">
-                    {interview.interviewers.map((interviewer, i) => (
-                      <Avatar
-                        key={i}
-                        className="h-7 w-7 border-2 border-background"
-                      >
-                        <AvatarImage src={interviewer.avatar} />
-                        <AvatarFallback className="text-xs">
-                          {interviewer.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </AvatarFallback>
-                      </Avatar>
-                    ))}
-                  </div>
-                  <span className="text-sm text-muted-foreground">
-                    {interview.interviewers.map((i) => i.name).join(", ")}
-                  </span>
-                </div>
+                <InterviewCardHeader
+                  interview={interview}
+                  FormatIcon={FormatIcon}
+                />
+                <InterviewersList interviewers={interview.interviewers} />
 
                 {interview.meetingLink && (
-                  <Button variant="outline" size="sm" className="w-full gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full gap-2 text-xs sm:text-sm"
+                  >
                     <Video className="h-4 w-4" />
                     Join Meeting
                   </Button>
@@ -315,65 +386,27 @@ export const InterviewScheduler = () => {
       {/* Past Interviews */}
       {pastInterviews.length > 0 && (
         <div className="space-y-3">
-          <h4 className="text-sm font-medium text-muted-foreground">
+          <h4 className="text-xs sm:text-sm font-medium text-muted-foreground">
             Past Interviews
           </h4>
           {pastInterviews.map((interview) => {
             const FormatIcon = formatIcons[interview.format];
-            const StatusConfig = statusConfig[interview.status];
-            const StatusIcon = StatusConfig.icon;
 
             return (
               <div
                 key={interview.id}
-                className="rounded-lg border bg-card p-4 space-y-3"
+                className="rounded-lg border bg-card p-3 sm:p-4 space-y-3"
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-muted">
-                      <FormatIcon className="h-5 w-5 text-muted-foreground" />
-                    </div>
-                    <div>
-                      <p className="font-medium">{interview.type}</p>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Calendar className="h-3 w-3" />
-                        {interview.date}
-                      </div>
-                    </div>
-                  </div>
-                  <Badge
-                    className={`${StatusConfig.color} text-white border-none gap-1`}
-                  >
-                    <StatusIcon className="h-3 w-3" />
-                    {StatusConfig.label}
-                  </Badge>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <div className="flex -space-x-2">
-                    {interview.interviewers.map((interviewer, i) => (
-                      <Avatar
-                        key={i}
-                        className="h-6 w-6 border-2 border-background"
-                      >
-                        <AvatarImage src={interviewer.avatar} />
-                        <AvatarFallback className="text-xs">
-                          {interviewer.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </AvatarFallback>
-                      </Avatar>
-                    ))}
-                  </div>
-                  <span className="text-sm text-muted-foreground">
-                    {interview.interviewers.map((i) => i.name).join(", ")}
-                  </span>
-                </div>
+                <InterviewCardHeader
+                  interview={interview}
+                  FormatIcon={FormatIcon}
+                  isPast={true}
+                />
+                <InterviewersList interviewers={interview.interviewers} />
 
                 {interview.feedback && (
                   <div className="p-3 rounded-lg bg-muted/50">
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       {interview.feedback}
                     </p>
                   </div>

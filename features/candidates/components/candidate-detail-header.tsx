@@ -29,14 +29,8 @@ const CandidateDetailHeader: React.FC<CandidateDetailHeaderProps> = ({
             </Avatar>
             <div>
               <SheetTitle className="text-xl">{candidate.name}</SheetTitle>
-              <p className="text-muted-foreground">{candidate.role}</p>
+              <p className="text-sm text-muted-foreground">{candidate.role}</p>
               <div className="flex items-center gap-2 mt-2">
-                <Badge
-                  variant="secondary"
-                  className={`${candidate.stageColor} text-muted border-none`}
-                >
-                  {candidate.stage}
-                </Badge>
                 <Badge variant="outline">{candidate.department}</Badge>
               </div>
             </div>
@@ -53,26 +47,6 @@ const CandidateDetailHeader: React.FC<CandidateDetailHeaderProps> = ({
             </Button>
           </div>
         </div>
-
-        {/* Quick Actions */}
-        {/* <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="gap-2">
-            <Mail className="h-4 w-4" />
-            Email
-          </Button>
-          <Button size="sm" variant="outline" className="gap-2">
-            <Calendar className="h-4 w-4" />
-            Schedule
-          </Button>
-          <Button size="sm" variant="outline" className="gap-2">
-            <MessageSquare className="h-4 w-4" />
-            Note
-          </Button>
-          <Button size="sm" variant="outline" className="gap-2">
-            <Phone className="h-4 w-4" />
-            Call
-          </Button>
-        </div> */}
       </SheetHeader>
     </div>
   );
