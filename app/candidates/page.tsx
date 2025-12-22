@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import { CandidateFilters } from "@/features/candidates/components/candidate-filters";
 import { CandidateTableRow } from "@/features/candidates/components/candidate-table-row";
-import { CandidateDetailDrawer } from "@/features/candidates/components/candidate-detail-drawer";
+import { CandidateDetailDrawer } from "@/app/candidates/candidate-detail-drawer";
 import {
   candidatesFullData,
   Candidate,

@@ -2,15 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import {
-  Mail,
-  Phone,
-  Calendar,
-  MessageSquare,
-  Linkedin,
-  Github,
-  Globe,
-} from "lucide-react";
+import { Linkedin, Github, Globe } from "lucide-react";
 import { Candidate } from "../data/mock-data";
 import React from "react";
 
