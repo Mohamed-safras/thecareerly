@@ -1,13 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { UserProfile } from "@/types/user-profile";
 import { userStatus } from "@/constents/action-colors";
-import {
-  ArrowUpDown,
-  CloudUpload,
-  Copy,
-  KeyRound,
-  MoreHorizontal,
-} from "lucide-react";
+import { CloudUpload, Copy, KeyRound, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import {
