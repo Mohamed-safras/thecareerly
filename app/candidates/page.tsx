@@ -1,6 +1,6 @@
 "use client";
 import { useState, useMemo } from "react";
-import { Plus, Download, Upload, Users } from "lucide-react";
+import { Plus, Download, Upload, Users, List, LayoutGrid } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -17,8 +17,13 @@ import {
   candidatesFullData,
   Candidate,
 } from "@/features/candidates/data/mock-data";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { KanbanBoard } from "@/features/candidates/components/kanban/kanban-board";
 
 const Candidates = () => {
+  const [viewMode, setViewMode] = useState<"table" | "kanban">("kanban");
+  const [allCandidates, setAllCandidates] =
+    useState<Candidate[]>(candidatesFullData);
   const [searchQuery, setSearchQuery] = useState("");
   const [stageFilter, setStageFilter] = useState("All Stages");
   const [departmentFilter, setDepartmentFilter] = useState("All Departments");
@@ -30,7 +35,7 @@ const Candidates = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const filteredCandidates = useMemo(() => {
-    return candidatesFullData.filter((candidate) => {
+    return allCandidates.filter((candidate) => {
       const matchesSearch =
         searchQuery === "" ||
         candidate.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -117,6 +122,24 @@ const Candidates = () => {
               <Plus className="h-4 w-4" />
               Add Candidate
             </Button>
+
+            <div className="flex items-center gap-2">
+              <Tabs
+                value={viewMode}
+                onValueChange={(v) => setViewMode(v as "table" | "kanban")}
+              >
+                <TabsList className="bg-muted/50">
+                  <TabsTrigger value="table" className="gap-2">
+                    <List className="h-4 w-4" />
+                    <span className="hidden sm:inline">Table</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="kanban" className="gap-2">
+                    <LayoutGrid className="h-4 w-4" />
+                    <span className="hidden sm:inline">Kanban</span>
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
           </div>
         </div>
 
@@ -139,76 +162,92 @@ const Candidates = () => {
           />
         </div>
 
-        {/* Candidates Table */}
-        <div className="rounded-lg border bg-card">
-          <div className="p-4 border-b flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">
-                Showing {filteredCandidates.length} candidates
-              </span>
-              {selectedCandidates.length > 0 && (
-                <span className="text-sm font-medium text-primary">
-                  ({selectedCandidates.length} selected)
+        {viewMode === "kanban" ? (
+          <KanbanBoard
+            candidates={filteredCandidates}
+            onCandidatesChange={(updated) => {
+              setAllCandidates((prev) => {
+                const updatedIds = new Set(updated.map((c) => c.id));
+                const unchanged = prev.filter((c) => !updatedIds.has(c.id));
+                return [...unchanged, ...updated];
+              });
+            }}
+          />
+        ) : (
+          /* Table View */
+          <div className="rounded-lg border bg-card">
+            <div className="p-4 border-b flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">
+                  Showing {filteredCandidates.length} candidates
                 </span>
-              )}
+                {selectedCandidates.length > 0 && (
+                  <span className="text-sm font-medium text-primary">
+                    ({selectedCandidates.length} selected)
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
 
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-12">
-                  <Checkbox
-                    checked={
-                      selectedCandidates.length === filteredCandidates.length &&
-                      filteredCandidates.length > 0
-                    }
-                    onCheckedChange={handleSelectAll}
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-12">
+                    <Checkbox
+                      checked={
+                        selectedCandidates.length ===
+                          filteredCandidates.length &&
+                        filteredCandidates.length > 0
+                      }
+                      onCheckedChange={handleSelectAll}
+                    />
+                  </TableHead>
+                  <TableHead>Candidate</TableHead>
+                  <TableHead>Position</TableHead>
+                  <TableHead>Stage</TableHead>
+                  <TableHead>Rating</TableHead>
+                  <TableHead>Match</TableHead>
+                  <TableHead>Experience</TableHead>
+                  <TableHead>Applied</TableHead>
+                  <TableHead className="w-24">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredCandidates.map((candidate) => (
+                  <CandidateTableRow
+                    key={candidate.id}
+                    candidate={candidate}
+                    isSelected={selectedCandidates.includes(candidate.id)}
+                    onSelect={handleSelectCandidate}
+                    onViewDetails={handleViewDetails}
                   />
-                </TableHead>
-                <TableHead>Candidate</TableHead>
-                <TableHead>Position</TableHead>
-                <TableHead>Stage</TableHead>
-                <TableHead>Rating</TableHead>
-                <TableHead>Match</TableHead>
-                <TableHead>Experience</TableHead>
-                <TableHead>Applied</TableHead>
-                <TableHead className="w-24">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredCandidates.map((candidate) => (
-                <CandidateTableRow
-                  key={candidate.id}
-                  candidate={candidate}
-                  isSelected={selectedCandidates.includes(candidate.id)}
-                  onSelect={handleSelectCandidate}
-                  onViewDetails={handleViewDetails}
-                />
-              ))}
-            </TableBody>
-          </Table>
+                ))}
+              </TableBody>
+            </Table>
 
-          {filteredCandidates.length === 0 && (
-            <div className="text-center py-12">
-              <Users className="h-12 w-12 mx-auto text-muted-foreground/50 mb-3" />
-              <p className="text-muted-foreground">
-                No candidates found matching your filters
-              </p>
-              <Button variant="link" onClick={clearFilters}>
-                Clear filters
-              </Button>
-            </div>
-          )}
-        </div>
+            {filteredCandidates.length === 0 && (
+              <div className="text-center py-12">
+                <Users className="h-12 w-12 mx-auto text-muted-foreground/50 mb-3" />
+                <p className="text-muted-foreground">
+                  No candidates found matching your filters
+                </p>
+                <Button variant="link" onClick={clearFilters}>
+                  Clear filters
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
       </main>
 
       {/* Candidate Detail Drawer */}
-      <CandidateDetailDrawer
-        candidate={detailCandidate}
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-      />
+      {viewMode === "table" && (
+        <CandidateDetailDrawer
+          candidate={detailCandidate}
+          isOpen={isDrawerOpen}
+          onClose={() => setIsDrawerOpen(false)}
+        />
+      )}
     </div>
   );
 };

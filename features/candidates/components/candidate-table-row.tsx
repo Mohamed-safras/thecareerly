@@ -1,6 +1,5 @@
 "use client";
 import {
-  Star,
   MoreHorizontal,
   Mail,
   Phone,
