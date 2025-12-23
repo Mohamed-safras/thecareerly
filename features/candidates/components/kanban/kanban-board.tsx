@@ -1,9 +1,10 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Candidate, stageOptions } from "@/features/candidates/data/mock-data";
 import { CandidateDetailDrawer } from "@/app/candidates/candidate-detail-drawer";
 import { KanbanColumn } from "./kanban-column";
 import { toast } from "sonner";
+import { useSidebar } from "@/components/ui/sidebar";
 
 // Filter out "All Stages" for the Kanban view
 const kanbanStages = stageOptions.filter((stage) => stage !== "All Stages");
@@ -121,11 +122,18 @@ export const KanbanBoard = ({
     toast.success(`${candidate.name} moved to ${newStage}`);
   };
 
+  const sidebar = useSidebar();
+  const [window, setWindow] = useState("");
+  useEffect(() => {
+    console.log("side bar open", sidebar.open);
+    setWindow(sidebar.open ? "w-[calc(100vw-300px)]" : "w-[calc(100vw-90px)]");
+  }, [sidebar]);
+
   return (
     <>
-      <div className="h-[calc(100vh-380px)] min-h-[500px]">
-        <ScrollArea className="h-full w-full">
-          <div className="flex gap-4 p-1 pb-4 min-w-max">
+      <div className="h-[calc(100vh-380px)] min-h-[460px]">
+        <ScrollArea className={`h-full ${window} `}>
+          <div className="flex gap-3 mb-3 min-w-max">
             {kanbanStages.map((stage) => (
               <KanbanColumn
                 key={stage}

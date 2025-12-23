@@ -21,7 +21,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { KanbanBoard } from "@/features/candidates/components/kanban/kanban-board";
 
 const Candidates = () => {
-  const [viewMode, setViewMode] = useState<"table" | "kanban">("kanban");
+  const [viewMode, setViewMode] = useState<"table" | "kanban">("table");
   const [allCandidates, setAllCandidates] =
     useState<Candidate[]>(candidatesFullData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -97,12 +97,11 @@ const Candidates = () => {
   return (
     <div className="min-h-screen">
       {/* Main Content */}
-      <main className="container px-4 py-6 space-y-6">
+      <div className="px-4 py-6 space-y-3">
         {/* Page Header */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
           <div>
             <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
-              <Users className="h-8 w-8 text-primary" />
               Candidates
             </h1>
             <p className="text-muted-foreground mt-1">
@@ -147,7 +146,7 @@ const Candidates = () => {
         {/* <CandidatesStats /> */}
 
         {/* Filters */}
-        <div className="rounded-lg border bg-card p-4">
+        <div className="rounded-lg border bg-card p-3">
           <CandidateFilters
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
@@ -176,7 +175,7 @@ const Candidates = () => {
         ) : (
           /* Table View */
           <div className="rounded-lg border bg-card">
-            <div className="p-4 border-b flex items-center justify-between">
+            <div className="p-3 border-b flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground">
                   Showing {filteredCandidates.length} candidates
@@ -238,7 +237,7 @@ const Candidates = () => {
             )}
           </div>
         )}
-      </main>
+      </div>
 
       {/* Candidate Detail Drawer */}
       {viewMode === "table" && (

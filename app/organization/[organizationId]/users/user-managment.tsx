@@ -1,10 +1,9 @@
 "use client";
-import React from "react";
 import { UserTable } from "./user-table";
 
 const UserManagement = () => {
   return (
-    <section className="py-2 px-6">
+    <section className="px-4 py-6">
       <h1 className="text-2xl font-semibold">Your Users</h1>
 
       <UserTable />

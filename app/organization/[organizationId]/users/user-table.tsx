@@ -42,6 +42,7 @@ import { UserInfoCard } from "@/features/users/components/user-activity";
 import EditUserForm from "@/features/users/components/edit-user";
 import React from "react";
 import RolePermissionManager from "@/features/users/components/role-permission-manager";
+import { useSidebar } from "@/components/ui/sidebar";
 
 // --- Data and Components (Included for completeness) ---
 
@@ -249,6 +250,13 @@ export function UserTable() {
     )
   ).sort((a, b) => a.localeCompare(b));
 
+  const sidebar = useSidebar();
+  const [window, setWindow] = useState("");
+  useEffect(() => {
+    console.log("side bar open", sidebar.open);
+    setWindow(sidebar.open ? "w-[calc(100vw-330px)]" : "w-[calc(100vw-100px)]");
+  }, [sidebar]);
+
   return (
     <div className="w-full">
       {/* Toolbar */}
@@ -262,9 +270,11 @@ export function UserTable() {
       />
 
       {/* Responsive Table Wrapper */}
-      <div className="rounded-md border overflow-x-auto bg-background w-full">
-        <div className="min-w-full inline-block align-middle">
-          <Table className="w-full text-sm">
+      <div
+        className={` rounded-lg border overflow-x-auto bg-background w-full`}
+      >
+        <div className=" inline-block align-middle">
+          <Table className={`${window} text-sm`}>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>

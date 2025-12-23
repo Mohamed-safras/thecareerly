@@ -61,14 +61,14 @@ export const KanbanColumn = ({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       className={cn(
-        "flex flex-col min-w-[300px] md:min-w-[320px] lg:min-w-[340px] max-w-[360px] h-full rounded-2xl transition-all duration-300",
+        "flex flex-col min-w-[240px] md:min-w-[280px] lg:min-w-[320px] xl:min-w-[360px] max-w-[360px] h-full rounded-lg transition-all duration-300",
         colorScheme.bg,
         isDragOver &&
           `ring-2 ring-offset-2 ring-offset-background ${colorScheme.glow}`
       )}
     >
       {/* Column Header */}
-      <div className={cn("p-4 rounded-t-2xl border-b", colorScheme.border)}>
+      <div className={cn("p-3 rounded-t-2xl border-b", colorScheme.border)}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div
