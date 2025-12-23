@@ -73,7 +73,7 @@ export const KanbanCard = ({
         )}
       />
 
-      <div className="p-4 pt-5">
+      <div className="p-3 pt-5">
         {/* Header with Drag Handle and Actions */}
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
