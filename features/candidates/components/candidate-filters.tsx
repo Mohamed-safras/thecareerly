@@ -43,7 +43,7 @@ export const CandidateFilters = ({
   clearFilters,
 }: CandidateFiltersProps) => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <div className="flex flex-col md:flex-row gap-3">
         {/* Search */}
         <div className="relative flex-1">

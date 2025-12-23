@@ -61,25 +61,16 @@ export const KanbanColumn = ({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       className={cn(
-        "flex flex-col min-w-[240px] md:min-w-[280px] lg:min-w-[320px] xl:min-w-[360px] max-w-[360px] h-full rounded-lg transition-all duration-300",
-        colorScheme.bg,
+        "flex flex-col min-w-[240px] md:min-w-[280px] lg:min-w-[320px] xl:min-w-[360px] max-w-[360px] h-full border-1 rounded-lg transition-all duration-300",
+        // colorScheme.bg,
         isDragOver &&
           `ring-2 ring-offset-2 ring-offset-background ${colorScheme.glow}`
       )}
     >
       {/* Column Header */}
-      <div className={cn("p-3 rounded-t-2xl border-b", colorScheme.border)}>
+      <div className={cn("p-3 rounded-t-2xl border-b")}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div
-              className={cn(
-                "flex items-center justify-center w-8 h-8 rounded-lg font-bold text-sm",
-                colorScheme.badge,
-                colorScheme.text
-              )}
-            >
-              {candidates.length}
-            </div>
             <div>
               <h3 className="font-semibold text-sm">{stage}</h3>
               <p className="text-xs text-muted-foreground">

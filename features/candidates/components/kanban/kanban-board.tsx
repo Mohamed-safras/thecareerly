@@ -133,7 +133,7 @@ export const KanbanBoard = ({
     <>
       <div className="h-[calc(100vh-380px)] min-h-[460px]">
         <ScrollArea className={`h-full ${window} `}>
-          <div className="flex gap-3 mb-3 min-w-max">
+          <div className="flex gap-3 border-b-1 mb-3 min-w-max">
             {kanbanStages.map((stage) => (
               <KanbanColumn
                 key={stage}
