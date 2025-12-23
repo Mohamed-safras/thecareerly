@@ -59,7 +59,7 @@ const Candidates = () => {
         matchesSearch && matchesStage && matchesDepartment && matchesSource
       );
     });
-  }, [searchQuery, stageFilter, departmentFilter, sourceFilter]);
+  }, [searchQuery, stageFilter, departmentFilter, sourceFilter, allCandidates]);
 
   const activeFiltersCount = [
     stageFilter !== "All Stages",
@@ -99,7 +99,7 @@ const Candidates = () => {
       {/* Main Content */}
       <div className="px-4 py-6 space-y-3">
         {/* Page Header */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+        {/* <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
           <div>
             <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
               Candidates
@@ -108,38 +108,37 @@ const Candidates = () => {
               Manage and track all candidates in your hiring pipeline
             </p>
           </div>
+        </div> */}
+        <div className="flex justify-end items-center gap-2">
           <div className="flex items-center gap-2">
-            <Button variant="outline" className="gap-2">
-              <Upload className="h-4 w-4" />
-              Import
-            </Button>
-            <Button variant="outline" className="gap-2">
-              <Download className="h-4 w-4" />
-              Export
-            </Button>
-            <Button className="gap-2">
-              <Plus className="h-4 w-4" />
-              Add Candidate
-            </Button>
-
-            <div className="flex items-center gap-2">
-              <Tabs
-                value={viewMode}
-                onValueChange={(v) => setViewMode(v as "table" | "kanban")}
-              >
-                <TabsList className="bg-muted/50">
-                  <TabsTrigger value="table" className="gap-2">
-                    <List className="h-4 w-4" />
-                    <span className="hidden sm:inline">Table</span>
-                  </TabsTrigger>
-                  <TabsTrigger value="kanban" className="gap-2">
-                    <LayoutGrid className="h-4 w-4" />
-                    <span className="hidden sm:inline">Kanban</span>
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
+            <Tabs
+              value={viewMode}
+              onValueChange={(v) => setViewMode(v as "table" | "kanban")}
+            >
+              <TabsList className="bg-muted/50">
+                <TabsTrigger value="table" className="gap-2">
+                  <List className="h-4 w-4" />
+                  <span className="hidden sm:inline">Table</span>
+                </TabsTrigger>
+                <TabsTrigger value="kanban" className="gap-2">
+                  <LayoutGrid className="h-4 w-4" />
+                  <span className="hidden sm:inline">Kanban</span>
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
           </div>
+          <Button variant="outline" className="gap-2">
+            <Upload className="h-4 w-4" />
+            Import
+          </Button>
+          <Button variant="outline" className="gap-2">
+            <Download className="h-4 w-4" />
+            Export
+          </Button>
+          <Button className="gap-2">
+            <Plus className="h-4 w-4" />
+            Add Candidate
+          </Button>
         </div>
 
         {/* Stats */}
