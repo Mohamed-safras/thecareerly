@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useRef } from "react";
+import React, { useState, useMemo, useCallback, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -9,8 +9,12 @@ import listPlugin from "@fullcalendar/list";
 import { EventClickArg, EventDropArg } from "@fullcalendar/core";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight, Calendar, Clock, Menu } from "lucide-react";
 
-import { CalendarHeader } from "./calendar-header";
+import { InterviewEvent, typeConfig, InterviewType } from "@/types/interviews";
+import { initialEvents } from "../data/interviews";
+import { CalendarSidebar } from "./calendar-sidebar";
+import { EventPopup } from "./event-popup";
 import {
   Dialog,
   DialogContent,
@@ -19,25 +23,27 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
-import { initialEvents } from "../data/interviews";
-import { EventPopup } from "./event-popup";
-import { InterviewEvent, InterviewType, typeConfig } from "@/types/interviews";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
-export function EventCalendar() {
+export function RecruitmentCalendar() {
   const calendarRef = useRef<FullCalendar>(null);
   const [events, setEvents] = useState<InterviewEvent[]>(initialEvents);
   const [selectedEvent, setSelectedEvent] = useState<InterviewEvent | null>(
     null
   );
-  const [selectedType, setSelectedType] = useState<string>("all");
-  const [selectedPosition, setSelectedPosition] = useState<string>("all");
+  const [currentDate, setCurrentDate] = useState(new Date(2025, 11, 21));
+  const [selectedPositions, setSelectedPositions] = useState<string[]>([]);
+  const [selectedInterviewers, setSelectedInterviewers] = useState<string[]>(
+    []
+  );
   const [rescheduleData, setRescheduleData] = useState<{
     event: InterviewEvent;
     newStart: Date;
     newEnd: Date;
   } | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Get unique positions
   const positions = useMemo(() => {
@@ -45,15 +51,32 @@ export function EventCalendar() {
     return unique.sort();
   }, [events]);
 
+  // Get unique interviewers
+  const interviewers = useMemo(() => {
+    const unique = [
+      ...new Set(events.flatMap((e) => e.interviewer.split(", "))),
+    ];
+    return unique.map((name) => ({ name, avatar: undefined }));
+  }, [events]);
+
   // Filter events
   const filteredEvents = useMemo(() => {
     return events.filter((event) => {
-      if (selectedType !== "all" && event.type !== selectedType) return false;
-      if (selectedPosition !== "all" && event.position !== selectedPosition)
+      if (
+        selectedPositions.length > 0 &&
+        !selectedPositions.includes(event.position)
+      ) {
         return false;
+      }
+      if (selectedInterviewers.length > 0) {
+        const eventInterviewers = event.interviewer.split(", ");
+        if (!eventInterviewers.some((i) => selectedInterviewers.includes(i))) {
+          return false;
+        }
+      }
       return true;
     });
-  }, [events, selectedType, selectedPosition]);
+  }, [events, selectedPositions, selectedInterviewers]);
 
   // Convert to FullCalendar format
   const calendarEvents = useMemo(() => {
@@ -62,7 +85,7 @@ export function EventCalendar() {
       title: event.candidate,
       start: event.start,
       end: event.end,
-      backgroundColor: typeConfig[event.type].color,
+      backgroundColor: typeConfig[event.type].bgColor,
       borderColor: typeConfig[event.type].color,
       extendedProps: { ...event },
     }));
@@ -126,46 +149,153 @@ export function EventCalendar() {
     setRescheduleData(null);
   }, []);
 
-  // Custom event content
+  // Handle date change from sidebar
+  const handleDateChange = useCallback((date: Date) => {
+    setCurrentDate(date);
+    if (calendarRef.current) {
+      const calendarApi = calendarRef.current.getApi();
+      calendarApi.gotoDate(date);
+    }
+  }, []);
+
+  // Toggle position filter
+  const handlePositionToggle = useCallback((position: string) => {
+    setSelectedPositions((prev) =>
+      prev.includes(position)
+        ? prev.filter((p) => p !== position)
+        : [...prev, position]
+    );
+  }, []);
+
+  // Toggle interviewer filter
+  const handleInterviewerToggle = useCallback((interviewer: string) => {
+    setSelectedInterviewers((prev) =>
+      prev.includes(interviewer)
+        ? prev.filter((i) => i !== interviewer)
+        : [...prev, interviewer]
+    );
+  }, []);
+
+  // Custom event content with styled card
   const renderEventContent = (eventInfo: any) => {
-    const type = eventInfo.event.extendedProps.type as InterviewType;
+    const event = eventInfo.event.extendedProps as InterviewEvent;
+    const type = event.type as InterviewType;
+    const config = typeConfig[type];
+    const isTimeGrid = eventInfo.view.type.includes("timeGrid");
+
+    if (isTimeGrid) {
+      return (
+        <div
+          className="styled-event h-full w-full"
+          style={{
+            backgroundColor: config.bgColor,
+            borderLeftColor: config.color,
+          }}
+        >
+          <div className="flex flex-col h-full justify-between p-2">
+            <div>
+              <div
+                className="text-[10px] font-semibold px-1.5 py-0.5 rounded inline-block mb-1"
+                style={{ backgroundColor: config.color, color: "white" }}
+              >
+                {format(eventInfo.event.start, "h:mm a")}
+              </div>
+              <div className="font-semibold text-xs text-foreground leading-tight">
+                {event.title.split(" - ")[1] || event.position}
+              </div>
+              <div className="text-[11px] text-muted-foreground mt-0.5 flex items-center gap-1">
+                <span style={{ color: config.color }}>■</span>
+                {event.position.split(" ")[0]}
+              </div>
+            </div>
+            <div className="flex items-center gap-1 mt-1">
+              <Avatar className="h-5 w-5 border border-background">
+                <AvatarFallback
+                  className="text-[8px]"
+                  style={{
+                    backgroundColor: config.bgColor,
+                    color: config.color,
+                  }}
+                >
+                  {event.interviewer
+                    .split(" ")
+                    .slice(0, 2)
+                    .map((n) => n[0])
+                    .join("")}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Month/other views - simpler display
     return (
-      <div className="flex items-center gap-1.5 px-1 py-0.5 overflow-hidden">
+      <div
+        className="flex items-center gap-1.5 px-2 py-1 rounded-md overflow-hidden"
+        style={{ backgroundColor: config.bgColor }}
+      >
         <div
           className="w-1.5 h-1.5 rounded-full shrink-0"
-          style={{ backgroundColor: "white" }}
+          style={{ backgroundColor: config.color }}
         />
-        <span className="truncate font-medium text-xs">
+        <span
+          className="truncate font-medium text-xs"
+          style={{ color: config.color }}
+        >
           {eventInfo.event.title}
         </span>
       </div>
     );
   };
 
+  const SidebarContent = (
+    <CalendarSidebar
+      currentDate={currentDate}
+      onDateChange={handleDateChange}
+      selectedPositions={selectedPositions}
+      onPositionToggle={handlePositionToggle}
+      positions={positions}
+      selectedInterviewers={selectedInterviewers}
+      onInterviewerToggle={handleInterviewerToggle}
+      interviewers={interviewers}
+    />
+  );
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="min-h-screen bg-background p-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      className="h-screen flex bg-background"
     >
-      <div className="max-w-[1600px] mx-auto">
-        <CalendarHeader
-          totalEvents={filteredEvents.length}
-          selectedType={selectedType}
-          onTypeChange={setSelectedType}
-          selectedPosition={selectedPosition}
-          onPositionChange={setSelectedPosition}
-          positions={positions}
-        />
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:block">{SidebarContent}</div>
 
-        {/* Calendar Container */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="calendar-wrapper"
-        >
+      {/* Mobile Sidebar */}
+      <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+        <SheetContent side="left" className="p-0 w-72">
+          {SidebarContent}
+        </SheetContent>
+      </Sheet>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        {/* Mobile Header */}
+        <div className="lg:hidden flex items-center gap-3 p-3 border-b border-border">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setSidebarOpen(true)}
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+          <h1 className="text-lg font-semibold">Recruitment Calendar</h1>
+        </div>
+
+        {/* Calendar */}
+        <div className="flex-1 overflow-auto">
           <FullCalendar
             ref={calendarRef}
             plugins={[
@@ -174,16 +304,26 @@ export function EventCalendar() {
               interactionPlugin,
               listPlugin,
             ]}
-            initialView="dayGridMonth"
-            initialDate={new Date(2025, 11, 1)}
+            initialView="timeGridWeek"
+            initialDate={currentDate}
             headerToolbar={{
               left: "prev,next today",
               center: "title",
-              right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
+              right:
+                "timeGridDay,timeGridWeek,dayGridMonth,dayGridYear,listWeek",
+            }}
+            buttonText={{
+              today: "Today",
+              month: "Month",
+              week: "Week",
+              day: "Day",
+              year: "Year",
+              list: "Agenda",
             }}
             events={calendarEvents}
             eventClick={handleEventClick}
             eventDrop={handleEventDrop}
+            datesSet={(arg) => setCurrentDate(arg.start)}
             editable={true}
             droppable={true}
             selectable={true}
@@ -191,18 +331,22 @@ export function EventCalendar() {
             dayMaxEvents={3}
             weekends={true}
             nowIndicator={true}
-            height="auto"
-            contentHeight={650}
+            height="100%"
             eventContent={renderEventContent}
             eventDisplay="block"
-            slotMinTime="08:00:00"
-            slotMaxTime="20:00:00"
+            slotMinTime="07:00:00"
+            slotMaxTime="18:00:00"
             allDaySlot={false}
-            slotDuration="00:30:00"
-            businessHours={{
-              daysOfWeek: [1, 2, 3, 4, 5],
-              startTime: "09:00",
-              endTime: "18:00",
+            slotDuration="01:00:00"
+            slotLabelInterval="01:00:00"
+            slotLabelFormat={{
+              hour: "numeric",
+              minute: "2-digit",
+              meridiem: "short",
+            }}
+            dayHeaderFormat={{
+              weekday: "short",
+              day: "numeric",
             }}
             eventTimeFormat={{
               hour: "numeric",
@@ -210,69 +354,69 @@ export function EventCalendar() {
               meridiem: "short",
             }}
           />
-        </motion.div>
+        </div>
+      </div>
 
-        {/* Event Popup */}
-        <EventPopup
-          event={selectedEvent}
-          onClose={() => setSelectedEvent(null)}
-        />
+      {/* Event Popup */}
+      <EventPopup
+        event={selectedEvent}
+        onClose={() => setSelectedEvent(null)}
+      />
 
-        {/* Reschedule Confirmation Dialog */}
-        <Dialog open={!!rescheduleData} onOpenChange={() => cancelReschedule()}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
-                <Calendar className="h-5 w-5 text-primary" />
-                Confirm Reschedule
-              </DialogTitle>
-              <DialogDescription>
-                Are you sure you want to move this interview?
-              </DialogDescription>
-            </DialogHeader>
-            {rescheduleData && (
-              <div className="space-y-4">
-                <div className="p-4 bg-muted rounded-lg space-y-2">
-                  <p className="font-semibold text-foreground">
-                    {rescheduleData.event.candidate}
+      {/* Reschedule Confirmation Dialog */}
+      <Dialog open={!!rescheduleData} onOpenChange={() => cancelReschedule()}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Calendar className="h-5 w-5 text-primary" />
+              Confirm Reschedule
+            </DialogTitle>
+            <DialogDescription>
+              Are you sure you want to move this interview?
+            </DialogDescription>
+          </DialogHeader>
+          {rescheduleData && (
+            <div className="space-y-4">
+              <div className="p-4 bg-muted rounded-lg space-y-2">
+                <p className="font-semibold text-foreground">
+                  {rescheduleData.event.candidate}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {rescheduleData.event.position}
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3 p-3 border rounded-lg">
+                <Clock className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="font-medium text-sm">
+                    {format(rescheduleData.newStart, "EEEE, MMMM d, yyyy")}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {rescheduleData.event.position}
+                    {format(rescheduleData.newStart, "h:mm a")} -{" "}
+                    {format(rescheduleData.newEnd, "h:mm a")}
                   </p>
                 </div>
-
-                <div className="flex items-center gap-3 p-3 border rounded-lg">
-                  <Clock className="h-5 w-5 text-primary" />
-                  <div>
-                    <p className="font-medium text-sm">
-                      {format(rescheduleData.newStart, "EEEE, MMMM d, yyyy")}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {format(rescheduleData.newStart, "h:mm a")} -{" "}
-                      {format(rescheduleData.newEnd, "h:mm a")}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-2 pt-2">
-                  <Button
-                    variant="outline"
-                    className="flex-1"
-                    onClick={cancelReschedule}
-                  >
-                    Cancel
-                  </Button>
-                  <Button className="flex-1" onClick={confirmReschedule}>
-                    Confirm
-                  </Button>
-                </div>
               </div>
-            )}
-          </DialogContent>
-        </Dialog>
-      </div>
+
+              <div className="flex gap-2 pt-2">
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  onClick={cancelReschedule}
+                >
+                  Cancel
+                </Button>
+                <Button className="flex-1" onClick={confirmReschedule}>
+                  Confirm
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </motion.div>
   );
 }
 
-export default EventCalendar;
+export default RecruitmentCalendar;

@@ -37,7 +37,7 @@ export function CalendarHeader({
   const hasFilters = selectedType !== "all" || selectedPosition !== "all";
 
   return (
-    <div className="flex flex-col gap-4 mb-6">
+    <div className="flex flex-col gap-3 mb-6">
       {/* Title row */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div className="flex items-center gap-3">
