@@ -102,7 +102,7 @@ export const CandidateDetailDrawer = ({
 
                 {/* Interviews Tab */}
                 <TabsContent value="interviews" className="mt-0">
-                  <InterviewScheduler />
+                  <InterviewScheduler candidateName={candidate.name} />
                 </TabsContent>
 
                 {/* Messages Tab */}

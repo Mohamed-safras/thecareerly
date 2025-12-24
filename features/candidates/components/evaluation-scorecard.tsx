@@ -4,6 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import StarRating from "@/components/star-rating";
 
 interface Evaluation {
   id: string;
@@ -164,19 +165,21 @@ export const EvaluationScorecard = () => {
               </div>
 
               {/* Criteria Scores */}
-              <div className="space-y-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {evaluation.criteria.map((criterion) => (
-                  <div key={criterion.name} className="space-y-1">
-                    <div className="flex items-center justify-between text-sm">
+                  <div key={criterion.name} className="space-y-1 border-1 p-3">
+                    <div className="flex items-center gap-3 text-sm">
                       <span>{criterion.name}</span>
                       <span className="font-medium">
                         {criterion.score}/{criterion.maxScore}
                       </span>
                     </div>
-                    <Progress
-                      value={(criterion.score / criterion.maxScore) * 100}
-                      className="h-2"
-                    />
+                    <div className="flex gap-1">
+                      <StarRating
+                        rating={criterion.score}
+                        maxLength={criterion.maxScore}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
@@ -186,33 +189,35 @@ export const EvaluationScorecard = () => {
               {/* Strengths & Concerns */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm font-medium text-green-600 mb-2">
+                  <p className="text-sm font-medium text-status-active mb-2">
                     Strengths
                   </p>
                   <ul className="space-y-1">
-                    {evaluation.strengths.map((s, i) => (
+                    {evaluation.strengths.map((strength, index) => (
                       <li
-                        key={i}
-                        className="text-sm text-muted-foreground flex items-start gap-2"
+                        key={index}
+                        className="text-sm text-muted-foreground flex items-center gap-2"
                       >
-                        <span className="text-green-500 mt-1">•</span>
-                        {s}
+                        <span className="text-status-active text-xl mt-1">
+                          •
+                        </span>
+                        {strength}
                       </li>
                     ))}
                   </ul>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-orange-600 mb-2">
+                  <p className="text-sm font-medium text-destructive mb-2">
                     Concerns
                   </p>
                   <ul className="space-y-1">
-                    {evaluation.concerns.map((c, i) => (
+                    {evaluation.concerns.map((concern, i) => (
                       <li
                         key={i}
-                        className="text-sm text-muted-foreground flex items-start gap-2"
+                        className="text-sm text-muted-foreground flex items-center gap-2"
                       >
-                        <span className="text-orange-500 mt-1">•</span>
-                        {c}
+                        <span className="text-destructive text-xl mt-1">•</span>
+                        {concern}
                       </li>
                     ))}
                   </ul>

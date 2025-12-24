@@ -10,6 +10,7 @@ import {
   XCircle,
   AlertCircle,
   MoreHorizontal,
+  ClipboardList,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,6 +38,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { FeedbackDialog } from "@/features/interview/feedback-dialog";
 
 interface Interview {
   id: string;
@@ -247,8 +249,24 @@ const InterviewCardHeader = ({
   );
 };
 
-export const InterviewScheduler = () => {
+interface InterviewSchedulerProps {
+  candidateName?: string;
+}
+
+export const InterviewScheduler: React.FC<InterviewSchedulerProps> = ({
+  candidateName,
+}) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [selectedInterview, setSelectedInterview] = useState<Interview | null>(
+    null
+  );
+
+  const handleOpenFeedback = (interview: Interview) => {
+    setSelectedInterview(interview);
+    setFeedbackOpen(true);
+  };
 
   const upcomingInterviews = mockInterviews.filter(
     (i) => i.status === "scheduled"
@@ -410,9 +428,28 @@ export const InterviewScheduler = () => {
                     </p>
                   </div>
                 )}
+
+                {interview.status === "completed" && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full gap-2"
+                    onClick={() => handleOpenFeedback(interview)}
+                  >
+                    <ClipboardList className="h-4 w-4" />
+                    {interview.feedback ? "Update Feedback" : "Submit Feedback"}
+                  </Button>
+                )}
               </div>
             );
           })}
+
+          <FeedbackDialog
+            open={feedbackOpen}
+            onOpenChange={setFeedbackOpen}
+            candidateName={candidateName}
+            interviewType={selectedInterview?.type || "Interview"}
+          />
         </div>
       )}
     </div>
