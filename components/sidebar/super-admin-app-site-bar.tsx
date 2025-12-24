@@ -1,13 +1,9 @@
-import React from "react";
-
 import {
   AudioWaveform,
   BriefcaseBusiness,
-  Calendar,
   CreditCard,
   FileText,
   GalleryVerticalEnd,
-  Group,
   Inbox,
   LayoutDashboard,
   Link,
@@ -16,6 +12,7 @@ import {
   Speech,
   Users,
   CircleUserRound,
+  Calendar,
 } from "lucide-react";
 
 import { TeamSwitcher } from "@/components/team-switcher";
@@ -56,7 +53,7 @@ const SuperAdminAppSideBar = () => {
         icon: Inbox,
       },
       {
-        title: "Calendar & Tasks",
+        title: "Calendar & Events",
         url: "/calander",
         icon: Calendar,
       },
