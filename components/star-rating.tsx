@@ -4,13 +4,18 @@ import { cn } from "@/lib/utils";
 
 export interface StarRatingProps {
   rating: number;
+  maxLength?: number;
   className?: string;
 }
 
-const StarRating: React.FC<StarRatingProps> = ({ rating, className }) => {
+const StarRating: React.FC<StarRatingProps> = ({
+  rating,
+  className,
+  maxLength = 5,
+}) => {
   return (
     <React.Fragment>
-      {Array.from({ length: 5 }).map((_, i) => (
+      {Array.from({ length: maxLength }).map((_, i) => (
         <Star
           key={i}
           className={cn(
