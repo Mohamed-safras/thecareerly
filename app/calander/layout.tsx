@@ -8,7 +8,7 @@ export default function DashBoardLayout({ children }: { children: ReactNode }) {
   return (
     <ProtectedClientShell allowedRoles={[Roles.ORGANIZATION_ADMIN]}>
       <ProtectedUserSideBar>
-        <HeaderShell breadCrumbPage="Calander & Tasks">{children}</HeaderShell>
+        <HeaderShell breadCrumbPage="Calander & Events">{children}</HeaderShell>
       </ProtectedUserSideBar>
     </ProtectedClientShell>
   );
