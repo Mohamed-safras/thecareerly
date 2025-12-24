@@ -57,7 +57,7 @@ const SuperAdminAppSideBar = () => {
       },
       {
         title: "Calendar & Tasks",
-        url: "#",
+        url: "/calander",
         icon: Calendar,
       },
     ],
@@ -136,9 +136,15 @@ const SuperAdminAppSideBar = () => {
     ],
     adminTools: [
       {
-        title: "System Settings",
+        title: "Settings",
         url: "#",
         icon: Settings,
+        items: [
+          {
+            title: "Calander Sync",
+            url: "/settings/calander-sync",
+          },
+        ],
       },
       {
         title: "Billing & Subscription",

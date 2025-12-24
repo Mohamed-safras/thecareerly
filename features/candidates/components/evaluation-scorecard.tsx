@@ -145,7 +145,7 @@ export const EvaluationScorecard = () => {
                     <AvatarFallback>
                       {evaluation.evaluator.name
                         .split(" ")
-                        .map((n) => n[0])
+                        .map((name) => name[0])
                         .join("")}
                     </AvatarFallback>
                   </Avatar>
