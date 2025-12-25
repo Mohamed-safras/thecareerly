@@ -14,7 +14,6 @@ import {
 } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Events from "./events";
 
 interface CalendarSidebarProps {
@@ -34,9 +33,6 @@ export function MiniCalendarEvents({
   selectedPositions,
   onPositionToggle,
   positions,
-  selectedInterviewers,
-  onInterviewerToggle,
-  interviewers,
 }: CalendarSidebarProps) {
   const today = new Date(); // December 24, 2025
   const [miniCalendarDate, setMiniCalendarDate] = useState(currentDate);
@@ -62,7 +58,7 @@ export function MiniCalendarEvents({
   };
 
   return (
-    <aside className="w-64  h-full md:h-[calc(100vh-5.1rem)] shrink-0 xl:border-t xl:border-l xl:border-b xl:rounded-l-lg xl:border-border flex flex-col">
+    <aside className="w-full h-full shrink-0 xl:border-t xl:border-l xl:border-b xl:rounded-l-lg xl:border-border flex flex-col">
       {/* Mini Calendar */}
       <div className="p-3 border-b">
         <div className="flex items-center justify-between mb-3">

@@ -9,19 +9,11 @@ import listPlugin from "@fullcalendar/list";
 import { EventClickArg, EventDropArg } from "@fullcalendar/core";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Calendar,
-  Clock,
-  Menu,
-  SidebarIcon,
-} from "lucide-react";
+import { Calendar, Clock, SidebarIcon } from "lucide-react";
 
 import { InterviewEvent, typeConfig, InterviewType } from "@/types/interviews";
-import { initialEvents } from "../data/interviews";
-import { MiniCalendarEvents } from "./mini-calendar";
-import { EventPopup } from "./event-popup";
+import { initialEvents } from "../../features/interview/data/interviews";
+import { EventPopup } from "../../features/calander/event-popup";
 import {
   Dialog,
   DialogContent,
@@ -38,6 +30,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { MiniCalendarEvents } from "../../features/calander/mini-calendar";
 
 export function EventCalendar() {
   const calendarRef = useRef<FullCalendar>(null);
@@ -282,12 +275,12 @@ export function EventCalendar() {
       transition={{ duration: 0.3 }}
       className="h-[calc(100vh-5.1rem)] flex bg-background"
     >
-      {/* Desktop Sidebar */}
+      {/* Desktop MiniCalendarEvents */}
       {!sidebarOpen && (
         <div className="hidden xl:block">{MiniCalendarEventsContent}</div>
       )}
 
-      {/* Mobile Sidebar */}
+      {/* Mobile MiniCalendarEvents */}
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
         <SheetContent side="right" className="p-0 w-64">
           {MiniCalendarEventsContent}
@@ -296,16 +289,16 @@ export function EventCalendar() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Calendar */}
         <div className="xl:hidden flex items-center justify-end gap-3 py-3">
           <Button
+            className="h-8 w-8"
             variant="ghost"
-            size="icon"
             onClick={() => setSidebarOpen(true)}
           >
-            <SidebarIcon className="h-5 w-5" />
+            <SidebarIcon className="h-4 w-4" />
           </Button>
         </div>
+        {/* Calendar */}
         <div className="flex-1 overflow-auto rounded-r-lg border-t border-r sm:border-l  sm:rounded-l-lg md:rounded-l-none border-border">
           <FullCalendar
             ref={calendarRef}
