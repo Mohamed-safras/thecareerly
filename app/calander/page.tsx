@@ -1,12 +1,9 @@
-import EventCalendar from "@/features/interview/calander/calander";
+import EventCalendar from "@/features/interview/calander/event-calander";
 
 const CalendarPage = () => {
   return (
-    <div className="min-h-screen">
-      {/* Main Content */}
-      <div className="px-4 py-6 space-y-3">
-        <EventCalendar />
-      </div>
+    <div className="p-3 space-y-3">
+      <EventCalendar />
     </div>
   );
 };

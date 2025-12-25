@@ -15,6 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Events from "./events";
 
 interface CalendarSidebarProps {
   currentDate: Date;
@@ -27,7 +28,7 @@ interface CalendarSidebarProps {
   interviewers: { name: string; avatar?: string }[];
 }
 
-export function CalendarSidebar({
+export function MiniCalendarEvents({
   currentDate,
   onDateChange,
   selectedPositions,
@@ -61,10 +62,10 @@ export function CalendarSidebar({
   };
 
   return (
-    <aside className="w-64 shrink-0 border-r border-border bg-card flex flex-col">
+    <aside className="w-64  h-full md:h-[calc(100vh-5.1rem)] shrink-0 xl:border-t xl:border-l xl:border-b xl:rounded-l-lg xl:border-border flex flex-col">
       {/* Mini Calendar */}
-      <div className="p-3 border-b border-border">
-        <div className="flex items-center justify-between mb-4">
+      <div className="p-3 border-b">
+        <div className="flex items-center justify-between mb-3">
           <button
             onClick={handlePrevMonth}
             className="p-1 hover:bg-muted rounded-md transition-colors"
@@ -125,12 +126,26 @@ export function CalendarSidebar({
         </div>
       </div>
 
-      {/* Positions Filter */}
-      <div className="p-4 border-b border-border">
-        <h3 className="text-sm font-semibold text-foreground mb-3">
-          Positions
-        </h3>
-        <div className="space-y-2">
+      {/* Events */}
+      <Events>
+        <div className="p-3 space-y-3">
+          {positions.slice(0, 5).map((position) => (
+            <label
+              key={position}
+              className="flex items-center gap-2 cursor-pointer group"
+            >
+              <Checkbox
+                checked={selectedPositions.includes(position)}
+                onCheckedChange={() => onPositionToggle(position)}
+                className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+              />
+              <Building2 className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm text-foreground group-hover:text-primary transition-colors truncate">
+                {position}
+              </span>
+            </label>
+          ))}
+
           {positions.slice(0, 5).map((position) => (
             <label
               key={position}
@@ -148,10 +163,10 @@ export function CalendarSidebar({
             </label>
           ))}
         </div>
-      </div>
+      </Events>
 
       {/* Interviewers Filter */}
-      <div className="p-4 flex-1 overflow-auto">
+      {/* <div className="p-4 flex-1 overflow-auto">
         <h3 className="text-sm font-semibold text-foreground mb-3">
           Interviewers
         </h3>
@@ -181,7 +196,7 @@ export function CalendarSidebar({
             </label>
           ))}
         </div>
-      </div>
+      </div> */}
     </aside>
   );
 }

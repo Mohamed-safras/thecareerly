@@ -9,11 +9,18 @@ import listPlugin from "@fullcalendar/list";
 import { EventClickArg, EventDropArg } from "@fullcalendar/core";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Calendar, Clock, Menu } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Calendar,
+  Clock,
+  Menu,
+  SidebarIcon,
+} from "lucide-react";
 
 import { InterviewEvent, typeConfig, InterviewType } from "@/types/interviews";
 import { initialEvents } from "../data/interviews";
-import { CalendarSidebar } from "./calendar-sidebar";
+import { MiniCalendarEvents } from "./mini-calendar";
 import { EventPopup } from "./event-popup";
 import {
   Dialog,
@@ -25,15 +32,20 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
-export function RecruitmentCalendar() {
+export function EventCalendar() {
   const calendarRef = useRef<FullCalendar>(null);
   const [events, setEvents] = useState<InterviewEvent[]>(initialEvents);
   const [selectedEvent, setSelectedEvent] = useState<InterviewEvent | null>(
     null
   );
-  const [currentDate, setCurrentDate] = useState(new Date(2025, 11, 21));
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedPositions, setSelectedPositions] = useState<string[]>([]);
   const [selectedInterviewers, setSelectedInterviewers] = useState<string[]>(
     []
@@ -250,8 +262,8 @@ export function RecruitmentCalendar() {
     );
   };
 
-  const SidebarContent = (
-    <CalendarSidebar
+  const MiniCalendarEventsContent = (
+    <MiniCalendarEvents
       currentDate={currentDate}
       onDateChange={handleDateChange}
       selectedPositions={selectedPositions}
@@ -268,34 +280,33 @@ export function RecruitmentCalendar() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className="h-screen flex bg-background"
+      className="h-[calc(100vh-5.1rem)] flex bg-background"
     >
       {/* Desktop Sidebar */}
-      <div className="hidden lg:block">{SidebarContent}</div>
+      {!sidebarOpen && (
+        <div className="hidden xl:block">{MiniCalendarEventsContent}</div>
+      )}
 
       {/* Mobile Sidebar */}
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-        <SheetContent side="left" className="p-0 w-72">
-          {SidebarContent}
+        <SheetContent side="right" className="p-0 w-64">
+          {MiniCalendarEventsContent}
         </SheetContent>
       </Sheet>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Mobile Header */}
-        <div className="lg:hidden flex items-center gap-3 p-3 border-b border-border">
+        {/* Calendar */}
+        <div className="xl:hidden flex items-center justify-end gap-3 py-3">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setSidebarOpen(true)}
           >
-            <Menu className="h-5 w-5" />
+            <SidebarIcon className="h-5 w-5" />
           </Button>
-          <h1 className="text-lg font-semibold">Recruitment Calendar</h1>
         </div>
-
-        {/* Calendar */}
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1 overflow-auto rounded-r-lg border-t border-r sm:border-l  sm:rounded-l-lg md:rounded-l-none border-border">
           <FullCalendar
             ref={calendarRef}
             plugins={[
@@ -307,7 +318,7 @@ export function RecruitmentCalendar() {
             initialView="timeGridWeek"
             initialDate={currentDate}
             headerToolbar={{
-              left: "prev,next today",
+              left: "prev,next,today",
               center: "title",
               right:
                 "timeGridDay,timeGridWeek,dayGridMonth,dayGridYear,listWeek",
@@ -419,4 +430,4 @@ export function RecruitmentCalendar() {
   );
 }
 
-export default RecruitmentCalendar;
+export default EventCalendar;

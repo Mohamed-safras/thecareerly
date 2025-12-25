@@ -18,7 +18,7 @@ const CustomBreadcrumpProps: FC<CustomBreadcrumpProps> = ({
   breadCrumpItems,
 }) => {
   return (
-    <Breadcrumb className="hidden sm:block">
+    <Breadcrumb>
       <BreadcrumbList>
         {breadCrumpItems && (
           <React.Fragment>

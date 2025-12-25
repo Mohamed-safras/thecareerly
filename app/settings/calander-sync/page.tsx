@@ -1,4 +1,4 @@
-import { CalendarSync } from "@/features/interview/calander/calendar-settings";
+import { CalendarSync } from "@/features/interview/calander/calendar-sync";
 
 const CalanderSettings = () => {
   return (
