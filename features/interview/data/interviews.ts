@@ -135,4 +135,17 @@ export const initialEvents: InterviewEvent[] = [
     status: "scheduled",
     email: "jennifer.lee@email.com",
   },
+  {
+    id: "11",
+    title: "Lisa - Final Round",
+    start: new Date(2025, 11, 12, 13, 0),
+    end: new Date(2025, 11, 12, 14, 0),
+    candidate: "Lisa Wang",
+    position: "Full Stack Developer",
+    interviewer: "Dev Team",
+    location: "Video Call",
+    type: "technical",
+    status: "scheduled",
+    email: "lisa.wang@email.com",
+  },
 ];

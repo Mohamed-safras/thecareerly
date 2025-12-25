@@ -845,21 +845,22 @@
 }
 
 @layer components {
-  .calendar-wrapper {
-    @apply rounded-xl border bg-card shadow-sm overflow-hidden;
-  }
+}
 
-  .event-card {
-    @apply rounded-md px-2 py-1 text-xs font-medium cursor-pointer transition-all duration-200;
-    @apply hover:shadow-md hover:scale-[1.02];
-  }
+.calendar-wrapper {
+  @apply rounded-xl border bg-card shadow-sm overflow-hidden;
+}
 
-  /* Styled event card like reference */
-  .styled-event {
-    @apply rounded-lg p-2 text-xs cursor-pointer transition-all duration-200;
-    @apply hover:shadow-lg hover:-translate-y-0.5;
-    border-left: 4px solid;
-  }
+.event-card {
+  @apply rounded-md px-2 py-1 text-xs font-medium cursor-pointer transition-all duration-200;
+  @apply hover:shadow-md hover:scale-[1.02];
+}
+
+/* Styled event card like reference */
+.styled-event {
+  @apply rounded-lg  text-xs cursor-pointer transition-all duration-200;
+  @apply hover:shadow-lg hover:-translate-y-0.5;
+  border-left: 4px solid;
 }
 
 /* FullCalendar custom styles */

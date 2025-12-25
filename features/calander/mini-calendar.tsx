@@ -58,7 +58,7 @@ export function MiniCalendarEvents({
   };
 
   return (
-    <aside className="w-full h-full shrink-0 xl:border-t xl:border-l xl:border-b xl:rounded-l-lg xl:border-border flex flex-col">
+    <aside className="w-full h-[calc(100vh-3rem)] shrink-0 xl:border-t xl:border-l xl:border-b xl:rounded-l-lg xl:border-border flex flex-col">
       {/* Mini Calendar */}
       <div className="p-3 border-b">
         <div className="flex items-center justify-between mb-3">
@@ -141,7 +141,22 @@ export function MiniCalendarEvents({
               </span>
             </label>
           ))}
-
+          {positions.slice(0, 5).map((position) => (
+            <label
+              key={position}
+              className="flex items-center gap-2 cursor-pointer group"
+            >
+              <Checkbox
+                checked={selectedPositions.includes(position)}
+                onCheckedChange={() => onPositionToggle(position)}
+                className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+              />
+              <Building2 className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm text-foreground group-hover:text-primary transition-colors truncate">
+                {position}
+              </span>
+            </label>
+          ))}
           {positions.slice(0, 5).map((position) => (
             <label
               key={position}
