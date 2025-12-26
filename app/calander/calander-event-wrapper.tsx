@@ -20,8 +20,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
-import { MiniCalendarEvents } from "../../features/calander/mini-calendar";
 import FullCalendarWrapper from "./full-calander-wrapper";
+import MiniCalanderWrapper from "./mini-calander-wrapper";
+import EventsWrapper from "./events-wrapper";
 
 export function EventCalendar() {
   const calendarRef = useRef<FullCalendar>(null);
@@ -173,16 +174,19 @@ export function EventCalendar() {
   }, []);
 
   const MiniCalendarEventsContent = (
-    <MiniCalendarEvents
-      currentDate={currentDate}
-      onDateChange={handleDateChange}
-      selectedPositions={selectedPositions}
-      onPositionToggle={handlePositionToggle}
-      positions={positions}
-      selectedInterviewers={selectedInterviewers}
-      onInterviewerToggle={handleInterviewerToggle}
-      interviewers={interviewers}
-    />
+    <aside className="w-full h-[calc(100vh-5.1rem)] shrink-0 xl:border-t xl:border-l xl:border-b xl:rounded-l-lg xl:border-border flex flex-col">
+      <MiniCalanderWrapper
+        currentDate={currentDate}
+        onDateChange={handleDateChange}
+        // selectedPositions={selectedPositions}
+        // onPositionToggle={handlePositionToggle}
+        // positions={positions}
+        // selectedInterviewers={selectedInterviewers}
+        // onInterviewerToggle={handleInterviewerToggle}
+        // interviewers={interviewers}
+      />
+      <EventsWrapper />
+    </aside>
   );
 
   return (

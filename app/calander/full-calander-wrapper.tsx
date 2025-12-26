@@ -12,7 +12,6 @@ import {
   EventSourceInput,
 } from "@fullcalendar/core";
 import { format } from "date-fns";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface FullCalendarWrapperProps {
   currentDate: DateInput | undefined;
