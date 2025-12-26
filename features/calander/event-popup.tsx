@@ -3,25 +3,25 @@ import {
   X,
   Clock,
   MapPin,
-  Users,
   Mail,
   Video,
   Phone,
   Edit3,
   Bell,
-  ExternalLink,
-  Briefcase,
   CheckCircle2,
   MessageSquare,
   FileText,
-  Star,
   Copy,
+  Calendar,
+  Link2,
+  MoreHorizontal,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { InterviewEvent, typeConfig } from "@/types/interviews";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface EventPopupProps {
   event: InterviewEvent | null;
@@ -32,7 +32,14 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
   if (!event) return null;
 
   const config = typeConfig[event.type];
-  const initials = event.candidate
+
+  const interviewerInitials = event.interviewer
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+
+  const candidateInitials = event.candidate
     .split(" ")
     .map((n) => n[0])
     .join("")
@@ -49,10 +56,10 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
 
   const formatDate = (date: Date) => {
     return date.toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
+      weekday: "short",
+      month: "numeric",
       day: "numeric",
+      year: "numeric",
     });
   };
 
@@ -64,21 +71,24 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
     });
   };
 
-  const getDuration = (start: Date, end: Date) => {
-    const diff = end.getTime() - start.getTime();
-    const minutes = Math.round(diff / 60000);
-    if (minutes < 60) return `${minutes} min`;
-    const hours = Math.floor(minutes / 60);
-    const remainingMinutes = minutes % 60;
-    return remainingMinutes > 0
-      ? `${hours}h ${remainingMinutes}m`
-      : `${hours} hour${hours > 1 ? "s" : ""}`;
-  };
-
   const copyEmail = () => {
     navigator.clipboard.writeText(event.email);
     toast.success("Email copied to clipboard");
   };
+
+  const copyMeetingLink = () => {
+    toast.success("Meeting link copied to clipboard");
+  };
+
+  // Mock attendees
+  const attendees = [
+    {
+      name: event.interviewer,
+      role: "Interviewer",
+      status: "accepted" as const,
+    },
+    { name: event.candidate, role: "Candidate", status: "pending" as const },
+  ];
 
   return (
     <AnimatePresence>
@@ -86,7 +96,7 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-background/90"
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm"
         onClick={onClose}
       >
         <motion.div
@@ -95,236 +105,335 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-6xl max-h-[90vh] bg-card rounded-lg  overflow-hidden border flex flex-col"
+          className="relative w-full max-w-5xl max-h-[85vh] bg-card rounded-lg overflow-hidden border shadow-xl flex flex-col"
         >
-          {/* Fixed Header */}
-          <div
-            className="relative px-6 py-5 shrink-0"
-            style={{
-              background: `linear-gradient(135deg, ${config.color}15 0%, ${config.color}05 100%)`,
-              borderBottom: `1px solid ${config.color}20`,
-            }}
-          >
-            <button
-              onClick={onClose}
-              className="absolute top-3 right-3 p-2 rounded-full hover:bg-background/80 transition-colors z-10"
-            >
-              <X className="h-4 w-4 text-muted-foreground" />
-            </button>
+          {/* Header Toolbar */}
+          <div className="flex items-center justify-between px-4 py-2 border-b bg-muted/30 shrink-0">
+            <div className="flex items-center gap-1">
+              <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-xs">
+                <Edit3 className="h-3.5 w-3.5" />
+                Edit
+              </Button>
+              <Separator orientation="vertical" className="h-4 mx-1" />
 
-            <div className="flex items-center gap-4">
-              <div
-                className="h-14 w-14 rounded-xl flex items-center justify-center text-lg font-bold text-white shrink-0 shadow-md"
-                style={{ backgroundColor: config.color }}
-              >
-                {initials}
-              </div>
-
-              <div className="flex-1 min-w-0">
-                <div className="flex flex-wrap items-center gap-2 mb-1">
-                  <Badge
-                    className="text-xs font-medium px-2 py-0.5"
-                    style={{
-                      backgroundColor: config.bgColor,
-                      color: config.color,
-                    }}
-                  >
-                    {config.label}
-                  </Badge>
-                  <Badge variant="outline" className="text-xs capitalize">
-                    <CheckCircle2 className="h-3 w-3 mr-1" />
-                    {event.status}
-                  </Badge>
-                </div>
-
-                <h2 className="text-xl font-bold text-foreground truncate">
-                  {event.candidate}
-                </h2>
-                <p className="text-sm text-muted-foreground flex items-center gap-1.5">
-                  <Briefcase className="h-3.5 w-3.5" />
-                  {event.position}
-                </p>
-              </div>
+              <Separator orientation="vertical" className="h-4 mx-1" />
+              <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-xs">
+                <Calendar className="h-3.5 w-3.5" />
+                Reschedule
+              </Button>
+              <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-xs">
+                <Bell className="h-3.5 w-3.5" />
+                Remind
+              </Button>
             </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              className="h-8 w-8"
+            >
+              <X className="h-4 w-4" />
+            </Button>
           </div>
 
-          {/* Scrollable Content */}
-          <div className="flex-1 overflow-y-auto p-5 space-y-4">
-            {/* Details Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {/* Date & Time */}
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
-                <div
-                  className="h-9 w-9 rounded-lg flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: `${config.color}15` }}
-                >
-                  <Clock className="h-4 w-4" style={{ color: config.color }} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-muted-foreground">
-                    Date & Time
-                  </p>
-                  <p className="text-sm font-medium text-foreground mt-0.5">
-                    {formatDate(event.start)}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {formatTime(event.start)} - {formatTime(event.end)}
-                    <span className="ml-1" style={{ color: config.color }}>
-                      ({getDuration(event.start, event.end)})
-                    </span>
-                  </p>
-                </div>
-              </div>
+          {/* Main Content */}
+          <div className="flex flex-1 overflow-hidden">
+            {/* Left Panel - Event Details */}
+            <div className="flex-1 overflow-y-auto">
+              {/* Title Section */}
+              <div className="p-5 border-b">
+                <div className="flex items-center gap-4">
+                  <div
+                    className="w-1 h-14 rounded-full shrink-0"
+                    style={{ backgroundColor: config.color }}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <Badge
+                        className="text-xs font-medium"
+                        style={{
+                          backgroundColor: config.bgColor,
+                          color: config.color,
+                        }}
+                      >
+                        {config.label}
+                      </Badge>
+                      <Badge
+                        variant="outline"
+                        className="text-xs gap-1 capitalize"
+                      >
+                        <CheckCircle2 className="h-3 w-3 text-green-500" />
+                        {event.status}
+                      </Badge>
+                    </div>
+                    <h2 className="text-lg font-semibold text-foreground">
+                      {event.candidate} - {event.position}
+                    </h2>
+                  </div>
 
-              {/* Location */}
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
-                <div
-                  className="h-9 w-9 rounded-lg flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: `${config.color}15` }}
-                >
-                  <span style={{ color: config.color }}>
-                    {getLocationIcon()}
-                  </span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-muted-foreground">
-                    Location
-                  </p>
-                  <p className="text-sm font-medium text-foreground mt-0.5 truncate">
-                    {event.location}
-                  </p>
-                  {isVideoCall && (
-                    <button
-                      className="text-xs font-medium mt-0.5 flex items-center gap-1 hover:underline"
-                      style={{ color: config.color }}
+                  <div className="flex items-center gap-3">
+                    {isVideoCall && (
+                      <Button
+                        size="sm"
+                        className="h-8 gap-1.5 text-xs"
+                        style={{ backgroundColor: config.color }}
+                      >
+                        <Video className="h-3.5 w-3.5" />
+                        Join
+                      </Button>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 gap-1.5 text-xs"
                     >
-                      Join meeting <ExternalLink className="h-3 w-3" />
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {/* Interviewer */}
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
-                <div
-                  className="h-9 w-9 rounded-lg flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: `${config.color}15` }}
-                >
-                  <Users className="h-4 w-4" style={{ color: config.color }} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-muted-foreground">
-                    Interviewer(s)
-                  </p>
-                  <p className="text-sm font-medium text-foreground mt-0.5">
-                    {event.interviewer}
-                  </p>
-                </div>
-              </div>
-
-              {/* Email */}
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
-                <div
-                  className="h-9 w-9 rounded-lg flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: `${config.color}15` }}
-                >
-                  <Mail className="h-4 w-4" style={{ color: config.color }} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-muted-foreground">
-                    Contact
-                  </p>
-                  <div className="flex items-center gap-1.5 mt-0.5">
-                    <p className="text-sm font-medium text-foreground truncate flex-1">
-                      {event.email}
-                    </p>
-                    <button
-                      onClick={copyEmail}
-                      className="p-1 hover:bg-background rounded transition-colors shrink-0"
-                    >
-                      <Copy className="h-3 w-3 text-muted-foreground" />
-                    </button>
+                      <MessageSquare className="h-3.5 w-3.5" />
+                      Chat
+                    </Button>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Quick Actions */}
-            <div className="flex flex-wrap gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="gap-1.5 text-xs h-8"
-              >
-                <FileText className="h-3.5 w-3.5" />
-                View Resume
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="gap-1.5 text-xs h-8"
-              >
-                <MessageSquare className="h-3.5 w-3.5" />
-                Send Message
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="gap-1.5 text-xs h-8"
-              >
-                <Star className="h-3.5 w-3.5" />
-                Add Notes
-              </Button>
-            </div>
-
-            {/* Notes Section */}
-            {event.notes && (
-              <div>
-                <h3 className="text-xs font-semibold text-muted-foreground mb-1.5">
-                  Notes
-                </h3>
-                <p className="text-sm text-muted-foreground p-3 bg-muted/30 rounded-lg">
-                  {event.notes}
-                </p>
+              {/* Date, Time & Location */}
+              <div className="px-5 py-4 space-y-3 border-b">
+                <div className="flex items-center gap-3 text-sm">
+                  <Clock className="h-4 w-4 text-muted-foreground shrink-0" />
+                  <span className="text-foreground">
+                    {formatDate(event.start)} {formatTime(event.start)} -{" "}
+                    {formatTime(event.end)}
+                  </span>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="h-auto p-0 text-xs"
+                  >
+                    View series
+                  </Button>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="h-auto p-0 text-xs"
+                  >
+                    Show all instances
+                  </Button>
+                </div>
+                <div className="flex items-center gap-3 text-sm">
+                  <span className="text-muted-foreground shrink-0">
+                    {getLocationIcon()}
+                  </span>
+                  <span className="text-foreground">{event.location}</span>
+                </div>
               </div>
-            )}
-          </div>
 
-          {/* Fixed Footer */}
-          <div className="shrink-0 p-4 border-t bg-card/95 backdrop-blur-sm">
-            <div className="flex flex-col sm:flex-row gap-2">
-              <Button
-                className="flex-1 gap-2 h-9 text-sm font-medium"
-                style={{ backgroundColor: config.color }}
-              >
-                {isVideoCall ? (
-                  <>
-                    <Video className="h-4 w-4" />
-                    Join Video Call
-                  </>
-                ) : isPhoneCall ? (
-                  <>
-                    <Phone className="h-4 w-4" />
-                    Start Call
-                  </>
-                ) : (
-                  <>
-                    <ExternalLink className="h-4 w-4" />
-                    View Details
-                  </>
-                )}
-              </Button>
-              <Button variant="outline" className="flex-1 gap-2 h-9 text-sm">
-                <Edit3 className="h-4 w-4" />
-                Reschedule
-              </Button>
-              <Button
-                variant="ghost"
-                className="sm:flex-none gap-2 h-9 text-sm"
-              >
-                <Bell className="h-4 w-4" />
-                Remind
-              </Button>
+              {/* Meeting Details */}
+              {isVideoCall && (
+                <div className="px-5 py-4 border-b">
+                  <Separator className="mb-4" />
+                  <h3 className="font-semibold text-foreground mb-3">
+                    Meeting Details
+                  </h3>
+                  <div className="space-y-2">
+                    <Button
+                      variant="link"
+                      className="h-auto p-0 text-primary font-medium text-sm"
+                    >
+                      Join the meeting now
+                    </Button>
+                    <p className="text-sm text-muted-foreground">
+                      Meeting ID: 487 582 884 496 0
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Passcode: YT9sg72P
+                    </p>
+                    <div className="pt-2">
+                      <Button
+                        variant="link"
+                        className="h-auto p-0 text-xs text-primary"
+                      >
+                        Meeting options
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Notes Section */}
+              {event.notes && (
+                <div className="px-5 py-4 border-b">
+                  <h4 className="text-sm font-medium text-muted-foreground mb-2">
+                    Notes
+                  </h4>
+                  <p className="text-sm text-foreground">{event.notes}</p>
+                </div>
+              )}
+
+              {/* Quick Actions */}
+              <div className="px-5 py-4">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 text-xs h-8"
+                  >
+                    <FileText className="h-3.5 w-3.5" />
+                    View Resume
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 text-xs h-8"
+                  >
+                    <MessageSquare className="h-3.5 w-3.5" />
+                    Send Message
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 text-xs h-8"
+                  >
+                    <Link2 className="h-3.5 w-3.5" />
+                    Copy Meeting Link
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Panel - Tracking & Attendees */}
+            <div className="w-64 border-l bg-muted/20 overflow-y-auto shrink-0 hidden md:block">
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-semibold text-sm text-foreground">
+                    Tracking
+                  </h3>
+                  <Button variant="ghost" size="icon" className="h-6 w-6">
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                {/* Organizer */}
+                <div className="mb-5">
+                  <p className="text-xs text-muted-foreground mb-2">
+                    Organizer
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-9 w-9">
+                      <AvatarFallback
+                        className="text-xs font-medium text-white"
+                        style={{ backgroundColor: config.color }}
+                      >
+                        {interviewerInitials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-foreground truncate">
+                        {event.interviewer}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Scheduled today
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <Separator className="my-4" />
+
+                {/* Attendees */}
+                <div>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    Attendees
+                  </p>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    You didn&apos;t respond
+                  </p>
+
+                  {/* Accepted */}
+                  <div className="mb-3">
+                    <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1.5">
+                      <span className="text-green-500">✓</span>
+                      Accepted:{" "}
+                      {attendees.filter((a) => a.status === "accepted").length}
+                    </p>
+                    <div className="space-y-2">
+                      {attendees
+                        .filter((a) => a.status === "accepted")
+                        .map((attendee, idx) => (
+                          <div key={idx} className="flex items-center gap-2.5">
+                            <Avatar className="h-8 w-8">
+                              <AvatarFallback className="text-xs bg-secondary text-secondary-foreground">
+                                {attendee.name
+                                  .split(" ")
+                                  .map((n) => n[0])
+                                  .join("")}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm text-foreground truncate">
+                                {attendee.name}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {attendee.role}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+
+                  {/* Pending */}
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1.5">
+                      <Clock className="h-3 w-3 text-amber-500" />
+                      Pending:{" "}
+                      {attendees.filter((a) => a.status === "pending").length}
+                    </p>
+                    <div className="space-y-2">
+                      {attendees
+                        .filter((a) => a.status === "pending")
+                        .map((attendee, idx) => (
+                          <div key={idx} className="flex items-center gap-2.5">
+                            <Avatar className="h-8 w-8">
+                              <AvatarFallback className="text-xs bg-secondary text-secondary-foreground">
+                                {attendee.name
+                                  .split(" ")
+                                  .map((n) => n[0])
+                                  .join("")}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm text-foreground truncate">
+                                {attendee.name}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {attendee.role}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                </div>
+
+                <Separator className="my-4" />
+
+                {/* Contact */}
+                <div>
+                  <p className="text-xs text-muted-foreground mb-2">Contact</p>
+                  <div className="flex items-center gap-2">
+                    <Mail className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                    <span className="text-sm text-foreground truncate flex-1">
+                      {event.email}
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 shrink-0"
+                      onClick={copyEmail}
+                    >
+                      <Copy className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </motion.div>
