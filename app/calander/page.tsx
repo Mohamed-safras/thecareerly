@@ -1,4 +1,4 @@
-import EventCalendarWrapper from "@/app/calander/event-calander-wrapper";
+import EventCalendarWrapper from "@/app/calander/calander-event-wrapper";
 
 const CalendarPage = () => {
   return (

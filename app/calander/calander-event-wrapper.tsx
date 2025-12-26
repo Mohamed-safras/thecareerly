@@ -2,16 +2,12 @@
 
 import React, { useState, useMemo, useCallback, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import listPlugin from "@fullcalendar/list";
 import { EventClickArg, EventDropArg } from "@fullcalendar/core";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
 import { Calendar, Clock, SidebarIcon } from "lucide-react";
 
-import { InterviewEvent, typeConfig, InterviewType } from "@/types/interviews";
+import { InterviewEvent, typeConfig } from "@/types/interviews";
 import { initialEvents } from "../../features/interview/data/interviews";
 import { EventPopup } from "../../features/calander/event-popup";
 import {
@@ -22,15 +18,11 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
-import {
-  Sheet,
-  SheetContent,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { MiniCalendarEvents } from "../../features/calander/mini-calendar";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
+import FullCalendarWrapper from "./full-calander-wrapper";
+import MiniCalanderWrapper from "./mini-calander-wrapper";
+import EventsWrapper from "./events-wrapper";
 
 export function EventCalendar() {
   const calendarRef = useRef<FullCalendar>(null);
@@ -181,91 +173,20 @@ export function EventCalendar() {
     );
   }, []);
 
-  // Custom event content with styled card
-  const renderEventContent = (eventInfo: any) => {
-    const event = eventInfo.event.extendedProps as InterviewEvent;
-    const type = event.type as InterviewType;
-    const config = typeConfig[type];
-    const isTimeGrid = eventInfo.view.type.includes("timeGrid");
-
-    if (isTimeGrid) {
-      return (
-        <div
-          className="styled-event h-full w-full"
-          style={{
-            backgroundColor: config.bgColor,
-            borderLeftColor: config.color,
-          }}
-        >
-          <div className="flex flex-col h-full justify-between p-2">
-            <div>
-              <div
-                className="text-[10px] font-semibold px-1.5 py-0.5 rounded inline-block mb-1"
-                style={{ backgroundColor: config.color, color: "white" }}
-              >
-                {format(eventInfo.event.start, "h:mm a")}
-              </div>
-              <div className="font-semibold text-xs text-foreground leading-tight">
-                {event.title.split(" - ")[1] || event.position}
-              </div>
-              <div className="text-[11px] text-muted-foreground mt-0.5 flex items-center gap-1">
-                <span style={{ color: config.color }}>■</span>
-                {event.position.split(" ")[0]}
-              </div>
-            </div>
-            <div className="flex items-center gap-1 mt-1">
-              <Avatar className="h-5 w-5 border border-background">
-                <AvatarFallback
-                  className="text-[8px]"
-                  style={{
-                    backgroundColor: config.bgColor,
-                    color: config.color,
-                  }}
-                >
-                  {event.interviewer
-                    .split(" ")
-                    .slice(0, 2)
-                    .map((n) => n[0])
-                    .join("")}
-                </AvatarFallback>
-              </Avatar>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    // Month/other views - simpler display
-    return (
-      <div
-        className="flex items-center gap-1.5 px-2 py-1 rounded-md overflow-hidden"
-        style={{ backgroundColor: config.bgColor }}
-      >
-        <div
-          className="w-1.5 h-1.5 rounded-full shrink-0"
-          style={{ backgroundColor: config.color }}
-        />
-        <span
-          className="truncate font-medium text-xs"
-          style={{ color: config.color }}
-        >
-          {eventInfo.event.title}
-        </span>
-      </div>
-    );
-  };
-
   const MiniCalendarEventsContent = (
-    <MiniCalendarEvents
-      currentDate={currentDate}
-      onDateChange={handleDateChange}
-      selectedPositions={selectedPositions}
-      onPositionToggle={handlePositionToggle}
-      positions={positions}
-      selectedInterviewers={selectedInterviewers}
-      onInterviewerToggle={handleInterviewerToggle}
-      interviewers={interviewers}
-    />
+    <aside className="w-full h-[calc(100vh-5.1rem)] shrink-0 xl:border-t xl:border-l xl:border-b xl:rounded-l-lg xl:border-border flex flex-col">
+      <MiniCalanderWrapper
+        currentDate={currentDate}
+        onDateChange={handleDateChange}
+        // selectedPositions={selectedPositions}
+        // onPositionToggle={handlePositionToggle}
+        // positions={positions}
+        // selectedInterviewers={selectedInterviewers}
+        // onInterviewerToggle={handleInterviewerToggle}
+        // interviewers={interviewers}
+      />
+      <EventsWrapper />
+    </aside>
   );
 
   return (
@@ -282,14 +203,15 @@ export function EventCalendar() {
 
       {/* Mobile MiniCalendarEvents */}
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-        <SheetContent side="right" className="p-0 w-64">
+        <SheetContent side="right" className="p-0 gap-0 w-64">
+          <SheetTitle className="p-3">Calander</SheetTitle>
           {MiniCalendarEventsContent}
         </SheetContent>
       </Sheet>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <div className="xl:hidden flex items-center justify-end gap-3 py-3">
+        <div className="xl:hidden flex items-center justify-end gap-3 mb-3">
           <Button
             className="h-8 w-8"
             variant="ghost"
@@ -298,67 +220,17 @@ export function EventCalendar() {
             <SidebarIcon className="h-4 w-4" />
           </Button>
         </div>
+
         {/* Calendar */}
-        <div className="flex-1 overflow-auto rounded-r-lg border-t border-r sm:border-l  sm:rounded-l-lg md:rounded-l-none border-border">
-          <FullCalendar
-            ref={calendarRef}
-            plugins={[
-              dayGridPlugin,
-              timeGridPlugin,
-              interactionPlugin,
-              listPlugin,
-            ]}
-            initialView="timeGridWeek"
-            initialDate={currentDate}
-            headerToolbar={{
-              left: "prev,next,today",
-              center: "title",
-              right:
-                "timeGridDay,timeGridWeek,dayGridMonth,dayGridYear,listWeek",
-            }}
-            buttonText={{
-              today: "Today",
-              month: "Month",
-              week: "Week",
-              day: "Day",
-              year: "Year",
-              list: "Agenda",
-            }}
-            events={calendarEvents}
-            eventClick={handleEventClick}
-            eventDrop={handleEventDrop}
-            datesSet={(arg) => setCurrentDate(arg.start)}
-            editable={true}
-            droppable={true}
-            selectable={true}
-            selectMirror={true}
-            dayMaxEvents={3}
-            weekends={true}
-            nowIndicator={true}
-            height="100%"
-            eventContent={renderEventContent}
-            eventDisplay="block"
-            slotMinTime="07:00:00"
-            slotMaxTime="18:00:00"
-            allDaySlot={false}
-            slotDuration="01:00:00"
-            slotLabelInterval="01:00:00"
-            slotLabelFormat={{
-              hour: "numeric",
-              minute: "2-digit",
-              meridiem: "short",
-            }}
-            dayHeaderFormat={{
-              weekday: "short",
-              day: "numeric",
-            }}
-            eventTimeFormat={{
-              hour: "numeric",
-              minute: "2-digit",
-              meridiem: "short",
-            }}
-          />
-        </div>
+        <FullCalendarWrapper
+          currentDate={currentDate}
+          calendarRef={calendarRef}
+          setCurrentDate={setCurrentDate}
+          calendarEvents={calendarEvents}
+          setSelectedPositions={setSelectedPositions}
+          handleEventDrop={handleEventDrop}
+          handleEventClick={handleEventClick}
+        />
       </div>
 
       {/* Event Popup */}

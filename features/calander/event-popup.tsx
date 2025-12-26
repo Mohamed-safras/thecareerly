@@ -1,34 +1,45 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { format } from "date-fns";
 import {
   X,
   Clock,
   MapPin,
-  Users,
   Mail,
   Video,
   Phone,
-  Calendar,
   Edit3,
   Bell,
-  ExternalLink,
+  CheckCircle2,
+  MessageSquare,
+  FileText,
+  Copy,
+  Calendar,
+  Link2,
+  MoreHorizontal,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
 import { InterviewEvent, typeConfig } from "@/types/interviews";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface EventPopupProps {
   event: InterviewEvent | null;
   onClose: () => void;
-  position?: { x: number; y: number };
 }
 
-export function EventPopup({ event, onClose, position }: EventPopupProps) {
+export function EventPopup({ event, onClose }: EventPopupProps) {
   if (!event) return null;
 
   const config = typeConfig[event.type];
-  const initials = event.candidate
+
+  const interviewerInitials = event.interviewer
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+
+  const candidateInitials = event.candidate
     .split(" ")
     .map((n) => n[0])
     .join("")
@@ -43,183 +54,386 @@ export function EventPopup({ event, onClose, position }: EventPopupProps) {
     return <MapPin className="h-4 w-4" />;
   };
 
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString("en-US", {
+      weekday: "short",
+      month: "numeric",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText(event.email);
+    toast.success("Email copied to clipboard");
+  };
+
+  const copyMeetingLink = () => {
+    toast.success("Meeting link copied to clipboard");
+  };
+
+  // Mock attendees
+  const attendees = [
+    {
+      name: event.interviewer,
+      role: "Interviewer",
+      status: "accepted" as const,
+    },
+    { name: event.candidate, role: "Candidate", status: "pending" as const },
+  ];
+
   return (
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm"
         onClick={onClose}
       >
-        {/* Backdrop */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="absolute inset-0 bg-foreground/20 backdrop-blur-sm"
-        />
-
-        {/* Popup */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          transition={{ type: "spring", duration: 0.3 }}
+          transition={{ type: "spring", damping: 25, stiffness: 300 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-md bg-card rounded-xl shadow-xl overflow-hidden border"
+          className="relative w-full max-w-5xl max-h-[85vh] bg-card rounded-lg overflow-hidden border shadow-xl flex flex-col"
         >
-          {/* Header with color band */}
-          <div className="h-2" style={{ backgroundColor: config.color }} />
+          {/* Header Toolbar */}
+          <div className="flex items-center justify-between px-4 py-2 border-b bg-muted/30 shrink-0">
+            <div className="flex items-center gap-1">
+              <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-xs">
+                <Edit3 className="h-3.5 w-3.5" />
+                Edit
+              </Button>
+              <Separator orientation="vertical" className="h-4 mx-1" />
 
-          {/* Close button */}
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
-          >
-            <X className="h-4 w-4" />
-          </button>
-
-          {/* Content */}
-          <div className="p-6">
-            {/* Type badge and status */}
-            <div className="flex items-center gap-2 mb-4">
-              <Badge
-                style={{
-                  backgroundColor: config.bgColor,
-                  color: config.color,
-                }}
-                className="font-medium"
-              >
-                {config.label}
-              </Badge>
-              <Badge
-                variant={event.status === "confirmed" ? "default" : "secondary"}
-                className="capitalize"
-              >
-                {event.status}
-              </Badge>
+              <Separator orientation="vertical" className="h-4 mx-1" />
+              <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-xs">
+                <Calendar className="h-3.5 w-3.5" />
+                Reschedule
+              </Button>
+              <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-xs">
+                <Bell className="h-3.5 w-3.5" />
+                Remind
+              </Button>
             </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              className="h-8 w-8"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
 
-            {/* Candidate info */}
-            <div className="flex items-start gap-4 mb-6">
-              <div
-                className="h-14 w-14 rounded-full flex items-center justify-center text-lg font-bold shrink-0"
-                style={{
-                  backgroundColor: config.color,
-                  color: "white",
-                }}
-              >
-                {initials}
-              </div>
-              <div className="flex-1 min-w-0">
-                <h2 className="text-xl font-semibold text-foreground truncate">
-                  {event.candidate}
-                </h2>
-                <p className="text-muted-foreground text-sm">
-                  {event.position}
-                </p>
-              </div>
-            </div>
+          {/* Main Content */}
+          <div className="flex flex-1 overflow-hidden">
+            {/* Left Panel - Event Details */}
+            <div className="flex-1 overflow-y-auto">
+              {/* Title Section */}
+              <div className="p-5 border-b">
+                <div className="flex items-center gap-4">
+                  <div
+                    className="w-1 h-14 rounded-full shrink-0"
+                    style={{ backgroundColor: config.color }}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <Badge
+                        className="text-xs font-medium"
+                        style={{
+                          backgroundColor: config.bgColor,
+                          color: config.color,
+                        }}
+                      >
+                        {config.label}
+                      </Badge>
+                      <Badge
+                        variant="outline"
+                        className="text-xs gap-1 capitalize"
+                      >
+                        <CheckCircle2 className="h-3 w-3 text-green-500" />
+                        {event.status}
+                      </Badge>
+                    </div>
+                    <h2 className="text-lg font-semibold text-foreground">
+                      {event.candidate} - {event.position}
+                    </h2>
+                  </div>
 
-            <Separator className="mb-4" />
-
-            {/* Details grid */}
-            <div className="space-y-3">
-              {/* Date & Time */}
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">
-                <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                  <Clock className="h-4 w-4 text-primary" />
+                  <div className="flex items-center gap-3">
+                    {isVideoCall && (
+                      <Button
+                        size="sm"
+                        className="h-8 gap-1.5 text-xs"
+                        style={{ backgroundColor: config.color }}
+                      >
+                        <Video className="h-3.5 w-3.5" />
+                        Join
+                      </Button>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 gap-1.5 text-xs"
+                    >
+                      <MessageSquare className="h-3.5 w-3.5" />
+                      Chat
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground">
-                    {format(event.start, "EEEE, MMMM d, yyyy")}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {format(event.start, "h:mm a")} -{" "}
-                    {format(event.end, "h:mm a")}
-                  </p>
+              </div>
+
+              {/* Date, Time & Location */}
+              <div className="px-5 py-4 space-y-3 border-b">
+                <div className="flex items-center gap-3 text-sm">
+                  <Clock className="h-4 w-4 text-muted-foreground shrink-0" />
+                  <span className="text-foreground">
+                    {formatDate(event.start)} {formatTime(event.start)} -{" "}
+                    {formatTime(event.end)}
+                  </span>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="h-auto p-0 text-xs"
+                  >
+                    View series
+                  </Button>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="h-auto p-0 text-xs"
+                  >
+                    Show all instances
+                  </Button>
+                </div>
+                <div className="flex items-center gap-3 text-sm">
+                  <span className="text-muted-foreground shrink-0">
+                    {getLocationIcon()}
+                  </span>
+                  <span className="text-foreground">{event.location}</span>
                 </div>
               </div>
 
-              {/* Location */}
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">
-                <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                  {getLocationIcon()}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground">
-                    {event.location}
-                  </p>
-                  {isVideoCall && (
-                    <p className="text-sm text-primary hover:underline cursor-pointer flex items-center gap-1">
-                      Join meeting <ExternalLink className="h-3 w-3" />
+              {/* Meeting Details */}
+              {isVideoCall && (
+                <div className="px-5 py-4 border-b">
+                  <Separator className="mb-4" />
+                  <h3 className="font-semibold text-foreground mb-3">
+                    Meeting Details
+                  </h3>
+                  <div className="space-y-2">
+                    <Button
+                      variant="link"
+                      className="h-auto p-0 text-primary font-medium text-sm"
+                    >
+                      Join the meeting now
+                    </Button>
+                    <p className="text-sm text-muted-foreground">
+                      Meeting ID: 487 582 884 496 0
                     </p>
-                  )}
+                    <p className="text-sm text-muted-foreground">
+                      Passcode: YT9sg72P
+                    </p>
+                    <div className="pt-2">
+                      <Button
+                        variant="link"
+                        className="h-auto p-0 text-xs text-primary"
+                      >
+                        Meeting options
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* Interviewer */}
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">
-                <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                  <Users className="h-4 w-4 text-primary" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground">
-                    Interviewer
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {event.interviewer}
-                  </p>
-                </div>
-              </div>
-
-              {/* Email */}
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors">
-                <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                  <Mail className="h-4 w-4 text-primary" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground">Contact</p>
-                  <p className="text-sm text-muted-foreground truncate">
-                    {event.email}
-                  </p>
-                </div>
-              </div>
-
-              {/* Notes */}
+              {/* Notes Section */}
               {event.notes && (
-                <div className="p-3 rounded-lg bg-warning/10 border border-warning/20">
+                <div className="px-5 py-4 border-b">
+                  <h4 className="text-sm font-medium text-muted-foreground mb-2">
+                    Notes
+                  </h4>
                   <p className="text-sm text-foreground">{event.notes}</p>
                 </div>
               )}
+
+              {/* Quick Actions */}
+              <div className="px-5 py-4">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 text-xs h-8"
+                  >
+                    <FileText className="h-3.5 w-3.5" />
+                    View Resume
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 text-xs h-8"
+                  >
+                    <MessageSquare className="h-3.5 w-3.5" />
+                    Send Message
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 text-xs h-8"
+                  >
+                    <Link2 className="h-3.5 w-3.5" />
+                    Copy Meeting Link
+                  </Button>
+                </div>
+              </div>
             </div>
 
-            <Separator className="my-4" />
+            {/* Right Panel - Tracking & Attendees */}
+            <div className="w-64 border-l bg-muted/20 overflow-y-auto shrink-0 hidden md:block">
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-semibold text-sm text-foreground">
+                    Tracking
+                  </h3>
+                  <Button variant="ghost" size="icon" className="h-6 w-6">
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </div>
 
-            {/* Action buttons */}
-            <div className="flex flex-wrap gap-2">
-              <Button className="flex-1 gap-2" size="sm">
-                {isVideoCall ? (
-                  <>
-                    <Video className="h-4 w-4" />
-                    Join Call
-                  </>
-                ) : (
-                  <>
-                    <Calendar className="h-4 w-4" />
-                    Open Details
-                  </>
-                )}
-              </Button>
-              <Button variant="outline" size="sm" className="gap-2">
-                <Edit3 className="h-4 w-4" />
-                Reschedule
-              </Button>
-              <Button variant="ghost" size="sm" className="gap-2">
-                <Bell className="h-4 w-4" />
-                Remind
-              </Button>
+                {/* Organizer */}
+                <div className="mb-5">
+                  <p className="text-xs text-muted-foreground mb-2">
+                    Organizer
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-9 w-9">
+                      <AvatarFallback
+                        className="text-xs font-medium text-white"
+                        style={{ backgroundColor: config.color }}
+                      >
+                        {interviewerInitials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-foreground truncate">
+                        {event.interviewer}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Scheduled today
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <Separator className="my-4" />
+
+                {/* Attendees */}
+                <div>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    Attendees
+                  </p>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    You didn&apos;t respond
+                  </p>
+
+                  {/* Accepted */}
+                  <div className="mb-3">
+                    <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1.5">
+                      <span className="text-green-500">✓</span>
+                      Accepted:{" "}
+                      {attendees.filter((a) => a.status === "accepted").length}
+                    </p>
+                    <div className="space-y-2">
+                      {attendees
+                        .filter((a) => a.status === "accepted")
+                        .map((attendee, idx) => (
+                          <div key={idx} className="flex items-center gap-2.5">
+                            <Avatar className="h-8 w-8">
+                              <AvatarFallback className="text-xs bg-secondary text-secondary-foreground">
+                                {attendee.name
+                                  .split(" ")
+                                  .map((n) => n[0])
+                                  .join("")}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm text-foreground truncate">
+                                {attendee.name}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {attendee.role}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+
+                  {/* Pending */}
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1.5">
+                      <Clock className="h-3 w-3 text-amber-500" />
+                      Pending:{" "}
+                      {attendees.filter((a) => a.status === "pending").length}
+                    </p>
+                    <div className="space-y-2">
+                      {attendees
+                        .filter((a) => a.status === "pending")
+                        .map((attendee, idx) => (
+                          <div key={idx} className="flex items-center gap-2.5">
+                            <Avatar className="h-8 w-8">
+                              <AvatarFallback className="text-xs bg-secondary text-secondary-foreground">
+                                {attendee.name
+                                  .split(" ")
+                                  .map((n) => n[0])
+                                  .join("")}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm text-foreground truncate">
+                                {attendee.name}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {attendee.role}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                </div>
+
+                <Separator className="my-4" />
+
+                {/* Contact */}
+                <div>
+                  <p className="text-xs text-muted-foreground mb-2">Contact</p>
+                  <div className="flex items-center gap-2">
+                    <Mail className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                    <span className="text-sm text-foreground truncate flex-1">
+                      {event.email}
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 shrink-0"
+                      onClick={copyEmail}
+                    >
+                      <Copy className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </motion.div>
