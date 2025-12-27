@@ -10,7 +10,6 @@ import {
   Bell,
   CheckCircle2,
   MessageSquare,
-  FileText,
   Copy,
   Calendar,
   Link2,
@@ -105,24 +104,24 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-5xl max-h-[85vh] bg-card rounded-lg overflow-hidden border shadow-xl flex flex-col"
+          className="relative w-full max-w-5xl max-h-[85vh] bg-card rounded-lg overflow-hidden border flex flex-col"
         >
           {/* Header Toolbar */}
           <div className="flex items-center justify-between px-4 py-2 border-b bg-muted/30 shrink-0">
             <div className="flex items-center gap-1">
               <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-xs">
-                <Edit3 className="h-3.5 w-3.5" />
+                <Edit3 className="h-4 w-4" />
                 Edit
               </Button>
               <Separator orientation="vertical" className="h-4 mx-1" />
 
               <Separator orientation="vertical" className="h-4 mx-1" />
               <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-xs">
-                <Calendar className="h-3.5 w-3.5" />
+                <Calendar className="h-4 w-4" />
                 Reschedule
               </Button>
               <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-xs">
-                <Bell className="h-3.5 w-3.5" />
+                <Bell className="h-4 w-4" />
                 Remind
               </Button>
             </div>
@@ -141,44 +140,42 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
             {/* Left Panel - Event Details */}
             <div className="flex-1 overflow-y-auto">
               {/* Title Section */}
-              <div className="p-5 border-b">
-                <div className="flex items-center gap-4">
-                  <div
-                    className="w-1 h-14 rounded-full shrink-0"
-                    style={{ backgroundColor: config.color }}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <Badge
-                        className="text-xs font-medium"
-                        style={{
-                          backgroundColor: config.bgColor,
-                          color: config.color,
-                        }}
-                      >
-                        {config.label}
-                      </Badge>
-                      <Badge
-                        variant="outline"
-                        className="text-xs gap-1 capitalize"
-                      >
-                        <CheckCircle2 className="h-3 w-3 text-green-500" />
-                        {event.status}
-                      </Badge>
+              <div className="p-3 border-b">
+                <div className="flex gap-3 flex-col items-start sm:flex-row sm:items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-1 h-14 rounded-full shrink-0"
+                      style={{ backgroundColor: config.color }}
+                    />{" "}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3 mb-1.5">
+                        <Badge
+                          className="text-xs font-medium"
+                          style={{
+                            backgroundColor: config.bgColor,
+                            color: config.color,
+                          }}
+                        >
+                          {config.label}
+                        </Badge>
+                        <Badge
+                          variant="outline"
+                          className="text-xs gap-1 capitalize"
+                        >
+                          <CheckCircle2 className="h-4 w-4 text-status-active" />
+                          {event.status}
+                        </Badge>
+                      </div>
+                      <h2 className="text-lg font-semibold text-foreground">
+                        {event.candidate} - {event.position}
+                      </h2>
                     </div>
-                    <h2 className="text-lg font-semibold text-foreground">
-                      {event.candidate} - {event.position}
-                    </h2>
                   </div>
 
                   <div className="flex items-center gap-3">
                     {isVideoCall && (
-                      <Button
-                        size="sm"
-                        className="h-8 gap-1.5 text-xs"
-                        style={{ backgroundColor: config.color }}
-                      >
-                        <Video className="h-3.5 w-3.5" />
+                      <Button size="sm" className="h-8 gap-1.5 text-xs">
+                        <Video className="h-4 w-4" />
                         Join
                       </Button>
                     )}
@@ -187,7 +184,7 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
                       size="sm"
                       className="h-8 gap-1.5 text-xs"
                     >
-                      <MessageSquare className="h-3.5 w-3.5" />
+                      <MessageSquare className="h-4 w-4" />
                       Chat
                     </Button>
                   </div>
@@ -195,7 +192,7 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
               </div>
 
               {/* Date, Time & Location */}
-              <div className="px-5 py-4 space-y-3 border-b">
+              <div className="p-3 space-y-3 border-b">
                 <div className="flex items-center gap-3 text-sm">
                   <Clock className="h-4 w-4 text-muted-foreground shrink-0" />
                   <span className="text-foreground">
@@ -227,12 +224,11 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
 
               {/* Meeting Details */}
               {isVideoCall && (
-                <div className="px-5 py-4 border-b">
-                  <Separator className="mb-4" />
+                <div className="p-3 border-b">
                   <h3 className="font-semibold text-foreground mb-3">
                     Meeting Details
                   </h3>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <Button
                       variant="link"
                       className="h-auto p-0 text-primary font-medium text-sm"
@@ -245,7 +241,7 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
                     <p className="text-sm text-muted-foreground">
                       Passcode: YT9sg72P
                     </p>
-                    <div className="pt-2">
+                    <div className="pt-3">
                       <Button
                         variant="link"
                         className="h-auto p-0 text-xs text-primary"
@@ -259,8 +255,8 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
 
               {/* Notes Section */}
               {event.notes && (
-                <div className="px-5 py-4 border-b">
-                  <h4 className="text-sm font-medium text-muted-foreground mb-2">
+                <div className="p-3 border-b">
+                  <h4 className="text-sm font-medium text-muted-foreground mb-3">
                     Notes
                   </h4>
                   <p className="text-sm text-foreground">{event.notes}</p>
@@ -268,30 +264,14 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
               )}
 
               {/* Quick Actions */}
-              <div className="px-5 py-4">
+              <div className="p-3">
                 <div className="flex items-center gap-2 flex-wrap">
                   <Button
                     variant="outline"
                     size="sm"
                     className="gap-1.5 text-xs h-8"
                   >
-                    <FileText className="h-3.5 w-3.5" />
-                    View Resume
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="gap-1.5 text-xs h-8"
-                  >
-                    <MessageSquare className="h-3.5 w-3.5" />
-                    Send Message
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="gap-1.5 text-xs h-8"
-                  >
-                    <Link2 className="h-3.5 w-3.5" />
+                    <Link2 className="h-4 w-4" />
                     Copy Meeting Link
                   </Button>
                 </div>
@@ -300,8 +280,8 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
 
             {/* Right Panel - Tracking & Attendees */}
             <div className="w-64 border-l bg-muted/20 overflow-y-auto shrink-0 hidden md:block">
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-4">
+              <div className="p-3">
+                <div className="flex items-center justify-between mb-3">
                   <h3 className="font-semibold text-sm text-foreground">
                     Tracking
                   </h3>
@@ -311,12 +291,12 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
                 </div>
 
                 {/* Organizer */}
-                <div className="mb-5">
-                  <p className="text-xs text-muted-foreground mb-2">
+                <div className="mb-3">
+                  <p className="text-xs text-muted-foreground mb-3">
                     Organizer
                   </p>
                   <div className="flex items-center gap-3">
-                    <Avatar className="h-9 w-9">
+                    <Avatar className="h-8 w-8">
                       <AvatarFallback
                         className="text-xs font-medium text-white"
                         style={{ backgroundColor: config.color }}
@@ -335,25 +315,25 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
                   </div>
                 </div>
 
-                <Separator className="my-4" />
+                <Separator className="my-3" />
 
                 {/* Attendees */}
                 <div>
                   <p className="text-xs text-muted-foreground mb-3">
                     Attendees
                   </p>
-                  <p className="text-xs text-muted-foreground mb-2">
+                  <p className="text-xs text-muted-foreground mb-3">
                     You didn&apos;t respond
                   </p>
 
                   {/* Accepted */}
                   <div className="mb-3">
-                    <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1.5">
-                      <span className="text-green-500">✓</span>
+                    <p className="text-xs text-muted-foreground mb-3 flex items-center gap-1.5">
+                      <span className="text-status-active">✓</span>
                       Accepted:{" "}
                       {attendees.filter((a) => a.status === "accepted").length}
                     </p>
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       {attendees
                         .filter((a) => a.status === "accepted")
                         .map((attendee, idx) => (
@@ -382,11 +362,11 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
                   {/* Pending */}
                   <div>
                     <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1.5">
-                      <Clock className="h-3 w-3 text-amber-500" />
+                      <Clock className="h-4 w-4 text-status-hold" />
                       Pending:{" "}
                       {attendees.filter((a) => a.status === "pending").length}
                     </p>
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       {attendees
                         .filter((a) => a.status === "pending")
                         .map((attendee, idx) => (
@@ -413,23 +393,23 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
                   </div>
                 </div>
 
-                <Separator className="my-4" />
+                <Separator className="my-3" />
 
                 {/* Contact */}
                 <div>
-                  <p className="text-xs text-muted-foreground mb-2">Contact</p>
+                  <p className="text-xs text-muted-foreground mb-3">Contact</p>
                   <div className="flex items-center gap-2">
-                    <Mail className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                    <Mail className="h-4 w-4 text-muted-foreground shrink-0" />
                     <span className="text-sm text-foreground truncate flex-1">
                       {event.email}
                     </span>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-6 w-6 shrink-0"
+                      className="h-8 w-8 shrink-0"
                       onClick={copyEmail}
                     >
-                      <Copy className="h-3 w-3" />
+                      <Copy className="h-4 w-4" />
                     </Button>
                   </div>
                 </div>

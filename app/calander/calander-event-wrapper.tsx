@@ -9,7 +9,7 @@ import { Calendar, Clock, SidebarIcon } from "lucide-react";
 
 import { InterviewEvent, typeConfig } from "@/types/interviews";
 import { initialEvents } from "../../features/interview/data/interviews";
-import { EventPopup } from "../../features/calander/event-popup";
+import { EventPopup } from "./event-detail-wrapper";
 import {
   Dialog,
   DialogContent,
