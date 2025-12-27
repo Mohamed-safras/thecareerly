@@ -128,6 +128,10 @@ const SuperAdminAppSideBar = () => {
             title: "View Jobs",
             url: jobsPath ? `${jobsPath}` : "#",
           },
+          {
+            title: "Candidate Matcher",
+            url: "/candidate-matcher",
+          },
         ],
       },
     ],

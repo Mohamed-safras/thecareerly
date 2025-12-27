@@ -41,13 +41,15 @@ export interface Job extends JobForm {
 
 export function JobPostingCard({
   job,
+  children,
   onJobClick,
 }: {
   job: Job;
+  children?: React.ReactNode;
   onJobClick: (job: Job) => void;
 }) {
   return (
-    <Card className="relative overflow-hidden max-h-[500px]">
+    <Card className="relative rounded-lg shadow-none overflow-hidden max-h-[500px]">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -57,15 +59,15 @@ export function JobPostingCard({
                 jobStatus[job.status] || ""
               } text-white font-bold text-sm flex items-center gap-1`}
             >
-              {job.status === "OPEN" && <CircleDot className="h-3 w-3" />}
-              {job.status === "HOLD" && <PauseCircleIcon className="h-3 w-3" />}
-              {job.status === "DRAFT" && <Pencil className="h-3 w-3" />}
-              {job.status === "CLOSED" && <CircleCheck className="h-3 w-3" />}
+              {job.status === "OPEN" && <CircleDot className="h-4 w-4" />}
+              {job.status === "HOLD" && <PauseCircleIcon className="h-4 w-4" />}
+              {job.status === "DRAFT" && <Pencil className="h-4 w-4" />}
+              {job.status === "CLOSED" && <CircleCheck className="h-4 w-4" />}
 
               <span className="capitalize">{job.status}</span>
 
               {!["OPEN", "HOLD", "CLOSED", "DRAFT"].includes(job.status) && (
-                <ChevronDown className="h-3 w-3 cursor-pointer" />
+                <ChevronDown className="h-4 w-3 cursor-pointer" />
               )}
             </Badge>
 
@@ -118,7 +120,8 @@ export function JobPostingCard({
 
       <Separator />
 
-      <div className="grid grid-cols-2 gap-2 sm:gap-2 px-6">
+      {/* when you invoke this in jobs use the reming commented code */}
+      {/* <div className="grid grid-cols-2 gap-2 sm:gap-2 px-6">
         <StatisticPill
           value={job.candidatesApplied || 0}
           label="Candidates Applied"
@@ -128,7 +131,9 @@ export function JobPostingCard({
           value={job.completedInterviews || 0}
           label={`Completed interview${job.completedInterviews > 1 ? "s" : ""}`}
         />
-      </div>
+      </div> */}
+
+      {children}
 
       <Separator />
       <CardFooter className="flex flex-col lg:flex-row lg:items-center items-start justify-between gap-2">
