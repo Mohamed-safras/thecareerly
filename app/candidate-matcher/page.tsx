@@ -44,12 +44,12 @@ export default function CVMatching() {
 
   const getStrongMatchCountForJob = (jobId: string) => {
     return mockMatchResults.filter(
-      (r) => r.jobId === jobId && r.recommendation === "strong"
+      (rob) => rob.jobId === jobId && rob.recommendation === "strong"
     ).length;
   };
 
   const getMatchesForJob = (jobId: string) => {
-    return mockMatchResults.filter((r) => r.jobId === jobId);
+    return mockMatchResults.filter((result) => result.jobId === jobId);
   };
 
   // Show candidates view when a job is selected

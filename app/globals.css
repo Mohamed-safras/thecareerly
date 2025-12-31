@@ -844,9 +844,6 @@
   }
 }
 
-@layer components {
-}
-
 .calendar-wrapper {
   @apply rounded-xl border bg-card shadow-sm overflow-hidden;
 }
@@ -861,6 +858,82 @@
   @apply rounded-lg  text-xs cursor-pointer transition-all duration-200;
   @apply hover:shadow-lg hover:-translate-y-0.5;
   border-left: 4px solid;
+}
+
+.shadow-card {
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.35),
+    0 10px 20px -5px rgb(0 0 0 / 0.2);
+}
+
+.shadow-credit-card {
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.35),
+    0 10px 20px -5px rgb(0 0 0 / 0.2);
+}
+
+/* Credit card gradients */
+.gradient-visa {
+  background: linear-gradient(135deg, #1a1f71 0%, #2d3a8c 50%, #1a237e 100%);
+}
+
+.gradient-mastercard {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+
+.gradient-gold {
+  background: linear-gradient(135deg, #f5af19 0%, #f12711 50%, #f5af19 100%);
+}
+
+.gradient-platinum {
+  background: linear-gradient(135deg, #373b44 0%, #4286f4 50%, #373b44 100%);
+}
+
+.gradient-dark {
+  background: linear-gradient(135deg, #232526 0%, #414345 50%, #232526 100%);
+}
+
+/* Card shine effect */
+.card-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-shine::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.card-shine:hover::before {
+  left: 100%;
+}
+
+/* 3D card effect */
+.card-3d {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.card-3d-inner {
+  transition: transform 0.3s ease;
+}
+
+.card-3d:hover .card-3d-inner {
+  transform: rotateY(-5deg) rotateX(5deg);
+}
+
+/* Embossed text */
+.text-embossed {
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), 0 -1px 1px rgba(255, 255, 255, 0.1);
 }
 
 /* FullCalendar custom styles */
