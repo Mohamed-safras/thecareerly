@@ -24,14 +24,14 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { USER_STATUS } from "@/constents/user-actions";
-import { Candidate } from "@/interfaces/candidate";
 import StarRating from "@/components/star-rating";
+import { MatchResult } from "@/interfaces/matching";
 
 // Define the columns as a function that accepts the click handler
-export const createCandidateColumns = (
-  handleUpdateUserProfileClick: (candidate: Candidate) => void,
-  onViewDetails: (candidate: Candidate) => void
-): ColumnDef<Candidate>[] => [
+export const createMatchResultColumns = (
+  handleUpdateUserProfileClick: (candidate: MatchResult) => void,
+  onViewDetails: (candidate: MatchResult) => void
+): ColumnDef<MatchResult>[] => [
   {
     id: "select",
     header: ({ table }) => (

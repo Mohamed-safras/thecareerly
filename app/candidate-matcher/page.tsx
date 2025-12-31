@@ -5,13 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import {
-  Search,
-  Upload,
-  Settings2,
-  Briefcase,
-  Sparkles,
-} from "lucide-react";
+import { Search, Upload, Settings2, Briefcase, Sparkles } from "lucide-react";
 
 import { MatchingConfigPanel } from "@/features/candidates/matching/matching-config-panel";
 import { CVUploadZone } from "@/features/candidates/matching/cv-upload-zone";
@@ -169,14 +163,6 @@ export default function CVMatching() {
             <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
               {filteredJobs.length > 0 ? (
                 filteredJobs.map((job, index) => (
-                  // <JobCard
-                  //   key={index}
-                  //   job={job}
-                  //   matchCount={getMatchCountForJob(job.id)}
-                  //   strongMatchCount={getStrongMatchCountForJob(job.id)}
-                  //   onClick={() => setSelectedJob(job)}
-                  //   index={index}
-                  // />
                   <JobPostingCard
                     key={index}
                     job={job}
