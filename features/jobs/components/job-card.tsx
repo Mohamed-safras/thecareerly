@@ -9,11 +9,11 @@ import {
   ChevronRight,
   Clock,
 } from "lucide-react";
-import { motion } from "framer-motion";
-import { JobDescription } from "@/types/matching";
+
+import { Job } from "./job-posting-card";
 
 interface JobCardProps {
-  job: JobDescription;
+  job: Job;
   matchCount: number;
   strongMatchCount: number;
   onClick: () => void;
@@ -32,14 +32,9 @@ export function JobCard({
   matchCount,
   strongMatchCount,
   onClick,
-  index = 0,
 }: JobCardProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: index * 0.05 }}
-    >
+    <div>
       <Card
         className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-primary/40 hover:-translate-y-1 overflow-hidden relative"
         onClick={onClick}
@@ -80,7 +75,7 @@ export function JobCard({
                 </span>
                 <span className="flex items-center gap-1.5">
                   <DollarSign className="h-3.5 w-3.5" />
-                  {job.salaryRange}
+                  {job.salary.min} - {job.salary.max} {job.salary.currency} /{" "}
                 </span>
               </div>
 
@@ -140,6 +135,6 @@ export function JobCard({
           </div>
         </div>
       </Card>
-    </motion.div>
+    </div>
   );
 }

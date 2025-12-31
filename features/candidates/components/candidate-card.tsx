@@ -9,7 +9,6 @@ import {
   ChevronRight,
   Sparkles,
 } from "lucide-react";
-import { motion } from "framer-motion";
 import { MatchResult } from "@/types/matching";
 
 interface CandidateCardProps {
@@ -57,11 +56,7 @@ const recommendationConfig = {
   },
 };
 
-export function CandidateCard({
-  result,
-  onViewDetails,
-  index = 0,
-}: CandidateCardProps) {
+export function CandidateCard({ result, onViewDetails }: CandidateCardProps) {
   const config = recommendationConfig[result.recommendation];
   const Icon = config.icon;
   const initials = result.candidateName
@@ -71,11 +66,7 @@ export function CandidateCard({
     .toUpperCase();
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.3, delay: index * 0.05 }}
-    >
+    <div>
       <Card
         className={`group cursor-pointer transition-all duration-300 hover:shadow-lg border-l-4 ${config.border} hover:-translate-y-1 overflow-hidden`}
         onClick={onViewDetails}
@@ -89,8 +80,7 @@ export function CandidateCard({
           <div className="flex items-start gap-5">
             {/* Score Circle with animation */}
             <div className="shrink-0">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
+              <div
                 className={`relative w-20 h-20 rounded-2xl ${config.bg} flex items-center justify-center shadow-sm`}
               >
                 <div className="text-center">
@@ -102,15 +92,11 @@ export function CandidateCard({
                   </div>
                 </div>
                 {result.recommendation === "strong" && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-status-active flex items-center justify-center shadow-lg"
-                  >
+                  <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-status-active flex items-center justify-center shadow-lg">
                     <Sparkles className="h-3 w-3 text-white" />
-                  </motion.div>
+                  </div>
                 )}
-              </motion.div>
+              </div>
             </div>
 
             {/* Main Content */}
@@ -152,13 +138,7 @@ export function CandidateCard({
                       <span className="font-semibold">{item.value}%</span>
                     </div>
                     <div className="h-2 bg-muted rounded-full overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${item.value}%` }}
-                        transition={{
-                          duration: 0.5,
-                          delay: 0.2 + index * 0.05,
-                        }}
+                      <div
                         className={`h-full rounded-full ${
                           item.value >= 90
                             ? "bg-status-active"
@@ -223,6 +203,11 @@ export function CandidateCard({
           </div>
         </div>
       </Card>
-    </motion.div>
+    </div>
+    // <Sheet open={isOpen} onOpenChange={onClose}>
+    //   <SheetContent className="w-full sm:max-w-2xl p-0 flex flex-col">
+    //     {initials}
+    //   </SheetContent>
+    // </Sheet>
   );
 }

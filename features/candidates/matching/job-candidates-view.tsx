@@ -14,12 +14,13 @@ import {
   XCircle,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { JobDescription, MatchResult } from "@/types/matching";
+import { MatchResult } from "@/types/matching";
 import { CandidateCard } from "../components/candidate-card";
 import { MatchDetailDialog } from "./match-detail";
+import { Job } from "@/features/jobs/components/job-posting-card";
 
 interface JobCandidatesViewProps {
-  job: JobDescription;
+  job: Job;
   matches: MatchResult[];
   onBack: () => void;
 }
@@ -135,7 +136,7 @@ export function JobCandidatesView({
                     </span>
                     <span className="flex items-center gap-1">
                       <DollarSign className="h-3.5 w-3.5" />
-                      {job.salaryRange}
+                      {job.salary.min} - {job.salary.max} {job.salary.currency}
                     </span>
                   </div>
                 </div>
