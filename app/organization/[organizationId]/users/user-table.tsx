@@ -43,6 +43,8 @@ import EditUserForm from "@/features/users/components/edit-user";
 import React from "react";
 import RolePermissionManager from "@/features/users/components/role-permission-manager";
 import { useSidebar } from "@/components/ui/sidebar";
+import ResponsiveTable from "@/components/responsive-table";
+import { TablePagination } from "@/components/table-pagination";
 
 // --- Data and Components (Included for completeness) ---
 
@@ -269,59 +271,18 @@ export function UserTable() {
         uniqueAccessTags={uniqueAccessTags}
       />
 
-      {/* Responsive Table Wrapper */}
-      <div
-        className={` rounded-lg border overflow-x-auto bg-background w-full`}
-      >
-        <div className=" inline-block align-middle">
-          <Table className={`${window} text-sm`}>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
+      <ResponsiveTable
+        table={table}
+        columns={columns}
+        flexRender={flexRender}
+        Table={Table}
+        TableHeader={TableHeader}
+        TableRow={TableRow}
+        TableHead={TableHead}
+        TableBody={TableBody}
+        TableCell={TableCell}
+        windowClassName={window}
+      />
 
       {/* Pagination */}
       <TablePagination table={table} />
@@ -457,39 +418,6 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
         </DropdownMenuContent>
       </DropdownMenu>
       <AddUser />
-    </div>
-  </div>
-);
-
-// --- TablePagination Component (Refined for responsiveness) ---
-
-interface TablePaginationProps {
-  table: ReactTableInstance<UserProfile>;
-}
-
-const TablePagination: React.FC<TablePaginationProps> = ({ table }) => (
-  <div className="flex items-center justify-end space-x-2 py-4 flex-wrap">
-    <div className="text-muted-foreground flex-1 text-sm text-center sm:text-left">
-      {table.getFilteredSelectedRowModel().rows.length} of{" "}
-      {table.getFilteredRowModel().rows.length} row(s) selected.
-    </div>
-    <div className="space-x-2">
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => table.previousPage()}
-        disabled={!table.getCanPreviousPage()}
-      >
-        Previous
-      </Button>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => table.nextPage()}
-        disabled={!table.getCanNextPage()}
-      >
-        Next
-      </Button>
     </div>
   </div>
 );

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { axiosClient } from "@/lib/axios/axios-client";
-import type { JobForm, PosterPayload } from "@/types/job-form";
+import type { JobForm, PosterPayload } from "@/interfaces/job";
 import { normalizePosterVibe } from "@/types/poster";
 import axios from "axios";
 import { extractStatusAndMessage } from "@/lib/error/error-message-extractor";

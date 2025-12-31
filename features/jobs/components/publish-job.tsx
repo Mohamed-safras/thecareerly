@@ -17,7 +17,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 import { useSubmitJobForm } from "@/hooks/use-submit-form";
 import { ACTIONS } from "@/constents/actions";
-import { JobForm } from "@/types/job-form";
+import { JobForm } from "@/interfaces/job";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 interface SchedulePanelProps {

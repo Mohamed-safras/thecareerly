@@ -2,7 +2,7 @@ import type { PosterVibe } from "@/types/poster-vibe";
 import { Question } from "@/types/question";
 import { SelectionProcess } from "@/types/selection-process";
 
-export type JobForm = {
+export interface JobForm {
   title: string;
   location: string;
   department: string;
@@ -28,12 +28,12 @@ export type JobForm = {
   questions: Question[];
   selectionProcess: SelectionProcess[];
   skills: string[];
-};
+}
 
-export type PosterPayload = {
+export interface PosterPayload {
   title: string;
   posterNotes?: string;
   posterVibe?: string;
   companyName?: string;
   brandColorHex?: string;
-};
+}

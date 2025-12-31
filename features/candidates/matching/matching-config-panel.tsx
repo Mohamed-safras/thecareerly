@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Settings2, RotateCcw, Save } from "lucide-react";
 import { toast } from "sonner";
-import { defaultMatchingConfig, MatchingConfig } from "@/types/matching";
+import { defaultMatchingConfig, MatchingConfig } from "@/interfaces/matching";
 
 interface MatchingConfigPanelProps {
   config?: MatchingConfig;

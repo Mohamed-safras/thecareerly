@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ReactNode, useEffect, useMemo, useRef } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import AccessCheck from "@/components/access-check";
 import { useAuth } from "@/hooks/use-auth";
@@ -19,17 +19,17 @@ type ProtectedClientShellProps = {
   requireAll?: boolean; // If true, user must have ALL allowedRoles
 };
 
-function getSafeCallbackUrl(url: string): string {
-  if (
-    url.startsWith("/") &&
-    !url.startsWith("//") &&
-    !url.startsWith("/\\") &&
-    !url.includes("://")
-  ) {
-    return url;
-  }
-  return "/";
-}
+// function getSafeCallbackUrl(url: string): string {
+//   if (
+//     url.startsWith("/") &&
+//     !url.startsWith("//") &&
+//     !url.startsWith("/\\") &&
+//     !url.includes("://")
+//   ) {
+//     return url;
+//   }
+//   return "/";
+// }
 
 export default function ProtectedClientShell({
   children,
@@ -41,7 +41,6 @@ export default function ProtectedClientShell({
   requireAll = false,
 }: ProtectedClientShellProps) {
   const router = useRouter();
-  const pathname = usePathname();
   const dispatch = useAppDispatch();
   const redirectingRef = useRef(false);
 
@@ -52,16 +51,6 @@ export default function ProtectedClientShell({
       dispatch(checkAuthStatus());
     }
   }, [dispatch, status]);
-
-  const safeCallbackUrl = useMemo(
-    () => getSafeCallbackUrl(pathname),
-    [pathname]
-  );
-
-  const loginHref = useMemo(
-    () => `${loginUrl}?redirect=${encodeURIComponent(safeCallbackUrl)}`,
-    [loginUrl, safeCallbackUrl]
-  );
 
   // Extract all user roles as strings
   const userRoles = useMemo(() => user?.roles ?? [], [user?.roles]);
@@ -116,7 +105,7 @@ export default function ProtectedClientShell({
     if (!isAuthenticated) {
       console.log("User not authenticated, redirecting to login");
       redirectingRef.current = true;
-      router.replace(loginHref);
+      router.replace(loginUrl);
       return;
     }
 
@@ -127,7 +116,7 @@ export default function ProtectedClientShell({
       router.replace(forbiddenUrl);
       return;
     }
-  }, [status, isAuthenticated, hasAccess, loginHref, forbiddenUrl, router]);
+  }, [status, isAuthenticated, hasAccess, loginUrl, forbiddenUrl, router]);
 
   if (status === "idle" || status === "loading") {
     return <AccessCheck />;

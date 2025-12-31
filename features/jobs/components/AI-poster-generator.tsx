@@ -30,7 +30,7 @@ import { useFileHandler } from "@/hooks/use-file-handler";
 import { AllowedVibesTypeValue, isPosterVibe } from "@/types/poster";
 import { ALLOWED_VIBES_TYPES } from "@/constents/basic-info-options";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { JobForm } from "@/types/job-form";
+import { JobForm } from "@/interfaces/job";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 const MAX_FILES = 3;

@@ -9,7 +9,7 @@ import {
   ChevronRight,
   Sparkles,
 } from "lucide-react";
-import { MatchResult } from "@/types/matching";
+import { MatchResult } from "@/interfaces/matching";
 
 interface CandidateCardProps {
   result: MatchResult;
@@ -59,11 +59,6 @@ const recommendationConfig = {
 export function CandidateCard({ result, onViewDetails }: CandidateCardProps) {
   const config = recommendationConfig[result.recommendation];
   const Icon = config.icon;
-  const initials = result.candidateName
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase();
 
   return (
     <div>
@@ -104,7 +99,7 @@ export function CandidateCard({ result, onViewDetails }: CandidateCardProps) {
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div>
                   <h3 className="font-semibold text-lg text-foreground group-hover:text-primary transition-colors">
-                    {result.candidateName}
+                    {result.name}
                   </h3>
                   <Badge
                     variant="secondary"

@@ -1,24 +1,14 @@
 "use client";
-import { useState, useMemo } from "react";
-import { Plus, Download, Upload, Users, List, LayoutGrid } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import React, { useState, useMemo } from "react";
+import { List, LayoutGrid } from "lucide-react";
+
 import { CandidateFilters } from "@/features/candidates/components/candidate-filters";
-import { CandidateTableRow } from "@/features/candidates/components/candidate-table-row";
 import { CandidateDetailDrawer } from "@/app/candidates/candidate-detail-drawer";
-import {
-  candidatesFullData,
-  Candidate,
-} from "@/features/candidates/data/mock-data";
+import { candidatesFullData } from "@/features/candidates/data/mock-data";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { KanbanBoard } from "@/features/candidates/components/kanban/kanban-board";
+import { Candidate } from "@/interfaces/candidate";
+import CandidatesTableWrapper from "./candidates-table-wrapper";
 
 const Candidates = () => {
   const [viewMode, setViewMode] = useState<"table" | "kanban">("table");
@@ -28,11 +18,10 @@ const Candidates = () => {
   const [stageFilter, setStageFilter] = useState("All Stages");
   const [departmentFilter, setDepartmentFilter] = useState("All Departments");
   const [sourceFilter, setSourceFilter] = useState("All Sources");
-  const [selectedCandidates, setSelectedCandidates] = useState<string[]>([]);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [detailCandidate, setDetailCandidate] = useState<Candidate | null>(
     null
   );
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const filteredCandidates = useMemo(() => {
     return allCandidates.filter((candidate) => {
@@ -75,40 +64,15 @@ const Candidates = () => {
     setSourceFilter("All Sources");
   };
 
-  const handleSelectAll = () => {
-    if (selectedCandidates.length === filteredCandidates.length) {
-      setSelectedCandidates([]);
-    } else {
-      setSelectedCandidates(filteredCandidates.map((c) => c.id));
-    }
-  };
-
-  const handleSelectCandidate = (id: string) => {
-    setSelectedCandidates((prev) =>
-      prev.includes(id) ? prev.filter((cId) => cId !== id) : [...prev, id]
-    );
-  };
-
   const handleViewDetails = (candidate: Candidate) => {
     setDetailCandidate(candidate);
     setIsDrawerOpen(true);
   };
 
   return (
-    <div className="min-h-screen">
+    <React.Fragment>
       {/* Main Content */}
       <div className="px-4 py-6 space-y-3">
-        {/* Page Header */}
-        {/* <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
-              Candidates
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Manage and track all candidates in your hiring pipeline
-            </p>
-          </div>
-        </div> */}
         <div className="flex justify-end items-center gap-2">
           <div className="flex items-center gap-2">
             <Tabs
@@ -127,22 +91,7 @@ const Candidates = () => {
               </TabsList>
             </Tabs>
           </div>
-          <Button variant="outline" className="gap-2">
-            <Upload className="h-4 w-4" />
-            Import
-          </Button>
-          <Button variant="outline" className="gap-2">
-            <Download className="h-4 w-4" />
-            Export
-          </Button>
-          <Button className="gap-2">
-            <Plus className="h-4 w-4" />
-            Add Candidate
-          </Button>
         </div>
-
-        {/* Stats */}
-        {/* <CandidatesStats /> */}
 
         {/* Filters */}
         <div className="rounded-lg border bg-card p-3">
@@ -165,76 +114,22 @@ const Candidates = () => {
             candidates={filteredCandidates}
             onCandidatesChange={(updated) => {
               setAllCandidates((prev) => {
-                const updatedIds = new Set(updated.map((c) => c.id));
-                const unchanged = prev.filter((c) => !updatedIds.has(c.id));
+                const updatedIds = new Set(
+                  updated.map((candidate) => candidate.id)
+                );
+                const unchanged = prev.filter(
+                  (candidate) => !updatedIds.has(candidate.id)
+                );
                 return [...unchanged, ...updated];
               });
             }}
           />
         ) : (
           /* Table View */
-          <div className="rounded-lg border bg-card">
-            <div className="p-3 border-b flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">
-                  Showing {filteredCandidates.length} candidates
-                </span>
-                {selectedCandidates.length > 0 && (
-                  <span className="text-sm font-medium text-primary">
-                    ({selectedCandidates.length} selected)
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-12">
-                    <Checkbox
-                      checked={
-                        selectedCandidates.length ===
-                          filteredCandidates.length &&
-                        filteredCandidates.length > 0
-                      }
-                      onCheckedChange={handleSelectAll}
-                    />
-                  </TableHead>
-                  <TableHead>Candidate</TableHead>
-                  <TableHead>Position</TableHead>
-                  <TableHead>Stage</TableHead>
-                  <TableHead>Rating</TableHead>
-                  <TableHead>Match</TableHead>
-                  <TableHead>Experience</TableHead>
-                  <TableHead>Applied</TableHead>
-                  <TableHead className="w-24">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredCandidates.map((candidate) => (
-                  <CandidateTableRow
-                    key={candidate.id}
-                    candidate={candidate}
-                    isSelected={selectedCandidates.includes(candidate.id)}
-                    onSelect={handleSelectCandidate}
-                    onViewDetails={handleViewDetails}
-                  />
-                ))}
-              </TableBody>
-            </Table>
-
-            {filteredCandidates.length === 0 && (
-              <div className="text-center py-12">
-                <Users className="h-12 w-12 mx-auto text-muted-foreground/50 mb-3" />
-                <p className="text-muted-foreground">
-                  No candidates found matching your filters
-                </p>
-                <Button variant="link" onClick={clearFilters}>
-                  Clear filters
-                </Button>
-              </div>
-            )}
-          </div>
+          <CandidatesTableWrapper
+            candidates={filteredCandidates}
+            handleViewDetails={handleViewDetails}
+          />
         )}
       </div>
 
@@ -246,7 +141,7 @@ const Candidates = () => {
           onClose={() => setIsDrawerOpen(false)}
         />
       )}
-    </div>
+    </React.Fragment>
   );
 };
 

@@ -10,7 +10,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { Candidate } from "../../features/candidates/data/mock-data";
 import { EvaluationScorecard } from "../../features/candidates/components/evaluation-scorecard";
 import { InterviewScheduler } from "../../features/candidates/components/interview-scheduler";
 import { CommunicationHistory } from "../../features/candidates/components/communication-history";
@@ -18,6 +17,7 @@ import { DocumentsManager } from "../../features/candidates/components/documents
 import { PipelineStageManager } from "../../features/candidates/components/pipeline-stage-manager";
 import CandidateDetailHeader from "../../features/candidates/components/candidate-detail-header";
 import CandidateBasicInfo from "@/features/candidates/components/candidate-basic-info";
+import { Candidate } from "@/interfaces/candidate";
 
 export interface CandidateDetailDrawerProps {
   candidate: Candidate | null;

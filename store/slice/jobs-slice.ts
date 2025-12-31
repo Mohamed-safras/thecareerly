@@ -4,7 +4,7 @@ import {
   Draft,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
-import type { JobForm } from "@/types/job-form";
+import type { JobForm } from "@/interfaces/job";
 import { localStoreGet, localStoreSet } from "@/lib/common/localstore";
 import {
   CREATE_JOB_FORM,

@@ -8,7 +8,7 @@ import { Forward, Heart, SquareArrowOutUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { JobForm } from "@/types/job-form";
+import { JobForm } from "@/interfaces/job";
 
 export interface PreviewPanelProps {
   compact?: boolean;

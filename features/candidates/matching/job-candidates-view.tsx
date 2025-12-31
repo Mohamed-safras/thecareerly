@@ -13,8 +13,7 @@ import {
   DollarSign,
   XCircle,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { MatchResult } from "@/types/matching";
+import { MatchResult } from "@/interfaces/matching";
 import { CandidateCard } from "../components/candidate-card";
 import { MatchDetailDialog } from "./match-detail";
 import { Job } from "@/features/jobs/components/job-posting-card";
@@ -39,17 +38,15 @@ export function JobCandidatesView({
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
 
   const filteredMatches = matches
-    .filter((m) => {
+    .filter((match) => {
       if (searchQuery) {
-        return m.candidateName
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase());
+        return match.name.toLowerCase().includes(searchQuery.toLowerCase());
       }
       return true;
     })
-    .filter((m) => {
+    .filter((match) => {
       if (filterRecommendation !== "all") {
-        return m.recommendation === filterRecommendation;
+        return match.recommendation === filterRecommendation;
       }
       return true;
     })
@@ -104,26 +101,22 @@ export function JobCandidatesView({
   return (
     <div className="h-full flex flex-col bg-gradient-to-b from-muted/30 to-background">
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="border-b bg-card/80 backdrop-blur-sm sticky top-0 z-10"
-      >
-        <div className="p-4 md:p-6">
-          <div className="flex items-start gap-4 mb-5">
+      <div className="border-b bg-card/80 backdrop-blur-sm sticky top-0 z-10">
+        <div className="p-3">
+          <div className="flex items-center gap-3 mb-3">
             <Button
               variant="ghost"
               size="icon"
               onClick={onBack}
               className="shrink-0 hover:bg-primary/10 hover:text-primary transition-colors"
             >
-              <ArrowLeft className="h-5 w-5" />
+              <ArrowLeft className="h-4 w-4" />
             </Button>
 
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-3 mb-2">
+              <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-primary/10">
-                  <Briefcase className="h-5 w-5 text-primary" />
+                  <Briefcase className="h-4 w-4 text-primary" />
                 </div>
                 <div>
                   <h1 className="text-xl md:text-2xl font-bold text-foreground">
@@ -145,18 +138,16 @@ export function JobCandidatesView({
           </div>
 
           {/* Filter Chips */}
-          <div className="flex flex-wrap gap-2 mb-4">
+          <div className="flex flex-wrap gap-3 mb-3">
             {filterButtons.map((btn) => {
               const Icon = btn.icon;
               const isActive = filterRecommendation === btn.value;
               return (
-                <motion.button
+                <button
                   key={btn.value}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                   onClick={() => setFilterRecommendation(btn.value)}
                   className={`
-                    inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
+                    inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium
                     transition-all duration-200
                     ${
                       isActive
@@ -177,7 +168,7 @@ export function JobCandidatesView({
                   >
                     {btn.count}
                   </span>
-                </motion.button>
+                </button>
               );
             })}
           </div>
@@ -193,64 +184,53 @@ export function JobCandidatesView({
             />
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Candidate List */}
       <div className="flex-1 overflow-auto">
-        <div className="p-4 md:p-6 max-w-4xl mx-auto">
-          <AnimatePresence mode="wait">
-            {filteredMatches.length > 0 ? (
-              <motion.div
-                key="list"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="space-y-4"
-              >
-                {/* this is already avalible in dashboard candidate card can reuse */}
-                {filteredMatches.map((result, index) => (
-                  <CandidateCard
-                    key={result.id}
-                    result={result}
-                    onViewDetails={() => handleViewDetails(result)}
-                    index={index}
-                  />
-                ))}
-              </motion.div>
-            ) : (
-              <motion.div
-                key="empty"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="flex flex-col items-center justify-center py-16 text-center"
-              >
-                <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mb-4">
-                  <Users className="h-10 w-10 text-muted-foreground/50" />
-                </div>
-                <h3 className="font-semibold text-lg text-foreground mb-2">
-                  No candidates found
-                </h3>
-                <p className="text-muted-foreground max-w-sm">
-                  {searchQuery || filterRecommendation !== "all"
-                    ? "Try adjusting your search or filters to find more candidates"
-                    : "Upload CVs to start matching candidates to this position"}
-                </p>
-                {(searchQuery || filterRecommendation !== "all") && (
-                  <Button
-                    variant="outline"
-                    className="mt-4"
-                    onClick={() => {
-                      setSearchQuery("");
-                      setFilterRecommendation("all");
-                    }}
-                  >
-                    Clear filters
-                  </Button>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
+        <div className="p-3">
+          {filteredMatches.length > 0 ? (
+            <div key="list" className="space-y-3">
+              {/* this is already avalible in dashboard candidate card can reuse */}
+              {filteredMatches.map((result, index) => (
+                <CandidateCard
+                  key={result.id}
+                  result={result}
+                  onViewDetails={() => handleViewDetails(result)}
+                  index={index}
+                />
+              ))}
+            </div>
+          ) : (
+            <div
+              key="empty"
+              className="flex flex-col items-center justify-center py-16 text-center"
+            >
+              <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mb-4">
+                <Users className="h-10 w-10 text-muted-foreground/50" />
+              </div>
+              <h3 className="font-semibold text-lg text-foreground mb-2">
+                No candidates found
+              </h3>
+              <p className="text-muted-foreground max-w-sm">
+                {searchQuery || filterRecommendation !== "all"
+                  ? "Try adjusting your search or filters to find more candidates"
+                  : "Upload CVs to start matching candidates to this position"}
+              </p>
+              {(searchQuery || filterRecommendation !== "all") && (
+                <Button
+                  variant="outline"
+                  className="mt-4"
+                  onClick={() => {
+                    setSearchQuery("");
+                    setFilterRecommendation("all");
+                  }}
+                >
+                  Clear filters
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
