@@ -9,7 +9,7 @@ import { AxiosError } from "axios";
 import { extractMessage } from "@/lib/axios/axios-client";
 import { getJobsPath } from "@/lib/utils";
 import { ACTIONS } from "@/constents/actions";
-import { JobForm } from "@/types/job-form";
+import { JobForm } from "@/interfaces/job";
 
 export function useSubmitJobForm({
   jobForm,

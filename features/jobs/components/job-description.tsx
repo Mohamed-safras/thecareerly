@@ -16,7 +16,7 @@ import { Switch } from "@/components/ui/switch";
 import AIPosterGenerator from "./AI-poster-generator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { setFieldErrors } from "@/store/slice/form-error-slice";
-import { JobForm } from "@/types/job-form";
+import { JobForm } from "@/interfaces/job";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 export interface JobDescriptionProps {

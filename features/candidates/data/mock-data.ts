@@ -1,26 +1,4 @@
-export type Candidate = {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  avatar: string;
-  role: string;
-  department: string;
-  experience: string;
-  location: string;
-  salary: string;
-  stage: string;
-  rating: number;
-  matchScore: number;
-  appliedDate: string;
-  source: string;
-  resume: string;
-  skills: string[];
-  education: string;
-  status: "active" | "hired" | "rejected" | "withdrawn";
-  notes: number;
-  interviews: number;
-};
+import { Candidate } from "@/interfaces/candidate";
 
 export const candidatesFullData: Candidate[] = [
   {
@@ -37,7 +15,6 @@ export const candidatesFullData: Candidate[] = [
     salary: "$150,000 - $180,000",
     stage: "Technical Interview",
     rating: 5,
-    matchScore: 95,
     appliedDate: "2024-12-10",
     source: "LinkedIn",
     resume: "sarah_chen_resume.pdf",
@@ -61,7 +38,6 @@ export const candidatesFullData: Candidate[] = [
     salary: "$120,000 - $140,000",
     stage: "Final Round",
     rating: 4,
-    matchScore: 88,
     appliedDate: "2024-12-08",
     source: "Referral",
     resume: "michael_torres_portfolio.pdf",
@@ -91,7 +67,6 @@ export const candidatesFullData: Candidate[] = [
     salary: "$140,000 - $160,000",
     stage: "Rejected",
     rating: 4,
-    matchScore: 82,
     appliedDate: "2024-12-15",
     source: "Indeed",
     resume: "emily_watson_cv.pdf",
@@ -115,7 +90,6 @@ export const candidatesFullData: Candidate[] = [
     salary: "$170,000 - $200,000",
     stage: "Offer Extended",
     rating: 5,
-    matchScore: 92,
     appliedDate: "2024-12-01",
     source: "Glassdoor",
     resume: "david_kim_resume.pdf",
@@ -139,7 +113,6 @@ export const candidatesFullData: Candidate[] = [
     salary: "$110,000 - $130,000",
     stage: "Application Review",
     rating: 3,
-    matchScore: 75,
     appliedDate: "2024-12-16",
     source: "Company Website",
     resume: "lisa_park_cv.pdf",
@@ -168,9 +141,7 @@ export const candidatesFullData: Candidate[] = [
     location: "Denver, CO",
     salary: "$130,000 - $150,000",
     stage: "Technical Interview",
-
     rating: 4,
-    matchScore: 85,
     appliedDate: "2024-12-12",
     source: "LinkedIn",
     resume: "james_wilson_resume.pdf",
@@ -194,7 +165,6 @@ export const candidatesFullData: Candidate[] = [
     salary: "$95,000 - $115,000",
     stage: "HR Screening",
     rating: 4,
-    matchScore: 80,
     appliedDate: "2024-12-14",
     source: "Referral",
     resume: "anna_martinez_cv.pdf",
@@ -218,7 +188,6 @@ export const candidatesFullData: Candidate[] = [
     salary: "$200,000 - $250,000",
     stage: "Hired",
     rating: 5,
-    matchScore: 90,
     appliedDate: "2024-12-05",
     source: "Headhunter",
     resume: "robert_johnson_resume.pdf",
@@ -248,7 +217,6 @@ export const candidatesFullData: Candidate[] = [
     salary: "$200,000 - $250,000",
     stage: "Hired",
     rating: 5,
-    matchScore: 90,
     appliedDate: "2024-12-05",
     source: "Headhunter",
     resume: "robert_johnson_resume.pdf",
@@ -279,7 +247,6 @@ export const candidatesFullData: Candidate[] = [
     salary: "$200,000 - $250,000",
     stage: "Final Round",
     rating: 5,
-    matchScore: 90,
     appliedDate: "2024-12-05",
     source: "Headhunter",
     resume: "robert_johnson_resume.pdf",
@@ -309,7 +276,6 @@ export const candidatesFullData: Candidate[] = [
     salary: "$200,000 - $250,000",
     stage: "Final Round",
     rating: 5,
-    matchScore: 90,
     appliedDate: "2024-12-05",
     source: "Headhunter",
     resume: "robert_johnson_resume.pdf",
@@ -339,7 +305,6 @@ export const candidatesFullData: Candidate[] = [
     salary: "$200,000 - $250,000",
     stage: "Final Round",
     rating: 5,
-    matchScore: 90,
     appliedDate: "2024-12-05",
     source: "Headhunter",
     resume: "robert_johnson_resume.pdf",

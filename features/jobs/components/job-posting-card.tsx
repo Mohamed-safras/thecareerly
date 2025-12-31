@@ -25,7 +25,7 @@ import {
 
 import KV from "@/features/jobs/components/kv";
 import { jobStatus } from "@/constents/action-colors";
-import { JobForm } from "@/types/job-form";
+import { JobForm } from "@/interfaces/job";
 
 export interface Job extends JobForm {
   id: string;

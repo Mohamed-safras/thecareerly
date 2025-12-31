@@ -1,24 +1,37 @@
 "use client";
-import { useState, useMemo } from "react";
-import { Plus, Download, Upload, Users, List, LayoutGrid } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import { Plus, Download, Upload, List, LayoutGrid } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { CandidateFilters } from "@/features/candidates/components/candidate-filters";
-import { CandidateTableRow } from "@/features/candidates/components/candidate-table-row";
 import { CandidateDetailDrawer } from "@/app/candidates/candidate-detail-drawer";
-import {
-  candidatesFullData,
-  Candidate,
-} from "@/features/candidates/data/mock-data";
+import { candidatesFullData } from "@/features/candidates/data/mock-data";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { KanbanBoard } from "@/features/candidates/components/kanban/kanban-board";
+import ResponsiveTable from "@/components/responsive-table";
+
+import { Candidate } from "@/interfaces/candidate";
+import {
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+} from "@tanstack/react-table";
+import { createCandidateColumns } from "./candidate-columns";
+import { useSidebar } from "@/components/ui/sidebar";
+import { TablePagination } from "@/components/table-pagination";
 
 const Candidates = () => {
   const [viewMode, setViewMode] = useState<"table" | "kanban">("table");
@@ -28,7 +41,6 @@ const Candidates = () => {
   const [stageFilter, setStageFilter] = useState("All Stages");
   const [departmentFilter, setDepartmentFilter] = useState("All Departments");
   const [sourceFilter, setSourceFilter] = useState("All Sources");
-  const [selectedCandidates, setSelectedCandidates] = useState<string[]>([]);
   const [detailCandidate, setDetailCandidate] = useState<Candidate | null>(
     null
   );
@@ -75,24 +87,59 @@ const Candidates = () => {
     setSourceFilter("All Sources");
   };
 
-  const handleSelectAll = () => {
-    if (selectedCandidates.length === filteredCandidates.length) {
-      setSelectedCandidates([]);
-    } else {
-      setSelectedCandidates(filteredCandidates.map((c) => c.id));
-    }
-  };
-
-  const handleSelectCandidate = (id: string) => {
-    setSelectedCandidates((prev) =>
-      prev.includes(id) ? prev.filter((cId) => cId !== id) : [...prev, id]
-    );
-  };
-
   const handleViewDetails = (candidate: Candidate) => {
     setDetailCandidate(candidate);
     setIsDrawerOpen(true);
   };
+
+  const [isUserPopUpOpen, setIsUserPopUpOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<Candidate | null>(null);
+
+  const handleViewProfileClick = (user: Candidate): void => {
+    setSelectedUser(user);
+    setIsUserPopUpOpen(true);
+  };
+
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [globalFilter, setGlobalFilter] = useState<string>("");
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
+
+  const columns = useMemo(
+    () => createCandidateColumns(handleViewProfileClick, handleViewDetails),
+    []
+  );
+
+  const table = useReactTable<Candidate>({
+    data: filteredCandidates,
+    columns,
+    onSortingChange: setSorting,
+    onGlobalFilterChange: setGlobalFilter,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+      globalFilter,
+    },
+    initialState: { pagination: { pageSize: 10 } },
+  });
+
+  const [window, setWindow] = useState("");
+
+  const sidebar = useSidebar();
+  useEffect(() => {
+    console.log("side bar open", sidebar.open);
+    setWindow(sidebar.open ? "w-[calc(100vw-330px)]" : "w-[calc(100vw-100px)]");
+  }, [sidebar]);
 
   return (
     <div className="min-h-screen">
@@ -173,68 +220,22 @@ const Candidates = () => {
           />
         ) : (
           /* Table View */
-          <div className="rounded-lg border bg-card">
-            <div className="p-3 border-b flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">
-                  Showing {filteredCandidates.length} candidates
-                </span>
-                {selectedCandidates.length > 0 && (
-                  <span className="text-sm font-medium text-primary">
-                    ({selectedCandidates.length} selected)
-                  </span>
-                )}
-              </div>
-            </div>
+          <>
+            <ResponsiveTable
+              table={table}
+              columns={columns}
+              flexRender={flexRender}
+              Table={Table}
+              TableHeader={TableHeader}
+              TableRow={TableRow}
+              TableHead={TableHead}
+              TableBody={TableBody}
+              TableCell={TableCell}
+              windowClassName={window}
+            />
 
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-12">
-                    <Checkbox
-                      checked={
-                        selectedCandidates.length ===
-                          filteredCandidates.length &&
-                        filteredCandidates.length > 0
-                      }
-                      onCheckedChange={handleSelectAll}
-                    />
-                  </TableHead>
-                  <TableHead>Candidate</TableHead>
-                  <TableHead>Position</TableHead>
-                  <TableHead>Stage</TableHead>
-                  <TableHead>Rating</TableHead>
-                  <TableHead>Match</TableHead>
-                  <TableHead>Experience</TableHead>
-                  <TableHead>Applied</TableHead>
-                  <TableHead className="w-24">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredCandidates.map((candidate) => (
-                  <CandidateTableRow
-                    key={candidate.id}
-                    candidate={candidate}
-                    isSelected={selectedCandidates.includes(candidate.id)}
-                    onSelect={handleSelectCandidate}
-                    onViewDetails={handleViewDetails}
-                  />
-                ))}
-              </TableBody>
-            </Table>
-
-            {filteredCandidates.length === 0 && (
-              <div className="text-center py-12">
-                <Users className="h-12 w-12 mx-auto text-muted-foreground/50 mb-3" />
-                <p className="text-muted-foreground">
-                  No candidates found matching your filters
-                </p>
-                <Button variant="link" onClick={clearFilters}>
-                  Clear filters
-                </Button>
-              </div>
-            )}
-          </div>
+            <TablePagination table={table} />
+          </>
         )}
       </div>
 

@@ -1,4 +1,4 @@
-import { JobForm } from "@/types/job-form";
+import { JobForm } from "@/interfaces/job";
 import { useMemo, useState, useCallback } from "react";
 import { toast } from "sonner";
 import { extractStatusAndMessage } from "@/lib/error/error-message-extractor";

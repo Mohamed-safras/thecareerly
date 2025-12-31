@@ -21,7 +21,7 @@ import {
   ThumbsUp,
   ThumbsDown,
 } from "lucide-react";
-import { MatchResult } from "@/types/matching";
+import { MatchResult } from "@/interfaces/matching";
 
 interface MatchDetailDialogProps {
   result: MatchResult | null;
@@ -63,7 +63,7 @@ export function MatchDetailDialog({
 }: MatchDetailDialogProps) {
   if (!result) return null;
 
-  const initials = result.candidateName
+  const initials = result.name
     .split(" ")
     .map((n) => n[0])
     .join("")
@@ -87,7 +87,7 @@ export function MatchDetailDialog({
             </AvatarFallback>
           </Avatar>
           <div className="flex-1">
-            <h2 className="text-xl font-semibold">{result.candidateName}</h2>
+            <h2 className="text-xl font-semibold">{result.name}</h2>
             <p className="text-muted-foreground">
               Matched for {result.jobTitle}
             </p>

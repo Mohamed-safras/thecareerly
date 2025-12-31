@@ -1,16 +1,4 @@
-export interface JobDescription {
-  id: string;
-  title: string;
-  department: string;
-  description: string;
-  requirements: string[];
-  skills: string[];
-  experience: string;
-  location: string;
-  salaryRange: string;
-  createdAt: string;
-  status: "active" | "paused" | "closed";
-}
+import { Candidate } from "./candidate";
 
 export interface ParsedCV {
   id: string;
@@ -26,10 +14,8 @@ export interface ParsedCV {
   rawText?: string;
 }
 
-export interface MatchResult {
-  id: string;
+export interface MatchResult extends Candidate {
   candidateId: string;
-  candidateName: string;
   jobId: string;
   jobTitle: string;
   overallScore: number;
@@ -44,6 +30,7 @@ export interface MatchResult {
     candidate: string;
     score: number;
   };
+  matchScore: number;
   educationMatch: {
     score: number;
     notes: string;

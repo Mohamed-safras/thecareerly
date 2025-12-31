@@ -34,7 +34,7 @@ import { payPeriodTypeValue } from "@/types/pay-period";
 import { currencyOptionTypeValue } from "@/types/currency-option";
 import TypeaheadLocation from "@/components/type-ahead-location";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import type { JobForm } from "@/types/job-form";
+import type { JobForm } from "@/interfaces/job";
 import { JOB_TITLE_OPTIONS } from "@/constents/local-store-values";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";

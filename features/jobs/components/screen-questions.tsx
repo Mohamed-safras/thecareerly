@@ -12,7 +12,7 @@ import QuestionRow from "@/features/jobs/components/question-row";
 import { Question } from "@/types/question";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { localStoreGet, localStoreSet } from "@/lib/common/localstore";
-import { JobForm } from "@/types/job-form";
+import { JobForm } from "@/interfaces/job";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 const uid = () => Math.random().toString(36).slice(2, 9);

@@ -2,7 +2,7 @@ import SortableList from "@/components/sortable-list";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAppDispatch } from "@/store/hooks";
-import { JobForm } from "@/types/job-form";
+import { JobForm } from "@/interfaces/job";
 import { SelectionProcess } from "@/types/selection-process";
 import React, { useEffect } from "react";
 import HiringProcess from "@/features/jobs/components/hiring-process";
