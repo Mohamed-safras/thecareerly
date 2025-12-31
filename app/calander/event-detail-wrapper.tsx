@@ -91,18 +91,11 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
 
   return (
     <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+      <div
         className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm"
         onClick={onClose}
       >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        <div
           onClick={(e) => e.stopPropagation()}
           className="relative w-full max-w-5xl max-h-[85vh] bg-card rounded-lg overflow-hidden border flex flex-col"
         >
@@ -187,6 +180,17 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
                       <MessageSquare className="h-4 w-4" />
                       Chat
                     </Button>
+
+                    {/* Quick Actions */}
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="gap-1.5 text-xs h-8"
+                    >
+                      <Link2 className="h-4 w-4" />
+                      Copy Meeting Link
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -255,27 +259,13 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
 
               {/* Notes Section */}
               {event.notes && (
-                <div className="p-3 border-b">
+                <div className="p-3">
                   <h4 className="text-sm font-medium text-muted-foreground mb-3">
                     Notes
                   </h4>
                   <p className="text-sm text-foreground">{event.notes}</p>
                 </div>
               )}
-
-              {/* Quick Actions */}
-              <div className="p-3">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="gap-1.5 text-xs h-8"
-                  >
-                    <Link2 className="h-4 w-4" />
-                    Copy Meeting Link
-                  </Button>
-                </div>
-              </div>
             </div>
 
             {/* Right Panel - Tracking & Attendees */}
@@ -416,8 +406,8 @@ export function EventPopup({ event, onClose }: EventPopupProps) {
               </div>
             </div>
           </div>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </AnimatePresence>
   );
 }

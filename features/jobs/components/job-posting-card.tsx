@@ -25,13 +25,11 @@ import {
 
 import KV from "@/features/jobs/components/kv";
 import { jobStatus } from "@/constents/action-colors";
-import StatisticPill from "@/features/jobs/components/statistic-pill";
 import { JobForm } from "@/types/job-form";
 
 export interface Job extends JobForm {
   id: string;
   status: "OPEN" | "HOLD" | "CLOSED" | "DRAFT";
-
   candidatesApplied: number;
   completedInterviews: number;
   createdAt: string;

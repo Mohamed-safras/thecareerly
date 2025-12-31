@@ -10,7 +10,7 @@ export default function TeamManagmentLayout({
   return (
     <ProtectedClientShell
       allowedRoles={[Roles.ORGANIZATION_ADMIN]}
-      requireOrganizationId={true}
+      requireOrganizationId={false}
     >
       {children}
     </ProtectedClientShell>

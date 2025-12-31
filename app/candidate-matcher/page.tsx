@@ -7,30 +7,34 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import {
   Search,
-  Plus,
   Upload,
   Settings2,
   Briefcase,
   Sparkles,
-  Users,
 } from "lucide-react";
 
-import { JobDescription } from "@/types/matching";
 import { MatchingConfigPanel } from "@/features/candidates/matching/matching-config-panel";
 import { CVUploadZone } from "@/features/candidates/matching/cv-upload-zone";
 import {
-  mockJobDescriptions,
+  mockJobs,
   mockMatchResults,
 } from "@/features/candidates/data/candidate-maching-mock-data";
 import { JobCandidatesView } from "@/features/candidates/matching/job-candidates-view";
-import { JobPostingCard } from "@/features/jobs/components/job-posting-card";
-import { JobCard } from "@/features/jobs/components/job-card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  Job,
+  JobPostingCard,
+} from "@/features/jobs/components/job-posting-card";
 
 export default function CVMatching() {
-  const [selectedJob, setSelectedJob] = useState<JobDescription | null>(null);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredJobs = mockJobDescriptions.filter((job) => {
+  const filteredJobs = mockJobs.filter((job) => {
     if (searchQuery) {
       return (
         job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -68,7 +72,7 @@ export default function CVMatching() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-muted/30 to-background">
+    <div className="min-h-screen">
       {/* Header */}
       <div className="border-b bg-card/80 backdrop-blur-sm">
         <div className="mx-auto p-3">
@@ -92,21 +96,11 @@ export default function CVMatching() {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" className="hidden sm:flex">
-                <Upload className="h-4 w-4 mr-2" />
-                Bulk Upload
-              </Button>
-              <Button className="gap-2">
-                <Plus className="h-4 w-4" />
-                <span className="hidden sm:inline">New Job</span>
-              </Button>
-            </div>
           </div>
         </div>
       </div>
 
-      <div className="mx-auto p-3">
+      <div className="p-3">
         <Tabs defaultValue="jobs" className="space-y-3">
           <TabsList className="bg-muted/50 p-1">
             <TabsTrigger
@@ -148,35 +142,45 @@ export default function CVMatching() {
             </div>
 
             {/* Hint Card */}
-            <div>
-              <Card className="bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 border-primary/20 p-4">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-full bg-primary/20">
-                    <Sparkles className="h-4 w-4 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-foreground">Quick Tip</p>
-                    <p className="text-sm text-muted-foreground">
-                      Click on any job card to view all matching candidates
-                      ranked by their match score. Candidates are categorized as
-                      Strong, Good, Consider, or Weak matches.
-                    </p>
-                  </div>
-                </div>
-              </Card>
-            </div>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="link"
+                  className="text-sm text-muted-foreground *:hover:text-primary inline-flex items-center gap-1 p-0"
+                >
+                  <Sparkles className="h-4 w-4 text-primary" />
+                </Button>
+              </TooltipTrigger>
+
+              <TooltipContent
+                side="top"
+                align="center"
+                sideOffset={8}
+                className="max-w-sm p-4 border rounded-lg shadow-lg"
+              >
+                Click on any job card to view all matching candidates ranked by
+                their match score. Candidates are categorized as Strong, Good,
+                Consider, or Weak matches.
+              </TooltipContent>
+            </Tooltip>
 
             {/* Job List */}
-            <div className="space-y-3 ">
+            <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
               {filteredJobs.length > 0 ? (
                 filteredJobs.map((job, index) => (
-                  <JobCard
+                  // <JobCard
+                  //   key={index}
+                  //   job={job}
+                  //   matchCount={getMatchCountForJob(job.id)}
+                  //   strongMatchCount={getStrongMatchCountForJob(job.id)}
+                  //   onClick={() => setSelectedJob(job)}
+                  //   index={index}
+                  // />
+                  <JobPostingCard
                     key={index}
                     job={job}
-                    matchCount={getMatchCountForJob(job.id)}
-                    strongMatchCount={getStrongMatchCountForJob(job.id)}
-                    onClick={() => setSelectedJob(job)}
-                    index={index}
+                    onJobClick={() => setSelectedJob(job)}
                   />
                 ))
               ) : (
@@ -203,10 +207,7 @@ export default function CVMatching() {
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold">Upload CVs</h2>
                 <Badge variant="outline">
-                  {
-                    mockJobDescriptions.filter((j) => j.status === "active")
-                      .length
-                  }{" "}
+                  {mockJobs.filter((job) => job.status === "OPEN").length}{" "}
                   active jobs
                 </Badge>
               </div>
@@ -219,8 +220,8 @@ export default function CVMatching() {
                   Select which job descriptions to match uploaded CVs against
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {mockJobDescriptions
-                    .filter((j) => j.status === "active")
+                  {mockJobs
+                    .filter((job) => job.status === "OPEN")
                     .map((job) => (
                       <Badge
                         key={job.id}

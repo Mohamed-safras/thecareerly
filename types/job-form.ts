@@ -27,7 +27,7 @@ export type JobForm = {
   posterNotes: string;
   questions: Question[];
   selectionProcess: SelectionProcess[];
-  skills: [];
+  skills: string[];
 };
 
 export type PosterPayload = {

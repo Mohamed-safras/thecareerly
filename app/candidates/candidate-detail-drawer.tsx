@@ -19,7 +19,7 @@ import { PipelineStageManager } from "../../features/candidates/components/pipel
 import CandidateDetailHeader from "../../features/candidates/components/candidate-detail-header";
 import CandidateBasicInfo from "@/features/candidates/components/candidate-basic-info";
 
-interface CandidateDetailDrawerProps {
+export interface CandidateDetailDrawerProps {
   candidate: Candidate | null;
   isOpen: boolean;
   onClose: () => void;
