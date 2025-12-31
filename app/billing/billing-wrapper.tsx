@@ -23,6 +23,7 @@ import {
   PaymentRecord,
 } from "@/features/billing/components/payment-history-table";
 import { PaymentInfoSection } from "@/features/billing/components/payment-info";
+import { StripeCheckout } from "@/features/billing/components/stripe-checkout";
 
 const paymentHistory: PaymentRecord[] = [
   {
