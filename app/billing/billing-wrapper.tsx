@@ -23,7 +23,6 @@ import {
   PaymentRecord,
 } from "@/features/billing/components/payment-history-table";
 import { PaymentInfoSection } from "@/features/billing/components/payment-info";
-import { StripeCheckout } from "@/features/billing/components/stripe-checkout";
 
 const paymentHistory: PaymentRecord[] = [
   {
@@ -140,43 +139,19 @@ const BillingWrapper = () => {
   };
 
   return (
-    <div className="grid sm:grid-cols-4 grid-cols-1 gap-3">
-      <div className="sm:col-span-3 col-span-1 w-full mx-auto">
-        <div className="p-3">
-          {/* Main layout */}
-          <div className="grid gap-3">
-            {/* Left column */}
-            <div className="space-y-3">
-              {/* Top cards row */}
-              <div className="grid sm:grid-cols-2 gap-3">
-                <SubscriptionCard
-                  plan={currentPlan}
-                  onChangePlan={() => setPlansDialogOpen(true)}
-                />
-
-                <NextPaymentCard
-                  amount={currentPlan.price}
-                  date={subscription.currentPeriodEnd}
-                  onManage={() => toast.info("Manage payments")}
-                />
-              </div>
-            </div>
-
-            {/* Right sidebar */}
-            <div className="space-y-3">
-              {/* Payment history */}
-
-              <PaymentHistoryTable payments={paymentHistory} />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="sm:col-span-1 p-3 border-l">
+    <div>
+      <div className="p-3 flex justify-between gap-3 border-l">
+        <PaymentHistoryTable payments={paymentHistory} />
         <PaymentInfoSection
           methods={paymentMethods}
+          subscription={{
+            price: currentPlan.price,
+            period: subscription.currentPeriodEnd,
+          }}
+          plan={currentPlan}
           onEdit={() => toast.info("Edit payment method")}
           onAdd={() => toast.info("Add payment method")}
+          onChangePlan={() => setPlansDialogOpen(true)}
         />
       </div>
 

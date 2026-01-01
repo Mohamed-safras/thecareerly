@@ -16,10 +16,10 @@ export function SubscriptionCard({
   const isEnterprise = plan.tier === "enterprise";
 
   return (
-    <div className="card-3d">
+    <div className="card-3d border-1  rounded-lg">
       <div
         className={cn(
-          "card-3d-inner card-shine relative overflow-hidden rounded-lg p-3 text-white h-fit shadow-credit-card",
+          "card-3d-inner card-shine relative overflow-hidden rounded-lg p-3 text-white w-[315px] h-[200px]",
           plan.tier === "starter" &&
             "bg-gradient-to-br from-slate-700 via-slate-600 to-slate-800",
           isPro &&
@@ -46,16 +46,16 @@ export function SubscriptionCard({
 
         <div className="relative z-10 h-full flex flex-col justify-between">
           <div>
-            <p className="text-sm w-fit text-foreground">
+            <p className="text-sm w-fit text-muted pb-3">
               Current subscription plan
             </p>
 
-            <div className="flex items-baseline gap-1 mb-6 w-fit">
+            <div className="flex items-baseline gap-1 mb-3 w-fit">
               <span className="text-4xl font-bold">${plan.price}</span>
               <span className="text-lg text-white/90">.00</span>
             </div>
 
-            <p className="text-lg font-bold mb-3">{plan.name}</p>
+            <p className="text-sm mb-3 font-medium">{plan.name}</p>
           </div>
 
           <Button

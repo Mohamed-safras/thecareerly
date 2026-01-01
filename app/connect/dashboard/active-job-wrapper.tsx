@@ -64,9 +64,6 @@ const ActiveJobWrapper = () => {
       <div className="flex items-center justify-between mb-3">
         <div>
           <h2 className="text-lg font-semibold">Active Job Pipelines</h2>
-          <p className="text-sm text-muted-foreground">
-            Track candidate progress across roles
-          </p>
         </div>
         <Button variant="ghost" size="sm" className="gap-1">
           View All <ArrowRight className="h-4 w-4" />

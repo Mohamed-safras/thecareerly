@@ -148,11 +148,6 @@ const SuperAdminAppSideBar = () => {
         ],
       },
       {
-        title: "Billing & Subscription",
-        url: "#",
-        icon: CreditCard,
-      },
-      {
         title: "Audit Log",
         url: "#",
         icon: FileText,

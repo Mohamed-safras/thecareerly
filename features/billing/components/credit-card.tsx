@@ -27,7 +27,7 @@ export function CreditCard({
     <div className={cn("group perspective-1000", className)}>
       <div
         className={cn(
-          "relative w-full aspect-[1.586/1] rounded-2xl overflow-hidden transition-all duration-500",
+          "relative w-[315px] h-[200px] aspect-[1.575/1] rounded-2xl overflow-hidden transition-all duration-500",
           "transform-gpu group-hover:rotate-y-3 group-hover:rotate-x-6 group-hover:scale-102",
           "shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.1)_inset]"
         )}
