@@ -31,6 +31,7 @@ export default function HiringFunnelWrapper() {
           Candidate flow through recruitment stages (Last 30 days)
         </p>
       </CardHeader>
+
       <CardContent>
         <div className="grid lg:grid-cols-3 gap-3">
           {/* Funnel Chart */}

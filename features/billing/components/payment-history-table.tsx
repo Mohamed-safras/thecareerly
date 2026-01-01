@@ -212,7 +212,7 @@ function PaymentRow({ payment }: { payment: PaymentRecord }) {
 
 export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
   return (
-    <Card className="shadow-sm gap-0 p-0 border">
+    <Card className="w-full h-fit shadow-sm gap-0 p-0 border">
       {/* Header */}
       <div className="flex items-center justify-between p-3 border-b">
         <div className="flex items-center gap-3">

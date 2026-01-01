@@ -42,8 +42,8 @@ export function OfferAnalytics() {
   return (
     <Card className="shadow-none">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold">
-          <BadgeCheck /> Offer Analytics
+        <CardTitle className="text-lg font-semibold flex items-center gap-2">
+          <BadgeCheck className="h-5 w-5" /> Offer Analytics
         </CardTitle>
         <p className="text-sm text-muted-foreground">
           Offer acceptance trends and decline analysis

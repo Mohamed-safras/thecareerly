@@ -8,25 +8,38 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { PaymentMethod } from "@/interfaces/billing";
+import { PaymentMethod, PricingPlan } from "@/interfaces/billing";
 import { CreditCard } from "./credit-card";
 import { Separator } from "@/components/ui/separator";
+import { NextPaymentCard } from "./next-payment-card";
+import { toast } from "sonner";
+import { SubscriptionCard } from "./subscription-card";
+import { pricingPlans } from "../data/billing-data";
 
 interface PaymentInfoSectionProps {
   methods: PaymentMethod[];
+  subscription?: {
+    price: number;
+    period: Date;
+  };
+  plan: PricingPlan;
   onEdit: () => void;
   onAdd: () => void;
+  onChangePlan: () => void;
 }
 
 export function PaymentInfoSection({
   methods,
+  subscription,
+  plan,
   onEdit,
   onAdd,
+  onChangePlan,
 }: PaymentInfoSectionProps) {
   const defaultMethod = methods.find((m) => m.isDefault) || methods[0];
-
+  // sticky z-10 top-18
   return (
-    <Card className="sticky z-10 top-18 p-3 shadow-lg border-0 bg-gradient-to-b from-card to-card/80">
+    <Card className="p-3  h-fit w-fit bg-gradient-to-b from-card to-card/80">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -44,6 +57,17 @@ export function PaymentInfoSection({
         </Button>
       </div>
 
+      <SubscriptionCard plan={plan} onChangePlan={onChangePlan} />
+
+      <NextPaymentCard
+        amount={subscription?.price || 0}
+        date={
+          subscription?.period ||
+          new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)
+        }
+        onManage={() => toast.info("Manage payments")}
+      />
+
       {/* Main Credit Card */}
       {defaultMethod && (
         <div className="relative">
@@ -54,7 +78,7 @@ export function PaymentInfoSection({
                 : "visa"
             }
             last4={defaultMethod.last4}
-            cardholderName="John Doe"
+            cardholderName="Mohamed Safras"
             expiryMonth={defaultMethod.expiryMonth || 12}
             expiryYear={defaultMethod.expiryYear || 2026}
           />

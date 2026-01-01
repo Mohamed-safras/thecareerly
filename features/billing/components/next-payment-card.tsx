@@ -15,14 +15,14 @@ export function NextPaymentCard({
   onManage,
 }: NextPaymentCardProps) {
   return (
-    <Card className="p-3 shadow-card rounded-lg border-0 bg-card relative overflow-hidden">
+    <Card className="p-3 w-[315px] h-[200px] rounded-lg border-1 shadow-none relative overflow-hidden">
       {/* Decorative gradient */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-full" />
 
       <div className="relative z-10">
-        <div className="flex items-start justify-between mb-6">
+        <div className="flex items-start justify-between mb-3">
           <div>
-            <p className="text-sm text-muted-foreground mb-1">Next payment</p>
+            <p className="text-sm text-muted-foreground mb-3">Next payment</p>
             <div className="flex items-baseline gap-0.5">
               <span className="text-4xl font-bold">${amount}</span>
               <span className="text-lg text-foreground/70">.00</span>

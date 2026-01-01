@@ -29,7 +29,7 @@ import { ModeToggle } from "./mode-toggle";
 import { UserProfile } from "@/types/user-profile";
 import { useAppDispatch } from "@/store/hooks";
 import { clearUser } from "@/store/slice/auth-slice";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { CONNECT } from "@/constents/router-links";
 export function NavUser(user: UserProfile | null) {
@@ -43,8 +43,6 @@ export function NavUser(user: UserProfile | null) {
     auth.logout();
     dispatch(clearUser());
   };
-
-  const router = useRouter();
 
   return (
     <SidebarMenu>
@@ -109,12 +107,12 @@ export function NavUser(user: UserProfile | null) {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem
-                onClick={() => router.replace(`${CONNECT}/account-settings`)}
+                onClick={() => redirect(`${CONNECT}/account-settings`)}
               >
                 <BadgeCheck />
                 Account Settings
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => redirect("/billing")}>
                 <CreditCard />
                 Billing
               </DropdownMenuItem>
