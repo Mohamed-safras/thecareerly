@@ -13,7 +13,7 @@ interface UsageAlertsCardProps {
 const severityConfig = {
   critical: {
     icon: AlertCircle,
-    bgColor: "bg-destructive/5 border-destructive/20",
+    bgColor: "bg-destructive/10 border-destructive/30",
     iconColor: "text-destructive",
     badge: "bg-destructive/10 text-destructive border-transparent",
   },
