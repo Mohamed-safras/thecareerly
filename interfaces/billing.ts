@@ -102,3 +102,10 @@ export interface UsageHistoryPoint {
 
 export type PaymentMethodType = "card" | "bank";
 export type InvoiceStatus = "paid" | "pending" | "failed";
+
+export interface BillingPermission {
+  id: string;
+  name: string;
+  description: string;
+  roles: ("owner" | "admin" | "member" | "viewer")[];
+}

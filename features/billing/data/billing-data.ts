@@ -5,6 +5,92 @@ import {
   Subscription,
   UsageMetrics,
 } from "@/interfaces/billing";
+import { PaymentRecord } from "../components/payment-history-table";
+
+export const paymentHistory: PaymentRecord[] = [
+  {
+    id: "1",
+    amount: 65.0,
+    status: "pending",
+    recipient: { name: "Gabriel Banks" },
+    date: new Date("2024-05-10"),
+    paymentMethod: { type: "Visa", last4: "5432" },
+  },
+  {
+    id: "2",
+    amount: 250.0,
+    status: "completed",
+    recipient: { name: "Claudia Welch" },
+    date: new Date("2024-04-10"),
+    paymentMethod: { type: "Visa", last4: "5432" },
+    details: {
+      billingPlan: "Company Start",
+      items: [
+        "5 team members ($8 / month each)",
+        "100 GB extra storage ($25.00)",
+        "8 extra hours ($2 per 1 hour)",
+      ],
+      invoiceNumber: "EKG2SJFN",
+      datePaid: new Date("2024-04-10"),
+    },
+  },
+  {
+    id: "3",
+    amount: 50.0,
+    status: "completed",
+    recipient: { name: "Nina Sherman" },
+    date: new Date("2024-03-10"),
+    paymentMethod: { type: "Visa", last4: "5432" },
+    details: {
+      billingPlan: "Basic Plan",
+      items: ["Monthly subscription"],
+      invoiceNumber: "PLK8MNQR",
+      datePaid: new Date("2024-03-10"),
+    },
+  },
+  {
+    id: "4",
+    amount: 50.0,
+    status: "completed",
+    recipient: { name: "Elizabeth Robbins" },
+    date: new Date("2024-02-10"),
+    paymentMethod: { type: "Visa", last4: "5432" },
+    details: {
+      billingPlan: "Basic Plan",
+      items: ["Monthly subscription"],
+      invoiceNumber: "HTY3WDKL",
+      datePaid: new Date("2024-02-10"),
+    },
+  },
+  {
+    id: "5",
+    amount: 50.0,
+    status: "completed",
+    recipient: { name: "Elizabeth Robbins" },
+    date: new Date("2024-02-10"),
+    paymentMethod: { type: "Visa", last4: "5432" },
+    details: {
+      billingPlan: "Basic Plan",
+      items: ["Monthly subscription"],
+      invoiceNumber: "HTY3WDKL",
+      datePaid: new Date("2024-02-10"),
+    },
+  },
+  {
+    id: "6",
+    amount: 50.0,
+    status: "completed",
+    recipient: { name: "Elizabeth Robbins" },
+    date: new Date("2024-02-10"),
+    paymentMethod: { type: "Visa", last4: "5432" },
+    details: {
+      billingPlan: "Basic Plan",
+      items: ["Monthly subscription"],
+      invoiceNumber: "HTY3WDKL",
+      datePaid: new Date("2024-02-10"),
+    },
+  },
+];
 
 export const pricingPlans: PricingPlan[] = [
   {
