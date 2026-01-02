@@ -1,28 +1,25 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
-import { PricingCard } from "@/features/billing/components/pricing-card";
 import { UpgradeDialog } from "@/features/billing/components/upgrade-dialog";
 import {
   pricingPlans,
   currentSubscription,
   paymentMethods,
 } from "@/features/billing/data/billing-data";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { SubscriptionCard } from "@/features/billing/components/subscription-card";
-import { NextPaymentCard } from "@/features/billing/components/next-payment-card";
+
 import { PricingPlan } from "@/interfaces/billing";
 import {
   PaymentHistoryTable,
   PaymentRecord,
 } from "@/features/billing/components/payment-history-table";
 import { PaymentInfoSection } from "@/features/billing/components/payment-info";
+import BillingSettingsWrapper from "./billing-settings-wrapper";
+import { UsageDashboardDialog } from "@/features/billing/components/usage-dashboard-dialog";
+import { Button } from "@/components/ui/button";
+import { BarChart3, CreditCard } from "lucide-react";
+import { PlanManagementDialog } from "@/features/billing/components/plan-management-dialog";
 
 const paymentHistory: PaymentRecord[] = [
   {
@@ -111,23 +108,14 @@ const paymentHistory: PaymentRecord[] = [
 
 const BillingWrapper = () => {
   const [subscription, setSubscription] = useState(currentSubscription);
-  const [plansDialogOpen, setPlansDialogOpen] = useState(false);
   const [upgradeDialogOpen, setUpgradeDialogOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<PricingPlan | null>(null);
+  const [usageDialogOpen, setUsageDialogOpen] = useState(false);
+  const [planDialogOpen, setPlanDialogOpen] = useState(false);
 
   const currentPlan = pricingPlans.find(
     (plan) => plan.id === subscription.planId
   )!;
-
-  const handleSelectPlan = (planId: string) => {
-    if (planId === subscription.planId) return;
-    const plan = pricingPlans.find((p) => p.id === planId);
-    if (plan) {
-      setSelectedPlan(plan);
-      setPlansDialogOpen(false);
-      setUpgradeDialogOpen(true);
-    }
-  };
 
   const handleUpgradeConfirm = () => {
     if (selectedPlan) {
@@ -141,7 +129,11 @@ const BillingWrapper = () => {
   return (
     <div>
       <div className="p-3 flex justify-between gap-3 border-l">
-        <PaymentHistoryTable payments={paymentHistory} />
+        <div className="flex flex-col gap-3 flex-1">
+          <BillingSettingsWrapper />
+          <PaymentHistoryTable payments={paymentHistory} />
+        </div>
+
         <PaymentInfoSection
           methods={paymentMethods}
           subscription={{
@@ -151,12 +143,30 @@ const BillingWrapper = () => {
           plan={currentPlan}
           onEdit={() => toast.info("Edit payment method")}
           onAdd={() => toast.info("Add payment method")}
-          onChangePlan={() => setPlansDialogOpen(true)}
+          onChangePlan={() => setPlanDialogOpen(true)}
         />
       </div>
 
+      <Button
+        variant="outline"
+        onClick={() => setUsageDialogOpen(true)}
+        className="gap-2"
+      >
+        <BarChart3 className="h-4 w-4" />
+        View Usage & Limits
+      </Button>
+
+      <Button
+        variant="outline"
+        onClick={() => setPlanDialogOpen(true)}
+        className="gap-2 w-full sm:w-auto"
+      >
+        <CreditCard className="h-4 w-4" />
+        Manage Plan
+      </Button>
+
       {/* Plans Dialog */}
-      <Dialog open={plansDialogOpen} onOpenChange={setPlansDialogOpen}>
+      {/* <Dialog open={plansDialogOpen} onOpenChange={setPlansDialogOpen}>
         <DialogContent className="min-w-xs sm:min-w-2xl md:min-w-3xl lg:min-w-4xl xl:min-w-5xl 2xl:min-w-6xl max-w-7xl p-3 max-h-[calc(90vh-3rem)] m-auto overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Choose a plan</DialogTitle>
@@ -172,7 +182,7 @@ const BillingWrapper = () => {
             ))}
           </div>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
 
       {/* Upgrade Dialog */}
       {selectedPlan && (
@@ -184,6 +194,16 @@ const BillingWrapper = () => {
           onConfirm={handleUpgradeConfirm}
         />
       )}
+
+      <UsageDashboardDialog
+        open={usageDialogOpen}
+        onOpenChange={setUsageDialogOpen}
+      />
+
+      <PlanManagementDialog
+        open={planDialogOpen}
+        onOpenChange={setPlanDialogOpen}
+      />
     </div>
   );
 };
