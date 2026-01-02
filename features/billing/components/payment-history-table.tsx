@@ -8,6 +8,8 @@ import {
   Receipt,
   ChevronRight,
   ExternalLink,
+  BarChart3,
+  Users,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -38,6 +40,8 @@ interface PaymentRecord {
 
 interface PaymentHistoryTableProps {
   payments: PaymentRecord[];
+  onUsageClick?: () => void;
+  onAccessClick?: () => void;
 }
 
 const statusConfig = {
@@ -210,7 +214,11 @@ function PaymentRow({ payment }: { payment: PaymentRecord }) {
   );
 }
 
-export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
+export function PaymentHistoryTable({
+  payments,
+  onUsageClick,
+  onAccessClick,
+}: PaymentHistoryTableProps) {
   return (
     <Card className="w-full h-fit shadow-sm gap-0 p-0 border">
       {/* Header */}
@@ -226,14 +234,28 @@ export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
             </p>
           </div>
         </div>
-        <Button variant="outline" size="sm" className="gap-2 h-9">
-          <Download className="w-4 h-4" />
-          <span className="hidden sm:inline">Export</span>
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" onClick={onUsageClick} className="gap-2">
+            <BarChart3 className="h-4 w-4" />
+            View Usage & Limits
+          </Button>
+
+          <Button
+            variant="outline"
+            onClick={onAccessClick}
+            className="gap-2 w-full sm:w-auto"
+          >
+            <Users className="h-4 w-4" />
+            Account & Access
+          </Button>
+          <Button variant="outline" size="sm" className="gap-2 h-9">
+            <Download className="w-4 h-4" />
+            <span className="hidden sm:inline">Export</span>
+          </Button>
+        </div>
       </div>
 
       {/* Payment List */}
-
       {payments.length > 0 ? (
         <div className="max-h-[calc(100vh)] overflow-y-scroll">
           {payments.map((payment) => (
