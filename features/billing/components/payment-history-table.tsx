@@ -235,7 +235,7 @@ export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
       {/* Payment List */}
 
       {payments.length > 0 ? (
-        <div>
+        <div className="max-h-[calc(100vh)] overflow-y-scroll">
           {payments.map((payment) => (
             <PaymentRow key={payment.id} payment={payment} />
           ))}

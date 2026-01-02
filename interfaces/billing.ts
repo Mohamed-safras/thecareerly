@@ -17,6 +17,30 @@ export interface PricingPlan {
   popular?: boolean;
 }
 
+export interface PlanFeature {
+  name: string;
+  starter: boolean | string;
+  professional: boolean | string;
+  enterprise: boolean | string;
+}
+
+export interface Plan {
+  id: string;
+  name: string;
+  description: string;
+  monthlyPrice: number;
+  yearlyPrice: number;
+  popular?: boolean;
+  features: string[];
+}
+
+export interface TrialInfo {
+  isActive: boolean;
+  daysRemaining: number;
+  endDate: Date;
+  plan: string;
+}
+
 export interface Subscription {
   id: string;
   planId: string;
@@ -50,6 +74,30 @@ export interface PaymentMethod {
   expiryMonth?: number;
   expiryYear?: number;
   isDefault: boolean;
+}
+
+export interface UsageMetric {
+  id: string;
+  name: string;
+  used: number;
+  limit: number;
+  unit: string;
+  icon: string;
+}
+
+export interface UsageAlert {
+  id: string;
+  title: string;
+  message: string;
+  severity: "critical" | "warning" | "info";
+  timestamp: Date;
+}
+
+export interface UsageHistoryPoint {
+  date: string;
+  apiCalls: number;
+  storage: number;
+  seats: number;
 }
 
 export type PaymentMethodType = "card" | "bank";

@@ -14,7 +14,6 @@ import { Separator } from "@/components/ui/separator";
 import { NextPaymentCard } from "./next-payment-card";
 import { toast } from "sonner";
 import { SubscriptionCard } from "./subscription-card";
-import { pricingPlans } from "../data/billing-data";
 
 interface PaymentInfoSectionProps {
   methods: PaymentMethod[];

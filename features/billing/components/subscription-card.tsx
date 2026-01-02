@@ -1,4 +1,4 @@
-import { Crown, Sparkles, Zap } from "lucide-react";
+import { CreditCard, Crown, Sparkles, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { PricingPlan } from "@/interfaces/billing";
@@ -63,7 +63,7 @@ export function SubscriptionCard({
             className="w-full group bg-background text-foreground border-0 "
             onClick={onChangePlan}
           >
-            Change Plan
+            <CreditCard className="h-4 w-4" /> Manage Plan
           </Button>
         </div>
       </div>

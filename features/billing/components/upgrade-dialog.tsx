@@ -129,7 +129,7 @@ export function UpgradeDialog({
           )}
 
           {/* Price change */}
-          <div className="p-4 border rounded-lg">
+          <div className="p-3 border rounded-lg">
             <div className="flex items-center justify-between">
               <span className="text-sm">Monthly change</span>
               <span
