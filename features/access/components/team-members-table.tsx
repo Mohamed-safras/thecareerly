@@ -40,7 +40,7 @@ export const TeamMembersTable = ({
     <Card>
       <CardHeader className="pb-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <CardTitle className="text-base font-medium flex items-center gap-2">
+          <CardTitle className="text-base font-medium flex items-center gap-1.5">
             <Users className="h-4 w-4 text-primary" />
             Team Members
             <span className="text-muted-foreground font-normal">
@@ -52,7 +52,7 @@ export const TeamMembersTable = ({
             size="sm"
             className="gap-1.5 w-full sm:w-auto"
           >
-            <UserPlus className="h-3.5 w-3.5" />
+            <UserPlus className="h-4 w-4" />
             Invite Member
           </Button>
         </div>

@@ -56,7 +56,7 @@ export const BillingPermissions = ({
                     </p>
                   </td>
                   {roles.map((role) => (
-                    <td key={role} className="text-center py-3 px-2">
+                    <td key={role} className="text-center py-3 px-3">
                       {permission.roles.includes(role) ? (
                         <Check className="h-4 w-4 text-status-active mx-auto" />
                       ) : (
