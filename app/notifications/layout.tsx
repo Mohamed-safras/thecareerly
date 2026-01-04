@@ -4,11 +4,15 @@ import HeaderShell from "@/features/jobs/components/hiring-shell";
 import { Roles } from "@/lib/role";
 import { ReactNode } from "react";
 
-export default function CalanderLayout({ children }: { children: ReactNode }) {
+export default function NotificationLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   return (
     <ProtectedClientShell allowedRoles={[Roles.ORGANIZATION_ADMIN]}>
       <ProtectedUserSideBar>
-        <HeaderShell breadCrumbPage="Calander & Events">{children}</HeaderShell>
+        <HeaderShell breadCrumbPage="Notifications">{children}</HeaderShell>
       </ProtectedUserSideBar>
     </ProtectedClientShell>
   );

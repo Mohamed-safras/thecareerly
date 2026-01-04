@@ -116,7 +116,7 @@ export function NavUser(user: UserProfile | null) {
                 <CreditCard />
                 Billing
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => redirect("/notifications")}>
                 <Bell />
                 Notifications
               </DropdownMenuItem>
