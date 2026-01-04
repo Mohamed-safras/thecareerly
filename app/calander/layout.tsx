@@ -4,7 +4,7 @@ import HeaderShell from "@/features/jobs/components/hiring-shell";
 import { Roles } from "@/lib/role";
 import { ReactNode } from "react";
 
-export default function DashBoardLayout({ children }: { children: ReactNode }) {
+export default function CalanderLayout({ children }: { children: ReactNode }) {
   return (
     <ProtectedClientShell allowedRoles={[Roles.ORGANIZATION_ADMIN]}>
       <ProtectedUserSideBar>
