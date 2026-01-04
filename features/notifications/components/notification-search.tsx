@@ -52,7 +52,7 @@ export const NotificationSearch = ({
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="gap-2">
             <Filter className="h-4 w-4" />
-            All Types
+            Filter By Types
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">

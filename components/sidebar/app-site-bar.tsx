@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { UserProfile } from "@/types/user-profile";
+import UpgradeTrigger from "@/features/billing/components/upgrade-trigger";
 
 interface AppSideBarProps {
   sidebarHeader?: React.ReactNode;
@@ -179,6 +180,7 @@ const AppSideBar = ({ sidebarHeader, children, user }: AppSideBarProps) => {
       <SidebarContent>{children}</SidebarContent>
 
       <SidebarFooter>
+        <UpgradeTrigger />
         <NavUser {...user} />
       </SidebarFooter>
       <SidebarRail />

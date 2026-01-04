@@ -56,7 +56,6 @@ const NotificationsWrapper = () => {
         <CardContent className="p-3 space-y-6">
           {/* Header */}
           <NotificationHeader
-            unreadCount={unreadCount}
             onMarkAllAsRead={handleMarkAllAsRead}
             onOpenSettings={() => setPrefsDialogOpen(true)}
             onClearAll={handleClearAll}

@@ -147,19 +147,12 @@ const SuperAdminAppSideBar = () => {
           },
         ],
       },
-      {
-        title: "Audit Log",
-        url: "#",
-        icon: FileText,
-      },
+      // {
+      //   title: "Audit Log",
+      //   url: "#",
+      //   icon: FileText,
+      // },
     ],
-    // data: [
-    //   {
-    //     title: "Reports & Analytics",
-    //     url: "#",
-    //     icon: BarChart,
-    //   },
-    // ],
   };
 
   return (
@@ -178,10 +171,10 @@ const SuperAdminAppSideBar = () => {
         collapsibleItems={data.recruitment}
         sectionTitle="RECRUITMENT"
       />
-      <NavSecondary
+      {/* <NavSecondary
         collapsibleItems={data.adminTools}
         sectionTitle="ADMIN TOOLS"
-      />
+      /> */}
     </AppSideBar>
   );
 };

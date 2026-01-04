@@ -6,7 +6,6 @@ import {
   ChevronsUpDown,
   CreditCard,
   LogOut,
-  Sparkles,
 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -32,6 +31,7 @@ import { clearUser } from "@/store/slice/auth-slice";
 import { redirect } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { CONNECT } from "@/constents/router-links";
+
 export function NavUser(user: UserProfile | null) {
   const { isMobile } = useSidebar();
   const dispatch = useAppDispatch();
@@ -99,18 +99,11 @@ export function NavUser(user: UserProfile | null) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
               <DropdownMenuItem
                 onClick={() => redirect(`${CONNECT}/account-settings`)}
               >
                 <BadgeCheck />
-                Account Settings
+                Settings
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => redirect("/billing")}>
                 <CreditCard />
