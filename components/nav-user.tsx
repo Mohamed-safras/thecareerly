@@ -32,6 +32,7 @@ import { clearUser } from "@/store/slice/auth-slice";
 import { redirect } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { CONNECT } from "@/constents/router-links";
+
 export function NavUser(user: UserProfile | null) {
   const { isMobile } = useSidebar();
   const dispatch = useAppDispatch();

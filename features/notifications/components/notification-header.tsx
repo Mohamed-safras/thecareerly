@@ -1,4 +1,4 @@
-import { Bell, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,31 +8,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 interface NotificationHeaderProps {
-  unreadCount: number;
   onMarkAllAsRead?: () => void;
   onOpenSettings?: () => void;
   onClearAll?: () => void;
 }
 
 export const NotificationHeader = ({
-  unreadCount,
   onMarkAllAsRead,
   onOpenSettings,
   onClearAll,
 }: NotificationHeaderProps) => {
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-4">
-        <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-          <Bell className="h-6 w-6 text-primary" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold">Notifications</h1>
-          <p className="text-sm text-muted-foreground">
-            {unreadCount} unread notification{unreadCount !== 1 ? "s" : ""}
-          </p>
-        </div>
-      </div>
       <div className="flex items-center gap-2">
         <Button
           variant="outline"
