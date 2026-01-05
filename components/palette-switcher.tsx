@@ -122,7 +122,7 @@ export function PaletteSwitcher() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="icon" onClick={() => setIsOpen(true)}>
+        <Button variant="outline" size="sm" onClick={() => setIsOpen(true)}>
           <PaletteIcon className="h-4 w-4" />
         </Button>
       </DialogTrigger>

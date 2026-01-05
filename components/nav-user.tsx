@@ -3,7 +3,9 @@
 import {
   BadgeCheck,
   Bell,
+  ChevronRight,
   ChevronsUpDown,
+  Contrast,
   CreditCard,
   LogOut,
 } from "lucide-react";
@@ -31,6 +33,7 @@ import { clearUser } from "@/store/slice/auth-slice";
 import { redirect } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { CONNECT } from "@/constents/router-links";
+import { PaletteSwitcher } from "./palette-switcher";
 
 export function NavUser(user: UserProfile | null) {
   const { isMobile } = useSidebar();
@@ -74,8 +77,8 @@ export function NavUser(user: UserProfile | null) {
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
-            align="end"
+            side={isMobile ? "bottom" : "top"}
+            align="start"
             sideOffset={4}
           >
             <DropdownMenuLabel className="p-0 font-normal">
@@ -94,7 +97,6 @@ export function NavUser(user: UserProfile | null) {
                   <span className="truncate font-medium">{name}</span>
                   <span className="truncate text-xs">{email}</span>
                 </div>
-                <ModeToggle />
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -105,6 +107,34 @@ export function NavUser(user: UserProfile | null) {
                 <BadgeCheck />
                 Settings
               </DropdownMenuItem>
+
+              <DropdownMenuItem asChild>
+                <DropdownMenu>
+                  <DropdownMenuTrigger
+                    className="flex items-center gap-2"
+                    asChild
+                    onPointerDown={(e) => e.stopPropagation()}
+                  >
+                    <DropdownMenuItem>
+                      <Contrast />
+                      Appearance
+                      <ChevronRight className="ml-auto" />
+                    </DropdownMenuItem>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+                    side={isMobile ? "bottom" : "right"}
+                    align="start"
+                    sideOffset={4}
+                  >
+                    <DropdownMenuGroup>
+                      <PaletteSwitcher />
+                      <ModeToggle />
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </DropdownMenuItem>
+
               <DropdownMenuItem onClick={() => redirect("/billing")}>
                 <CreditCard />
                 Billing
@@ -117,7 +147,7 @@ export function NavUser(user: UserProfile | null) {
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={signOut}>
               <LogOut />
-              Log out
+              Sign out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
