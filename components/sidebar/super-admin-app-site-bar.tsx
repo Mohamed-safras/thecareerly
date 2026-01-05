@@ -1,8 +1,6 @@
 import {
   AudioWaveform,
   BriefcaseBusiness,
-  CreditCard,
-  FileText,
   GalleryVerticalEnd,
   Inbox,
   LayoutDashboard,
@@ -118,7 +116,6 @@ const SuperAdminAppSideBar = () => {
         title: "Jobs",
         url: jobsPath ? `${jobsPath}` : "#",
         icon: BriefcaseBusiness,
-        isActive: true,
         items: [
           {
             title: "Create New Job",
