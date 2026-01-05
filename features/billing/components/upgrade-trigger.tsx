@@ -8,7 +8,7 @@ const UpgradeTrigger = () => {
   return (
     <div
       className={
-        `w-full p-3 flex items-center justify-between bg-secondary/10 border rounded-lg gap-3 cursor-pointer relative overflow-hidden group` +
+        `w-full p-3 flex items-center justify-between bg-muted/70 border rounded-lg gap-3 cursor-pointer relative overflow-hidden hover:bg-muted/100` +
         `transition-all duration-200 ease-linear will-change-transform will-change-opacity will-change-max-height will-change-scale will-change-margin ` +
         (state === "expanded"
           ? "opacity-100 translate-x-0 max-h-32 pointer-events-auto"
