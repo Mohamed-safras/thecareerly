@@ -1,12 +1,17 @@
 import React, { useState } from "react";
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-  Settings,
-  Globe,
-  BookOpen,
-  Users,
+  UserCircle,
   CreditCard,
   Cloud,
   Shield,
@@ -18,8 +23,10 @@ import {
   HardDrive,
   Sparkles,
   MessageSquare,
+  Github,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { AccountSettingsWrapper } from "./account-settings-wrapper";
 
 interface SettingsDialogProps {
   open: boolean;
@@ -37,34 +44,18 @@ type MenuSection = {
 
 const menuSections: MenuSection[] = [
   {
-    title: "Project",
-    items: [
-      {
-        id: "settings",
-        label: "Project settings",
-        icon: <Settings className="h-4 w-4" />,
-      },
-      { id: "domains", label: "Domains", icon: <Globe className="h-4 w-4" /> },
-      {
-        id: "knowledge",
-        label: "Knowledge",
-        icon: <BookOpen className="h-4 w-4" />,
-      },
-    ],
-  },
-  {
     title: "Workspace",
     items: [
       {
         id: "workspace",
         label: "Mohamed's Lovable",
         icon: (
-          <div className="h-4 w-4 rounded bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground">
-            M
+          <div className="h-5 w-5 rounded bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+            <span className="text-[10px] font-bold text-white">M</span>
           </div>
         ),
       },
-      { id: "people", label: "People", icon: <Users className="h-4 w-4" /> },
+      { id: "people", label: "People", icon: <User className="h-4 w-4" /> },
       {
         id: "plans",
         label: "Plans & credits",
@@ -85,7 +76,11 @@ const menuSections: MenuSection[] = [
   {
     title: "Account",
     items: [
-      { id: "account", label: "Mohamed", icon: <User className="h-4 w-4" /> },
+      {
+        id: "account",
+        label: "Mohamed Safras",
+        icon: <UserCircle className="h-4 w-4" />,
+      },
       { id: "labs", label: "Labs", icon: <FlaskConical className="h-4 w-4" /> },
     ],
   },
@@ -94,8 +89,13 @@ const menuSections: MenuSection[] = [
     items: [
       {
         id: "connectors",
-        label: "Integrations",
+        label: "Connectors",
         icon: <Link className="h-4 w-4" />,
+      },
+      {
+        id: "github",
+        label: "GitHub",
+        icon: <Github className="h-4 w-4" />,
       },
     ],
   },
@@ -109,9 +109,9 @@ interface StatItemProps {
 
 function StatItem({ label, value, className }: StatItemProps) {
   return (
-    <div className={cn("space-y-1", className)}>
-      <p className="text-sm text-muted-foreground">{label}</p>
-      <p className="text-base font-medium">{value}</p>
+    <div className={cn("", className)}>
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p className="text-sm font-medium mt-0.5">{value}</p>
     </div>
   );
 }
@@ -134,71 +134,132 @@ function UsageRow({
   color,
 }: UsageRowProps) {
   const isUnlimited = limit === "unlimited";
-  const percentage = isUnlimited ? 0 : (used / limit) * 100;
-  const isNearLimit = percentage >= 80;
 
   return (
-    <div className="flex items-center justify-between py-3">
+    <div className="flex items-center justify-between py-3 border-b border-border last:border-0">
       <div className="flex items-center gap-3">
         <div className={cn("p-2 rounded-lg", color)}>{icon}</div>
-        <span className="text-sm font-medium">{label}</span>
+        <span className="text-sm">{label}</span>
       </div>
-      <div className="text-right">
-        <span
-          className={cn(
-            "text-sm font-semibold tabular-nums",
-            isNearLimit && !isUnlimited && "text-warning"
-          )}
-        >
+      <div className="text-sm">
+        <span className="font-medium">
           {used.toLocaleString()}
           {unit}
         </span>
-        <span className="text-sm text-muted-foreground">
+        <span className="text-muted-foreground">
           {" "}
-          / {isUnlimited ? "∞" : `${limit.toLocaleString()}${unit}`}
+          / {isUnlimited ? "∞" : `${(limit as number).toLocaleString()}${unit}`}
         </span>
       </div>
     </div>
   );
 }
 
-function ProjectSettingsContent() {
+function AccountSettingsContent() {
+  // Generate contribution grid data
+  const generateContributionData = () => {
+    const weeks = 52;
+    const days = 7;
+    const data = [];
+    for (let w = 0; w < weeks; w++) {
+      const week = [];
+      for (let d = 0; d < days; d++) {
+        // Random activity level (0-4)
+        const level =
+          Math.random() > 0.9 ? Math.floor(Math.random() * 4) + 1 : 0;
+        week.push(level);
+      }
+      data.push(week);
+    }
+    return data;
+  };
+
+  const contributionData = generateContributionData();
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h2 className="text-xl font-semibold mb-1">Project settings</h2>
-        <p className="text-sm text-muted-foreground">
-          Manage your project details, visibility, and preferences.
+        <h2 className="text-xl font-semibold">Account settings</h2>
+        <p className="text-sm text-muted-foreground mt-1">
+          Personalize how others see and interact with you on Lovable.
         </p>
       </div>
 
-      <div>
-        <h3 className="text-base font-semibold mb-3">Overview</h3>
-        <div className="grid grid-cols-2 gap-x-12 gap-y-3">
-          <StatItem label="Display name" value="Recruit Flow ✏️" />
-          <StatItem label="URL subdomain" value="No URL subdomain" />
-          <StatItem
-            label="Owner"
-            value={<span className="underline">Mohamed</span>}
-          />
-          <StatItem label="Created at" value="2025-12-31 16:28:53" />
-          <StatItem label="Messages count" value="21" />
-          <StatItem label="AI edits count" value="17" />
-          <StatItem label="Credits used" value="30.00" />
+      {/* Activity Graph */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium">4 edits on</span>
+          <span className="text-orange-500">🧡</span>
+          <span className="text-sm font-medium">Lovable</span>
+          <span className="text-sm text-muted-foreground">
+            in the last year
+          </span>
+        </div>
+
+        <div className="overflow-x-auto pb-2">
+          <div className="flex gap-[3px] min-w-max">
+            {contributionData.map((week, weekIndex) => (
+              <div key={weekIndex} className="flex flex-col gap-[3px]">
+                {week.map((level, dayIndex) => (
+                  <div
+                    key={dayIndex}
+                    className={cn(
+                      "w-[10px] h-[10px] rounded-xs",
+                      level === 0 && "bg-muted-foreground/20",
+                      level === 1 && "bg-blue-900/60",
+                      level === 2 && "bg-blue-700/70",
+                      level === 3 && "bg-blue-500/80",
+                      level === 4 && "bg-blue-400"
+                    )}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-8">
+          <StatItem label="Daily average" value="0.0 edits" />
+          <StatItem label="Days edited" value="2 (1%)" />
+          <StatItem label="Current streak" value="0 days" />
+        </div>
+
+        <div className="flex items-center justify-between text-muted-foreground">
+          <button className="p-1 hover:text-foreground transition-colors">
+            ←
+          </button>
+          <button className="p-1 hover:text-foreground transition-colors">
+            →
+          </button>
         </div>
       </div>
 
-      <div className="pt-4 border-t border-border">
-        <h3 className="text-base font-semibold mb-2">Project visibility</h3>
+      {/* Avatar Section */}
+      <div className="space-y-4">
+        <h3 className="text-sm font-medium">Your avatar</h3>
         <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            Keep your project hidden and prevent others from remixing it.
+          <p className="text-sm text-muted-foreground max-w-md">
+            Your avatar is either fetched from your linked identity provider or
+            automatically generated based on your account.
           </p>
-          <Button variant="outline" size="sm" className="gap-2">
-            <Users className="h-4 w-4" />
-            Workspace
-          </Button>
+          <Avatar className="h-12 w-12">
+            <AvatarImage src="/placeholder.svg" />
+            <AvatarFallback>MS</AvatarFallback>
+          </Avatar>
         </div>
+      </div>
+
+      {/* Username Section */}
+      <div className="space-y-4">
+        <h3 className="text-sm font-medium">Username</h3>
+        <p className="text-sm text-muted-foreground">
+          Your public identifier and profile URL.
+        </p>
+        <Input
+          value="Egcu095eleVW8b5INMTyc9DrG342"
+          readOnly
+          className="bg-muted/50"
+        />
       </div>
     </div>
   );
@@ -214,7 +275,7 @@ function PlansCreditsContent() {
       color: "bg-primary/10",
     },
     {
-      icon: <HardDrive className="h-4 w-4 text-accent" />,
+      icon: <HardDrive className="h-4 w-4 text-accent-foreground" />,
       label: "Storage",
       used: 2.4,
       limit: 5,
@@ -222,25 +283,25 @@ function PlansCreditsContent() {
       color: "bg-accent/10",
     },
     {
-      icon: <Database className="h-4 w-4 text-info" />,
+      icon: <Database className="h-4 w-4 text-blue-500" />,
       label: "API Calls",
       used: 45200,
       limit: 100000,
-      color: "bg-info/10",
+      color: "bg-blue-500/10",
     },
     {
-      icon: <Sparkles className="h-4 w-4 text-warning" />,
+      icon: <Sparkles className="h-4 w-4 text-amber-500" />,
       label: "AI Tokens",
       used: 125000,
       limit: 500000,
-      color: "bg-warning/10",
+      color: "bg-amber-500/10",
     },
     {
-      icon: <Users className="h-4 w-4 text-success" />,
+      icon: <User className="h-4 w-4 text-green-500" />,
       label: "Team Members",
       used: 4,
       limit: 10,
-      color: "bg-success/10",
+      color: "bg-green-500/10",
     },
     {
       icon: <MessageSquare className="h-4 w-4 text-muted-foreground" />,
@@ -252,42 +313,50 @@ function PlansCreditsContent() {
   ];
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-8">
       <div>
-        <h2 className="text-xl font-semibold mb-1">Plans & credits</h2>
-        <p className="text-sm text-muted-foreground">
+        <h2 className="text-xl font-semibold">Plans & credits</h2>
+        <p className="text-sm text-muted-foreground mt-1">
           Manage your subscription and monitor resource usage.
         </p>
       </div>
 
-      <div>
-        <h3 className="text-base font-semibold mb-4">Current plan</h3>
-        <div className="grid grid-cols-2 gap-x-12 gap-y-6">
+      <div className="space-y-4">
+        <h3 className="text-sm font-medium">Current plan</h3>
+        <div className="grid grid-cols-2 gap-4 p-4 bg-muted/50 rounded-lg">
           <StatItem label="Plan" value="Pro" />
-          <StatItem label="Billing cycle" value="Jan 5 - Feb 4, 2026" />
-          <StatItem label="Next payment" value="$29.00" />
-          <StatItem label="Days remaining" value="30" />
+          <StatItem label="Billing cycle" value="Monthly" />
+          <StatItem label="Next billing" value="Feb 15, 2024" />
+          <StatItem label="Amount" value="$29/month" />
         </div>
       </div>
 
-      <div className="pt-4 border-t border-border">
-        <h3 className="text-base font-semibold mb-2">Resource usage</h3>
-        <div className="divide-y divide-border">
+      <div className="space-y-4">
+        <h3 className="text-sm font-medium">Resource usage</h3>
+        <div className="bg-muted/50 rounded-lg p-4">
           {usageData.map((item) => (
-            <UsageRow key={item.label} {...item} />
+            <UsageRow
+              key={item.label}
+              icon={item.icon}
+              label={item.label}
+              used={item.used}
+              limit={item.limit}
+              unit={item.unit}
+              color={item.color}
+            />
           ))}
         </div>
       </div>
 
-      <div className="pt-4 border-t border-border">
-        <div className="flex items-center justify-between">
+      <div className="space-y-4">
+        <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
           <div>
-            <h3 className="text-base font-semibold">Need more resources?</h3>
+            <h4 className="font-medium">Need more resources?</h4>
             <p className="text-sm text-muted-foreground">
               Upgrade your plan to unlock higher limits.
             </p>
           </div>
-          <Button size="sm">Upgrade Plan</Button>
+          <Button>Upgrade Plan</Button>
         </div>
       </div>
     </div>
@@ -295,50 +364,39 @@ function PlansCreditsContent() {
 }
 
 export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
-  const [activeItem, setActiveItem] = useState("settings");
+  const [activeItem, setActiveItem] = useState("account");
 
   const renderContent = () => {
     switch (activeItem) {
       case "plans":
         return <PlansCreditsContent />;
+      case "account":
+        return <AccountSettingsWrapper />;
       default:
-        return <ProjectSettingsContent />;
+        return <AccountSettingsContent />;
     }
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="min-w-xs sm:min-w-2xl md:min-w-3xl lg:min-w-4xl xl:min-w-5xl 2xl:min-w-6xl max-w-7xl p-0 max-h-[calc(90vh-3rem)] m-auto overflow-y-auto gap-0">
-        <DialogHeader className="p-3 border-b bg-muted/30">
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-lg bg-primary/10">
-              <Settings className="h-5 w-5 text-primary" />
-            </div>
-            <div>
-              <h2 className="text-xl font-semibold">Settings</h2>
-              <p className="text-sm text-muted-foreground">
-                Manage your project and account settings
-              </p>
-            </div>
-          </div>
-        </DialogHeader>
-        <div className="flex h-full">
-          {/* Sidebar */}
-          <div className="w-56 border-r border-border bg-muted/30 flex-shrink-0">
-            <ScrollArea className="h-full py-3">
-              <div className="space-y-3 px-3">
+      <DialogContent className="min-w-xs sm:min-w-2xl md:min-w-3xl lg:min-w-4xl xl:min-w-5xl 2xl:min-w-6xl max-w-7xl p-0 h-[85vh] max-h-[85vh] gap-0 overflow-hidden border-border flex flex-col">
+        <div className="flex flex-1 min-h-0">
+          {/* Sidebar - independently scrollable */}
+          <div className="w-60 bg-card/50 border-r border-border flex-shrink-0 h-full overflow-hidden">
+            <ScrollArea className="h-full">
+              <div className="py-3 space-y-3">
                 {menuSections.map((section) => (
-                  <div key={section.title}>
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-3 mb-2">
+                  <div key={section.title} className="space-y-1">
+                    <p className="text-xs font-medium text-muted-foreground px-3 mb-3">
                       {section.title}
                     </p>
-                    <div className="space-y-0.5">
+                    <div className="space-y-0.5 px-3">
                       {section.items.map((item) => (
                         <button
                           key={item.id}
                           onClick={() => setActiveItem(item.id)}
                           className={cn(
-                            "w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left",
+                            "w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors text-left",
                             activeItem === item.id
                               ? "bg-accent text-accent-foreground"
                               : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
@@ -355,10 +413,16 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
             </ScrollArea>
           </div>
 
-          {/* Content */}
-          <div className="flex-1 overflow-hidden">
+          {/* Content - independently scrollable */}
+          <div className="flex-1 min-w-0 bg-background h-full overflow-hidden">
             <ScrollArea className="h-full">
-              <div className="p-3">{renderContent()}</div>
+              <div className="p-3">
+                <DialogHeader>
+                  <DialogTitle>Header</DialogTitle>
+                  <DialogDescription>sdada</DialogDescription>
+                </DialogHeader>
+                {renderContent()}
+              </div>
             </ScrollArea>
           </div>
         </div>
