@@ -4,7 +4,6 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -27,6 +26,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AccountSettingsWrapper } from "./account-settings-wrapper";
+import { DialogTitle } from "@radix-ui/react-dialog";
+import { Separator } from "@/components/ui/separator";
 
 interface SettingsDialogProps {
   open: boolean;
@@ -364,14 +365,23 @@ function PlansCreditsContent() {
 }
 
 export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
-  const [activeItem, setActiveItem] = useState("account");
+  const [activeItem, setActiveItem] = useState<string>("account");
 
   const renderContent = () => {
     switch (activeItem) {
       case "plans":
         return <PlansCreditsContent />;
       case "account":
-        return <AccountSettingsWrapper />;
+        return (
+          <React.Fragment>
+            <ContentHeader
+              title="Account settings"
+              description="Personalize how others see and interact with you."
+            />
+            <Separator className="my-3" />
+            <AccountSettingsWrapper />
+          </React.Fragment>
+        );
       default:
         return <AccountSettingsContent />;
     }
@@ -416,13 +426,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
           {/* Content - independently scrollable */}
           <div className="flex-1 min-w-0 bg-background h-full overflow-hidden">
             <ScrollArea className="h-full">
-              <div className="p-3">
-                <DialogHeader>
-                  <DialogTitle>Header</DialogTitle>
-                  <DialogDescription>sdada</DialogDescription>
-                </DialogHeader>
-                {renderContent()}
-              </div>
+              <div className="p-3">{renderContent()}</div>
             </ScrollArea>
           </div>
         </div>
@@ -430,3 +434,17 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
     </Dialog>
   );
 }
+
+interface ContentHeaderProps {
+  title: string;
+  description?: string;
+}
+export const ContentHeader: React.FC<ContentHeaderProps> = ({
+  title,
+  description,
+}) => (
+  <DialogHeader>
+    <DialogTitle>{title}</DialogTitle>
+    {description && <DialogDescription>{description}</DialogDescription>}
+  </DialogHeader>
+);
