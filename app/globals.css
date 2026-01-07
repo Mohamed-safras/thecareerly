@@ -39,10 +39,7 @@
 /* =========================================================
    PALETTE 1: Black & White (Your First Colorset)
    ========================================================= */
-
-/* INDIGO LIGHT MODE */
 .black-white-palette {
-  /* COLORS */
   --background: rgb(252, 252, 252);
   --foreground: oklch(0 0 0);
   --card: oklch(1 0 0);
@@ -76,7 +73,6 @@
   --sidebar-border: oklch(0.94 0 0);
   --sidebar-ring: oklch(0 0 0);
 
-  /* SHADOWS & RADIUS */
   --radius: 0.5rem; /* Specific radius for this palette */
   --shadow-2xs: 0px 4px 10px 0px hsl(0 0% 0% / 0.03);
   --shadow-xs: 0px 4px 10px 0px hsl(0 0% 0% / 0.03);
@@ -154,9 +150,7 @@
    PALETTE 2: BLUE (Your SECOND Colorset)
    ========================================================= */
 
-/* BLUE LIGHT MODE */
 .blue-palette {
-  /* COLORS */
   --background: oklch(100% 0.00011 271.152);
   --foreground: oklch(0.2542 0.0111 254.038);
   --card: oklch(1 0 0);
@@ -190,8 +184,7 @@
   --sidebar-border: oklch(0.8758 0.0123 247.9675);
   --sidebar-ring: oklch(0.5399 0.1906 257.4815);
 
-  /* SHADOWS & RADIUS */
-  --radius: 0.25rem; /* Specific radius for this palette */
+  --radius: 0.25rem;
   --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
   --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
   --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.1),
@@ -215,7 +208,6 @@
 
 /* BLUE DARK MODE */
 .blue-palette.dark {
-  /* COLORS */
   --background: oklch(0.1763 0.014 258.3572);
   --foreground: oklch(100% 0.00011 271.152);
   --card: oklch(0.2202 0.0157 256.8163);
@@ -249,7 +241,6 @@
   --sidebar-border: oklch(0.33 0.0149 252.3099);
   --sidebar-ring: oklch(0.7153 0.1518 253.3061);
 
-  /* SHADOWS & RADIUS */
   --radius: 0.25rem;
   --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
   --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);

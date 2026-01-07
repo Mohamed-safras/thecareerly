@@ -15,7 +15,6 @@ import {
   Cloud,
   Shield,
   User,
-  FlaskConical,
   Link,
   Zap,
   Database,
@@ -82,7 +81,6 @@ const menuSections: MenuSection[] = [
         label: "Mohamed Safras",
         icon: <UserCircle className="h-4 w-4" />,
       },
-      { id: "labs", label: "Labs", icon: <FlaskConical className="h-4 w-4" /> },
     ],
   },
   {
@@ -382,6 +380,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
             <AccountSettingsWrapper />
           </React.Fragment>
         );
+
       default:
         return <AccountSettingsContent />;
     }

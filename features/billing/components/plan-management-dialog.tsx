@@ -72,7 +72,7 @@ export const PlanManagementDialog = ({
             </div>
           </DialogHeader>
 
-          <div className="flex-1 overflow-y-auto px-3  space-y-3">
+          <div className="flex-1 overflow-y-auto p-3  space-y-3">
             {/* Trial Status */}
             {trialInfo.isActive && (
               <TrialStatusCard
