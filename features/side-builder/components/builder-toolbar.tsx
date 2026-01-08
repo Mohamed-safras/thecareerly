@@ -10,13 +10,12 @@ import {
   Smartphone,
   Save,
   Settings,
-  Palette,
   ExternalLink,
   Trash2,
-  Copy,
   Clipboard,
-  Code,
   Download,
+  Globe,
+  ArrowLeft,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -32,7 +31,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 interface BuilderToolbarProps {
   zoom: number;
@@ -69,15 +68,25 @@ export function BuilderToolbar({
   onClearCanvas,
   onPaste,
 }: BuilderToolbarProps) {
+  const router = useRouter();
+
   return (
     <div className="h-14 border-b bg-card flex items-center justify-between px-4">
       {/* Left: Logo & Actions */}
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
+        <Button
+          onClick={() => router.back()}
+          variant={"secondary"}
+          className="w-8 h-8 flex items-center justify-center rounded-full"
+        >
+          <ArrowLeft className="w-4 h-4" />
+        </Button>
+
+        <div className="flex items-center gap-1.5">
           <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-            <Palette className="h-4 w-4 text-primary-foreground" />
+            <Globe className="h-4 w-4 text-primary-foreground" />
           </div>
-          <span className="font-semibold text-lg">Site Builder</span>
+          <span className="font-semibold">Site Builder</span>
         </div>
 
         <Separator orientation="vertical" className="h-6" />

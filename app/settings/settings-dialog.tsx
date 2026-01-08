@@ -22,11 +22,13 @@ import {
   Sparkles,
   MessageSquare,
   Github,
+  CalendarSync,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AccountSettingsWrapper } from "./account-settings-wrapper";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Separator } from "@/components/ui/separator";
+import { SyncCalendar } from "@/features/calander/calendar-sync";
 
 interface SettingsDialogProps {
   open: boolean;
@@ -70,6 +72,11 @@ const menuSections: MenuSection[] = [
         id: "privacy",
         label: "Privacy & security",
         icon: <Shield className="h-4 w-4" />,
+      },
+      {
+        id: "sync-calander",
+        label: "Sync Calander",
+        icon: <CalendarSync className="h-4 w-4" />,
       },
     ],
   },
@@ -380,7 +387,14 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
             <AccountSettingsWrapper />
           </React.Fragment>
         );
-
+      case "sync-calander":
+        return (
+          <React.Fragment>
+            <ContentHeader title="Sync Calander" />
+            <Separator className="my-3" />
+            <SyncCalendar />
+          </React.Fragment>
+        );
       default:
         return <AccountSettingsContent />;
     }
