@@ -12,6 +12,7 @@ import {
   CircleUserRound,
   Calendar,
   Globe,
+  CircleUser,
 } from "lucide-react";
 
 import { TeamSwitcher } from "@/components/team-switcher";
@@ -52,7 +53,7 @@ const SuperAdminAppSideBar = () => {
         icon: Inbox,
       },
       {
-        title: "Calendar & Events",
+        title: "Events",
         url: "/calander",
         icon: Calendar,
       },
@@ -167,9 +168,9 @@ const SuperAdminAppSideBar = () => {
       />
       <NavSecondary
         linearItems={[
-          { title: "Candidates", icon: CircleUserRound, url: "/candidates" },
+          { title: "Candidates", icon: Users, url: "/candidates" },
           { title: "My Referrals", icon: Speech, url: "#" },
-          { title: "Career Site", icon: Link, url: "#" },
+          { title: "Career Page", icon: Link, url: "#" },
         ]}
         collapsibleItems={data.recruitment}
         sectionTitle="RECRUITMENT"

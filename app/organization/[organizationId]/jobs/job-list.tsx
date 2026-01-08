@@ -48,7 +48,9 @@ const JobList = ({ onJobClick }: JobListProps) => {
       <div className="flex flex-col items-center justify-center py-12">
         <div className="text-muted-foreground mb-4 text-center">
           <p className="text-lg font-semibold">No jobs found</p>
-          <p className="text-sm">There are no job postings at the moment.</p>
+          <p className="text-sm">
+            Create your first job posting to start attracting candidates.
+          </p>
         </div>
         <Button
           onClick={refresh}

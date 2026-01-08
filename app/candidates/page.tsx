@@ -73,8 +73,21 @@ const Candidates = () => {
     <React.Fragment>
       {/* Main Content */}
       <div className="px-4 py-6 space-y-3">
-        <div className="flex justify-end items-center gap-2">
-          <div className="flex items-center gap-2">
+        {/* Filters */}
+        <div className="flex items-center justify-between gap-1.5  rounded-lg border bg-card p-3">
+          <CandidateFilters
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            stageFilter={stageFilter}
+            setStageFilter={setStageFilter}
+            departmentFilter={departmentFilter}
+            setDepartmentFilter={setDepartmentFilter}
+            sourceFilter={sourceFilter}
+            setSourceFilter={setSourceFilter}
+            activeFiltersCount={activeFiltersCount}
+            clearFilters={clearFilters}
+          />
+          <div className="flex items-center gap-1.5 border rounded-lg">
             <Tabs
               value={viewMode}
               onValueChange={(v) => setViewMode(v as "table" | "kanban")}
@@ -91,22 +104,6 @@ const Candidates = () => {
               </TabsList>
             </Tabs>
           </div>
-        </div>
-
-        {/* Filters */}
-        <div className="rounded-lg border bg-card p-3">
-          <CandidateFilters
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            stageFilter={stageFilter}
-            setStageFilter={setStageFilter}
-            departmentFilter={departmentFilter}
-            setDepartmentFilter={setDepartmentFilter}
-            sourceFilter={sourceFilter}
-            setSourceFilter={setSourceFilter}
-            activeFiltersCount={activeFiltersCount}
-            clearFilters={clearFilters}
-          />
         </div>
 
         {viewMode === "kanban" ? (
