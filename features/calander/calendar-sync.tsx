@@ -86,7 +86,7 @@ const mockAccounts: CalendarAccount[] = [
   },
 ];
 
-export const CalendarSync = () => {
+export const SyncCalendar = () => {
   const [accounts, setAccounts] = useState<CalendarAccount[]>(mockAccounts);
   const [settings, setSettings] = useState<SyncSettings>({
     autoSync: true,

@@ -11,6 +11,7 @@ import {
   Users,
   CircleUserRound,
   Calendar,
+  Globe,
 } from "lucide-react";
 
 import { TeamSwitcher } from "@/components/team-switcher";
@@ -54,6 +55,11 @@ const SuperAdminAppSideBar = () => {
         title: "Calendar & Events",
         url: "/calander",
         icon: Calendar,
+      },
+      {
+        title: "Site Builder",
+        url: "/site-builder",
+        icon: Globe,
       },
     ],
     organization: [
