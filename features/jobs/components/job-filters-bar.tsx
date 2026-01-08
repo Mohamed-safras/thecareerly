@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { Grid2x2, List, RefreshCw, SlidersHorizontal } from "lucide-react";
+import { Grid2x2, List, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import CategoryPill from "./category-pill";
 import StatusPill from "./status-pill";
@@ -35,88 +35,84 @@ export default function JobFiltersBar() {
   ];
 
   return (
-    <div className="w-full rounded-lg border p-3 backdrop-blur supports-[backdrop-filter]:bg-background/40 mb-3">
-      <div className="flex items-start justify-between gap-2 flex-col lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-wrap items-center gap-2">
-          <div></div>
+    <div className="flex flex-col gap-4 w-full bg-card p-3 rounded-lg border">
+      {/* Top Row: Search and Mobile Actions */}
+      <div className="flex flex-col md:flex-row gap-3 w-full items-center">
+        <div className="w-full md:flex-1">
           <SearchBar searchQuery="" setSearchQuery={() => {}} />
-          <div className="inline-flex items-center rounded border bg-muted/50 p-0.5">
-            <CategoryPill
-              label={
-                categories.length
-                  ? `${categories.length} Selected`
-                  : "All Categories"
-              }
-              items={allCategories}
-              value={categories}
-              onChange={(next) => setCategories(next)}
-            />
-          </div>
-
-          <div className="inline-flex items-center rounded border bg-muted/50 p-0.5">
-            <StatusPill
-              label={
-                allStatuses.find((s) => s.id === status)?.label ?? "All Status"
-              }
-              items={allStatuses}
-              value={status}
-              onChange={setStatus}
-            />
-          </div>
-
-          <div className="inline-flex items-center rounded border bg-muted/50 p-0.5">
-            <LocationPill
-              label={
-                allLocations.find((l) => l.id === location)?.label ??
-                "All Location"
-              }
-              items={allLocations}
-              value={location}
-              onChange={setLocation}
-            />
-          </div>
-
-          <div className="inline-flex items-center rounded border bg-muted/50 p-0.5">
-            <AdvanceFilterPill />
-          </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="inline-flex items-center rounded border bg-muted/50 p-0.5">
-            <Button
-              variant="secondary"
+        {/* Refresh & Advanced (Visible on all, grouped on mobile) */}
+        <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+          {/* View Switcher: Right-aligned on desktop, full-width on mobile */}
+          <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-md self-end lg:self-auto">
+            <button
               onClick={() => setView("grid")}
               className={cn(
                 "inline-flex h-8 items-center gap-2 rounded px-3 text-sm transition",
                 view === "grid"
-                  ? "bg-secondary dark:bg-primary border shadow-sm"
-                  : "bg-transparent opacity-70 hover:opacity-100 hover:bg-background/50"
+                  ? "bg-background border shadow-sm"
+                  : "opacity-70 hover:opacity-100"
               )}
             >
               <Grid2x2 className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="secondary"
+              <span className="hidden sm:inline">Grid</span>
+            </button>
+            <button
               onClick={() => setView("list")}
               className={cn(
                 "inline-flex h-8 items-center gap-2 rounded px-3 text-sm transition",
                 view === "list"
-                  ? "bg-secondary dark:bg-primary border shadow-sm"
-                  : "bg-transparent opacity-70 hover:opacity-100 hover:bg-background/50"
+                  ? "bg-background border shadow-sm"
+                  : "opacity-70 hover:opacity-100"
               )}
             >
               <List className="h-4 w-4" />
-            </Button>
+              <span className="hidden sm:inline">List</span>
+            </button>
           </div>
-          {/* <div className="inline-flex items-center rounded border bg-muted/50 p-0.5">
-            <Button
-              variant="secondary"
-              onClick={refresh}
-              className="h-8 px-4 rounded-lg transition-colors bg-transparent opacity-70 hover:opacity-100 hover:bg-background/50"
-            >
-              <RefreshCw className="w-4 h-4" />
-            </Button>
-          </div> */}
+          {/* <Button
+            variant="outline"
+            size="icon"
+            onClick={refresh}
+            className="shrink-0"
+          >
+            <RefreshCw className="h-4 w-4" />
+          </Button> */}
+        </div>
+      </div>
+
+      <hr className="md:hidden opacity-50" />
+
+      {/* Bottom Row: Filters and View Toggle */}
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+        {/* Filter Pills Group: Scrollable on mobile, wrapped on desktop */}
+        <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+          <CategoryPill
+            label={
+              categories.length
+                ? `${categories.length} Selected`
+                : "All Categories"
+            }
+            items={allCategories}
+            value={categories}
+            onChange={(next) => setCategories(next)}
+          />
+          <StatusPill
+            label={allStatuses.find((s) => s.id === status)?.label ?? "Status"}
+            items={allStatuses}
+            value={status}
+            onChange={setStatus}
+          />
+          <LocationPill
+            label={
+              allLocations.find((l) => l.id === location)?.label ?? "Location"
+            }
+            items={allLocations}
+            value={location}
+            onChange={setLocation}
+          />
+          <AdvanceFilterPill />
         </div>
       </div>
     </div>

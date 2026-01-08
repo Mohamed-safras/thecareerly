@@ -9,6 +9,7 @@ import { Metadata } from "next";
 import JobDetailsSidebar from "@/features/jobs/job-details-sidebar";
 import { Job } from "@/features/jobs/components/job-posting-card";
 import JobsStatusBar from "@/features/jobs/components/jobs-status";
+import { JobStatsCards } from "@/features/jobs/components/job-stats-cards";
 
 type Props = {
   params: { id: string };
@@ -30,10 +31,22 @@ const Jobs = () => {
   };
 
   return (
-    <div className="mx-auto max-w-8xl p-3">
+    <div className="mx-auto max-w-8xl p-3 space-y-3">
       <JobsOpeningHeader />
+      <JobStatsCards
+        stats={{
+          totalApplications: 10,
+          totalViews: 1,
+          draft: 1,
+          total: 1,
+          paused: 1,
+          published: 3,
+          closed: 1,
+        }}
+      />
+
       <JobFiltersBar />
-      <JobsStatusBar />
+
       <JobList onJobClick={handleJobClick} />
 
       {selectedJob && (
