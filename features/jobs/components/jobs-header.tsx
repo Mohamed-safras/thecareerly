@@ -18,8 +18,8 @@ export default function JobsOpeningHeader({ onImport, className }: Props) {
   const jobsPath = getJobsPath(user?.organizationId, user?.teamId);
 
   return (
-    <div className={cn("w-full py-3 mb-4", className)}>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className={cn("w-full py-3", className)}>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         {/* Buttons: stack on xs, row on sm+ */}
         <div className="flex flex-col sm:flex-row flex-1 items-stretch sm:items-center justify-end gap-2">
           <Button
