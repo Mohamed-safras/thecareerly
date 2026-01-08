@@ -15,7 +15,6 @@ import {
   RotateCw,
   AlertCircle,
 } from "lucide-react";
-import MarkdownEditor from "@/components/markdowneditor";
 import CircleSpinner from "@/components/circlespinner";
 import { AnimatedIconButton } from "@/components/animatediconbutton";
 import { useUndoRedo } from "@/hooks/use-undo-redo";
@@ -32,6 +31,7 @@ import { ALLOWED_VIBES_TYPES } from "@/constents/basic-info-options";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { JobForm } from "@/interfaces/job";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import MarkdownEditor from "@/components/markdowneditor";
 
 const MAX_FILES = 3;
 

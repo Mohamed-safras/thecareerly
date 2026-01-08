@@ -30,7 +30,7 @@ const Jobs = () => {
   };
 
   return (
-    <div className="mx-auto max-w-8xl p-4">
+    <div className="mx-auto max-w-8xl p-3">
       <JobsOpeningHeader />
       <JobFiltersBar />
       <JobsStatusBar />

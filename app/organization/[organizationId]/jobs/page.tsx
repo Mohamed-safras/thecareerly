@@ -1,4 +1,3 @@
-import React from "react";
 import Jobs from "./jobs";
 
 import type { Metadata } from "next";

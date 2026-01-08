@@ -9,6 +9,7 @@ import StatusPill from "./status-pill";
 import LocationPill from "./location-pill";
 import AdvanceFilterPill from "./advance-filter-pill";
 import { useFetchJobs } from "@/hooks/useFetchJobs";
+import SearchBar from "@/components/search-bar";
 
 export default function JobFiltersBar() {
   const { refresh } = useFetchJobs();
@@ -34,9 +35,11 @@ export default function JobFiltersBar() {
   ];
 
   return (
-    <div className="w-full rounded-xl border p-2 backdrop-blur supports-[backdrop-filter]:bg-background/40 mb-4">
+    <div className="w-full rounded-lg border p-3 backdrop-blur supports-[backdrop-filter]:bg-background/40 mb-3">
       <div className="flex items-start justify-between gap-2 flex-col lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-wrap items-center gap-2">
+          <div></div>
+          <SearchBar searchQuery="" setSearchQuery={() => {}} />
           <div className="inline-flex items-center rounded border bg-muted/50 p-0.5">
             <CategoryPill
               label={
@@ -82,16 +85,6 @@ export default function JobFiltersBar() {
           <div className="inline-flex items-center rounded border bg-muted/50 p-0.5">
             <Button
               variant="secondary"
-              className="h-8 px-4 border-0 rounded-lg transition-colors dark:bg-transparent opacity-70 hover:opacity-100 dark:hover:bg-background/50"
-            >
-              <SlidersHorizontal className="mr-2 h-4 w-4" />
-              General Setting
-            </Button>
-          </div>
-
-          <div className="inline-flex items-center rounded border bg-muted/50 p-0.5">
-            <Button
-              variant="secondary"
               onClick={() => setView("grid")}
               className={cn(
                 "inline-flex h-8 items-center gap-2 rounded px-3 text-sm transition",
@@ -115,7 +108,7 @@ export default function JobFiltersBar() {
               <List className="h-4 w-4" />
             </Button>
           </div>
-          <div className="inline-flex items-center rounded border bg-muted/50 p-0.5">
+          {/* <div className="inline-flex items-center rounded border bg-muted/50 p-0.5">
             <Button
               variant="secondary"
               onClick={refresh}
@@ -123,7 +116,7 @@ export default function JobFiltersBar() {
             >
               <RefreshCw className="w-4 h-4" />
             </Button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
