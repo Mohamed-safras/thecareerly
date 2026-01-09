@@ -163,10 +163,9 @@ export const useTeamManager = () => {
 
   // Input change handler
   const onSearchChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setSearchInput(value);
-      debouncedSearch(value);
+    (searchQuery: string) => {
+      setSearchInput(searchQuery);
+      debouncedSearch(searchQuery);
     },
     [debouncedSearch]
   );
