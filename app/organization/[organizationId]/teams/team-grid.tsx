@@ -1,5 +1,5 @@
 "use client";
-import { Layers3, Filter, ChevronDown, Loader, Search } from "lucide-react";
+import { Layers3, Filter, ChevronDown, Loader } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -10,11 +10,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { CreateTeamDialog } from "@/features/teams/components/create-team-dialog";
 import TeamCard from "@/features/teams/components/team-card";
 import { useTeamManager } from "@/hooks/use-team-manager";
 import React from "react";
+import SearchBar from "@/components/search-bar";
 
 export function TeamGrid() {
   const {
@@ -38,15 +38,7 @@ export function TeamGrid() {
   return (
     <React.Fragment>
       <div className="flex flex-col md:flex-row md:items-center py-4 gap-3">
-        <div className="flex relative bg-input items-center w-full md:max-w-md border rounded-lg px-2 py-0 group">
-          <Search className="absolute bg-transparent left-3 w-4 h-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
-          <Input
-            placeholder="Search by team name, user, email, role..."
-            value={searchInput}
-            onChange={onSearchChange}
-            className="w-full ml-7 border-none outline-none shadow-none p-0"
-          />
-        </div>
+        <SearchBar searchQuery={searchInput} setSearchQuery={onSearchChange} />
 
         <div className="flex flex-row gap-2 ml-auto max-sm:flex-wrap">
           {/* Status Filter Dropdown */}
