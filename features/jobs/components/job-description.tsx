@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import MarkdownEditor from "@/components/markdowneditor";
 import { AnimatedIconButton } from "@/components/animatediconbutton";
 import CircleSpinner from "@/components/circlespinner";
-import useAIGenerateJobDescription from "@/hooks/use-ai-generate-Job-description";
+import useAIGenerateJobDescription from "@/features/jobs/hooks/use-ai-generate-Job-description";
 import { useUndoRedo } from "@/hooks/use-undo-redo";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { AlertCircle, RotateCcw, RotateCw, Sparkles } from "lucide-react";

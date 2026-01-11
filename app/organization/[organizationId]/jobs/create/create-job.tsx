@@ -21,7 +21,7 @@ import ScreeningQuestions from "@/features/jobs/components/screen-questions";
 import { createJobPostingSteps } from "@/constents/stepper-item";
 import HiringProcesses from "@/features/jobs/components/hiring-processes";
 import HeaderShell from "@/features/jobs/components/hiring-shell";
-import { useSubmitJobForm } from "@/hooks/use-submit-form";
+import { useSubmitJobForm } from "@/features/jobs/hooks/use-submit-form";
 import { useAppSelector } from "@/store/hooks";
 import { getJobsPath } from "@/lib/utils";
 import { CREATE_JOB_FORM } from "@/constents/local-store-values";
@@ -32,7 +32,7 @@ import {
 } from "@/store/slice/jobs-slice";
 
 import { goNext, goPrev, goTo } from "@/lib/form-validation/job-form";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/features/auth/hooks/use-auth";
 
 export default function CreateJob() {
   const [currentStep, setCurrentStep] = React.useState(1);

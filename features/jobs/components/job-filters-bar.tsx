@@ -8,7 +8,7 @@ import CategoryPill from "./category-pill";
 import StatusPill from "./status-pill";
 import LocationPill from "./location-pill";
 import AdvanceFilterPill from "./advance-filter-pill";
-import { useFetchJobs } from "@/hooks/useFetchJobs";
+import { useFetchJobs } from "@/features/jobs/hooks/useFetchJobs";
 import SearchBar from "@/components/search-bar";
 
 export default function JobFiltersBar() {

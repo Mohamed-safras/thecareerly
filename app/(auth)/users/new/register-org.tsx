@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { PasswordInput } from "@/components/password-input";
-import useOrganizationRegister from "@/hooks/use-organization-register";
+import useOrganizationRegister from "@/features/auth/hooks/use-organization-register";
 import { FieldGroup } from "../../../../components/ui/field";
 import { cn } from "@/lib/utils";
 import { ArrowRight, GalleryVerticalEnd } from "lucide-react";

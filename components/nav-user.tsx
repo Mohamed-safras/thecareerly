@@ -31,7 +31,7 @@ import { UserProfile } from "@/types/user-profile";
 import { useAppDispatch } from "@/store/hooks";
 import { clearUser } from "@/store/slice/auth-slice";
 import { redirect } from "next/navigation";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/features/auth/hooks/use-auth";
 import { PaletteSwitcher } from "./palette-switcher";
 import React, { useState } from "react";
 import { SettingsDialog } from "@/app/settings/settings-dialog";

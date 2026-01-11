@@ -4,7 +4,7 @@ import React, { ReactNode, useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 import AccessCheck from "@/components/access-check";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/features/auth/hooks/use-auth";
 import { useAppDispatch } from "@/store/hooks";
 import { checkAuthStatus } from "@/store/slice/auth-slice";
 import { FORBIDDEN, LOGIN } from "@/constents/router-links";

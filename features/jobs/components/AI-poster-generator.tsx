@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { useAppDispatch } from "@/store/hooks";
-import { useGeneratePoster } from "@/hooks/use-generate-poster";
+import { useGeneratePoster } from "@/features/jobs/hooks/use-generate-poster";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

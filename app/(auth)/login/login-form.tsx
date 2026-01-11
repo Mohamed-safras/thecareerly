@@ -11,7 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../../../components/ui/form";
-import useLogin from "@/hooks/use-login";
+import useLogin from "@/features/auth/hooks/use-login";
 import { PasswordInput } from "../../../components/password-input";
 import Link from "next/link";
 import { CONNECT_ORGANIZATION_NEW } from "@/constents/router-links";

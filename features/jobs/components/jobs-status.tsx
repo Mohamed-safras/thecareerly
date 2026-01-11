@@ -1,4 +1,4 @@
-import { useFetchJobs } from "@/hooks/useFetchJobs";
+import { useFetchJobs } from "@/features/jobs/hooks/useFetchJobs";
 import { cn } from "@/lib/utils";
 import React from "react";
 

@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { CreateTeamDialog } from "@/features/teams/components/create-team-dialog";
 import TeamCard from "@/features/teams/components/team-card";
-import { useTeamManager } from "@/hooks/use-team-manager";
+import { useTeamManager } from "@/features/teams/hooks/use-team-manager";
 import React from "react";
 import SearchBar from "@/components/search-bar";
 
