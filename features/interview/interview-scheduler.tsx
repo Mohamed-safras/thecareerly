@@ -5,7 +5,6 @@ import {
   Video,
   MapPin,
   Phone,
-  Plus,
   CheckCircle2,
   XCircle,
   AlertCircle,
@@ -21,24 +20,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+
 import { FeedbackDialog } from "@/features/interview/feedback-dialog";
+import InterviewSchedulerPopup from "./interview-scheduler-popup";
 
 interface Interview {
   id: string;
@@ -274,8 +258,7 @@ export const InterviewScheduler: React.FC<InterviewSchedulerProps> = ({
   const pastInterviews = mockInterviews.filter((i) => i.status !== "scheduled");
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      {/* Header */}
+    <div className="space-y-3">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h3 className="font-semibold text-base sm:text-lg">
@@ -286,82 +269,10 @@ export const InterviewScheduler: React.FC<InterviewSchedulerProps> = ({
             completed
           </p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button size="sm" className="gap-2 w-full sm:w-auto">
-              <Plus className="h-4 w-4" />
-              <span className="hidden sm:inline">Schedule Interview</span>
-              <span className="sm:hidden">Schedule</span>
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Schedule New Interview</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label>Interview Type</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="hr">HR Screening</SelectItem>
-                    <SelectItem value="technical">
-                      Technical Interview
-                    </SelectItem>
-                    <SelectItem value="culture">Culture Fit</SelectItem>
-                    <SelectItem value="final">Final Round</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Date</Label>
-                  <Input type="date" />
-                </div>
-                <div className="space-y-2">
-                  <Label>Time</Label>
-                  <Input type="time" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label>Duration</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select duration" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="30">30 minutes</SelectItem>
-                    <SelectItem value="45">45 minutes</SelectItem>
-                    <SelectItem value="60">1 hour</SelectItem>
-                    <SelectItem value="90">1.5 hours</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>Format</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select format" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="video">Video Call</SelectItem>
-                    <SelectItem value="phone">Phone Call</SelectItem>
-                    <SelectItem value="in-person">In-Person</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>Notes</Label>
-                <Textarea placeholder="Add any notes or agenda items..." />
-              </div>
-              <Button className="w-full" onClick={() => setIsDialogOpen(false)}>
-                Schedule Interview
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <InterviewSchedulerPopup
+          isDialogOpen={isDialogOpen}
+          setIsDialogOpen={setIsDialogOpen}
+        />
       </div>
 
       {/* Upcoming Interviews */}
