@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import Platforms from "@/components/platforms";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
-import { useSubmitJobForm } from "@/hooks/use-submit-form";
+import { useSubmitJobForm } from "@/features/jobs/hooks/use-submit-form";
 import { ACTIONS } from "@/constents/actions";
 import { JobForm } from "@/interfaces/job";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";

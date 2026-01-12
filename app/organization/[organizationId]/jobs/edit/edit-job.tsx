@@ -21,7 +21,7 @@ import ScreeningQuestions from "@/features/jobs/components/screen-questions";
 import { editJobPostingSteps } from "@/constents/stepper-item";
 import HiringProcesses from "@/features/jobs/components/hiring-processes";
 import HeaderShell from "@/features/jobs/components/hiring-shell";
-import { useSubmitJobForm } from "@/hooks/use-submit-form";
+import { useSubmitJobForm } from "@/features/jobs/hooks/use-submit-form";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { getJobsPath } from "@/lib/utils";
 import { goNext, goPrev, goTo } from "@/lib/form-validation/job-form";

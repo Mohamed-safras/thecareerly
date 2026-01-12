@@ -7,7 +7,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { Roles } from "@/lib/role";
 import SuperAdminAppSideBar from "@/components/sidebar/super-admin-app-site-bar";
 import AppSideBar from "@/components/sidebar/app-site-bar";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/features/auth/hooks/use-auth";
 
 export default function ProtectedUserSideBar({
   children,

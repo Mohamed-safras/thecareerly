@@ -111,7 +111,7 @@ const useAIGenerateJobDescription = ({
     } finally {
       setGenerating(false);
     }
-  }, [aiPromptInputs, dispatch]);
+  }, [aiPromptInputs, dispatch, setFormMerge]);
 
   return {
     generating,

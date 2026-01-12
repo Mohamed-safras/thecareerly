@@ -4,7 +4,7 @@ import {
   Job,
   JobPostingCard,
 } from "@/features/jobs/components/job-posting-card";
-import { useFetchJobs } from "@/hooks/useFetchJobs";
+import { useFetchJobs } from "@/features/jobs/hooks/useFetchJobs";
 import { Loader } from "lucide-react";
 import React from "react";
 
