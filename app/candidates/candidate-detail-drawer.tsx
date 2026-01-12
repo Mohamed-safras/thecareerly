@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EvaluationScorecard } from "../../features/candidates/components/evaluation-scorecard";
-import { InterviewScheduler } from "../../features/candidates/components/interview-scheduler";
+import { InterviewScheduler } from "../../features/interview/interview-scheduler";
 import { CommunicationHistory } from "../../features/candidates/components/communication-history";
 import { DocumentsManager } from "../../features/candidates/components/documents-manager";
 import { PipelineStageManager } from "../../features/candidates/components/pipeline-stage-manager";

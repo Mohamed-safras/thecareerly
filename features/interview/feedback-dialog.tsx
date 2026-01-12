@@ -36,7 +36,7 @@ export function FeedbackDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] p-0">
+      <DialogContent className="min-w-xs sm:min-w-2xl md:min-w-3xl lg:min-w-4xl xl:min-w-5xl 2xl:min-w-6xl max-w-7xl p-0 max-h-[calc(90vh-3rem)] m-auto overflow-y-auto">
         <DialogHeader className="px-6 pt-6 pb-0">
           <DialogTitle>Interview Feedback Form</DialogTitle>
         </DialogHeader>

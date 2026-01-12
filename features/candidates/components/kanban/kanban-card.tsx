@@ -18,8 +18,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Candidate } from "@/features/candidates/data/mock-data";
 import { cn } from "@/lib/utils";
+import { Candidate } from "@/interfaces/candidate";
 
 interface KanbanCardProps {
   candidate: Candidate;
@@ -39,19 +39,6 @@ export const KanbanCard = ({
     e.dataTransfer.effectAllowed = "move";
   };
 
-  const getMatchColor = (score: number) => {
-    if (score >= 85) return "text-emerald-500 bg-emerald-500/10";
-    if (score >= 70) return "text-amber-500 bg-amber-500/10";
-    return "text-rose-500 bg-rose-500/10";
-  };
-
-  const getPriorityIndicator = (score: number) => {
-    if (score >= 90) return "bg-gradient-to-r from-emerald-500 to-teal-500";
-    if (score >= 80) return "bg-gradient-to-r from-blue-500 to-indigo-500";
-    if (score >= 70) return "bg-gradient-to-r from-amber-500 to-orange-500";
-    return "bg-gradient-to-r from-slate-400 to-slate-500";
-  };
-
   return (
     <div
       draggable
@@ -65,14 +52,6 @@ export const KanbanCard = ({
         isDragging && "opacity-50 scale-105 shadow-2xl rotate-2"
       )}
     >
-      {/* Priority Indicator Bar */}
-      <div
-        className={cn(
-          "absolute top-0 left-3 right-3 h-1 rounded-b-full",
-          getPriorityIndicator(candidate.matchScore)
-        )}
-      />
-
       <div className="p-3 pt-5">
         {/* Header with Drag Handle and Actions */}
         <div className="flex items-start justify-between mb-3">
@@ -182,16 +161,6 @@ export const KanbanCard = ({
                 </span>
               </div>
             )}
-          </div>
-
-          {/* Match Score */}
-          <div
-            className={cn(
-              "flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold",
-              getMatchColor(candidate.matchScore)
-            )}
-          >
-            {candidate.matchScore}%
           </div>
         </div>
       </div>

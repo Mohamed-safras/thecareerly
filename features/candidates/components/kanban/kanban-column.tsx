@@ -8,9 +8,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Candidate } from "@/features/candidates/data/mock-data";
 import { KanbanCard } from "./kanban-card";
 import { cn } from "@/lib/utils";
+import { Candidate } from "@/interfaces/candidate";
 
 interface KanbanColumnProps {
   stage: string;
@@ -35,9 +35,9 @@ export const KanbanColumn = ({
 }: KanbanColumnProps) => {
   const [isDragOver, setIsDragOver] = useState(false);
 
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
+  const handleDragOver = (event: React.DragEvent) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
     setIsDragOver(true);
   };
 
@@ -46,10 +46,10 @@ export const KanbanColumn = ({
     setIsDragOver(false);
   };
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
+  const handleDrop = (event: React.DragEvent) => {
+    event.preventDefault();
     setIsDragOver(false);
-    const candidateId = e.dataTransfer.getData("candidateId");
+    const candidateId = event.dataTransfer.getData("candidateId");
     if (candidateId) {
       onMoveCandidate(candidateId, stage);
     }
