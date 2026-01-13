@@ -21,7 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { FeedbackDialog } from "@/features/interview/feedback-dialog";
+import { FeedbackDialog } from "@/features/interview/components/feedback-dialog";
 import InterviewSchedulerPopup from "./interview-scheduler-popup";
 
 interface Interview {
