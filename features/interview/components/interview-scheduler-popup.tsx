@@ -283,15 +283,15 @@ const InterviewSchedulerPopup: React.FC<InterviewSchedulerPopupProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Add your additional notes</FormLabel>
-                  <div className="relative border-input border rounded-md">
-                    <FormControl>
-                      <Textarea
-                        placeholder="Add any notes or agenda items to generate interview questions..."
-                        className="resize-none space-y-3 max-h-60 overflow-y-auto border rounded-lg"
-                        {...field}
-                      />
-                    </FormControl>
-                  </div>
+
+                  <FormControl>
+                    <Textarea
+                      placeholder="Add any notes or agenda items to generate interview questions..."
+                      className="resize-none space-y-3 max-h-60 overflow-y-auto border rounded-lg"
+                      {...field}
+                    />
+                  </FormControl>
+
                   <FormMessage />
                 </FormItem>
               )}
