@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { ArrowUp, Plus } from "lucide-react";
+import { Plus, Sparkles } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -35,6 +35,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import axios from "axios";
+import CircleSpinner from "@/components/circlespinner";
 
 interface InterviewQuestion {
   question: string;
@@ -114,7 +115,7 @@ const InterviewSchedulerPopup: React.FC<InterviewSchedulerPopupProps> = ({
           <span className="sm:hidden">Schedule</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md min-w-xs sm:min-w-2xl md:min-w-3xl lg:min-w-4xl xl:min-w-5xl 2xl:min-w-6xl max-w-7xl max-h-[calc(90vh-3rem)] m-auto overflow-y-auto">
+      <DialogContent className=" sm:max-w-md min-w-xs sm:min-w-2xl md:min-w-3xl lg:min-w-4xl xl:min-w-5xl 2xl:min-w-6xl max-w-7xl max-h-[calc(90vh-3rem)] m-auto overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Schedule New Interview</DialogTitle>
           <DialogDescription>
@@ -151,9 +152,7 @@ const InterviewSchedulerPopup: React.FC<InterviewSchedulerPopupProps> = ({
                   <FormLabel>Job Description</FormLabel>
                   <FormControl>
                     <Textarea
-                      className="resize-none"
-                      rows={5}
-                      cols={5}
+                      className="resize-none space-y-3 max-h-60 overflow-y-auto border rounded-lg"
                       placeholder="e.g. Senior Frontend Developer"
                       {...field}
                     />
@@ -283,35 +282,44 @@ const InterviewSchedulerPopup: React.FC<InterviewSchedulerPopupProps> = ({
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Add your Notes</FormLabel>
-                  <div className="relative h-20 border-input border rounded-md">
+                  <FormLabel>Add your additional notes</FormLabel>
+                  <div className="relative border-input border rounded-md">
                     <FormControl>
-                      <Input
+                      <Textarea
                         placeholder="Add any notes or agenda items to generate interview questions..."
-                        className="border-none shadow-none"
+                        className="resize-none space-y-3 max-h-60 overflow-y-auto border rounded-lg"
                         {...field}
                       />
                     </FormControl>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={generateQuestionList}
-                      disabled={loading}
-                      className="w-8 h-8 absolute bottom-1 right-2 rounded-full"
-                    >
-                      <ArrowUp className="w-4 h-4" />
-                    </Button>
                   </div>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            {questions.length > 0 && (
-              <div className="space-y-3 mt-4">
-                <h3 className="font-semibold text-sm">Generated Questions:</h3>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={generateQuestionList}
+              disabled={loading}
+              className="rounded-lg animate-pulse"
+            >
+              {loading ? (
+                <>
+                  <CircleSpinner size={20} className="rounded-full" />{" "}
+                  Generating
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-4 h-4" /> Generate Interview Questions
+                </>
+              )}
+            </Button>
 
-                <div className="space-y-2 max-h-60 overflow-y-auto border rounded-lg p-3">
+            {questions.length > 0 && (
+              <div className="space-y-3 mt-3">
+                <h3 className="font-semibold text-sm">Generated Questions:</h3>
+                <div className="space-y-3 max-h-60 overflow-y-auto border rounded-lg p-3">
                   {questions.map((question, index) => (
                     <div key={index} className="p-2 bg-muted rounded-md">
                       <div className="flex items-start gap-2">
@@ -335,7 +343,10 @@ const InterviewSchedulerPopup: React.FC<InterviewSchedulerPopupProps> = ({
 
             <div className="flex items-center justify-between">
               <Button variant="secondary">Cancel</Button>
-              <Button type="submit">Schedule Interview</Button>
+
+              <Button type="submit" disabled={questions.length < 1}>
+                Schedule Interview
+              </Button>
             </div>
           </form>
         </Form>
