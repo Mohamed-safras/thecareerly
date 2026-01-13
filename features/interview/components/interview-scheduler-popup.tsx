@@ -307,7 +307,7 @@ const InterviewSchedulerPopup: React.FC<InterviewSchedulerPopupProps> = ({
               {loading ? (
                 <>
                   <CircleSpinner size={20} className="rounded-full" />{" "}
-                  Generating
+                  Generating questions...
                 </>
               ) : (
                 <>
