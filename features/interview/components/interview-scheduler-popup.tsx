@@ -74,10 +74,20 @@ const InterviewSchedulerPopup: React.FC<InterviewSchedulerPopupProps> = ({
 
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState<InterviewQuestion[]>([]);
+
   const generateQuestionList = async () => {
-    setLoading(true);
     console.log(form.getValues());
+
+    console.log(form.formState.isValid);
+
+    if (!form.formState.isValid) {
+      toast.warning("fill the required fileds");
+      return;
+    }
+
     try {
+      setLoading(true);
+
       const result = await axios.post("/api/interview", form.getValues());
 
       console.log("API Response:", result.data);
@@ -132,7 +142,9 @@ const InterviewSchedulerPopup: React.FC<InterviewSchedulerPopupProps> = ({
               name="jobPosition"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Job Position</FormLabel>
+                  <FormLabel>
+                    Job Position <span className="text-destructive">*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="e.g. Senior Frontend Developer"
@@ -149,7 +161,9 @@ const InterviewSchedulerPopup: React.FC<InterviewSchedulerPopupProps> = ({
               name="jobDescription"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Job Description</FormLabel>
+                  <FormLabel>
+                    Job Description <span className="text-destructive">*</span>
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       className="resize-none space-y-3 max-h-60 overflow-y-auto border rounded-lg"
@@ -168,7 +182,9 @@ const InterviewSchedulerPopup: React.FC<InterviewSchedulerPopupProps> = ({
                 name="interviewType"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Interview Type</FormLabel>
+                    <FormLabel>
+                      Interview Type <span className="text-destructive">*</span>
+                    </FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -199,7 +215,9 @@ const InterviewSchedulerPopup: React.FC<InterviewSchedulerPopupProps> = ({
                 name="duration"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Duration</FormLabel>
+                    <FormLabel>
+                      Duration <span className="text-destructive">*</span>
+                    </FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -226,7 +244,10 @@ const InterviewSchedulerPopup: React.FC<InterviewSchedulerPopupProps> = ({
                 name="format"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Interview Format</FormLabel>
+                    <FormLabel>
+                      Interview Format{" "}
+                      <span className="text-destructive">*</span>
+                    </FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -254,7 +275,9 @@ const InterviewSchedulerPopup: React.FC<InterviewSchedulerPopupProps> = ({
                 name="date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>
+                      Date <span className="text-destructive">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -267,7 +290,9 @@ const InterviewSchedulerPopup: React.FC<InterviewSchedulerPopupProps> = ({
                 name="time"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Time</FormLabel>
+                    <FormLabel>
+                      Time <span className="text-destructive">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
