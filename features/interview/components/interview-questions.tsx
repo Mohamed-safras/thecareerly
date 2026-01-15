@@ -24,7 +24,7 @@ const InterviewQuestions: React.FC<InterviewQuestionsProps> = ({
         </>
       ) : (
         <>
-          {questions.length > 0 && (
+          {questions.length > 0 ? (
             <div className="space-y-3 mt-3">
               <h3 className="font-semibold text-sm">Generated Questions:</h3>
               <div className="space-y-3 max-h-60 overflow-y-auto border rounded-lg p-3">
@@ -47,6 +47,8 @@ const InterviewQuestions: React.FC<InterviewQuestionsProps> = ({
                 ))}
               </div>
             </div>
+          ) : (
+            "No questions availble"
           )}
         </>
       )}

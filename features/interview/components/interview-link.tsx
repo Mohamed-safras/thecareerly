@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { Check, Copy, Clock, ListChecks, Calendar, Mail } from "lucide-react";
+import {
+  Check,
+  Copy,
+  Clock,
+  ListChecks,
+  Calendar,
+  Mail,
+  Slack,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
@@ -54,10 +62,10 @@ const InterviewShareCard = ({
   };
 
   return (
-    <Card className="border-border/50">
+    <Card className="border-border/50 shadow-none rounded-lg">
       {/* Success Header */}
       <div
-        className="pt-8 pb-6 px-6 text-center"
+        className="pt-8 pb-6 px-3 text-center"
         style={{
           background:
             "linear-gradient(to bottom, hsl(152 69% 95%), hsl(var(--card)))",
@@ -67,9 +75,9 @@ const InterviewShareCard = ({
           className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
           style={{ backgroundColor: "hsl(152 69% 45%)" }}
         >
-          <Check className="w-7 h-7 text-white" strokeWidth={3} />
+          <Check className="w-8 h-8 text-white" strokeWidth={3} />
         </div>
-        <h2 className="text-xl font-semibold text-card-foreground mb-2">
+        <h2 className="text-xl font-semibold text-card-foreground mb-3">
           Your AI Interview is Ready!
         </h2>
         <p className="text-muted-foreground text-sm">
@@ -86,7 +94,7 @@ const InterviewShareCard = ({
               Interview Link
             </label>
             <span
-              className="text-xs font-medium px-2.5 py-1 rounded-full"
+              className="text-xs font-medium px-3 py-1 rounded-full"
               style={{
                 color: "hsl(217 91% 50%)",
                 backgroundColor: "hsl(217 91% 95%)",
@@ -96,7 +104,7 @@ const InterviewShareCard = ({
             </span>
           </div>
 
-          <div className="flex items-center gap-2 p-1 bg-muted rounded-lg border border-border">
+          <div className="flex items-center gap-3 p-1 bg-muted rounded-lg border border-border">
             <div className="flex-1 px-3 py-2 text-sm text-muted-foreground truncate">
               {interviewLink}
             </div>
@@ -115,7 +123,7 @@ const InterviewShareCard = ({
           </div>
 
           {/* Meta Info */}
-          <div className="flex items-center gap-4 text-xs text-muted-foreground pt-1">
+          <div className="flex items-center gap-3 text-xs text-muted-foreground pt-1">
             <div className="flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5" />
               <span>{duration}</span>
@@ -132,7 +140,7 @@ const InterviewShareCard = ({
         </div>
 
         {/* Share Section */}
-        <div className="space-y-3 pt-2">
+        <div className="space-y-3 pt-3">
           <label className="text-sm font-medium text-card-foreground">
             Share via
           </label>
@@ -147,10 +155,10 @@ const InterviewShareCard = ({
             </Button>
             <Button
               variant="outline"
-              className="h-11 gap-2 text-sm font-medium"
+              className="h-11 gap-1.5 text-sm font-medium"
               onClick={() => handleShare("slack")}
             >
-              <SlackIcon className="w-4 h-4" />
+              <Slack className="w-4 h-4" />
               Slack
             </Button>
             <Button
@@ -167,13 +175,6 @@ const InterviewShareCard = ({
     </Card>
   );
 };
-
-// Custom Slack Icon
-const SlackIcon = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z" />
-  </svg>
-);
 
 // Custom WhatsApp Icon
 const WhatsAppIcon = ({ className }: { className?: string }) => (
