@@ -201,9 +201,9 @@ const DeviceCheckDialog = ({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="grid md:grid-cols-2 gap-6 mt-4">
+        <div className="grid md:grid-cols-2 gap-6 mt-3">
           {/* Video Preview */}
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div className="relative aspect-video bg-muted rounded-lg overflow-hidden">
               <video
                 ref={videoRef}
@@ -254,7 +254,7 @@ const DeviceCheckDialog = ({
             </div>
 
             {/* Audio Level Indicator */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Volume2 className="w-4 h-4" />
                 <span>Microphone Level</span>
@@ -272,7 +272,7 @@ const DeviceCheckDialog = ({
           </div>
 
           {/* Device Selection */}
-          <div className="space-y-4">
+          <div className="space-y-3">
             {/* Camera Status */}
             <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
               <StatusIcon status={cameraStatus} />
@@ -298,7 +298,7 @@ const DeviceCheckDialog = ({
             </div>
 
             {/* Camera Select */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <label className="text-sm font-medium">Camera</label>
               <Select value={selectedCamera} onValueChange={setSelectedCamera}>
                 <SelectTrigger>
@@ -315,7 +315,7 @@ const DeviceCheckDialog = ({
             </div>
 
             {/* Microphone Select */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <label className="text-sm font-medium">Microphone</label>
               <Select
                 value={selectedMicrophone}
