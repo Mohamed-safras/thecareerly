@@ -9,7 +9,7 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Plus, Sparkles } from "lucide-react";
+import { ArrowLeft, Plus, Sparkles } from "lucide-react";
 import InterviewForm from "./interview-form";
 import { useState } from "react";
 import InterviewLink from "./interview-link";
@@ -30,7 +30,7 @@ const InterviewSchedulerPopup: React.FC<InterviewSchedulerPopupProps> = ({
   isDialogOpen,
   setIsDialogOpen,
 }) => {
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
 
   const [generating, setGenerating] = useState(false);
   const [questions, setQuestions] = useState<InterviewQuestion[]>([]);
@@ -118,35 +118,54 @@ const InterviewSchedulerPopup: React.FC<InterviewSchedulerPopupProps> = ({
       </DialogTrigger>
       <DialogContent className=" sm:max-w-md min-w-xs sm:min-w-2xl md:min-w-3xl lg:min-w-4xl xl:min-w-5xl 2xl:min-w-6xl max-w-7xl max-h-[calc(90vh-3rem)] m-auto overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Schedule New Interview</DialogTitle>
-          <DialogDescription>
-            AI-Driven Interviews, Hassle-Free-Hiring
-          </DialogDescription>
+          <div className="flex items-center gap-3">
+            {step > 1 && (
+              <Button
+                variant="secondary"
+                className="rounded-full"
+                size="icon"
+                onClick={goPrev}
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+            )}
+            <div>
+              <DialogTitle>Schedule New Interview</DialogTitle>
+              <DialogDescription>
+                AI-Driven Interviews, Hassle-Free-Hiring
+              </DialogDescription>
+            </div>
+          </div>
         </DialogHeader>
 
         {step === 1 && <InterviewForm form={form} />}
         {step === 2 && (
           <InterviewQuestions questions={questions} generating={generating} />
         )}
-        {step === 3 && <InterviewLink />}
+        {step === 3 && (
+          <InterviewLink
+            interviewId={"2342cdsadxw3"}
+            duration={"30"}
+            questions={10}
+            expiresDate={"Nov 20, 2025"}
+            validDays={30}
+          />
+        )}
 
         <div className="flex items-center justify-between">
-          {step > 1 ? (
-            <Button variant="secondary" onClick={goPrev}>
-              Go Prev
-            </Button>
-          ) : (
-            <Button variant="secondary" onClick={goNext}>
-              Go Next
-            </Button>
-          )}
+          <Button variant="secondary" onClick={() => setIsDialogOpen(false)}>
+            Cancel
+          </Button>
+
+          {/* {step === 3 && (
+            <Button variant="secondary">Back to Interviews</Button>
+          )} */}
 
           {step === 1 && (
             <Button
               type="button"
               variant="outline"
               onClick={generateQuestionList}
-              // disabled={loading}
               className="rounded-lg animate-pulse"
             >
               <Sparkles className="w-4 h-4" /> Generate Interview Questions
@@ -155,6 +174,11 @@ const InterviewSchedulerPopup: React.FC<InterviewSchedulerPopupProps> = ({
           {step === 2 && !generating && (
             <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
               Schedule Interview
+            </Button>
+          )}
+          {step === 3 && (
+            <Button type="submit">
+              <Plus className="w-4 h-4" /> Schedule New Interview
             </Button>
           )}
         </div>
