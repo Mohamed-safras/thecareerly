@@ -13,21 +13,23 @@ import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 
 interface InterviewShareCardProps {
-  interviewLink?: string;
-  duration?: string;
-  questions?: number;
-  expiresDate?: string;
-  validDays?: number;
+  interviewId: string;
+  duration: string;
+  questions: number;
+  expiresDate: string;
+  validDays: number;
 }
 
 const InterviewShareCard = ({
-  interviewLink = "https://alcruiter.ai/interview/j8k9m2n3p4",
-  duration = "30 Minutes",
-  questions = 10,
-  expiresDate = "Nov 20, 2025",
-  validDays = 30,
+  interviewId,
+  duration,
+  questions,
+  expiresDate,
+  validDays,
 }: InterviewShareCardProps) => {
   const [copied, setCopied] = useState(false);
+
+  const interviewLink = `https://alcruiter.ai/interview/${interviewId}`;
 
   const handleCopyLink = async () => {
     try {

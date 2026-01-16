@@ -142,7 +142,15 @@ const InterviewSchedulerPopup: React.FC<InterviewSchedulerPopupProps> = ({
         {step === 2 && (
           <InterviewQuestions questions={questions} generating={generating} />
         )}
-        {step === 3 && <InterviewLink />}
+        {step === 3 && (
+          <InterviewLink
+            interviewId={"2342cdsadxw3"}
+            duration={"30"}
+            questions={10}
+            expiresDate={"Nov 20, 2025"}
+            validDays={30}
+          />
+        )}
 
         <div className="flex items-center justify-between">
           <Button variant="secondary" onClick={() => setIsDialogOpen(false)}>
