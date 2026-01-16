@@ -78,7 +78,7 @@ const InterviewShareCard = ({
           <Check className="w-8 h-8 text-white" strokeWidth={3} />
         </div>
         <h2 className="text-xl font-semibold text-card-foreground mb-3">
-          Your AI Interview is Ready!
+          Your Interview is Ready!
         </h2>
         <p className="text-muted-foreground text-sm">
           Share this link with your candidates to start the interview process
