@@ -20,26 +20,15 @@ const InterviewBeginTips = ({
   title = "Before you begin",
 }: InterviewBeginTipsProps) => {
   return (
-    <div
-      className="rounded-lg p-4 text-left"
-      style={{ backgroundColor: "hsl(217 91% 97%)" }}
-    >
+    <div className="rounded-lg p-3 text-left bg-muted/70">
       <div className="flex items-center gap-2 mb-3">
-        <Info className="w-4 h-4" style={{ color: "hsl(217 91% 60%)" }} />
-        <span
-          className="text-sm font-medium"
-          style={{ color: "hsl(217 91% 40%)" }}
-        >
-          {title}
-        </span>
+        <Info className="w-4 h-4" />
+        <span className="text-sm font-medium">{title}</span>
       </div>
-      <ul className="space-y-2 text-sm" style={{ color: "hsl(217 91% 35%)" }}>
+      <ul className="space-y-2 text-sm">
         {tips.map((tip, index) => (
           <li key={index} className="flex items-start gap-2">
-            <span
-              className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0"
-              style={{ backgroundColor: "hsl(217 91% 60%)" }}
-            />
+            <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 bg-muted-foreground" />
             {tip.text}
           </li>
         ))}

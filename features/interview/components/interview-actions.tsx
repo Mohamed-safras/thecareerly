@@ -17,20 +17,12 @@ const InterviewActions = ({
   testLabel = "Test Audio & Video",
 }: InterviewActionsProps) => {
   return (
-    <div className="space-y-3 flex justify-center gap-3">
-      <Button
-        onClick={onJoin}
-        className="flex-1 h-12 text-base font-medium gap-2"
-        style={{ backgroundColor: "hsl(217 91% 60%)" }}
-      >
-        <Video className="w-5 h-5" />
-        {joinLabel}
-      </Button>
-
+    <div className="space-y-3 flex justify-end gap-3">
       <Button
         variant="outline"
+        size={"lg"}
         onClick={onTestDevices}
-        className="flex-1 h-12 text-base font-medium gap-2"
+        className="text-base font-medium gap-2"
       >
         <Settings className="w-5 h-5" />
         {testLabel}
@@ -40,6 +32,14 @@ const InterviewActions = ({
             style={{ backgroundColor: "hsl(152 69% 45%)" }}
           />
         )}
+      </Button>
+      <Button
+        onClick={onJoin}
+        size={"lg"}
+        className="text-base font-medium gap-2"
+      >
+        <Video className="w-5 h-5" />
+        {joinLabel}
       </Button>
     </div>
   );
