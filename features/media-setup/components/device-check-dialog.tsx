@@ -13,15 +13,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Mic,
-  MicOff,
-  Video,
-  VideoOff,
-  Volume2,
-  Check,
-  AlertCircle,
-} from "lucide-react";
+import { Check, AlertCircle } from "lucide-react";
+import VideoPreview from "./video-preview";
+import AudioLevelIndicator from "./audio-level-indicatior";
 
 interface DeviceCheckDialogProps {
   open: boolean;
@@ -61,17 +55,6 @@ const DeviceCheckDialog = ({
   );
   const [audioLevel, setAudioLevel] = useState(0);
 
-  useEffect(() => {
-    if (open) {
-      initializeDevices();
-    }
-    return () => {
-      if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
-      }
-    };
-  }, [open]);
-
   const initializeDevices = async () => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -91,24 +74,24 @@ const DeviceCheckDialog = ({
       const devices = await navigator.mediaDevices.enumerateDevices();
 
       const videoDevices = devices
-        .filter((d) => d.kind === "videoinput")
-        .map((d) => ({
-          deviceId: d.deviceId,
-          label: d.label || `Camera ${d.deviceId.slice(0, 5)}`,
+        .filter((device) => device.kind === "videoinput")
+        .map((device) => ({
+          deviceId: device.deviceId,
+          label: device.label || `Camera ${device.deviceId.slice(0, 5)}`,
         }));
 
       const audioInputDevices = devices
-        .filter((d) => d.kind === "audioinput")
-        .map((d) => ({
-          deviceId: d.deviceId,
-          label: d.label || `Microphone ${d.deviceId.slice(0, 5)}`,
+        .filter((device) => device.kind === "audioinput")
+        .map((device) => ({
+          deviceId: device.deviceId,
+          label: device.label || `Microphone ${device.deviceId.slice(0, 5)}`,
         }));
 
       const audioOutputDevices = devices
-        .filter((d) => d.kind === "audiooutput")
-        .map((d) => ({
-          deviceId: d.deviceId,
-          label: d.label || `Speaker ${d.deviceId.slice(0, 5)}`,
+        .filter((device) => device.kind === "audiooutput")
+        .map((device) => ({
+          deviceId: device.deviceId,
+          label: device.label || `Speaker ${device.deviceId.slice(0, 5)}`,
         }));
 
       setCameras(videoDevices);
@@ -145,6 +128,18 @@ const DeviceCheckDialog = ({
       setMicStatus("error");
     }
   };
+
+  useEffect(() => {
+    if (open) {
+      initializeDevices();
+    }
+
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+      }
+    };
+  }, [open]);
 
   const toggleCamera = () => {
     if (stream) {
@@ -204,71 +199,16 @@ const DeviceCheckDialog = ({
         <div className="grid md:grid-cols-2 gap-3 mt-3">
           {/* Video Preview */}
           <div className="space-y-3 border-1 p-3 rounded-lg">
-            <div className="relative aspect-video rounded-lg border-1 overflow-hidden">
-              <video
-                ref={videoRef}
-                autoPlay
-                muted
-                playsInline
-                className="w-full h-full object-cover scale-x-[-1]"
-              />
-              {!cameraEnabled && (
-                <div className="absolute inset-0 bg-muted flex items-center justify-center">
-                  <VideoOff className="w-12 h-12 text-muted-foreground" />
-                </div>
-              )}
-
-              {/* Camera/Mic Toggle Buttons */}
-              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
-                <button
-                  onClick={toggleCamera}
-                  className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
-                  style={{
-                    backgroundColor: cameraEnabled
-                      ? "var(--card)"
-                      : "hsl(0 84% 60%)",
-                  }}
-                >
-                  {cameraEnabled ? (
-                    <Video className="w-5 h-5 text-card-foreground" />
-                  ) : (
-                    <VideoOff className="w-5 h-5 text-white" />
-                  )}
-                </button>
-                <button
-                  onClick={toggleMic}
-                  className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
-                  style={{
-                    backgroundColor: micEnabled
-                      ? "var(--card)"
-                      : "hsl(0 84% 60%)",
-                  }}
-                >
-                  {micEnabled ? (
-                    <Mic className="w-5 h-5 text-card-foreground" />
-                  ) : (
-                    <MicOff className="w-5 h-5 text-white" />
-                  )}
-                </button>
-              </div>
-            </div>
+            <VideoPreview
+              ref={videoRef}
+              cameraEnabled={cameraEnabled}
+              micEnabled={micEnabled}
+              toggleCamera={toggleCamera}
+              toggleMic={toggleMic}
+            />
 
             {/* Audio Level Indicator */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Volume2 className="w-4 h-4" />
-                <span>Microphone Level</span>
-              </div>
-              <div className="h-2 bg-muted rounded-full overflow-hidden">
-                <div
-                  className="h-full transition-all duration-75 rounded-full"
-                  style={{
-                    width: `${audioLevel}%`,
-                    backgroundColor: "hsl(152 69% 45%)",
-                  }}
-                />
-              </div>
-            </div>
+            <AudioLevelIndicator audioLevel={audioLevel} />
           </div>
 
           {/* Device Selection */}
@@ -335,7 +275,7 @@ const DeviceCheckDialog = ({
             </div>
 
             {/* Speaker Select */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <label className="text-sm font-medium">Speaker</label>
               <Select
                 value={selectedSpeaker}

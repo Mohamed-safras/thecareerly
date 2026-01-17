@@ -6,7 +6,7 @@ import interviewIllustration from "@/assets/interview-illustration.png";
 import Image from "next/image";
 import InterviewDetails from "@/features/interview/components/interview-join-details";
 import InterviewBeginTips from "@/features/interview/components/interview-begin-tips";
-import DeviceCheckDialog from "@/features/interview/components/device-check-dialog";
+import DeviceCheckDialog from "@/features/media-setup/components/device-check-dialog";
 import InterviewActions from "@/features/interview/components/interview-actions";
 import { toast } from "sonner";
 

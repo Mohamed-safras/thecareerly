@@ -37,7 +37,6 @@ const InterviewActions = ({
         onClick={onJoin}
         size={"lg"}
         className="text-base font-medium gap-2"
-        style={{ backgroundColor: "hsl(217 91% 60%)" }}
       >
         <Video className="w-5 h-5" />
         {joinLabel}
