@@ -194,17 +194,17 @@ const DeviceCheckDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="md:max-w-7xl">
+      <DialogContent className="md:max-w-5xl">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">
             Test Audio & Video
           </DialogTitle>
         </DialogHeader>
 
-        <div className="grid md:grid-cols-2 gap-6 mt-3">
+        <div className="grid md:grid-cols-2 gap-3 mt-3">
           {/* Video Preview */}
-          <div className="space-y-3">
-            <div className="relative aspect-video bg-muted rounded-lg overflow-hidden">
+          <div className="space-y-3 border-1 p-3 rounded-lg">
+            <div className="relative aspect-video rounded-lg border-1 overflow-hidden">
               <video
                 ref={videoRef}
                 autoPlay
@@ -225,7 +225,7 @@ const DeviceCheckDialog = ({
                   className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
                   style={{
                     backgroundColor: cameraEnabled
-                      ? "hsl(var(--card))"
+                      ? "var(--card)"
                       : "hsl(0 84% 60%)",
                   }}
                 >
@@ -240,7 +240,7 @@ const DeviceCheckDialog = ({
                   className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
                   style={{
                     backgroundColor: micEnabled
-                      ? "hsl(var(--card))"
+                      ? "var(--card)"
                       : "hsl(0 84% 60%)",
                   }}
                 >
@@ -272,7 +272,7 @@ const DeviceCheckDialog = ({
           </div>
 
           {/* Device Selection */}
-          <div className="space-y-3">
+          <div className="space-y-3 border-1 rounded-lg p-3">
             {/* Camera Status */}
             <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
               <StatusIcon status={cameraStatus} />
@@ -280,8 +280,8 @@ const DeviceCheckDialog = ({
                 {cameraStatus === "working"
                   ? "Camera is working"
                   : cameraStatus === "error"
-                  ? "Camera not detected"
-                  : "Checking camera..."}
+                    ? "Camera not detected"
+                    : "Checking camera..."}
               </span>
             </div>
 
@@ -292,8 +292,8 @@ const DeviceCheckDialog = ({
                 {micStatus === "working"
                   ? "Microphone is working"
                   : micStatus === "error"
-                  ? "Microphone not detected"
-                  : "Checking microphone..."}
+                    ? "Microphone not detected"
+                    : "Checking microphone..."}
               </span>
             </div>
 
@@ -356,16 +356,11 @@ const DeviceCheckDialog = ({
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 mt-6">
+        <div className="flex justify-end gap-3 mt-3">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button
-            onClick={handleComplete}
-            style={{ backgroundColor: "hsl(217 91% 60%)" }}
-          >
-            Done
-          </Button>
+          <Button onClick={handleComplete}>Done</Button>
         </div>
       </DialogContent>
     </Dialog>
