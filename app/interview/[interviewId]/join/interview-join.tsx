@@ -11,7 +11,6 @@ import { redirect } from "next/navigation";
 import DeviceCheck from "@/features/media-setup/components/device-check";
 
 const InterviewJoin = () => {
-  const [devicesChecked, setDevicesChecked] = useState(false);
   const [joining, setJoining] = useState(false);
 
   const interviewData = {
@@ -21,10 +20,6 @@ const InterviewJoin = () => {
   };
 
   const handleJoinInterview = () => {
-    if (!devicesChecked) {
-      toast.info("We recommend testing your audio & video before joining");
-    }
-
     setJoining(true);
 
     // In real app, this would navigate to the interview room
@@ -33,11 +28,6 @@ const InterviewJoin = () => {
       setJoining(false);
       redirect("/interview/jcg-vios-vrk");
     }, 3000);
-  };
-
-  const handleDeviceCheckComplete = () => {
-    setDevicesChecked(true);
-    toast.success("Your devices are ready!");
   };
 
   return (
@@ -52,9 +42,9 @@ const InterviewJoin = () => {
 
           {/* <InterviewBeginTips /> */}
 
-          <DeviceCheck onComplete={handleDeviceCheckComplete} />
+          <DeviceCheck />
 
-          {/* <InterviewActions onJoin={handleJoinInterview} joining={joining} /> */}
+          <InterviewActions onJoin={handleJoinInterview} joining={joining} />
         </div>
       </Card>
     </div>
