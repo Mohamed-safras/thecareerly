@@ -1,11 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+
 import {
   Select,
   SelectContent,
@@ -13,13 +7,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Check, AlertCircle } from "lucide-react";
+import { Check, AlertCircle, EllipsisVertical } from "lucide-react";
 import VideoPreview from "./video-preview";
 import AudioLevelIndicator from "./audio-level-indicatior";
+import MediaSettingsDailog from "./media-settings-dailog";
 
 interface DeviceCheckDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
   onComplete: () => void;
 }
 
@@ -28,11 +21,7 @@ interface DeviceInfo {
   label: string;
 }
 
-const DeviceCheckDialog = ({
-  open,
-  onOpenChange,
-  onComplete,
-}: DeviceCheckDialogProps) => {
+const DeviceCheck = ({ onComplete }: DeviceCheckDialogProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
 
@@ -54,6 +43,7 @@ const DeviceCheckDialog = ({
     "checking"
   );
   const [audioLevel, setAudioLevel] = useState(0);
+  const [open, setOpen] = useState(true);
 
   const initializeDevices = async () => {
     try {
@@ -130,16 +120,14 @@ const DeviceCheckDialog = ({
   };
 
   useEffect(() => {
-    if (open) {
-      initializeDevices();
-    }
+    initializeDevices();
 
     return () => {
       if (stream) {
         stream.getTracks().forEach((track) => track.stop());
       }
     };
-  }, [open]);
+  }, []);
 
   const toggleCamera = () => {
     if (stream) {
@@ -161,14 +149,6 @@ const DeviceCheckDialog = ({
     }
   };
 
-  const handleComplete = () => {
-    if (stream) {
-      stream.getTracks().forEach((track) => track.stop());
-    }
-    onComplete();
-    onOpenChange(false);
-  };
-
   const StatusIcon = ({
     status,
   }: {
@@ -188,123 +168,108 @@ const DeviceCheckDialog = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="md:max-w-5xl">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">
-            Test Audio & Video
-          </DialogTitle>
-        </DialogHeader>
+    <div className="md:max-w-5xl">
+      <div className="grid md:grid-cols-2 gap-3 mt-3">
+        {/* Video Preview */}
+        <div className="relative">
+          <VideoPreview
+            ref={videoRef}
+            cameraEnabled={cameraEnabled}
+            micEnabled={micEnabled}
+            toggleCamera={toggleCamera}
+            toggleMic={toggleMic}
+          />
 
-        <div className="grid md:grid-cols-2 gap-3 mt-3">
-          {/* Video Preview */}
-          <div className="space-y-3 border-1 p-3 rounded-lg">
-            <VideoPreview
-              ref={videoRef}
-              cameraEnabled={cameraEnabled}
-              micEnabled={micEnabled}
-              toggleCamera={toggleCamera}
-              toggleMic={toggleMic}
-            />
+          {/* Audio Level Indicator */}
+          {/* <AudioLevelIndicator audioLevel={audioLevel} /> */}
 
-            {/* Audio Level Indicator */}
-            <AudioLevelIndicator audioLevel={audioLevel} />
-          </div>
-
-          {/* Device Selection */}
-          <div className="space-y-3 border-1 rounded-lg p-3">
-            {/* Camera Status */}
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
-              <StatusIcon status={cameraStatus} />
-              <span className="text-sm font-medium">
-                {cameraStatus === "working"
-                  ? "Camera is working"
-                  : cameraStatus === "error"
-                    ? "Camera not detected"
-                    : "Checking camera..."}
-              </span>
-            </div>
-
-            {/* Microphone Status */}
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
-              <StatusIcon status={micStatus} />
-              <span className="text-sm font-medium">
-                {micStatus === "working"
-                  ? "Microphone is working"
-                  : micStatus === "error"
-                    ? "Microphone not detected"
-                    : "Checking microphone..."}
-              </span>
-            </div>
-
-            {/* Camera Select */}
-            <div className="space-y-3">
-              <label className="text-sm font-medium">Camera</label>
-              <Select value={selectedCamera} onValueChange={setSelectedCamera}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select camera" />
-                </SelectTrigger>
-                <SelectContent>
-                  {cameras.map((camera) => (
-                    <SelectItem key={camera.deviceId} value={camera.deviceId}>
-                      {camera.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Microphone Select */}
-            <div className="space-y-3">
-              <label className="text-sm font-medium">Microphone</label>
-              <Select
-                value={selectedMicrophone}
-                onValueChange={setSelectedMicrophone}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select microphone" />
-                </SelectTrigger>
-                <SelectContent>
-                  {microphones.map((mic) => (
-                    <SelectItem key={mic.deviceId} value={mic.deviceId}>
-                      {mic.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Speaker Select */}
-            <div className="space-y-3">
-              <label className="text-sm font-medium">Speaker</label>
-              <Select
-                value={selectedSpeaker}
-                onValueChange={setSelectedSpeaker}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select speaker" />
-                </SelectTrigger>
-                <SelectContent>
-                  {speakers.map((speaker) => (
-                    <SelectItem key={speaker.deviceId} value={speaker.deviceId}>
-                      {speaker.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+          <MediaSettingsDailog open={open} onOpenChange={setOpen} />
         </div>
 
-        <div className="flex justify-end gap-3 mt-3">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
-          </Button>
-          <Button onClick={handleComplete}>Done</Button>
+        {/* Device Selection */}
+
+        <div className="space-y-3 border-1 rounded-lg p-3">
+          {/* Camera Status */}
+          <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+            <StatusIcon status={cameraStatus} />
+            <span className="text-sm font-medium">
+              {cameraStatus === "working"
+                ? "Camera is working"
+                : cameraStatus === "error"
+                  ? "Camera not detected"
+                  : "Checking camera..."}
+            </span>
+          </div>
+
+          {/* Microphone Status */}
+          <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+            <StatusIcon status={micStatus} />
+            <span className="text-sm font-medium">
+              {micStatus === "working"
+                ? "Microphone is working"
+                : micStatus === "error"
+                  ? "Microphone not detected"
+                  : "Checking microphone..."}
+            </span>
+          </div>
+
+          {/* Camera Select */}
+          <div className="space-y-3">
+            <label className="text-sm font-medium">Camera</label>
+            <Select value={selectedCamera} onValueChange={setSelectedCamera}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select camera" />
+              </SelectTrigger>
+              <SelectContent>
+                {cameras.map((camera) => (
+                  <SelectItem key={camera.deviceId} value={camera.deviceId}>
+                    {camera.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Microphone Select */}
+          <div className="space-y-3">
+            <label className="text-sm font-medium">Microphone</label>
+            <Select
+              value={selectedMicrophone}
+              onValueChange={setSelectedMicrophone}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select microphone" />
+              </SelectTrigger>
+              <SelectContent>
+                {microphones.map((mic) => (
+                  <SelectItem key={mic.deviceId} value={mic.deviceId}>
+                    {mic.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Speaker Select */}
+          <div className="space-y-3">
+            <label className="text-sm font-medium">Speaker</label>
+            <Select value={selectedSpeaker} onValueChange={setSelectedSpeaker}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select speaker" />
+              </SelectTrigger>
+              <SelectContent>
+                {speakers.map((speaker) => (
+                  <SelectItem key={speaker.deviceId} value={speaker.deviceId}>
+                    {speaker.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 };
 
-export default DeviceCheckDialog;
+export default DeviceCheck;

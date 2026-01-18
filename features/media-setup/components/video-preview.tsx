@@ -1,6 +1,7 @@
 "use client";
 
-import { Mic, MicOff, Video, VideoOff } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { EllipsisVertical, Mic, MicOff, Video, VideoOff } from "lucide-react";
 import React, { RefObject } from "react";
 
 export interface VideoPreviewProps {
@@ -33,9 +34,15 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
         </div>
       )}
 
+      <div className="absolute top-2 right-2">
+        <Button className="w-10 h-10 rounded-full flex items-center justify-center bg-transparent hover:bg-accent/10">
+          <EllipsisVertical className="w-5 h-5" />
+        </Button>
+      </div>
+
       {/* Camera/Mic Toggle Buttons */}
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
-        <button
+        <Button
           onClick={toggleCamera}
           className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
           style={{
@@ -47,9 +54,10 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
           ) : (
             <VideoOff className="w-5 h-5 text-white" />
           )}
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={toggleMic}
+          size={"lg"}
           className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
           style={{
             backgroundColor: micEnabled ? "var(--card)" : "hsl(0 84% 60%)",
@@ -60,7 +68,7 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
           ) : (
             <MicOff className="w-5 h-5 text-white" />
           )}
-        </button>
+        </Button>
       </div>
     </div>
   );
