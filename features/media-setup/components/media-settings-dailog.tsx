@@ -5,19 +5,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import React, { useState } from "react";
-import DeviceSelector, { DeviceSelectorProps } from "./device-selector";
+import { DeviceSelectorProps } from "./device-selector";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  CalendarSync,
-  Cloud,
-  CreditCard,
-  Settings,
-  Shield,
-  Speaker,
-  User,
-  Video,
-} from "lucide-react";
+import { Settings, Speaker, Video } from "lucide-react";
 import { cn } from "@/lib/utils";
+import InputDevice from "./input-device";
 
 export interface MediaSettingsDailogProps {
   open: boolean;
@@ -61,14 +53,55 @@ const MediaSettingsDailog: React.FC<MediaSettingsDailogProps> = ({
 
   const renderContent = () => {
     switch (activeItem) {
-      case "plans":
-        return "audio";
+      case "audio":
+        return (
+          <div className="space-y-3">
+            <InputDevice
+              lable="Microphone"
+              selectedDevice={deviceSelectorProps.selectedMicrophone}
+              availableChannel={deviceSelectorProps.microphones}
+              setSelectedDevice={deviceSelectorProps.setSelectedMicrophone}
+            />
+
+            <InputDevice
+              lable="Speaker"
+              selectedDevice={deviceSelectorProps.selectedSpeaker}
+              availableChannel={deviceSelectorProps.speakers}
+              setSelectedDevice={deviceSelectorProps.setSelectedSpeaker}
+            />
+          </div>
+        );
       case "video":
-        return "video";
+        return (
+          <div className="space-y-3">
+            <InputDevice
+              lable="Camera"
+              selectedDevice={deviceSelectorProps.selectedCamera}
+              availableChannel={deviceSelectorProps.cameras}
+              setSelectedDevice={deviceSelectorProps.setSelectedCamera}
+            />
+          </div>
+        );
       case "general":
         return "general";
       default:
-        return "audio";
+        return (
+          <div className="space-y-3">
+            <InputDevice
+              lable="Microphone"
+              selectedDevice={deviceSelectorProps.selectedMicrophone}
+              availableChannel={deviceSelectorProps.microphones}
+              setSelectedDevice={deviceSelectorProps.setSelectedMicrophone}
+            />
+
+            <InputDevice
+              lable="Speaker"
+              selectedDevice={deviceSelectorProps.selectedSpeaker}
+              availableChannel={deviceSelectorProps.speakers}
+              setSelectedDevice={deviceSelectorProps.setSelectedSpeaker}
+            />
+          </div>
+        );
     }
   };
 
@@ -79,17 +112,17 @@ const MediaSettingsDailog: React.FC<MediaSettingsDailogProps> = ({
           <DialogTitle>Settings</DialogTitle>
         </DialogHeader>
 
-        <div className="flex flex-1 min-h-0">
+        <div className="flex flex-1">
           {/* Sidebar - independently scrollable */}
           <div className="w-60 bg-card/50 border-r border-border flex-shrink-0 h-full overflow-hidden">
             <ScrollArea className="h-full">
-              <div className="py-3 space-y-3">
+              <div className="space-y-3">
                 {menuSections.map((section) => (
                   <div key={section.title} className="space-y-3">
                     <p className="text-xs font-medium text-muted-foreground px-3 mb-3">
                       {section.title}
                     </p>
-                    <div className="space-y-0.5 px-3">
+                    <div className="space-y-3 mr-3">
                       {section.items.map((item) => (
                         <button
                           key={item.id}
@@ -120,7 +153,7 @@ const MediaSettingsDailog: React.FC<MediaSettingsDailogProps> = ({
           </div>
         </div>
 
-        <DeviceSelector {...deviceSelectorProps} />
+        {/* <DeviceSelector {...deviceSelectorProps} /> */}
       </DialogContent>
     </Dialog>
   );
