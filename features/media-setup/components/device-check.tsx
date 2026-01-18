@@ -3,6 +3,9 @@ import VideoPreview from "./video-preview";
 import AudioLevelIndicator from "./audio-level-indicatior";
 import MediaSettingsDailog from "./media-settings-dailog";
 import { DeviceInfo } from "@/interfaces/media";
+import InterviewActions from "@/features/interview/components/interview-actions";
+import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 const DeviceCheck = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -26,7 +29,8 @@ const DeviceCheck = () => {
     "checking"
   );
   const [audioLevel, setAudioLevel] = useState(0);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [joining, setJoining] = useState(false);
 
   const initializeDevices = async () => {
     try {
@@ -132,6 +136,17 @@ const DeviceCheck = () => {
     }
   };
 
+  const handleJoinInterview = () => {
+    setJoining(true);
+
+    // In real app, this would navigate to the interview room
+    toast.success("Joining interview...");
+    setTimeout(() => {
+      setJoining(false);
+      redirect("/interview/jcg-vios-vrk");
+    }, 3000);
+  };
+
   return (
     <div className="md:max-w-5xl">
       <div className="grid md:grid-cols-2 gap-3 mt-3">
@@ -147,28 +162,33 @@ const DeviceCheck = () => {
 
           {/* Audio Level Indicator */}
           {/* <AudioLevelIndicator audioLevel={audioLevel} /> */}
-
-          <MediaSettingsDailog
-            open={open}
-            onOpenChange={setOpen}
-            deviceSelectorProps={{
-              cameras,
-              cameraStatus,
-              microphones,
-              micStatus,
-              speakers,
-              selectedCamera,
-              selectedMicrophone,
-              selectedSpeaker,
-              setSelectedCamera,
-              setSelectedMicrophone,
-              setSelectedSpeaker,
-            }}
-          />
         </div>
 
         {/* Device Selection */}
+        <div className="flex flex-col items-center justify-center space-y-3">
+          <h1 className="text-2xl font-medium">Ready to join ?</h1>
+          <span className="text-sm font-medium">No one else is here</span>
+          <InterviewActions onJoin={handleJoinInterview} joining={joining} />
+        </div>
       </div>
+
+      <MediaSettingsDailog
+        open={open}
+        onOpenChange={setOpen}
+        deviceSelectorProps={{
+          cameras,
+          cameraStatus,
+          microphones,
+          micStatus,
+          speakers,
+          selectedCamera,
+          selectedMicrophone,
+          selectedSpeaker,
+          setSelectedCamera,
+          setSelectedMicrophone,
+          setSelectedSpeaker,
+        }}
+      />
     </div>
   );
 };

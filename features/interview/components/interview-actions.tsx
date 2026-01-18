@@ -14,8 +14,11 @@ const InterviewActions = ({
   joinLabel = "Join now",
 }: InterviewActionsProps) => {
   return (
-    <div className="space-y-3 flex justify-end gap-3">
-      <Button onClick={onJoin} className="text-base font-medium gap-2">
+    <div className="space-y-3 w-60 flex justify-end gap-3">
+      <Button
+        onClick={onJoin}
+        className="h-12 w-full text-base font-medium gap-3 rounded-full"
+      >
         {joining ? (
           <>
             <CircleSpinner className="border-secondary" size={16} />

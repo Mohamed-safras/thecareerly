@@ -1,33 +1,18 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import { useState } from "react";
 import InterviewDetails from "@/features/interview/components/interview-join-details";
-import InterviewBeginTips from "@/features/interview/components/interview-begin-tips";
-import DeviceCheckDialog from "@/features/media-setup/components/device-check";
 import InterviewActions from "@/features/interview/components/interview-actions";
-import { toast } from "sonner";
-import { redirect } from "next/navigation";
 import DeviceCheck from "@/features/media-setup/components/device-check";
+import InterviewBeginTips from "@/features/interview/components/interview-begin-tips";
 
 const InterviewJoin = () => {
-  const [joining, setJoining] = useState(false);
-
   const interviewData = {
+    userName: "Mohamed Safras",
     title: "Full Stack Developer Interview",
     company: "Google Inc.",
     duration: "30 Minutes",
-  };
-
-  const handleJoinInterview = () => {
-    setJoining(true);
-
-    // In real app, this would navigate to the interview room
-    toast.success("Joining interview...");
-    setTimeout(() => {
-      setJoining(false);
-      redirect("/interview/jcg-vios-vrk");
-    }, 3000);
+    date: "Friday, Jan 16 • 12:00 PM - 12:30 PM GMT+5:30",
   };
 
   return (
@@ -36,15 +21,14 @@ const InterviewJoin = () => {
         <div className="p-3 pt-3 space-y-3">
           <InterviewDetails
             title={interviewData.title}
-            date={"Friday, Jan 16 • 12:00 PM - 12:30 PM GMT+5:30"}
+            userName={interviewData.userName}
+            date={interviewData.date}
             duration={interviewData.duration}
           />
 
-          {/* <InterviewBeginTips /> */}
+          <InterviewBeginTips />
 
           <DeviceCheck />
-
-          <InterviewActions onJoin={handleJoinInterview} joining={joining} />
         </div>
       </Card>
     </div>
