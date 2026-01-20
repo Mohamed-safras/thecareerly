@@ -1,13 +1,28 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { EllipsisVertical, Mic, MicOff, Video, VideoOff } from "lucide-react";
-import React, { RefObject } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import InterviewBeginTips from "@/features/interview/components/interview-begin-tips";
+import {
+  EllipsisVertical,
+  Info,
+  Mic,
+  MicOff,
+  Video,
+  VideoOff,
+} from "lucide-react";
+import React, { Dispatch, RefObject, SetStateAction } from "react";
 
 export interface VideoPreviewProps {
   ref: RefObject<HTMLVideoElement | null>;
   cameraEnabled: boolean;
   micEnabled: boolean;
+  openDeviceSettings: boolean;
+  setOpenDeviceSettings: Dispatch<SetStateAction<boolean>>;
   toggleCamera: () => void;
   toggleMic: () => void;
 }
@@ -16,6 +31,7 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
   ref,
   cameraEnabled,
   micEnabled,
+  setOpenDeviceSettings,
   toggleCamera,
   toggleMic,
 }) => {
@@ -35,9 +51,36 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
       )}
 
       <div className="absolute top-2 right-2">
-        <Button className="w-10 h-10 rounded-full flex items-center justify-center bg-transparent hover:bg-accent/10">
+        <Button
+          onClick={() => setOpenDeviceSettings(true)}
+          className="w-10 h-10 rounded-full flex items-center justify-center bg-transparent hover:bg-accent/10"
+        >
           <EllipsisVertical className="w-5 h-5" />
         </Button>
+      </div>
+
+      <div className="absolute bottom-3 right-3">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-accent/10"
+              style={{
+                backgroundColor: "hsl(0 84% 60%)",
+              }}
+            >
+              <Info className="w-5 h-5" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent
+            side="top"
+            align="start"
+            sideOffset={8}
+            tooltipPrimitiveCustomClassName={`bg-background fill-transparent border-1 border-t-background border-l-background mt-[0.5px]`}
+            className="min-w-[260px] p-0 max-w-[300px] bg-background border rounded-lg shadow-lg"
+          >
+            <InterviewBeginTips />
+          </TooltipContent>
+        </Tooltip>
       </div>
 
       {/* Camera/Mic Toggle Buttons */}
