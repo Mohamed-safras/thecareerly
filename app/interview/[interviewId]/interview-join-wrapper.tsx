@@ -1,10 +1,19 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
+import InterviewActions from "@/features/interview/components/interview-actions";
 import InterviewDetails from "@/features/interview/components/interview-join-details";
 import DeviceCheck from "@/features/media-setup/components/device-check";
 
-const InterviewJoin = () => {
+export interface InterviewJoinProps {
+  joining: boolean;
+  handleJoinInterview: () => void;
+}
+
+const InterviewJoinWrapper: React.FC<InterviewJoinProps> = ({
+  joining,
+  handleJoinInterview,
+}) => {
   const interviewData = {
     userName: "Mohamed Safras",
     title: "Full Stack Developer Interview",
@@ -23,10 +32,21 @@ const InterviewJoin = () => {
             date={interviewData.date}
             duration={interviewData.duration}
           />
-          <DeviceCheck />
+          <div className="grid md:grid-cols-2 gap-3 mt-3">
+            <DeviceCheck />
+            {/* Device Selection */}
+            <div className="flex flex-col items-center justify-center space-y-3">
+              <h1 className="text-2xl font-medium">Ready to join ?</h1>
+              <span className="text-sm font-medium">No one else is here</span>
+              <InterviewActions
+                onJoin={handleJoinInterview}
+                joining={joining}
+              />
+            </div>
+          </div>
         </div>
       </Card>
     </div>
   );
 };
-export default InterviewJoin;
+export default InterviewJoinWrapper;

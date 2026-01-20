@@ -2,9 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import VideoPreview from "./video-preview";
 import MediaSettingsDailog from "./media-settings-dailog";
 import { DeviceInfo } from "@/interfaces/media";
-import InterviewActions from "@/features/interview/components/interview-actions";
-import { toast } from "sonner";
-import { redirect } from "next/navigation";
 
 const DeviceCheck = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -29,7 +26,6 @@ const DeviceCheck = () => {
   );
   const [audioLevel, setAudioLevel] = useState(0);
   const [openDeviceSettings, setOpenDeviceSettings] = useState(false);
-  const [joining, setJoining] = useState(false);
 
   const initializeDevices = async () => {
     try {
@@ -135,39 +131,19 @@ const DeviceCheck = () => {
     }
   };
 
-  const handleJoinInterview = () => {
-    setJoining(true);
-
-    // In real app, this would navigate to the interview room
-    toast.success("Joining interview...");
-    setTimeout(() => {
-      setJoining(false);
-      redirect("/interview/jcg-vios-vrk");
-    }, 3000);
-  };
-
   return (
     <div className="md:max-w-5xl">
-      <div className="grid md:grid-cols-2 gap-3 mt-3">
-        {/* Video Preview */}
-        <div className="relative">
-          <VideoPreview
-            ref={videoRef}
-            cameraEnabled={cameraEnabled}
-            micEnabled={micEnabled}
-            toggleCamera={toggleCamera}
-            toggleMic={toggleMic}
-            openDeviceSettings={openDeviceSettings}
-            setOpenDeviceSettings={setOpenDeviceSettings}
-          />
-        </div>
-
-        {/* Device Selection */}
-        <div className="flex flex-col items-center justify-center space-y-3">
-          <h1 className="text-2xl font-medium">Ready to join ?</h1>
-          <span className="text-sm font-medium">No one else is here</span>
-          <InterviewActions onJoin={handleJoinInterview} joining={joining} />
-        </div>
+      {/* Video Preview */}
+      <div className="relative">
+        <VideoPreview
+          ref={videoRef}
+          cameraEnabled={cameraEnabled}
+          micEnabled={micEnabled}
+          toggleCamera={toggleCamera}
+          toggleMic={toggleMic}
+          openDeviceSettings={openDeviceSettings}
+          setOpenDeviceSettings={setOpenDeviceSettings}
+        />
       </div>
 
       <MediaSettingsDailog
