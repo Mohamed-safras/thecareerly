@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import VideoPreview from "./video-preview";
-import AudioLevelIndicator from "./audio-level-indicatior";
 import MediaSettingsDailog from "./media-settings-dailog";
 import { DeviceInfo } from "@/interfaces/media";
 import InterviewActions from "@/features/interview/components/interview-actions";
@@ -26,10 +25,10 @@ const DeviceCheck = () => {
     "checking" | "working" | "error"
   >("checking");
   const [micStatus, setMicStatus] = useState<"checking" | "working" | "error">(
-    "checking"
+    "checking",
   );
   const [audioLevel, setAudioLevel] = useState(0);
-  const [open, setOpen] = useState(false);
+  const [openDeviceSettings, setOpenDeviceSettings] = useState(false);
   const [joining, setJoining] = useState(false);
 
   const initializeDevices = async () => {
@@ -158,10 +157,9 @@ const DeviceCheck = () => {
             micEnabled={micEnabled}
             toggleCamera={toggleCamera}
             toggleMic={toggleMic}
+            openDeviceSettings={openDeviceSettings}
+            setOpenDeviceSettings={setOpenDeviceSettings}
           />
-
-          {/* Audio Level Indicator */}
-          {/* <AudioLevelIndicator audioLevel={audioLevel} /> */}
         </div>
 
         {/* Device Selection */}
@@ -173,8 +171,8 @@ const DeviceCheck = () => {
       </div>
 
       <MediaSettingsDailog
-        open={open}
-        onOpenChange={setOpen}
+        open={openDeviceSettings}
+        onOpenChange={setOpenDeviceSettings}
         deviceSelectorProps={{
           cameras,
           cameraStatus,
@@ -184,6 +182,7 @@ const DeviceCheck = () => {
           selectedCamera,
           selectedMicrophone,
           selectedSpeaker,
+          audioLevel,
           setSelectedCamera,
           setSelectedMicrophone,
           setSelectedSpeaker,

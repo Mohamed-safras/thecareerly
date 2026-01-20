@@ -2,9 +2,7 @@
 
 import { Card } from "@/components/ui/card";
 import InterviewDetails from "@/features/interview/components/interview-join-details";
-import InterviewActions from "@/features/interview/components/interview-actions";
 import DeviceCheck from "@/features/media-setup/components/device-check";
-import InterviewBeginTips from "@/features/interview/components/interview-begin-tips";
 
 const InterviewJoin = () => {
   const interviewData = {
@@ -18,16 +16,13 @@ const InterviewJoin = () => {
   return (
     <div className="min-h-screen flex items-center justify-center p-3">
       <Card className="w-full max-w-5xl p-0 mx-auto overflow-hidden shadow-none">
-        <div className="p-3 pt-3 space-y-3">
+        <div className="p-3 pt-6 space-y-6">
           <InterviewDetails
             title={interviewData.title}
             userName={interviewData.userName}
             date={interviewData.date}
             duration={interviewData.duration}
           />
-
-          <InterviewBeginTips />
-
           <DeviceCheck />
         </div>
       </Card>

@@ -10,6 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Settings, Speaker, Video } from "lucide-react";
 import { cn } from "@/lib/utils";
 import InputDevice from "./input-device";
+import AudioLevelIndicator from "./audio-level-indicatior";
 
 export interface MediaSettingsDailogProps {
   open: boolean;
@@ -28,6 +29,7 @@ type MenuSection = {
 
 const menuSections: MenuSection[] = [
   {
+    title: "settings",
     items: [
       {
         id: "audio",
@@ -62,6 +64,8 @@ const MediaSettingsDailog: React.FC<MediaSettingsDailogProps> = ({
               availableChannel={deviceSelectorProps.microphones}
               setSelectedDevice={deviceSelectorProps.setSelectedMicrophone}
             />
+
+            <AudioLevelIndicator audioLevel={deviceSelectorProps.audioLevel} />
 
             <InputDevice
               lable="Speaker"
@@ -119,9 +123,6 @@ const MediaSettingsDailog: React.FC<MediaSettingsDailogProps> = ({
               <div className="space-y-3">
                 {menuSections.map((section) => (
                   <div key={section.title} className="space-y-3">
-                    <p className="text-xs font-medium text-muted-foreground px-3 mb-3">
-                      {section.title}
-                    </p>
                     <div className="space-y-3 mr-3">
                       {section.items.map((item) => (
                         <button
@@ -131,7 +132,7 @@ const MediaSettingsDailog: React.FC<MediaSettingsDailogProps> = ({
                             "w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors text-left",
                             activeItem === item.id
                               ? "bg-accent text-accent-foreground"
-                              : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                              : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
                           )}
                         >
                           {item.icon}

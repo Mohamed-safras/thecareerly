@@ -20,6 +20,7 @@ export interface DeviceSelectorProps {
   selectedCamera: string;
   selectedMicrophone: string;
   selectedSpeaker: string;
+  audioLevel: number;
   setSelectedCamera: Dispatch<SetStateAction<string>>;
   setSelectedMicrophone: Dispatch<SetStateAction<string>>;
   setSelectedSpeaker: Dispatch<SetStateAction<string>>;

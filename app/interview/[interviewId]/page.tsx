@@ -1,7 +1,7 @@
-import React from "react";
+import InterviewJoin from "./interview-join";
 
-const InterviewScreen = () => {
-  return <div>InterviewScreen</div>;
+const InterviewJoinPage = () => {
+  return <InterviewJoin />;
 };
 
-export default InterviewScreen;
+export default InterviewJoinPage;

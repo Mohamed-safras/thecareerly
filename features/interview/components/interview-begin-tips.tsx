@@ -20,16 +20,18 @@ const InterviewBeginTips = ({
   title = "Before you begin",
 }: InterviewBeginTipsProps) => {
   return (
-    <div className="rounded-lg p-3 text-left bg-muted/70">
+    <div className="rounded-lg p-3 text-left">
       <div className="flex items-center gap-2 mb-3">
-        <Info className="w-4 h-4" />
-        <span className="text-sm font-medium">{title}</span>
+        <Info className="w-4 h-4 text-muted-foreground" />
+        <span className="text-sm font-medium text-muted-foreground">
+          {title}
+        </span>
       </div>
       <ul className="space-y-2 text-sm">
         {tips.map((tip, index) => (
           <li key={index} className="flex items-start gap-2">
             <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 bg-muted-foreground" />
-            {tip.text}
+            <span className="text-muted-foreground">{tip.text}</span>
           </li>
         ))}
       </ul>
