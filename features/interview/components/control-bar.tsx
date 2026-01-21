@@ -10,16 +10,10 @@ import {
   MessageSquare,
   Users,
   Hand,
-  ChevronUp,
   Share2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,6 +22,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import ControlButton from "./control-button";
+import { Separator } from "@/components/ui/separator";
 
 interface ControlBarProps {
   isMuted: boolean;
@@ -68,65 +64,6 @@ export function ControlBar({
   showParticipants = false,
   className,
 }: ControlBarProps) {
-  const ControlButton = ({
-    active,
-    danger,
-    onClick,
-    icon: Icon,
-    label,
-    badge,
-    hasDropdown,
-    selected,
-  }: {
-    active?: boolean;
-    danger?: boolean;
-    onClick: () => void;
-    icon: React.ElementType;
-    label: string;
-    badge?: number;
-    hasDropdown?: boolean;
-    selected?: boolean;
-  }) => (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <div className="relative flex flex-col items-center">
-          <Button
-            variant="ghost"
-            size="icon"
-            className={cn(
-              "h-11 w-11 rounded-md transition-all relative",
-              danger && "bg-[#c4314b] hover:bg-[#a52a3f] text-white",
-              active && !danger && "bg-[#6264a7] hover:bg-[#5254a3] text-white",
-              !active &&
-                !danger &&
-                "bg-[#3d3d3d] hover:bg-[#4a4a4a] text-white",
-              selected &&
-                "ring-2 ring-[#6264a7] ring-offset-2 ring-offset-[#1f1f1f]",
-            )}
-            onClick={onClick}
-          >
-            <Icon className="h-5 w-5" />
-            {badge && badge > 0 && (
-              <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-[#c4314b] text-white text-xs flex items-center justify-center">
-                {badge > 9 ? "9+" : badge}
-              </span>
-            )}
-          </Button>
-          {hasDropdown && (
-            <ChevronUp className="h-3 w-3 text-white/60 absolute -bottom-1" />
-          )}
-          <span className="text-[10px] text-white/80 mt-1.5">{label}</span>
-        </div>
-      </TooltipTrigger>
-      <TooltipContent
-        side="top"
-        className="bg-[#1f1f1f] border-[#3d3d3d] text-white"
-      >
-        {label}
-      </TooltipContent>
-    </Tooltip>
-  );
-
   return (
     <TooltipProvider delayDuration={200}>
       <motion.div
@@ -139,7 +76,7 @@ export function ControlBar({
         )}
       >
         {/* Main controls */}
-        <div className="flex items-center gap-1 bg-[#292929] rounded-lg p-1.5">
+        <div className="flex items-center gap-3 bg-[#292929] rounded-lg p-3">
           {/* Camera */}
           <ControlButton
             danger={!isVideoOn}
@@ -162,7 +99,6 @@ export function ControlBar({
             onClick={onToggleScreenShare}
             icon={MonitorUp}
             label="Share"
-            hasDropdown
           />
 
           {/* Hand */}
@@ -178,13 +114,12 @@ export function ControlBar({
             <DropdownMenuTrigger asChild>
               <div className="flex flex-col items-center">
                 <Button
-                  variant="ghost"
                   size="icon"
-                  className="h-11 w-11 rounded-md bg-[#3d3d3d] hover:bg-[#4a4a4a] text-white"
+                  className="h-11 w-11 rounded-md bg-[#3d3d3d] hover:bg-[#4a4a4a] "
                 >
                   <MoreHorizontal className="h-5 w-5" />
                 </Button>
-                <span className="text-[10px] text-white/80 mt-1.5">More</span>
+                {/* <span className="text-[10px] text-white/80 mt-1.5">More</span> */}
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -212,10 +147,10 @@ export function ControlBar({
         </div>
 
         {/* Divider */}
-        <div className="w-px h-10 bg-[#3d3d3d] mx-2" />
+        <Separator orientation="vertical" className="bg-[#3d3d3d] mx-3" />
 
         {/* Secondary controls */}
-        <div className="flex items-center gap-1 bg-[#292929] rounded-lg p-1.5">
+        <div className="flex items-center gap-3 bg-[#292929] rounded-lg p-3">
           {/* Chat */}
           <ControlButton
             onClick={onToggleChat}
@@ -238,7 +173,7 @@ export function ControlBar({
         </div>
 
         {/* Divider */}
-        <div className="w-px h-10 bg-[#3d3d3d] mx-2" />
+        <Separator orientation="vertical" className="bg-[#3d3d3d] mx-3" />
 
         {/* Leave */}
         <div className="flex flex-col items-center">
