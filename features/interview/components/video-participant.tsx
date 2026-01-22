@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { MicOff, MoreHorizontal, Hand } from "lucide-react";
+import { MicOff, MoreHorizontal, Hand, Mic } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,99 +15,105 @@ interface VideoParticipantProps {
   participant: Participant;
   isLocal?: boolean;
   isPinned?: boolean;
-  size?: "sm" | "md" | "lg" | "full";
   onPin?: () => void;
   className?: string;
 }
-
-const sizeStyles = {
-  sm: "h-28 w-40",
-  md: "h-44 w-60",
-  lg: "h-64 w-96",
-  full: "h-full w-full",
-};
 
 export function VideoParticipant({
   participant,
   isLocal = false,
   isPinned = false,
-  size = "md",
   onPin,
   className,
 }: VideoParticipantProps) {
+  // Check if participant has hand raised (you can add this to Participant type)
+  const hasHandRaised = participant.id === "2"; // Demo: second participant has hand raised
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       className={cn(
-        "relative rounded-lg overflow-hidden group",
-        "bg-gradient-to-br from-[#2d2c5e] to-[#1f1f3d]",
-        sizeStyles[size],
-        isPinned && "ring-2 ring-[#6264a7]",
+        "relative rounded-md overflow-hidden group h-full w-full",
+        "bg-[#292929]",
+        isPinned && "ring-2 ring-muted-foreground",
         className,
       )}
     >
-      {/* Video Feed or Avatar */}
-      {participant.isVideoOn ? (
-        <div className="absolute inset-0 bg-gradient-to-br from-[#3d3c6e] to-[#252548]">
-          <div className="h-full w-full flex items-center justify-center">
-            <Avatar className="h-20 w-20 ring-2 ring-white/10">
-              <AvatarImage src={participant.avatarUrl} />
-              <AvatarFallback className="text-2xl bg-gradient-to-br from-[#6264a7] to-[#8b8cc7] text-white font-semibold">
-                {participant.initials}
-              </AvatarFallback>
-            </Avatar>
-          </div>
-        </div>
-      ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-[#2d2c5e] to-[#1a1a35] flex items-center justify-center">
-          <Avatar className="h-24 w-24 ring-4 ring-[#6264a7]/30">
-            <AvatarImage src={participant.avatarUrl} />
-            <AvatarFallback className="text-3xl bg-gradient-to-br from-[#6264a7] to-[#8b8cc7] text-white font-semibold">
+      {/* Centered circular avatar with ping animation */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative flex items-center justify-center">
+          {/* Pinging ring animation when speaking - positioned behind avatar */}
+          {participant.isSpeaking && (
+            <>
+              <motion.div
+                className="absolute h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 lg:h-20 lg:w-20 xl:h-24 xl:w-24 rounded-full border-1 border-muted-foreground"
+                initial={{ scale: 1, opacity: 0.8 }}
+                animate={{ scale: 1.4, opacity: 0 }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+              <motion.div
+                className="absolute h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 lg:h-20 lg:w-20 xl:h-24 xl:w-24 rounded-full border-1 border-muted-foreground"
+                initial={{ scale: 1, opacity: 0.6 }}
+                animate={{ scale: 1.8, opacity: 0 }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 0.8,
+                }}
+              />
+            </>
+          )}
+
+          {/* Static avatar - no scale animation */}
+          <Avatar
+            className={cn(
+              "h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 lg:h-20 lg:w-20 xl:h-24 xl:w-24 ring-2 transition-colors duration-300 relative z-10",
+              participant.isSpeaking
+                ? "ring-muted-foreground"
+                : "ring-transparent",
+            )}
+          >
+            <AvatarImage src={participant.avatarUrl} className="object-cover" />
+            <AvatarFallback className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl bg-gradient-to-br  text-secondary font-semibold">
               {participant.initials}
             </AvatarFallback>
           </Avatar>
         </div>
-      )}
+      </div>
 
-      {/* Speaking Indicator - Teams style glow */}
-      {participant.isSpeaking && (
+      {/* Hand raised indicator - top right with banner */}
+      {hasHandRaised && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="absolute inset-0 rounded-lg ring-[3px] ring-[#6264a7] pointer-events-none"
-          style={{
-            boxShadow: "0 0 20px rgba(98, 100, 167, 0.5)",
-          }}
-        />
-      )}
-
-      {/* Hand raised indicator */}
-      {false && (
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          className="absolute top-2 right-2 h-8 w-8 rounded-full bg-[#ffaa44] flex items-center justify-center"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="absolute top-1 right-1 sm:top-2 sm:right-2 flex items-center gap-1 sm:gap-1.5 bg-[#6264a7] text-secondary text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded"
         >
-          <Hand className="h-4 w-4 text-white" />
+          <Hand className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+          <span className="hidden md:inline">raised their hand</span>
         </motion.div>
       )}
 
       {/* More options - visible on hover */}
-      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 bg-black/40 hover:bg-black/60 text-white rounded-md"
+              className="h-7 w-7 bg-black/50 hover:bg-black/70 text-secondary rounded"
             >
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            align="end"
-            className="bg-[#292929] border-[#3d3d3d] text-white"
+            align="start"
+            className="bg-[#292929] border-[#3d3d3d] text-secondary"
           >
             <DropdownMenuItem
               onClick={onPin}
@@ -127,17 +133,20 @@ export function VideoParticipant({
         </DropdownMenu>
       </div>
 
-      {/* Bottom Info Bar - Teams style */}
-      <div className="absolute bottom-0 left-0 right-0 p-2">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded px-2 py-1">
-            <span className="text-sm font-medium text-white truncate">
-              {participant.name}
-              {isLocal && " (You)"}
+      {/* Bottom Info Bar - name with emoji reactions */}
+      <div className="absolute bottom-0 left-0 ">
+        <div className="flex items-center justify-center gap-1 sm:gap-2">
+          <div className="flex items-center gap-1 sm:gap-1.5 backdrop-blur-sm rounded px-1.5 sm:px-2 py-0.5 sm:py-1">
+            <span className="text-[10px] sm:text-xs md:text-sm font-medium text-secondary truncate max-w-[60px] sm:max-w-[80px] md:max-w-[120px]">
+              {!isLocal && participant.name}
+              {isLocal && "You"}
             </span>
+            {hasHandRaised && (
+              <span className="text-xs sm:text-sm hidden sm:inline">✋</span>
+            )}
             {participant.isMuted && (
-              <div className="h-5 w-5 rounded bg-[#c4314b] flex items-center justify-center">
-                <MicOff className="h-3 w-3 text-white" />
+              <div className="h-3 w-3 sm:h-4 sm:w-4 rounded bg-[#c4314b] flex items-center justify-center ml-0.5 sm:ml-1">
+                <MicOff className="h-2 w-2 sm:h-2.5 sm:w-2.5 text-secondary" />
               </div>
             )}
           </div>
