@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { MicOff, MoreHorizontal, Hand, Mic } from "lucide-react";
+import { MicOff, MoreHorizontal, Hand } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -134,10 +134,10 @@ export function VideoParticipant({
       </div>
 
       {/* Bottom Info Bar - name with emoji reactions */}
-      <div className="absolute bottom-0 left-0 ">
+      <div className="absolute bottom-0 left-0">
         <div className="flex items-center justify-center gap-1 sm:gap-2">
           <div className="flex items-center gap-1 sm:gap-1.5 backdrop-blur-sm rounded px-1.5 sm:px-2 py-0.5 sm:py-1">
-            <span className="text-[10px] sm:text-xs md:text-sm font-medium text-secondary truncate max-w-[60px] sm:max-w-[80px] md:max-w-[120px]">
+            <span className="text-[10px] sm:text-xs md:text-xs font-medium text-secondary truncate max-w-[60px] sm:max-w-[80px] md:max-w-[120px]">
               {!isLocal && participant.name}
               {isLocal && "You"}
             </span>
@@ -145,7 +145,7 @@ export function VideoParticipant({
               <span className="text-xs sm:text-sm hidden sm:inline">✋</span>
             )}
             {participant.isMuted && (
-              <div className="h-3 w-3 sm:h-4 sm:w-4 rounded bg-[#c4314b] flex items-center justify-center ml-0.5 sm:ml-1">
+              <div className="h-3 w-3 sm:h-4 sm:w-4 rounded bg-[#c4314b] flex items-center justify-center">
                 <MicOff className="h-2 w-2 sm:h-2.5 sm:w-2.5 text-secondary" />
               </div>
             )}
