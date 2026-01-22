@@ -1,8 +1,7 @@
-"use client";
-import { Participant } from "@/interfaces/interview";
-import { cn } from "@/lib/utils";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { Participant } from "@/interfaces/interview";
 import { VideoParticipant } from "./video-participant";
 
 interface VideoGridProps {
@@ -21,17 +20,43 @@ export function VideoGrid({
   const [pinnedId, setPinnedId] = useState<string | null>(null);
 
   const pinnedParticipant = pinnedId
-    ? participants.find((participant) => participant.id === pinnedId)
+    ? participants.find((p) => p.id === pinnedId)
     : null;
 
-  const getGridLayout = (count: number) => {
-    if (count === 1) return "grid-cols-1 max-w-2xl mx-auto";
-    if (count === 2) return "grid-cols-2 max-w-4xl mx-auto";
-    if (count === 3) return "grid-cols-3 max-w-5xl mx-auto";
-    if (count === 4) return "grid-cols-2 max-w-4xl mx-auto";
-    if (count <= 6) return "grid-cols-3 max-w-6xl mx-auto";
-    if (count <= 9) return "grid-cols-3";
-    return "grid-cols-4";
+  // Dynamic grid configuration based on participant count
+  const gridConfig = useMemo(() => {
+    const count = participants.length;
+
+    if (count === 1) {
+      return { cols: 1, rows: 1, maxWidth: "max-w-2xl" };
+    }
+    if (count === 2) {
+      return { cols: 2, rows: 1, maxWidth: "max-w-4xl" };
+    }
+    if (count === 3) {
+      return { cols: 3, rows: 1, maxWidth: "max-w-5xl" };
+    }
+    if (count === 4) {
+      return { cols: 2, rows: 2, maxWidth: "max-w-4xl" };
+    }
+    if (count <= 6) {
+      return { cols: 3, rows: 2, maxWidth: "max-w-5xl" };
+    }
+    if (count <= 9) {
+      return { cols: 3, rows: 3, maxWidth: "max-w-6xl" };
+    }
+    return { cols: 4, rows: Math.ceil(count / 4), maxWidth: "max-w-7xl" };
+  }, [participants.length]);
+
+  const getGridClasses = () => {
+    const { cols } = gridConfig;
+    const colClasses: Record<number, string> = {
+      1: "grid-cols-1",
+      2: "grid-cols-2",
+      3: "grid-cols-3",
+      4: "grid-cols-4",
+    };
+    return colClasses[cols] || "grid-cols-4";
   };
 
   // Focus layout - one main speaker, others in filmstrip
@@ -45,26 +70,26 @@ export function VideoGrid({
     );
 
     return (
-      <div className={cn("flex flex-col gap-3 h-full", className)}>
+      <div className={cn("flex flex-col  h-full", className)}>
         {/* Main speaker */}
-        <div className="flex-1 flex items-center justify-center p-2">
-          <VideoParticipant
-            participant={mainParticipant}
-            isLocal={mainParticipant.id === localParticipantId}
-            isPinned={mainParticipant.id === pinnedId}
-            size="full"
-            onPin={() =>
-              setPinnedId(
-                pinnedId === mainParticipant.id ? null : mainParticipant.id,
-              )
-            }
-            className="max-w-5xl max-h-[70vh] aspect-video"
-          />
+        <div className="flex-1 flex items-center justify-center p-3">
+          <motion.div layout className="w-full max-w-5xl aspect-video">
+            <VideoParticipant
+              participant={mainParticipant}
+              isLocal={mainParticipant.id === localParticipantId}
+              isPinned={mainParticipant.id === pinnedId}
+              onPin={() =>
+                setPinnedId(
+                  pinnedId === mainParticipant.id ? null : mainParticipant.id,
+                )
+              }
+            />
+          </motion.div>
         </div>
 
         {/* Filmstrip */}
         {otherParticipants.length > 0 && (
-          <div className="flex justify-center gap-2 px-4 py-2 overflow-x-auto">
+          <div className="flex justify-center gap-3 p-3 overflow-x-auto">
             <AnimatePresence>
               {otherParticipants.map((participant) => (
                 <motion.div
@@ -72,12 +97,12 @@ export function VideoGrid({
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
+                  className="h-32 w-32 flex-shrink-0"
                 >
                   <VideoParticipant
                     participant={participant}
                     isLocal={participant.id === localParticipantId}
                     isPinned={participant.id === pinnedId}
-                    size="sm"
                     onPin={() =>
                       setPinnedId(
                         pinnedId === participant.id ? null : participant.id,
@@ -93,29 +118,33 @@ export function VideoGrid({
     );
   }
 
-  // Gallery layout - Teams default grid
+  // Gallery layout - Teams dynamic grid
   return (
     <div
-      className={cn("h-full flex items-center justify-center p-4", className)}
+      className={cn("h-full flex items-center justify-center p-3", className)}
     >
       <div
-        className={cn("grid gap-2 w-full", getGridLayout(participants.length))}
+        className={cn(
+          "grid gap-3 w-full mx-auto",
+          getGridClasses(),
+          gridConfig.maxWidth,
+        )}
       >
         <AnimatePresence>
-          {participants.map((participant) => (
+          {participants.map((participant, index) => (
             <motion.div
               key={participant.id}
               layout
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ delay: index * 0.05 }}
               className="aspect-video"
             >
               <VideoParticipant
                 participant={participant}
                 isLocal={participant.id === localParticipantId}
                 isPinned={participant.id === pinnedId}
-                size="full"
                 onPin={() =>
                   setPinnedId(
                     pinnedId === participant.id ? null : participant.id,

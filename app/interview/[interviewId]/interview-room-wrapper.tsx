@@ -28,6 +28,8 @@ const mockParticipants: Participant[] = [
     isScreenSharing: false,
     isSpeaking: false,
     initials: "ME",
+    avatarUrl:
+      "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     id: "user-2",
@@ -38,6 +40,8 @@ const mockParticipants: Participant[] = [
     isScreenSharing: false,
     isSpeaking: true,
     initials: "SC",
+    avatarUrl:
+      "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=689&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     id: "user-3",
@@ -51,13 +55,15 @@ const mockParticipants: Participant[] = [
   },
   {
     id: "user-4",
-    name: "Emily Watson",
+    name: "Doh",
     role: "observer",
     isMuted: true,
     isVideoOn: false,
     isScreenSharing: false,
     isSpeaking: false,
     initials: "EW",
+    avatarUrl:
+      "https://images.unsplash.com/photo-1587389198531-255244984b10?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     id: "user-5",
@@ -68,6 +74,8 @@ const mockParticipants: Participant[] = [
     isScreenSharing: false,
     isSpeaking: false,
     initials: "W",
+    avatarUrl:
+      "https://plus.unsplash.com/premium_photo-1690407617542-2f210cf20d7e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     id: "user-6",
@@ -78,46 +86,8 @@ const mockParticipants: Participant[] = [
     isScreenSharing: false,
     isSpeaking: false,
     initials: "W",
-  },
-  {
-    id: "user-7",
-    name: "Watson",
-    role: "observer",
-    isMuted: true,
-    isVideoOn: false,
-    isScreenSharing: false,
-    isSpeaking: false,
-    initials: "W",
-  },
-  {
-    id: "user-8",
-    name: "Watson",
-    role: "observer",
-    isMuted: true,
-    isVideoOn: false,
-    isScreenSharing: false,
-    isSpeaking: false,
-    initials: "W",
-  },
-  {
-    id: "user-9",
-    name: "Watson",
-    role: "observer",
-    isMuted: true,
-    isVideoOn: false,
-    isScreenSharing: false,
-    isSpeaking: false,
-    initials: "W",
-  },
-  {
-    id: "user-10",
-    name: "Watson",
-    role: "observer",
-    isMuted: true,
-    isVideoOn: false,
-    isScreenSharing: false,
-    isSpeaking: false,
-    initials: "W",
+    avatarUrl:
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
 ];
 
