@@ -178,11 +178,11 @@ export function ControlBar({
         {/* Leave */}
         <div className="flex flex-col items-center">
           <Button
-            className="h-11 px-6 rounded-md bg-[#c4314b] hover:bg-[#a52a3f] text-white font-medium"
+            size="icon"
+            className="rounded-md bg-[#c4314b] hover:bg-[#a52a3f] text-white font-medium"
             onClick={onLeave}
           >
-            <PhoneOff className="h-5 w-5 mr-2" />
-            Leave
+            <PhoneOff className="h-5 w-5" />
           </Button>
         </div>
 

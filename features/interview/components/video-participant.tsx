@@ -127,15 +127,13 @@ export function VideoParticipant({
       </div>
 
       {/* Bottom Info Bar - name with emoji reactions */}
-      <div className="absolute bottom-0 left-0">
+      <div className="absolute bottom-0 left-0 z-10">
         <div className="flex items-center justify-center gap-1 sm:gap-2">
           <div className="flex items-center gap-1 sm:gap-1.5 backdrop-blur-sm rounded px-1.5 sm:px-2 py-0.5 sm:py-1">
-            {isPinned && (
-              <span className="text-[10px] sm:text-xs md:text-xs font-medium text-secondary truncate max-w-[60px] sm:max-w-[80px] md:max-w-[120px]">
-                {!isLocal && participant.name}
-                {isLocal && "You"}
-              </span>
-            )}
+            <span className="text-[10px] sm:text-xs md:text-xs font-medium text-secondary truncate max-w-[60px] sm:max-w-[80px] md:max-w-[120px]">
+              {!isLocal && participant.name}
+              {isLocal && "You"}
+            </span>
 
             {hasHandRaised && (
               <span className="text-xs sm:text-sm hidden sm:inline">✋</span>
