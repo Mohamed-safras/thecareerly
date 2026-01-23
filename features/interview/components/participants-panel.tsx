@@ -38,15 +38,15 @@ export function ParticipantsPanel({
 }: ParticipantsPanelProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredParticipants = participants.filter((p) =>
-    p.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  const filteredParticipants = participants.filter((participant) =>
+    participant.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const organizers = filteredParticipants.filter(
-    (p) => p.role === "interviewer",
+    (participant) => participant.role === "interviewer",
   );
   const attendees = filteredParticipants.filter(
-    (p) => p.role !== "interviewer",
+    (participant) => participant.role !== "interviewer",
   );
 
   const ParticipantRow = ({ participant }: { participant: Participant }) => {
@@ -60,8 +60,8 @@ export function ParticipantsPanel({
       >
         <div className="relative">
           <Avatar className="h-9 w-9">
-            <AvatarImage src={participant.avatarUrl} />
-            <AvatarFallback className="bg-[#6264a7] text-white text-sm">
+            <AvatarImage src={participant.avatarUrl} className="object-cover" />
+            <AvatarFallback className="bg-gradient-to-br border-2 border-muted-foreground text-secondary text-sm">
               {participant.initials}
             </AvatarFallback>
           </Avatar>
@@ -75,7 +75,7 @@ export function ParticipantsPanel({
         </div>
 
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-white truncate">
+          <p className="text-sm font-medium text-secondary truncate">
             {participant.name}
             {isCurrentUser && <span className="text-white/50"> (You)</span>}
           </p>
@@ -87,7 +87,7 @@ export function ParticipantsPanel({
         <div className="flex items-center gap-1">
           {participant.isMuted ? (
             <div className="h-7 w-7 rounded flex items-center justify-center bg-[#c4314b]/20">
-              <MicOff className="h-4 w-4 text-[#c4314b]" />
+              <MicOff className="h-4 w-4 text-destructive" />
             </div>
           ) : (
             <div className="h-7 w-7 rounded flex items-center justify-center">
@@ -97,7 +97,7 @@ export function ParticipantsPanel({
 
           {!participant.isVideoOn && (
             <div className="h-7 w-7 rounded flex items-center justify-center bg-[#c4314b]/20">
-              <VideoOff className="h-4 w-4 text-[#c4314b]" />
+              <VideoOff className="h-4 w-4 text-destructive" />
             </div>
           )}
 
@@ -106,28 +106,28 @@ export function ParticipantsPanel({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7 opacity-0 group-hover:opacity-100 text-white/60 hover:text-white hover:bg-[#4a4a4a]"
+                className="h-8 w-8 opacity-0 group-hover:opacity-100 text-secondary/60 hover:text-secondary hover:bg-[#4a4a4a]"
               >
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
-              className="bg-[#292929] border-[#3d3d3d] text-white"
+              className="bg-[#292929] border-[#3d3d3d] text-secondary"
             >
-              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d]">
+              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary">
                 Pin for me
               </DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d]">
+              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary">
                 Spotlight for everyone
               </DropdownMenuItem>
               {!isCurrentUser && (
                 <>
                   <DropdownMenuSeparator className="bg-[#3d3d3d]" />
-                  <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d]">
+                  <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary">
                     Mute participant
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] text-[#c4314b]">
+                  <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] text-destructive hover:text-destructive focus:text-destructive ">
                     Remove from meeting
                   </DropdownMenuItem>
                 </>
@@ -151,13 +151,13 @@ export function ParticipantsPanel({
     >
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-[#3d3d3d]">
-        <h3 className="font-semibold text-white">
+        <h3 className="font-semibold text-secondary">
           People ({participants.length})
         </h3>
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 text-white/70 hover:text-white hover:bg-[#3d3d3d]"
+          className="h-8 w-8 text-secondary/70 hover:text-secondary hover:bg-[#3d3d3d]"
           onClick={onClose}
         >
           <X className="h-4 w-4" />
@@ -167,7 +167,7 @@ export function ParticipantsPanel({
       {/* Search and invite */}
       <div className="p-4 space-y-3 border-b border-[#3d3d3d]">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary/40" />
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -202,8 +202,8 @@ export function ParticipantsPanel({
             <h4 className="text-xs font-medium text-white/50 uppercase px-4 py-2">
               Attendees ({attendees.length})
             </h4>
-            {attendees.map((p) => (
-              <ParticipantRow key={p.id} participant={p} />
+            {attendees.map((participant) => (
+              <ParticipantRow key={participant.id} participant={participant} />
             ))}
           </div>
         )}

@@ -1,27 +1,26 @@
 "use client";
 import InterviewJoin from "./interview-join-wrapper";
-import { redirect } from "next/navigation";
 import React, { useState } from "react";
-import { toast } from "sonner";
 import InterviewRoomWrapper from "./interview-room-wrapper";
 
 const InterviewJoinPage = () => {
-  const [joining, setJoining] = useState(false);
+  const [join, setJoin] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const handleJoinInterview = () => {
-    // In real app, this would navigate to the interview room
-    toast.success("Joining interview...");
+    setLoading(true);
     setTimeout(() => {
-      setJoining(true);
-      redirect("/interview/jcg-vios-vrk");
+      setJoin(() => true);
+      setLoading(false);
     }, 3000);
   };
   return (
     <React.Fragment>
-      {joining ? (
+      {join ? (
         <InterviewRoomWrapper />
       ) : (
         <InterviewJoin
-          joining={joining}
+          loading={loading}
           handleJoinInterview={handleJoinInterview}
         />
       )}

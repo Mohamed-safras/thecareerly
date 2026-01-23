@@ -63,10 +63,10 @@ export function VideoGrid({
   if (layout === "focus" || pinnedParticipant) {
     const mainParticipant =
       pinnedParticipant ||
-      participants.find((p) => p.isSpeaking) ||
+      participants.find((participant) => participant.isSpeaking) ||
       participants[0];
     const otherParticipants = participants.filter(
-      (p) => p.id !== mainParticipant.id,
+      (participant) => participant.id !== mainParticipant.id,
     );
 
     return (
@@ -97,7 +97,7 @@ export function VideoGrid({
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
-                  className="h-32 w-32 flex-shrink-0"
+                  className="h-24 w-32 flex-shrink-0"
                 >
                   <VideoParticipant
                     participant={participant}

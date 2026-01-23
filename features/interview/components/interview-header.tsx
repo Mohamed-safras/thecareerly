@@ -83,10 +83,7 @@ export function InterviewHeader({
         <div className="flex items-center gap-3">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="text-white hover:bg-[#3d3d3d] gap-1 px-2"
-              >
+              <Button className="bg-transparent hover:bg-transparent text-secondary gap-1 px-2">
                 <span className="font-medium text-sm">{session.title}</span>
                 <ChevronDown className="h-4 w-4 text-white/60" />
               </Button>
@@ -102,13 +99,13 @@ export function InterviewHeader({
                 </p>
               </div>
               <DropdownMenuItem
-                className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d]"
+                className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary"
                 onClick={copyMeetingLink}
               >
                 <Copy className="h-4 w-4 mr-2" />
                 Copy meeting link
               </DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d]">
+              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary">
                 <Info className="h-4 w-4 mr-2" />
                 Meeting details
               </DropdownMenuItem>
@@ -116,7 +113,7 @@ export function InterviewHeader({
           </DropdownMenu>
 
           <div className="flex items-center gap-2">
-            <Shield className="h-4 w-4 text-[#92c353]" />
+            <Shield className="h-4 w-4 text-status-active" />
             <span className="text-xs text-white/50">Secured</span>
           </div>
         </div>
@@ -223,16 +220,16 @@ export function InterviewHeader({
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
-              className="bg-[#292929] border-[#3d3d3d] text-white"
+              className="bg-[#292929] border-[#3d3d3d] text-secondary"
             >
-              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d]">
+              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary">
                 Meeting options
               </DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d]">
+              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary">
                 Call health
               </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-[#3d3d3d]" />
-              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d]">
+              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary">
                 Report a problem
               </DropdownMenuItem>
             </DropdownMenuContent>
