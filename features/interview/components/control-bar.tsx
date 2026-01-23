@@ -124,22 +124,22 @@ export function ControlBar({
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="center"
-              className="bg-[#292929] border-[#3d3d3d] text-white w-56"
+              className="bg-[#292929] border-[#3d3d3d] text-secondary w-56"
             >
               <DropdownMenuItem
-                className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d]"
+                className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary"
                 onClick={onToggleRecording}
               >
                 {isRecording ? "Stop recording" : "Start recording"}
               </DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d]">
+              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary">
                 Turn on live captions
               </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-[#3d3d3d]" />
-              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d]">
+              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary">
                 Device settings
               </DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d]">
+              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary">
                 Meeting options
               </DropdownMenuItem>
             </DropdownMenuContent>

@@ -27,7 +27,7 @@ export function VideoParticipant({
   className,
 }: VideoParticipantProps) {
   // Check if participant has hand raised (you can add this to Participant type)
-  const hasHandRaised = participant.id === "2"; // Demo: second participant has hand raised
+  const hasHandRaised = participant.id === "3"; // Demo: second participant has hand raised
 
   return (
     <motion.div
@@ -36,7 +36,7 @@ export function VideoParticipant({
       className={cn(
         "relative rounded-md overflow-hidden group h-full w-full",
         "bg-[#292929]",
-        isPinned && "ring-2 ring-muted-foreground",
+        isPinned && "border-2 border-muted-foreground",
         className,
       )}
     >
@@ -47,7 +47,7 @@ export function VideoParticipant({
           {participant.isSpeaking && (
             <>
               <motion.div
-                className="absolute h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 lg:h-20 lg:w-20 xl:h-24 xl:w-24 rounded-full border-1 border-muted-foreground"
+                className="absolute h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 lg:h-18 lg:w-18 xl:h-20 xl:w-20 rounded-full border-1 border-muted-foreground"
                 initial={{ scale: 1, opacity: 0.8 }}
                 animate={{ scale: 1.4, opacity: 0 }}
                 transition={{
@@ -57,7 +57,7 @@ export function VideoParticipant({
                 }}
               />
               <motion.div
-                className="absolute h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 lg:h-20 lg:w-20 xl:h-24 xl:w-24 rounded-full border-1 border-muted-foreground"
+                className="absolute h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 lg:h-18 lg:w-18 xl:h-20 xl:w-20 rounded-full border-1 border-muted-foreground"
                 initial={{ scale: 1, opacity: 0.6 }}
                 animate={{ scale: 1.8, opacity: 0 }}
                 transition={{
@@ -73,14 +73,11 @@ export function VideoParticipant({
           {/* Static avatar - no scale animation */}
           <Avatar
             className={cn(
-              "h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 lg:h-20 lg:w-20 xl:h-24 xl:w-24 ring-2 transition-colors duration-300 relative z-10",
-              participant.isSpeaking
-                ? "ring-muted-foreground"
-                : "ring-transparent",
+              "h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 lg:h-18 lg:w-18 xl:h-20 xl:w-20 border-2 border-muted-foreground transition-colors duration-300 relative z-10",
             )}
           >
             <AvatarImage src={participant.avatarUrl} className="object-cover" />
-            <AvatarFallback className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl bg-gradient-to-br  text-secondary font-semibold">
+            <AvatarFallback className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl bg-gradient-to-br text-secondary font-semibold">
               {participant.initials}
             </AvatarFallback>
           </Avatar>
@@ -94,20 +91,16 @@ export function VideoParticipant({
           animate={{ opacity: 1, y: 0 }}
           className="absolute top-1 right-1 sm:top-2 sm:right-2 flex items-center gap-1 sm:gap-1.5 bg-[#6264a7] text-secondary text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded"
         >
-          <Hand className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+          <Hand className="h-3 w-3 sm:h-3 sm:w-3" />
           <span className="hidden md:inline">raised their hand</span>
         </motion.div>
       )}
 
       {/* More options - visible on hover */}
-      <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7 bg-black/50 hover:bg-black/70 text-secondary rounded"
-            >
+            <Button size="icon" className="h-7 w-7 text-secondary rounded">
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -117,15 +110,15 @@ export function VideoParticipant({
           >
             <DropdownMenuItem
               onClick={onPin}
-              className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d]"
+              className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary"
             >
               {isPinned ? "Unpin" : "Pin"}
             </DropdownMenuItem>
-            <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d]">
+            <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary">
               Spotlight
             </DropdownMenuItem>
             {!isLocal && (
-              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] text-red-400">
+              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] text-red-400 hover:text-red-400 focus:text-red-400">
                 Remove from meeting
               </DropdownMenuItem>
             )}
@@ -137,10 +130,13 @@ export function VideoParticipant({
       <div className="absolute bottom-0 left-0">
         <div className="flex items-center justify-center gap-1 sm:gap-2">
           <div className="flex items-center gap-1 sm:gap-1.5 backdrop-blur-sm rounded px-1.5 sm:px-2 py-0.5 sm:py-1">
-            <span className="text-[10px] sm:text-xs md:text-xs font-medium text-secondary truncate max-w-[60px] sm:max-w-[80px] md:max-w-[120px]">
-              {!isLocal && participant.name}
-              {isLocal && "You"}
-            </span>
+            {isPinned && (
+              <span className="text-[10px] sm:text-xs md:text-xs font-medium text-secondary truncate max-w-[60px] sm:max-w-[80px] md:max-w-[120px]">
+                {!isLocal && participant.name}
+                {isLocal && "You"}
+              </span>
+            )}
+
             {hasHandRaised && (
               <span className="text-xs sm:text-sm hidden sm:inline">✋</span>
             )}
