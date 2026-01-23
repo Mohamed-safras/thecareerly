@@ -6,12 +6,12 @@ import InterviewDetails from "@/features/interview/components/interview-join-det
 import DeviceCheck from "@/features/media-setup/components/device-check";
 
 export interface InterviewJoinProps {
-  joining: boolean;
+  loading: boolean;
   handleJoinInterview: () => void;
 }
 
 const InterviewJoinWrapper: React.FC<InterviewJoinProps> = ({
-  joining,
+  loading,
   handleJoinInterview,
 }) => {
   const interviewData = {
@@ -21,6 +21,8 @@ const InterviewJoinWrapper: React.FC<InterviewJoinProps> = ({
     duration: "30 Minutes",
     date: "Friday, Jan 16 • 12:00 PM - 12:30 PM GMT+5:30",
   };
+
+  console.log(loading);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-3">
@@ -40,7 +42,7 @@ const InterviewJoinWrapper: React.FC<InterviewJoinProps> = ({
               <span className="text-sm font-medium">No one else is here</span>
               <InterviewActions
                 onJoin={handleJoinInterview}
-                joining={joining}
+                loading={loading}
               />
             </div>
           </div>

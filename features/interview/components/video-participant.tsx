@@ -118,7 +118,7 @@ export function VideoParticipant({
               Spotlight
             </DropdownMenuItem>
             {!isLocal && (
-              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] text-red-400 hover:text-red-400 focus:text-red-400">
+              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] text-destructive hover:text-destructive focus:text-destructive">
                 Remove from meeting
               </DropdownMenuItem>
             )}
@@ -139,7 +139,7 @@ export function VideoParticipant({
               <span className="text-xs sm:text-sm hidden sm:inline">✋</span>
             )}
             {participant.isMuted && (
-              <div className="h-3 w-3 sm:h-4 sm:w-4 rounded bg-[#c4314b] flex items-center justify-center">
+              <div className="h-3 w-3 sm:h-4 sm:w-4 rounded bg-destructive flex items-center justify-center">
                 <MicOff className="h-2 w-2 sm:h-2.5 sm:w-2.5 text-secondary" />
               </div>
             )}

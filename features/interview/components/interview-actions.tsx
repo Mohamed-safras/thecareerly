@@ -4,13 +4,13 @@ import { Video } from "lucide-react";
 
 interface InterviewActionsProps {
   onJoin: () => void;
-  joining: boolean;
+  loading: boolean;
   joinLabel?: string;
 }
 
 const InterviewActions = ({
   onJoin,
-  joining,
+  loading,
   joinLabel = "Join now",
 }: InterviewActionsProps) => {
   return (
@@ -19,7 +19,7 @@ const InterviewActions = ({
         onClick={onJoin}
         className="h-12 w-full text-base font-medium gap-3 rounded-full"
       >
-        {joining ? (
+        {loading ? (
           <>
             <CircleSpinner className="border-secondary" size={16} />
             {"joining..."}
