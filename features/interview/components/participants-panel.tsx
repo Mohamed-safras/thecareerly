@@ -38,15 +38,15 @@ export function ParticipantsPanel({
 }: ParticipantsPanelProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredParticipants = participants.filter((p) =>
-    p.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  const filteredParticipants = participants.filter((participant) =>
+    participant.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const organizers = filteredParticipants.filter(
-    (p) => p.role === "interviewer",
+    (participant) => participant.role === "interviewer",
   );
   const attendees = filteredParticipants.filter(
-    (p) => p.role !== "interviewer",
+    (participant) => participant.role !== "interviewer",
   );
 
   const ParticipantRow = ({ participant }: { participant: Participant }) => {
@@ -60,8 +60,8 @@ export function ParticipantsPanel({
       >
         <div className="relative">
           <Avatar className="h-9 w-9">
-            <AvatarImage src={participant.avatarUrl} />
-            <AvatarFallback className="bg-[#6264a7] text-white text-sm">
+            <AvatarImage src={participant.avatarUrl} className="object-cover" />
+            <AvatarFallback className="bg-gradient-to-br border-2 border-muted-foreground text-secondary text-sm">
               {participant.initials}
             </AvatarFallback>
           </Avatar>
@@ -75,7 +75,7 @@ export function ParticipantsPanel({
         </div>
 
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-white truncate">
+          <p className="text-sm font-medium text-secondary truncate">
             {participant.name}
             {isCurrentUser && <span className="text-white/50"> (You)</span>}
           </p>
@@ -113,21 +113,21 @@ export function ParticipantsPanel({
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
-              className="bg-[#292929] border-[#3d3d3d] text-white"
+              className="bg-[#292929] border-[#3d3d3d] text-secondary"
             >
-              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d]">
+              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary">
                 Pin for me
               </DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d]">
+              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary">
                 Spotlight for everyone
               </DropdownMenuItem>
               {!isCurrentUser && (
                 <>
                   <DropdownMenuSeparator className="bg-[#3d3d3d]" />
-                  <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d]">
+                  <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary">
                     Mute participant
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] text-[#c4314b]">
+                  <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] text-[#c4314b] hover:text-[#c4314b] focus:text-[#c4314b] ">
                     Remove from meeting
                   </DropdownMenuItem>
                 </>

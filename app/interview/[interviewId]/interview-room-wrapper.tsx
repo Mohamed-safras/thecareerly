@@ -21,12 +21,12 @@ const mockSession: InterviewSession = {
 const mockParticipants: Participant[] = [
   {
     id: "user-1",
-    name: "You",
+    name: "Mohamed Safras",
     role: "interviewer",
     isMuted: false,
     isVideoOn: true,
-    isScreenSharing: false,
-    isSpeaking: false,
+    isScreenSharing: true,
+    isSpeaking: true,
     initials: "ME",
     avatarUrl:
       "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
