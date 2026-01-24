@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { MicOff, MoreHorizontal, Hand } from "lucide-react";
+import { MicOff, MoreHorizontal } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +14,7 @@ import { Participant } from "@/interfaces/interview";
 interface VideoParticipantProps {
   participant: Participant;
   isLocal?: boolean;
+  layout?: "grid" | "together" | "gallery" | "focus";
   isPinned?: boolean;
   onPin?: () => void;
   className?: string;
@@ -23,11 +24,13 @@ export function VideoParticipant({
   participant,
   isLocal = false,
   isPinned = false,
+  layout,
   onPin,
   className,
 }: VideoParticipantProps) {
+  console.log(participant);
   // Check if participant has hand raised (you can add this to Participant type)
-  const hasHandRaised = participant.id === "3"; // Demo: second participant has hand raised
+  const hasHandRaised = participant.id === "user-6"; // Demo: second participant has hand raised
 
   return (
     <motion.div
@@ -83,19 +86,10 @@ export function VideoParticipant({
           </Avatar>
         </div>
       </div>
-
       {/* Hand raised indicator - top right with banner */}
-      {hasHandRaised && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="absolute top-1 right-1 sm:top-2 sm:right-2 flex items-center gap-1 sm:gap-1.5 bg-[#6264a7] text-secondary text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded"
-        >
-          <Hand className="h-3 w-3 sm:h-3 sm:w-3" />
-          <span className="hidden md:inline">raised their hand</span>
-        </motion.div>
+      {(layout === "focus" || isPinned) && (
+        <HandRaise hasHandRaised={hasHandRaised} />
       )}
-
       {/* More options - visible on hover */}
       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
         <DropdownMenu>
@@ -125,7 +119,6 @@ export function VideoParticipant({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-
       {/* Bottom Info Bar - name with emoji reactions */}
       <div className="absolute bottom-0 left-0 z-10">
         <div className="flex items-center justify-center gap-1 sm:gap-2">
@@ -149,3 +142,17 @@ export function VideoParticipant({
     </motion.div>
   );
 }
+
+const HandRaise: React.FC<{ hasHandRaised: boolean }> = ({ hasHandRaised }) => (
+  <>
+    {hasHandRaised && (
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="absolute top-1 right-1 sm:top-2 sm:right-2 flex items-center gap-1 sm:gap-1.5 bg-[#6264a7] text-secondary text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded"
+      >
+        <span className="hidden md:inline">✋ raised their hand</span>
+      </motion.div>
+    )}
+  </>
+);

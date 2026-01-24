@@ -14,6 +14,7 @@ const InterviewJoinPage = () => {
       setLoading(false);
     }, 3000);
   };
+  
   return (
     <React.Fragment>
       {join ? (
