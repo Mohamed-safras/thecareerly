@@ -70,7 +70,7 @@ export function VideoGrid({
     );
 
     return (
-      <div className={cn("flex flex-col  h-full", className)}>
+      <div className={cn("flex flex-col h-full", className)}>
         {/* Main speaker */}
         <div className="flex-1 flex items-center justify-center p-3">
           <motion.div layout className="w-full max-w-5xl aspect-video">

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { MicOff, MoreHorizontal, Hand } from "lucide-react";
+import { MicOff, MoreHorizontal } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,7 +27,7 @@ export function VideoParticipant({
   className,
 }: VideoParticipantProps) {
   // Check if participant has hand raised (you can add this to Participant type)
-  const hasHandRaised = participant.id === "3"; // Demo: second participant has hand raised
+  const hasHandRaised = participant.id === "user-6"; // Demo: second participant has hand raised
 
   return (
     <motion.div
@@ -85,16 +85,7 @@ export function VideoParticipant({
       </div>
 
       {/* Hand raised indicator - top right with banner */}
-      {hasHandRaised && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="absolute top-1 right-1 sm:top-2 sm:right-2 flex items-center gap-1 sm:gap-1.5 bg-[#6264a7] text-secondary text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded"
-        >
-          <Hand className="h-3 w-3 sm:h-3 sm:w-3" />
-          <span className="hidden md:inline">raised their hand</span>
-        </motion.div>
-      )}
+      <HandRaise hasHandRaised={hasHandRaised} />
 
       {/* More options - visible on hover */}
       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -135,9 +126,6 @@ export function VideoParticipant({
               {isLocal && " (You)"}
             </span>
 
-            {hasHandRaised && (
-              <span className="text-xs sm:text-sm hidden sm:inline">✋</span>
-            )}
             {participant.isMuted && (
               <div className="h-3 w-3 sm:h-4 sm:w-4 rounded bg-destructive flex items-center justify-center">
                 <MicOff className="h-2 w-2 sm:h-2.5 sm:w-2.5 text-secondary" />
@@ -149,3 +137,19 @@ export function VideoParticipant({
     </motion.div>
   );
 }
+
+const HandRaise: React.FC<{ hasHandRaised: boolean }> = ({ hasHandRaised }) => (
+  <>
+    {hasHandRaised && (
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="absolute top-1 right-1 sm:top-2 sm:right-2 flex items-center gap-1 sm:gap-1.5 bg-[#6264a7] text-secondary text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded"
+      >
+        <span className="hidden md:inline capitalize">
+          ✋ raised their hand
+        </span>
+      </motion.div>
+    )}
+  </>
+);
