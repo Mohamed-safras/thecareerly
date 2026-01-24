@@ -78,6 +78,7 @@ export function VideoGrid({
               participant={mainParticipant}
               isLocal={mainParticipant.id === localParticipantId}
               isPinned={mainParticipant.id === pinnedId}
+              layout={layout}
               onPin={() =>
                 setPinnedId(
                   pinnedId === mainParticipant.id ? null : mainParticipant.id,

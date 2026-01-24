@@ -14,6 +14,7 @@ import { Participant } from "@/interfaces/interview";
 interface VideoParticipantProps {
   participant: Participant;
   isLocal?: boolean;
+  layout?: "grid" | "together" | "gallery" | "focus";
   isPinned?: boolean;
   onPin?: () => void;
   className?: string;
@@ -23,9 +24,11 @@ export function VideoParticipant({
   participant,
   isLocal = false,
   isPinned = false,
+  layout,
   onPin,
   className,
 }: VideoParticipantProps) {
+  console.log(participant);
   // Check if participant has hand raised (you can add this to Participant type)
   const hasHandRaised = participant.id === "user-6"; // Demo: second participant has hand raised
 
@@ -83,10 +86,10 @@ export function VideoParticipant({
           </Avatar>
         </div>
       </div>
-
       {/* Hand raised indicator - top right with banner */}
-      <HandRaise hasHandRaised={hasHandRaised} />
-
+      {(layout === "focus" || isPinned) && (
+        <HandRaise hasHandRaised={hasHandRaised} />
+      )}
       {/* More options - visible on hover */}
       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
         <DropdownMenu>
@@ -116,7 +119,6 @@ export function VideoParticipant({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-
       {/* Bottom Info Bar - name with emoji reactions */}
       <div className="absolute bottom-0 left-0 z-10">
         <div className="flex items-center justify-center gap-1 sm:gap-2">
@@ -126,6 +128,9 @@ export function VideoParticipant({
               {isLocal && " (You)"}
             </span>
 
+            {hasHandRaised && (
+              <span className="text-xs sm:text-sm hidden sm:inline">✋</span>
+            )}
             {participant.isMuted && (
               <div className="h-3 w-3 sm:h-4 sm:w-4 rounded bg-destructive flex items-center justify-center">
                 <MicOff className="h-2 w-2 sm:h-2.5 sm:w-2.5 text-secondary" />
@@ -146,9 +151,7 @@ const HandRaise: React.FC<{ hasHandRaised: boolean }> = ({ hasHandRaised }) => (
         animate={{ opacity: 1, y: 0 }}
         className="absolute top-1 right-1 sm:top-2 sm:right-2 flex items-center gap-1 sm:gap-1.5 bg-[#6264a7] text-secondary text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded"
       >
-        <span className="hidden md:inline capitalize">
-          ✋ raised their hand
-        </span>
+        <span className="hidden md:inline">✋ raised their hand</span>
       </motion.div>
     )}
   </>
