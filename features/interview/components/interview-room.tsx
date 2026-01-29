@@ -58,7 +58,10 @@ export function InterviewRoom({
 
   return (
     <div
-      className={cn("w-full h-screen flex flex-col bg-[#1a1a1a]", className)}
+      className={cn(
+        "w-full h-screen flex flex-col   dark:bg-[#1a1a1a]",
+        className,
+      )}
     >
       {/* Header */}
       <InterviewHeader
