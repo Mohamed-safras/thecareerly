@@ -36,11 +36,258 @@ interface InterviewHeaderProps {
   className?: string;
 }
 
+const DROPDOWN_MENU_CLASSES = cn(
+  // Light theme
+  "bg-white border-gray-200",
+  // Dark theme (original)
+  "dark:bg-[#292929] dark:border-[#3d3d3d]",
+);
+
+const DROPDOWN_ITEM_CLASSES = cn(
+  // Light theme
+  "hover:bg-gray-100 focus:bg-gray-100",
+  // Dark theme (original)
+  "dark:hover:bg-[#3d3d3d] dark:focus:bg-[#3d3d3d]",
+);
+
+const TOOLTIP_CLASSES = cn(
+  // Light theme
+  "bg-white border-gray-200 text-gray-900",
+  // Dark theme (original)
+  "dark:bg-[#1f1f1f] dark:border-[#3d3d3d] dark:text-white",
+);
+
+const formatTime = (seconds: number): string => {
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+
+  if (hrs > 0) {
+    return `${hrs}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  }
+  return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+};
+
+// Sub-components
+
+interface MeetingInfoDropdownProps {
+  session: InterviewSession;
+  onCopyLink: () => void;
+}
+
+function MeetingInfoDropdown({
+  session,
+  onCopyLink,
+}: MeetingInfoDropdownProps) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button className="bg-transparent hover:bg-transparent gap-1 px-2">
+          <span className="font-medium text-sm">{session.title}</span>
+          <ChevronDown className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="start"
+        className={cn(DROPDOWN_MENU_CLASSES, "w-72")}
+      >
+        <div
+          className={cn(
+            "p-3 border-b",
+            "border-gray-200 dark:border-[#3d3d3d]",
+          )}
+        >
+          <p className="font-medium">{session.title}</p>
+          <p className="text-sm text-foreground mt-1">
+            {session.candidate} • {session.position}
+          </p>
+        </div>
+        <DropdownMenuItem
+          className={DROPDOWN_ITEM_CLASSES}
+          onClick={onCopyLink}
+        >
+          <Copy className="h-4 w-4 mr-2" />
+          Copy meeting link
+        </DropdownMenuItem>
+        <DropdownMenuItem className={DROPDOWN_ITEM_CLASSES}>
+          <Info className="h-4 w-4 mr-2" />
+          Meeting details
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+function SecurityBadge() {
+  return (
+    <div className="flex items-center gap-2">
+      <Shield className="h-4 w-4 text-status-active" />
+      <span className="text-xs">Secured</span>
+    </div>
+  );
+}
+
+interface TimerDisplayProps {
+  status: InterviewSession["status"];
+  elapsedTime: number;
+}
+
+function TimerDisplay({ status, elapsedTime }: TimerDisplayProps) {
+  return (
+    <div className="flex items-center gap-3">
+      <div
+        className={cn(
+          "flex items-center gap-2 px-3 py-1.5 rounded-md",
+          // Light theme
+          "bg-gray-100",
+          // Dark theme (original)
+          "dark:bg-[#292929]",
+        )}
+      >
+        {status === "in-progress" && (
+          <motion.div
+            animate={{ opacity: [1, 0.5, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="h-2 w-2 rounded-full bg-[#c4314b]"
+          />
+        )}
+        <span className="text-sm font-mono">{formatTime(elapsedTime)}</span>
+      </div>
+    </div>
+  );
+}
+
+interface LayoutToggleProps {
+  layout: "grid" | "gallery" | "focus";
+  onLayoutChange: (layout: "grid" | "gallery" | "focus") => void;
+}
+
+function LayoutToggle({ layout, onLayoutChange }: LayoutToggleProps) {
+  const getButtonClasses = (isActive: boolean) =>
+    cn(
+      "h-8 w-8 rounded-sm",
+      isActive
+        ? // Active state - same for both themes
+          "bg-[#5254a3] dark:bg-[#6264a7] text-white"
+        : // Inactive state
+          cn(
+            // Light theme
+            "text-gray-500 hover:text-gray-700 hover:bg-gray-200",
+            // Dark theme (original)
+            "dark:text-white/60 dark:hover:text-white dark:hover:bg-[#3d3d3d]",
+          ),
+    );
+
+  return (
+    <div
+      className={cn(
+        "flex items-center rounded-md p-0.5",
+        "bg-gray-100 dark:bg-[#292929]",
+      )}
+    >
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={getButtonClasses(layout === "gallery")}
+            onClick={() => onLayoutChange("gallery")}
+          >
+            <Grid2X2 className="h-4 w-4" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="bottom" className={TOOLTIP_CLASSES}>
+          Gallery
+        </TooltipContent>
+      </Tooltip>
+
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={getButtonClasses(layout === "focus")}
+            onClick={() => onLayoutChange("focus")}
+          >
+            <Rows3 className="h-4 w-4" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="bottom" className={TOOLTIP_CLASSES}>
+          Focus
+        </TooltipContent>
+      </Tooltip>
+    </div>
+  );
+}
+
+function FullscreenButton() {
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className={cn(
+            "h-8 w-8",
+            // Light theme
+            "text-gray-500 hover:text-gray-700 hover:bg-gray-200",
+            // Dark theme (original)
+            "dark:text-white/60 dark:hover:text-white dark:hover:bg-[#3d3d3d]",
+          )}
+          onClick={() => document.documentElement.requestFullscreen?.()}
+        >
+          <Maximize className="h-4 w-4" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent side="bottom" className={TOOLTIP_CLASSES}>
+        Full screen
+      </TooltipContent>
+    </Tooltip>
+  );
+}
+
+function MoreOptionsMenu() {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className={cn(
+            "h-8 w-8",
+            // Light theme
+            "text-gray-500 hover:text-gray-700 hover:bg-gray-200",
+            // Dark theme (original)
+            "dark:text-white/60 dark:hover:text-white dark:hover:bg-[#3d3d3d]",
+          )}
+        >
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="end"
+        className={cn(DROPDOWN_MENU_CLASSES, "text-secondary")}
+      >
+        <DropdownMenuItem className={DROPDOWN_ITEM_CLASSES}>
+          Meeting options
+        </DropdownMenuItem>
+        <DropdownMenuItem className={DROPDOWN_ITEM_CLASSES}>
+          Call health
+        </DropdownMenuItem>
+        <DropdownMenuSeparator className="bg-gray-200 dark:bg-[#3d3d3d]" />
+        <DropdownMenuItem className={DROPDOWN_ITEM_CLASSES}>
+          Report a problem
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+// Main Component
 export function InterviewHeader({
   session,
   layout,
   onLayoutChange,
-  onBack,
   className,
 }: InterviewHeaderProps) {
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -54,16 +301,6 @@ export function InterviewHeader({
     }
   }, [session.status]);
 
-  const formatTime = (seconds: number) => {
-    const hrs = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    if (hrs > 0) {
-      return `${hrs}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-    }
-    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-  };
-
   const copyMeetingLink = () => {
     navigator.clipboard.writeText(window.location.href);
     toast.success("Meeting link copied");
@@ -75,165 +312,28 @@ export function InterviewHeader({
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         className={cn(
-          "flex items-center justify-between px-4 py-2 bg-[#1f1f1f] border-b border-[#3d3d3d]",
+          "flex items-center justify-between px-4 py-2 border-b",
+          // Light theme
+          "bg-gray-50 border-gray-200",
+          // Dark theme (original)
+          "dark:bg-[#1f1f1f] dark:border-[#3d3d3d]",
           className,
         )}
       >
         {/* Left section - Meeting info */}
         <div className="flex items-center gap-3">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button className="bg-transparent hover:bg-transparent text-secondary gap-1 px-2">
-                <span className="font-medium text-sm">{session.title}</span>
-                <ChevronDown className="h-4 w-4 text-white/60" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="start"
-              className="bg-[#292929] border-[#3d3d3d] text-white w-72"
-            >
-              <div className="p-3 border-b border-[#3d3d3d]">
-                <p className="font-medium">{session.title}</p>
-                <p className="text-sm text-white/60 mt-1">
-                  {session.candidate} • {session.position}
-                </p>
-              </div>
-              <DropdownMenuItem
-                className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary"
-                onClick={copyMeetingLink}
-              >
-                <Copy className="h-4 w-4 mr-2" />
-                Copy meeting link
-              </DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary">
-                <Info className="h-4 w-4 mr-2" />
-                Meeting details
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <div className="flex items-center gap-2">
-            <Shield className="h-4 w-4 text-status-active" />
-            <span className="text-xs text-white/50">Secured</span>
-          </div>
+          <MeetingInfoDropdown session={session} onCopyLink={copyMeetingLink} />
+          <SecurityBadge />
         </div>
 
         {/* Center - Timer */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-[#292929] rounded-md">
-            {session.status === "in-progress" && (
-              <motion.div
-                animate={{ opacity: [1, 0.5, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="h-2 w-2 rounded-full bg-[#c4314b]"
-              />
-            )}
-            <span className="text-sm font-mono text-white">
-              {formatTime(elapsedTime)}
-            </span>
-          </div>
-        </div>
+        <TimerDisplay status={session.status} elapsedTime={elapsedTime} />
 
         {/* Right section */}
         <div className="flex items-center gap-2">
-          {/* View toggle */}
-          <div className="flex items-center bg-[#292929] rounded-md p-0.5">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className={cn(
-                    "h-8 w-8 rounded-sm",
-                    layout === "gallery"
-                      ? "bg-[#6264a7] text-white"
-                      : "text-white/60 hover:text-white hover:bg-[#3d3d3d]",
-                  )}
-                  onClick={() => onLayoutChange("gallery")}
-                >
-                  <Grid2X2 className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent
-                side="bottom"
-                className="bg-[#1f1f1f] border-[#3d3d3d] text-white"
-              >
-                Gallery
-              </TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className={cn(
-                    "h-8 w-8 rounded-sm",
-                    layout === "focus"
-                      ? "bg-[#6264a7] text-white"
-                      : "text-white/60 hover:text-white hover:bg-[#3d3d3d]",
-                  )}
-                  onClick={() => onLayoutChange("focus")}
-                >
-                  <Rows3 className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent
-                side="bottom"
-                className="bg-[#1f1f1f] border-[#3d3d3d] text-white"
-              >
-                Focus
-              </TooltipContent>
-            </Tooltip>
-          </div>
-
-          {/* Fullscreen */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-white/60 hover:text-white hover:bg-[#3d3d3d]"
-                onClick={() => document.documentElement.requestFullscreen?.()}
-              >
-                <Maximize className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent
-              side="bottom"
-              className="bg-[#1f1f1f] border-[#3d3d3d] text-white"
-            >
-              Full screen
-            </TooltipContent>
-          </Tooltip>
-
-          {/* More */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-white/60 hover:text-white hover:bg-[#3d3d3d]"
-              >
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              className="bg-[#292929] border-[#3d3d3d] text-secondary"
-            >
-              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary">
-                Meeting options
-              </DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary">
-                Call health
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-[#3d3d3d]" />
-              <DropdownMenuItem className="hover:bg-[#3d3d3d] focus:bg-[#3d3d3d] hover:text-secondary focus:text-secondary">
-                Report a problem
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <LayoutToggle layout={layout} onLayoutChange={onLayoutChange} />
+          <FullscreenButton />
+          <MoreOptionsMenu />
         </div>
       </motion.header>
     </TooltipProvider>
