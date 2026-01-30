@@ -56,17 +56,17 @@ export function ChatPanel({
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
       className={cn(
-        "w-[360px] h-full bg-[#292929] border-l border-[#3d3d3d] flex flex-col",
+        "w-[360px] bg-muted h-full border-l flex flex-col",
         className,
       )}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-[#3d3d3d]">
-        <h3 className="font-semibold text-white">Meeting chat</h3>
+      <div className="flex items-center justify-between p-3 border-b">
+        <h3 className="font-semibold ">Meeting chat</h3>
         <Button
-          variant="ghost"
+          variant="secondary"
           size="icon"
-          className="h-8 w-8 text-white/70 hover:text-white hover:bg-[#3d3d3d]"
+          className="h-8 w-8"
           onClick={onClose}
         >
           <X className="h-4 w-4" />
@@ -74,8 +74,8 @@ export function ChatPanel({
       </div>
 
       {/* Messages */}
-      <ScrollArea className="flex-1 px-4 py-3" ref={scrollRef}>
-        <div className="space-y-4">
+      <ScrollArea className="flex-1 p-3" ref={scrollRef}>
+        <div className="space-y-3">
           <AnimatePresence>
             {messages.map((message, index) => {
               const isOwn = message.senderId === currentUserId;
@@ -91,9 +91,9 @@ export function ChatPanel({
                     key={message.id}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-center py-2"
+                    className="text-center py-3"
                   >
-                    <span className="text-xs text-white/50">
+                    <span className="text-xs text-muted-foreground">
                       {message.content}
                     </span>
                   </motion.div>
@@ -110,14 +110,14 @@ export function ChatPanel({
                   {showAvatar && (
                     <div className="flex items-center gap-2 mb-1">
                       <Avatar className="h-6 w-6">
-                        <AvatarFallback className="text-[10px] bg-[#6264a7] text-white">
+                        <AvatarFallback className="text-[10px] bg-[#6264a7] ">
                           {message.senderName
                             .split(" ")
                             .map((n) => n[0])
                             .join("")}
                         </AvatarFallback>
                       </Avatar>
-                      <span className="text-sm font-medium text-white">
+                      <span className="text-sm font-medium ">
                         {isOwn ? "You" : message.senderName}
                       </span>
                       <span className="text-xs text-white/40">
@@ -126,7 +126,7 @@ export function ChatPanel({
                     </div>
                   )}
                   <div className={cn("pl-8", !showAvatar && "pt-0.5")}>
-                    <p className="text-sm text-white/90 leading-relaxed">
+                    <p className="text-sm  leading-relaxed">
                       {message.content}
                     </p>
                   </div>
@@ -138,15 +138,15 @@ export function ChatPanel({
       </ScrollArea>
 
       {/* Input */}
-      <div className="p-4 border-t border-[#3d3d3d]">
-        <div className="bg-[#3d3d3d] rounded-lg">
+      <div className="p-3 border-t">
+        <div className="border border-input rounded-lg">
           <div className="flex items-center gap-1 p-2">
             <Input
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Type a message"
-              className="flex-1 border-0 bg-transparent text-white placeholder:text-white/40 focus-visible:ring-0 h-9"
+              className="flex-1 border-0 bg-transparent placeholder:text-input/40 focus-visible:ring-0 h-9"
             />
           </div>
           <div className="flex items-center justify-between px-2 pb-2">
@@ -154,26 +154,27 @@ export function ChatPanel({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 text-white/60 hover:text-white hover:bg-[#4a4a4a]"
+                className="h-8 w-8 text-muted-foreground/60 hover:text-muted-foreground"
               >
                 <Smile className="h-5 w-5" />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 text-white/60 hover:text-white hover:bg-[#4a4a4a]"
+                className="h-8 w-8 text-muted-foreground/60 hover:text-muted-foreground"
               >
                 <AtSign className="h-5 w-5" />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 text-white/60 hover:text-white hover:bg-[#4a4a4a]"
+                className="h-8 w-8 text-muted-foreground/60 hover:text-muted-foreground"
               >
                 <Paperclip className="h-5 w-5" />
               </Button>
             </div>
             <Button
+              variant="secondary"
               size="icon"
               className="h-8 w-8 bg-[#6264a7] hover:bg-[#5254a3]"
               onClick={handleSend}

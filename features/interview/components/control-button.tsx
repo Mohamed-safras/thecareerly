@@ -34,12 +34,11 @@ const ControlButton: React.FC<ControlButtonProps> = ({
         <Button
           size="icon"
           className={cn(
-            "h-12 w-12 text-foreground rounded-md transition-all relative",
+            "h-12 w-12  text-foreground rounded-md transition-all relative",
             danger && "bg-[#c4314b] hover:bg-[#a52a3f]",
             active && !danger && "bg-[#6264a7] hover:bg-[#5254a3]",
             !active && !danger && "bg-[#3d3d3d] hover:bg-[#4a4a4a]",
-            selected &&
-              "ring-2 ring-[#6264a7] ring-offset-2 ring-offset-[#1f1f1f]",
+            selected && "bg-[#6264a7] hover:bg-[#5254a3]",
           )}
           onClick={onClick}
         >
@@ -56,9 +55,7 @@ const ControlButton: React.FC<ControlButtonProps> = ({
         {/* <span className="text-[10px] text-white/80 mt-1.5">{label}</span> */}
       </div>
     </TooltipTrigger>
-    <TooltipContent side="top" className="border-[#3d3d3d] ">
-      {label}
-    </TooltipContent>
+    <TooltipContent side="top">{label}</TooltipContent>
   </Tooltip>
 );
 

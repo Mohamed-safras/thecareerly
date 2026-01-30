@@ -36,27 +36,6 @@ interface InterviewHeaderProps {
   className?: string;
 }
 
-const DROPDOWN_MENU_CLASSES = cn(
-  // Light theme
-  "bg-white border-gray-200",
-  // Dark theme (original)
-  "dark:bg-[#292929] dark:border-[#3d3d3d]",
-);
-
-const DROPDOWN_ITEM_CLASSES = cn(
-  // Light theme
-  "hover:bg-gray-100 focus:bg-gray-100",
-  // Dark theme (original)
-  "dark:hover:bg-[#3d3d3d] dark:focus:bg-[#3d3d3d]",
-);
-
-const TOOLTIP_CLASSES = cn(
-  // Light theme
-  "bg-white border-gray-200 text-gray-900",
-  // Dark theme (original)
-  "dark:bg-[#1f1f1f] dark:border-[#3d3d3d] dark:text-white",
-);
-
 const formatTime = (seconds: number): string => {
   const hrs = Math.floor(seconds / 3600);
   const mins = Math.floor((seconds % 3600) / 60);
@@ -82,34 +61,23 @@ function MeetingInfoDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="bg-transparent hover:bg-transparent gap-1 px-2">
+        <Button variant="secondary" className="gap-1 px-2">
           <span className="font-medium text-sm">{session.title}</span>
           <ChevronDown className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="start"
-        className={cn(DROPDOWN_MENU_CLASSES, "w-72")}
-      >
-        <div
-          className={cn(
-            "p-3 border-b",
-            "border-gray-200 dark:border-[#3d3d3d]",
-          )}
-        >
+      <DropdownMenuContent align="start">
+        <div className={cn("p-3 border-b")}>
           <p className="font-medium">{session.title}</p>
           <p className="text-sm text-foreground mt-1">
             {session.candidate} • {session.position}
           </p>
         </div>
-        <DropdownMenuItem
-          className={DROPDOWN_ITEM_CLASSES}
-          onClick={onCopyLink}
-        >
+        <DropdownMenuItem onClick={onCopyLink}>
           <Copy className="h-4 w-4 mr-2" />
           Copy meeting link
         </DropdownMenuItem>
-        <DropdownMenuItem className={DROPDOWN_ITEM_CLASSES}>
+        <DropdownMenuItem>
           <Info className="h-4 w-4 mr-2" />
           Meeting details
         </DropdownMenuItem>
@@ -135,20 +103,12 @@ interface TimerDisplayProps {
 function TimerDisplay({ status, elapsedTime }: TimerDisplayProps) {
   return (
     <div className="flex items-center gap-3">
-      <div
-        className={cn(
-          "flex items-center gap-2 px-3 py-1.5 rounded-md",
-          // Light theme
-          "bg-gray-100",
-          // Dark theme (original)
-          "dark:bg-[#292929]",
-        )}
-      >
+      <div className={"flex items-center gap-2 px-3 py-1.5 rounded-md"}>
         {status === "in-progress" && (
           <motion.div
             animate={{ opacity: [1, 0.5, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="h-2 w-2 rounded-full bg-[#c4314b]"
+            className="h-2 w-2 rounded-full bg-destructive"
           />
         )}
         <span className="text-sm font-mono">{formatTime(elapsedTime)}</span>
@@ -166,29 +126,16 @@ function LayoutToggle({ layout, onLayoutChange }: LayoutToggleProps) {
   const getButtonClasses = (isActive: boolean) =>
     cn(
       "h-8 w-8 rounded-sm",
-      isActive
-        ? // Active state - same for both themes
-          "bg-[#5254a3] dark:bg-[#6264a7] text-white"
-        : // Inactive state
-          cn(
-            // Light theme
-            "text-gray-500 hover:text-gray-700 hover:bg-gray-200",
-            // Dark theme (original)
-            "dark:text-white/60 dark:hover:text-white dark:hover:bg-[#3d3d3d]",
-          ),
+      isActive && // Active state - same for both themes
+        "bg-[#5254a3]",
     );
 
   return (
-    <div
-      className={cn(
-        "flex items-center rounded-md p-0.5",
-        "bg-gray-100 dark:bg-[#292929]",
-      )}
-    >
+    <div className={"flex items-center rounded-md p-0.5"}>
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            variant="ghost"
+            variant="secondary"
             size="icon"
             className={getButtonClasses(layout === "gallery")}
             onClick={() => onLayoutChange("gallery")}
@@ -196,9 +143,7 @@ function LayoutToggle({ layout, onLayoutChange }: LayoutToggleProps) {
             <Grid2X2 className="h-4 w-4" />
           </Button>
         </TooltipTrigger>
-        <TooltipContent side="bottom" className={TOOLTIP_CLASSES}>
-          Gallery
-        </TooltipContent>
+        <TooltipContent side="bottom">Gallery</TooltipContent>
       </Tooltip>
 
       <Tooltip>
@@ -212,9 +157,7 @@ function LayoutToggle({ layout, onLayoutChange }: LayoutToggleProps) {
             <Rows3 className="h-4 w-4" />
           </Button>
         </TooltipTrigger>
-        <TooltipContent side="bottom" className={TOOLTIP_CLASSES}>
-          Focus
-        </TooltipContent>
+        <TooltipContent side="bottom">Focus</TooltipContent>
       </Tooltip>
     </div>
   );
@@ -227,21 +170,13 @@ function FullscreenButton() {
         <Button
           variant="ghost"
           size="icon"
-          className={cn(
-            "h-8 w-8",
-            // Light theme
-            "text-gray-500 hover:text-gray-700 hover:bg-gray-200",
-            // Dark theme (original)
-            "dark:text-white/60 dark:hover:text-white dark:hover:bg-[#3d3d3d]",
-          )}
+          className={"h-8 w-8"}
           onClick={() => document.documentElement.requestFullscreen?.()}
         >
           <Maximize className="h-4 w-4" />
         </Button>
       </TooltipTrigger>
-      <TooltipContent side="bottom" className={TOOLTIP_CLASSES}>
-        Full screen
-      </TooltipContent>
+      <TooltipContent side="bottom">Full screen</TooltipContent>
     </Tooltip>
   );
 }
@@ -250,34 +185,15 @@ function MoreOptionsMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className={cn(
-            "h-8 w-8",
-            // Light theme
-            "text-gray-500 hover:text-gray-700 hover:bg-gray-200",
-            // Dark theme (original)
-            "dark:text-white/60 dark:hover:text-white dark:hover:bg-[#3d3d3d]",
-          )}
-        >
+        <Button variant="ghost" size="icon" className={"h-8 w-8"}>
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="end"
-        className={cn(DROPDOWN_MENU_CLASSES, "text-secondary")}
-      >
-        <DropdownMenuItem className={DROPDOWN_ITEM_CLASSES}>
-          Meeting options
-        </DropdownMenuItem>
-        <DropdownMenuItem className={DROPDOWN_ITEM_CLASSES}>
-          Call health
-        </DropdownMenuItem>
-        <DropdownMenuSeparator className="bg-gray-200 dark:bg-[#3d3d3d]" />
-        <DropdownMenuItem className={DROPDOWN_ITEM_CLASSES}>
-          Report a problem
-        </DropdownMenuItem>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem>Meeting options</DropdownMenuItem>
+        <DropdownMenuItem>Call health</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>Report a problem</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -312,11 +228,7 @@ export function InterviewHeader({
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         className={cn(
-          "flex items-center justify-between px-4 py-2 border-b",
-          // Light theme
-          "bg-gray-50 border-gray-200",
-          // Dark theme (original)
-          "dark:bg-[#1f1f1f] dark:border-[#3d3d3d]",
+          "flex items-center justify-between bg-muted p-3 border-b",
           className,
         )}
       >

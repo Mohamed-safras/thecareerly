@@ -22,8 +22,6 @@ const InterviewJoinWrapper: React.FC<InterviewJoinProps> = ({
     date: "Friday, Jan 16 • 12:00 PM - 12:30 PM GMT+5:30",
   };
 
-  console.log(loading);
-
   return (
     <div className="min-h-screen flex items-center justify-center p-3">
       <Card className="w-full max-w-5xl p-0 mx-auto overflow-hidden shadow-none">

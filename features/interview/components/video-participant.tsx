@@ -181,7 +181,6 @@ function ParticipantInfo({
           className={cn(
             "flex items-center gap-1 sm:gap-1.5",
             "backdrop-blur-sm rounded",
-            "bg-white/30 dark:bg-transparent",
             "px-1.5 sm:px-2 py-0.5 sm:py-1",
           )}
         >
@@ -191,7 +190,6 @@ function ParticipantInfo({
               "font-medium truncate",
               "max-w-[60px] sm:max-w-[80px] md:max-w-[120px]",
               // Light: dark text, Dark: light text
-              "text-gray-800 dark:text-foreground",
             )}
           >
             {name}
@@ -219,7 +217,7 @@ function MutedIndicator() {
         "flex items-center justify-center",
       )}
     >
-      <MicOff className="h-2 w-2 sm:h-2.5 sm:w-2.5 text-destructive-foreground" />
+      <MicOff className="h-2 w-2 sm:h-2.5 sm:w-2.5" />
     </div>
   );
 }
@@ -228,55 +226,30 @@ function OptionsMenu({ isPinned, isLocal, onPin }: OptionsMenuProps) {
   return (
     <div
       className={cn(
-        "absolute top-2 right-2",
+        "absolute top-1 right-1",
         "opacity-0 group-hover:opacity-100",
         "transition-opacity",
       )}
     >
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="icon" variant="secondary" className="h-7 w-7 rounded">
+          <Button size="icon" variant="secondary" className="h-8 w-8 rounded">
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent
-          align="start"
-          className={cn(
-            // Light theme
-            "bg-white border-gray-200",
-            // Dark theme (original)
-            "dark:bg-[#292929] dark:border-[#3d3d3d]",
-          )}
-        >
-          <DropdownMenuItem
-            onClick={onPin}
-            className={cn(
-              // Light theme
-              "hover:bg-gray-100 focus:bg-gray-100",
-              // Dark theme (original)
-              "dark:hover:bg-[#3d3d3d] dark:focus:bg-[#3d3d3d]",
-            )}
-          >
+        <DropdownMenuContent align="start">
+          <DropdownMenuItem onClick={onPin}>
             {isPinned ? "Unpin" : "Pin"}
           </DropdownMenuItem>
 
-          <DropdownMenuItem
-            className={cn(
-              "hover:bg-gray-100 focus:bg-gray-100",
-              "dark:hover:bg-[#3d3d3d] dark:focus:bg-[#3d3d3d]",
-            )}
-          >
-            Spotlight
-          </DropdownMenuItem>
+          <DropdownMenuItem>Spotlight</DropdownMenuItem>
 
           {!isLocal && (
             <DropdownMenuItem
-              className={cn(
-                "text-destructive hover:text-destructive focus:text-destructive",
-                "hover:bg-gray-100 focus:bg-gray-100",
-                "dark:hover:bg-[#3d3d3d] dark:focus:bg-[#3d3d3d]",
-              )}
+              className={
+                "text-destructive hover:text-destructive focus:text-destructive"
+              }
             >
               Remove from meeting
             </DropdownMenuItem>
@@ -287,10 +260,7 @@ function OptionsMenu({ isPinned, isLocal, onPin }: OptionsMenuProps) {
   );
 }
 
-// ============================================================================
 // Main Component
-// ============================================================================
-
 export function VideoParticipant({
   participant,
   isLocal = false,
@@ -311,7 +281,7 @@ export function VideoParticipant({
       className={cn(
         "relative rounded-md overflow-hidden group h-full w-full",
         // Light: light gray, Dark: original dark gray
-        "bg-gray-200 dark:bg-[#292929]",
+        "bg-muted",
         isPinned && "ring-2 ring-ring",
         className,
       )}
