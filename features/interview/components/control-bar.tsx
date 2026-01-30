@@ -25,10 +25,6 @@ import { cn } from "@/lib/utils";
 import ControlButton from "./control-button";
 import { Separator } from "@/components/ui/separator";
 
-// ============================================================================
-// Types
-// ============================================================================
-
 interface ControlBarProps {
   isMuted: boolean;
   isVideoOn: boolean;
@@ -49,45 +45,7 @@ interface ControlBarProps {
   className?: string;
 }
 
-// ============================================================================
-// Constants
-// ============================================================================
-
-const CONTROL_GROUP_CLASSES = cn(
-  "flex items-center gap-3 rounded-lg p-3",
-  // Light theme
-  "bg-gray-100",
-  // Dark theme (original)
-  "dark:bg-[#292929]",
-);
-
-const DROPDOWN_MENU_CLASSES = cn(
-  "w-56",
-  // Light theme
-  "bg-white border-gray-200",
-  // Dark theme (original)
-  "dark:bg-[#292929] dark:border-[#3d3d3d]",
-);
-
-const DROPDOWN_ITEM_CLASSES = cn(
-  // Light theme
-  "hover:bg-gray-100 focus:bg-gray-100",
-  // Dark theme (original)
-  "dark:hover:bg-[#3d3d3d] dark:focus:bg-[#3d3d3d]",
-);
-
-const SEPARATOR_CLASSES = cn(
-  "mx-3",
-  // Light theme
-  "bg-gray-300",
-  // Dark theme (original)
-  "dark:bg-[#3d3d3d]",
-);
-
-// ============================================================================
 // Sub-components
-// ============================================================================
-
 interface MainControlsProps {
   isVideoOn: boolean;
   isMuted: boolean;
@@ -114,7 +72,7 @@ function MainControls({
   onToggleRecording,
 }: MainControlsProps) {
   return (
-    <div className={CONTROL_GROUP_CLASSES}>
+    <div className={"flex items-center gap-3 rounded-lg p-3"}>
       <ControlButton
         danger={!isVideoOn}
         onClick={onToggleVideo}
@@ -165,38 +123,22 @@ function MoreOptionsDropdown({
       <DropdownMenuTrigger asChild>
         <div className="flex flex-col items-center">
           <Button
+            variant="secondary"
             size="icon"
-            className={cn(
-              "h-11 w-11 rounded-md",
-              // Light theme
-              "bg-gray-200 hover:bg-gray-300 text-gray-700",
-              // Dark theme (original)
-              "dark:bg-[#3d3d3d] dark:hover:bg-[#4a4a4a] dark:text-foreground",
-            )}
+            className={"h-12 w-12 rounded-md"}
           >
-            <MoreHorizontal className="h-5 w-5" />
+            <MoreHorizontal className="h-6 w-6" />
           </Button>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="center" className={DROPDOWN_MENU_CLASSES}>
-        <DropdownMenuItem
-          className={DROPDOWN_ITEM_CLASSES}
-          onClick={onToggleRecording}
-        >
+      <DropdownMenuContent align="center">
+        <DropdownMenuItem onClick={onToggleRecording}>
           {isRecording ? "Stop recording" : "Start recording"}
         </DropdownMenuItem>
-        <DropdownMenuItem className={DROPDOWN_ITEM_CLASSES}>
-          Turn on live captions
-        </DropdownMenuItem>
-        <DropdownMenuSeparator
-          className={cn("bg-gray-200 dark:bg-[#3d3d3d]")}
-        />
-        <DropdownMenuItem className={DROPDOWN_ITEM_CLASSES}>
-          Device settings
-        </DropdownMenuItem>
-        <DropdownMenuItem className={DROPDOWN_ITEM_CLASSES}>
-          Meeting options
-        </DropdownMenuItem>
+        <DropdownMenuItem>Turn on live captions</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>Device settings</DropdownMenuItem>
+        <DropdownMenuItem>Meeting options</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -218,7 +160,7 @@ function SecondaryControls({
   onToggleParticipants,
 }: SecondaryControlsProps) {
   return (
-    <div className={CONTROL_GROUP_CLASSES}>
+    <div className={"flex items-center gap-3 rounded-lg p-3 bg-muted"}>
       <ControlButton
         onClick={onToggleChat}
         icon={MessageSquare}
@@ -248,14 +190,13 @@ function LeaveButton({ onLeave }: LeaveButtonProps) {
     <div className="flex flex-col items-center">
       <Button
         size="icon"
-        className={cn(
-          "rounded-md font-medium text-white",
-          // Same red for both themes
-          "bg-[#c4314b] hover:bg-[#a52a3f]",
-        )}
+        variant="secondary"
+        className={
+          "rounded-md font-medium bg-[#c4314b] hover:bg-[#a52a3f] h-12 w-12"
+        }
         onClick={onLeave}
       >
-        <PhoneOff className="h-5 w-5" />
+        <PhoneOff className="h-6 w-6" />
       </Button>
     </div>
   );
@@ -272,7 +213,7 @@ function RecordingIndicator({ isRecording }: RecordingIndicatorProps) {
     <motion.div
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="absolute left-4 flex items-center gap-2 bg-[#c4314b] px-3 py-1.5 rounded-md text-white"
+      className="absolute left-4 flex items-center gap-2 bg-[#c4314b] px-3 py-1.5 rounded-md"
     >
       <motion.div
         animate={{ opacity: [1, 0.4, 1] }}
@@ -284,10 +225,7 @@ function RecordingIndicator({ isRecording }: RecordingIndicatorProps) {
   );
 }
 
-// ============================================================================
 // Main Component
-// ============================================================================
-
 export function ControlBar({
   isMuted,
   isVideoOn,
@@ -313,11 +251,7 @@ export function ControlBar({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className={cn(
-          "flex items-center justify-center gap-1 px-4 py-3",
-          // Light theme
-          "bg-gray-50",
-          // Dark theme (original)
-          "dark:bg-[#1f1f1f]",
+          "flex items-center bg-muted border-t justify-center gap-1 p-3",
           className,
         )}
       >
@@ -334,7 +268,7 @@ export function ControlBar({
           onToggleRecording={onToggleRecording}
         />
 
-        <Separator orientation="vertical" className={SEPARATOR_CLASSES} />
+        <Separator orientation="vertical" className="mx-3" />
 
         <SecondaryControls
           chatUnread={chatUnread}
@@ -344,7 +278,7 @@ export function ControlBar({
           onToggleParticipants={onToggleParticipants}
         />
 
-        <Separator orientation="vertical" className={SEPARATOR_CLASSES} />
+        <Separator orientation="vertical" className="mx-3" />
 
         <LeaveButton onLeave={onLeave} />
 

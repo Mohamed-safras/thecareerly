@@ -57,12 +57,7 @@ export function InterviewRoom({
   };
 
   return (
-    <div
-      className={cn(
-        "w-full h-screen flex flex-col   dark:bg-[#1a1a1a]",
-        className,
-      )}
-    >
+    <div className={cn("w-full h-screen flex flex-col", className)}>
       {/* Header */}
       <InterviewHeader
         session={session}
@@ -73,7 +68,7 @@ export function InterviewRoom({
       {/* Main content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Video area */}
-        <div className="flex-1 bg-[#141414]">
+        <div className="flex-1">
           <VideoGrid
             participants={participants}
             localParticipantId={currentUserId}
