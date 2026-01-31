@@ -156,8 +156,7 @@ function HandRaiseIndicator({ isVisible }: HandRaiseIndicatorProps) {
       className={cn(
         "absolute top-1 right-1 sm:top-2 sm:right-2",
         "flex items-center gap-1 sm:gap-1.5",
-        // Light: slightly darker purple, Dark: original color
-        "bg-[#5254a3] dark:bg-[#6264a7] text-white",
+        "bg-[#5254a3] dark:bg-[#6264a7]",
         "text-[10px] sm:text-xs",
         "px-1.5 sm:px-2 py-0.5 sm:py-1",
         "rounded",
@@ -189,7 +188,6 @@ function ParticipantInfo({
               "text-[10px] sm:text-xs md:text-xs",
               "font-medium truncate",
               "max-w-[60px] sm:max-w-[80px] md:max-w-[120px]",
-              // Light: dark text, Dark: light text
             )}
           >
             {name}
@@ -217,7 +215,7 @@ function MutedIndicator() {
         "flex items-center justify-center",
       )}
     >
-      <MicOff className="h-2 w-2 sm:h-2.5 sm:w-2.5" />
+      <MicOff className="h-2 w-2 sm:h-2.5 sm:w-2.5 text-muted" />
     </div>
   );
 }

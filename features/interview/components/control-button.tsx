@@ -33,16 +33,16 @@ const ControlButton: React.FC<ControlButtonProps> = ({
       <div className="relative flex flex-col items-center">
         <Button
           size="icon"
+          variant="secondary"
           className={cn(
-            "h-12 w-12  text-foreground rounded-md transition-all relative",
+            "h-12 w-12 rounded-md transition-all relative",
             danger && "bg-[#c4314b] hover:bg-[#a52a3f]",
             active && !danger && "bg-[#6264a7] hover:bg-[#5254a3]",
-            !active && !danger && "bg-[#3d3d3d] hover:bg-[#4a4a4a]",
             selected && "bg-[#6264a7] hover:bg-[#5254a3]",
           )}
           onClick={onClick}
         >
-          <Icon className="h-6 w-6 text-foreground" />
+          <Icon className="h-6 w-6" />
           {badge && badge > 0 && (
             <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-[#c4314b] text-xs flex items-center justify-center">
               {badge > 9 ? "9+" : badge}

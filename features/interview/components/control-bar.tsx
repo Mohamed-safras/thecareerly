@@ -196,7 +196,7 @@ function LeaveButton({ onLeave }: LeaveButtonProps) {
         }
         onClick={onLeave}
       >
-        <PhoneOff className="h-6 w-6" />
+        <PhoneOff className="h-6 w-6 text-muted" />
       </Button>
     </div>
   );
