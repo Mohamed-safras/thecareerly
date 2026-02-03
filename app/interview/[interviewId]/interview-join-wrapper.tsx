@@ -4,6 +4,8 @@ import { Card } from "@/components/ui/card";
 import InterviewActions from "@/features/interview/components/interview-actions";
 import InterviewDetails from "@/features/interview/components/interview-join-details";
 import DeviceCheck from "@/features/media-setup/components/device-check";
+import InterviewIllustration from "@/assets/interview-illustration.jpg";
+import Image from "next/image";
 
 export interface InterviewJoinProps {
   loading: boolean;
@@ -32,10 +34,19 @@ const InterviewJoinWrapper: React.FC<InterviewJoinProps> = ({
             date={interviewData.date}
             duration={interviewData.duration}
           />
+
+          <div className="border rounded-lg">
+            <Image
+              src={InterviewIllustration}
+              alt="Interview Illustration"
+              className="w-full aspect-video mx-auto object-cover rounded-lg"
+            />
+          </div>
+
           <div className="grid md:grid-cols-2 gap-3 mt-3">
             <DeviceCheck />
             {/* Device Selection */}
-            <div className="flex flex-col items-center justify-center space-y-3">
+            <div className="flex flex-col items-center justify-center space-y-3 border rounded-lg">
               <h1 className="text-2xl font-medium">Ready to join ?</h1>
               <span className="text-sm font-medium">No one else is here</span>
               <InterviewActions
