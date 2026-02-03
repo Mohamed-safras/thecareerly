@@ -27,7 +27,7 @@ const InterviewJoinWrapper: React.FC<InterviewJoinProps> = ({
   return (
     <div className="min-h-screen flex items-center justify-center p-3">
       <Card className="w-full max-w-5xl p-0 mx-auto overflow-hidden shadow-none">
-        <div className="p-3 pt-6 space-y-6">
+        <div className="p-3 space-y-3">
           <InterviewDetails
             title={interviewData.title}
             userName={interviewData.userName}
@@ -35,11 +35,11 @@ const InterviewJoinWrapper: React.FC<InterviewJoinProps> = ({
             duration={interviewData.duration}
           />
 
-          <div className="border rounded-lg">
+          <div className="border mx-auto rounded-lg w-120">
             <Image
               src={InterviewIllustration}
               alt="Interview Illustration"
-              className="w-full aspect-video mx-auto object-cover rounded-lg"
+              className="aspect-video object-cover rounded-lg"
             />
           </div>
 
