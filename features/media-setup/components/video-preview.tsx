@@ -53,21 +53,16 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
       <div className="absolute top-2 right-2">
         <Button
           onClick={() => setOpenDeviceSettings(true)}
-          className="w-10 h-10 rounded-full flex items-center justify-center bg-transparent hover:bg-accent/10"
+          className="w-10 h-10 rounded-full flex items-center justify-center bg-muted hover:bg-muted-foreground"
         >
           <EllipsisVertical className="w-5 h-5" />
         </Button>
       </div>
 
-      <div className="absolute bottom-3 right-3">
+      <div className="absolute top-2 left-2">
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button
-              className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-accent/10"
-              style={{
-                backgroundColor: "hsl(0 84% 60%)",
-              }}
-            >
+            <Button className="w-10 h-10 rounded-full flex items-center justify-center bg-muted hover:bg-muted-foreground">
               <Info className="w-5 h-5" />
             </Button>
           </TooltipTrigger>
@@ -95,12 +90,11 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
           {cameraEnabled ? (
             <Video className="w-5 h-5 text-card-foreground" />
           ) : (
-            <VideoOff className="w-5 h-5 text-white" />
+            <VideoOff className="w-5 h-5" />
           )}
         </Button>
         <Button
           onClick={toggleMic}
-          size={"lg"}
           className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
           style={{
             backgroundColor: micEnabled ? "var(--card)" : "hsl(0 84% 60%)",
@@ -109,7 +103,7 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
           {micEnabled ? (
             <Mic className="w-5 h-5 text-card-foreground" />
           ) : (
-            <MicOff className="w-5 h-5 text-white" />
+            <MicOff className="w-5 h-5" />
           )}
         </Button>
       </div>
