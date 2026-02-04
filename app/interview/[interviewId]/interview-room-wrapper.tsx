@@ -298,7 +298,13 @@ const mockMessages: ChatMessage[] = [
   },
 ];
 
-export default function InterviewRoomWrapper() {
+interface InterviewRoomWrapperProps {
+  onEndCall: () => void;
+}
+
+export default function InterviewRoomWrapper({
+  onEndCall,
+}: InterviewRoomWrapperProps) {
   const [messages, setMessages] = useState<ChatMessage[]>(mockMessages);
 
   const handleSendMessage = (content: string) => {
@@ -314,6 +320,7 @@ export default function InterviewRoomWrapper() {
   };
 
   const handleLeave = () => {
+    onEndCall();
     redirect("/");
   };
 
