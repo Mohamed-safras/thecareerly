@@ -269,54 +269,6 @@ const mockParticipants: Participant[] = [
     avatarUrl:
       "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
-  {
-    id: "user-6",
-    name: "Watson",
-    role: "observer",
-    isMuted: true,
-    isVideoOn: false,
-    isScreenSharing: false,
-    isSpeaking: false,
-    initials: "W",
-    avatarUrl:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: "user-6",
-    name: "Watson",
-    role: "observer",
-    isMuted: true,
-    isVideoOn: false,
-    isScreenSharing: false,
-    isSpeaking: false,
-    initials: "W",
-    avatarUrl:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: "user-6",
-    name: "Watson",
-    role: "observer",
-    isMuted: true,
-    isVideoOn: false,
-    isScreenSharing: false,
-    isSpeaking: false,
-    initials: "W",
-    avatarUrl:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: "user-6",
-    name: "Watson",
-    role: "observer",
-    isMuted: true,
-    isVideoOn: false,
-    isScreenSharing: false,
-    isSpeaking: false,
-    initials: "W",
-    avatarUrl:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
 ];
 
 const mockMessages: ChatMessage[] = [
