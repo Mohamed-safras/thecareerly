@@ -52,18 +52,22 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
 
       <div className="absolute top-2 right-2">
         <Button
+          variant="secondary"
           onClick={() => setOpenDeviceSettings(true)}
-          className="w-10 h-10 rounded-full flex items-center justify-center bg-muted hover:bg-muted-foreground"
+          className="w-10 h-10 rounded-full flex items-center justify-center bg-card"
         >
-          <EllipsisVertical className="w-5 h-5" />
+          <EllipsisVertical className="w-5 h-5 text-card-foreground" />
         </Button>
       </div>
 
-      <div className="absolute top-2 left-2">
+      <div className="absolute bottom-3 left-2">
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button className="w-10 h-10 rounded-full flex items-center justify-center bg-muted hover:bg-muted-foreground">
-              <Info className="w-5 h-5" />
+            <Button
+              variant="secondary"
+              className="w-10 h-10 rounded-full flex items-center justify-center bg-card"
+            >
+              <Info className="w-5 h-5 text-card-foreground" />
             </Button>
           </TooltipTrigger>
           <TooltipContent

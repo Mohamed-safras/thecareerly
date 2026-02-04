@@ -27,81 +27,82 @@ const DeviceCheck = () => {
   const [audioLevel, setAudioLevel] = useState(0);
   const [openDeviceSettings, setOpenDeviceSettings] = useState(false);
 
-  const initializeDevices = async () => {
-    try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-      });
-      setStream(mediaStream);
-
-      if (videoRef.current) {
-        videoRef.current.srcObject = mediaStream;
-      }
-
-      setCameraStatus("working");
-      setMicStatus("working");
-
-      // Get device list
-      const devices = await navigator.mediaDevices.enumerateDevices();
-
-      const videoDevices = devices
-        .filter((device) => device.kind === "videoinput")
-        .map((device) => ({
-          deviceId: device.deviceId,
-          label: device.label || `Camera ${device.deviceId.slice(0, 5)}`,
-        }));
-
-      const audioInputDevices = devices
-        .filter((device) => device.kind === "audioinput")
-        .map((device) => ({
-          deviceId: device.deviceId,
-          label: device.label || `Microphone ${device.deviceId.slice(0, 5)}`,
-        }));
-
-      const audioOutputDevices = devices
-        .filter((device) => device.kind === "audiooutput")
-        .map((device) => ({
-          deviceId: device.deviceId,
-          label: device.label || `Speaker ${device.deviceId.slice(0, 5)}`,
-        }));
-
-      setCameras(videoDevices);
-      setMicrophones(audioInputDevices);
-      setSpeakers(audioOutputDevices);
-
-      if (videoDevices.length > 0) setSelectedCamera(videoDevices[0].deviceId);
-      if (audioInputDevices.length > 0)
-        setSelectedMicrophone(audioInputDevices[0].deviceId);
-      if (audioOutputDevices.length > 0)
-        setSelectedSpeaker(audioOutputDevices[0].deviceId);
-
-      // Audio level monitoring
-      const audioContext = new AudioContext();
-      const analyser = audioContext.createAnalyser();
-      const microphone = audioContext.createMediaStreamSource(mediaStream);
-      microphone.connect(analyser);
-      analyser.fftSize = 256;
-
-      const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-      const checkAudioLevel = () => {
-        analyser.getByteFrequencyData(dataArray);
-        const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
-        setAudioLevel(Math.min(100, average * 2));
-        if (stream) {
-          requestAnimationFrame(checkAudioLevel);
-        }
-      };
-      checkAudioLevel();
-    } catch (error) {
-      console.error("Error accessing devices:", error);
-      setCameraStatus("error");
-      setMicStatus("error");
-    }
-  };
-
   useEffect(() => {
+    const initializeDevices = async () => {
+      try {
+        const mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true,
+        });
+        setStream(mediaStream);
+
+        if (videoRef.current) {
+          videoRef.current.srcObject = mediaStream;
+        }
+
+        setCameraStatus("working");
+        setMicStatus("working");
+
+        // Get device list
+        const devices = await navigator.mediaDevices.enumerateDevices();
+
+        const videoDevices = devices
+          .filter((device) => device.kind === "videoinput")
+          .map((device) => ({
+            deviceId: device.deviceId,
+            label: device.label || `Camera ${device.deviceId.slice(0, 5)}`,
+          }));
+
+        const audioInputDevices = devices
+          .filter((device) => device.kind === "audioinput")
+          .map((device) => ({
+            deviceId: device.deviceId,
+            label: device.label || `Microphone ${device.deviceId.slice(0, 5)}`,
+          }));
+
+        const audioOutputDevices = devices
+          .filter((device) => device.kind === "audiooutput")
+          .map((device) => ({
+            deviceId: device.deviceId,
+            label: device.label || `Speaker ${device.deviceId.slice(0, 5)}`,
+          }));
+
+        setCameras(videoDevices);
+        setMicrophones(audioInputDevices);
+        setSpeakers(audioOutputDevices);
+
+        if (videoDevices.length > 0)
+          setSelectedCamera(videoDevices[0].deviceId);
+        if (audioInputDevices.length > 0)
+          setSelectedMicrophone(audioInputDevices[0].deviceId);
+        if (audioOutputDevices.length > 0)
+          setSelectedSpeaker(audioOutputDevices[0].deviceId);
+
+        // Audio level monitoring
+        const audioContext = new AudioContext();
+        const analyser = audioContext.createAnalyser();
+        const microphone = audioContext.createMediaStreamSource(mediaStream);
+        microphone.connect(analyser);
+        analyser.fftSize = 256;
+
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+        const checkAudioLevel = () => {
+          analyser.getByteFrequencyData(dataArray);
+          const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
+          setAudioLevel(Math.min(100, average * 2));
+          if (stream) {
+            requestAnimationFrame(checkAudioLevel);
+          }
+        };
+        checkAudioLevel();
+      } catch (error) {
+        console.error("Error accessing devices:", error);
+        setCameraStatus("error");
+        setMicStatus("error");
+      }
+    };
+
     initializeDevices();
 
     return () => {
@@ -109,6 +110,7 @@ const DeviceCheck = () => {
         stream.getTracks().forEach((track) => track.stop());
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const toggleCamera = () => {
