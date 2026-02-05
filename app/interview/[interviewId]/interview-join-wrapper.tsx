@@ -9,12 +9,12 @@ import Image from "next/image";
 
 export interface InterviewJoinProps {
   loading: boolean;
-  handleJoinInterview: () => void;
+  startCall: () => void;
 }
 
 const InterviewJoinWrapper: React.FC<InterviewJoinProps> = ({
   loading,
-  handleJoinInterview,
+  startCall,
 }) => {
   const interviewData = {
     userName: "Mohamed Safras",
@@ -49,10 +49,7 @@ const InterviewJoinWrapper: React.FC<InterviewJoinProps> = ({
             <div className="flex flex-col items-center justify-center space-y-3 border rounded-lg">
               <h1 className="text-2xl font-medium">Ready to join ?</h1>
               <span className="text-sm font-medium">No one else is here</span>
-              <InterviewActions
-                onJoin={handleJoinInterview}
-                loading={loading}
-              />
+              <InterviewActions onJoin={startCall} loading={loading} />
             </div>
           </div>
         </div>

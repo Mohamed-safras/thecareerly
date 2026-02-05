@@ -350,7 +350,7 @@ export function VideoGrid({
       </div>
 
       {/* Overflow scrollable filmstrip */}
-      <FilmstripBar
+      {/* <FilmstripBar
         participants={overflowParticipants}
         localParticipantId={localParticipantId}
         pinnedId={pinnedId}
@@ -359,7 +359,7 @@ export function VideoGrid({
         filmstripWidth={gridConfig.filmstripWidth}
         gap={gridConfig.gap}
         label={`+${overflowParticipants.length} more`}
-      />
+      /> */}
     </div>
   );
 }
