@@ -29,7 +29,7 @@ const InterviewShareCard = ({
 }: InterviewShareCardProps) => {
   const [copied, setCopied] = useState(false);
 
-  const interviewLink = `https://alcruiter.ai/interview/${interviewId}`;
+  const interviewLink = `http://localhost:5173/interview/${interviewId}`;
 
   const handleCopyLink = async () => {
     try {
@@ -37,7 +37,7 @@ const InterviewShareCard = ({
       setCopied(true);
       toast.success("Link copied to clipboard!");
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
+    } catch {
       toast.error("Failed to copy link");
     }
   };
@@ -45,13 +45,13 @@ const InterviewShareCard = ({
   const handleShare = (platform: string) => {
     const encodedLink = encodeURIComponent(interviewLink);
     const message = encodeURIComponent(
-      "You're invited to an AI Interview. Click the link to get started:"
+      "You're invited to an AI Interview. Click the link to get started:",
     );
 
     switch (platform) {
       case "email":
         window.open(
-          `mailto:?subject=AI Interview Invitation&body=${message}%0A%0A${encodedLink}`
+          `mailto:?subject=AI Interview Invitation&body=${message}%0A%0A${encodedLink}`,
         );
         break;
       case "whatsapp":
