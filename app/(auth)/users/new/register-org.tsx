@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
 import Link from "next/link";
-import { LOGIN } from "@/constents/router-links";
+import { LOGIN } from "@/const/router-links";
 import {
   Form,
   FormControl,

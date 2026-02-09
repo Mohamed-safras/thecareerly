@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Head from "next/head";
 import { gsap } from "gsap"; // 👈 Import GSAP
 import Link from "next/link";
-import { LOGIN } from "@/constents/router-links";
+import { LOGIN } from "@/const/router-links";
 
 // Use currentColor for strokes/fills so SVG adapts to parent text color
 const COLORS = {
@@ -750,7 +750,7 @@ export default function NotFound() {
         yoyo: true,
         repeat: -1,
         stagger: 0.1,
-      }
+      },
     );
     gsap.to("#circlesSmall circle", {
       y: -4,
@@ -814,7 +814,7 @@ export default function NotFound() {
       if (!query) return;
       router.push(query);
     },
-    [query, router]
+    [query, router],
   );
   // ---
 

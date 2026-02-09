@@ -1,4 +1,4 @@
-import { EMPLOYMENT_TYPES } from "@/constents/basic-info-options";
+import { EMPLOYMENT_TYPES } from "@/const/basic-info-options";
 
 export type employmentTypeValue = (typeof EMPLOYMENT_TYPES)[number]["value"];
 
@@ -8,5 +8,5 @@ export const EMPLOYMENT_TYPE_LABEL: Readonly<
   Object.fromEntries(EMPLOYMENT_TYPES.map((o) => [o.value, o.label])) as Record<
     employmentTypeValue,
     string
-  >
+  >,
 );

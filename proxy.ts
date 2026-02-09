@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import { LOGIN } from "./constents/router-links";
+import { LOGIN } from "./const/router-links";
 import { publicRoutes } from "./lib/route-config";
 import { getAccessTokenFromCookies } from "./lib/cookie/cookie-utils";
 

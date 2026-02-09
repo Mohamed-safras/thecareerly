@@ -7,7 +7,7 @@ import AccessCheck from "@/components/access-check";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { useAppDispatch } from "@/store/hooks";
 import { checkAuthStatus } from "@/store/slice/auth-slice";
-import { FORBIDDEN, LOGIN } from "@/constents/router-links";
+import { FORBIDDEN, LOGIN } from "@/const/router-links";
 
 type ProtectedClientShellProps = {
   children: ReactNode;

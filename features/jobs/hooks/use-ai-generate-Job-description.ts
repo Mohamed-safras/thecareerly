@@ -2,10 +2,10 @@ import { JobForm } from "@/interfaces/job";
 import { useMemo, useState, useCallback } from "react";
 import { toast } from "sonner";
 import { extractStatusAndMessage } from "@/lib/error/error-message-extractor";
-import { GENERATE_JOB_DESCRIPTION_API } from "@/constents/router-links";
+import { GENERATE_JOB_DESCRIPTION_API } from "@/const/router-links";
 import { AIPromptInput } from "@/types/gen-AI";
 import { useAppDispatch } from "@/store/hooks";
-import { AI_AGENT_SERVICE_ENDPOINTS } from "@/constents/api-end-points";
+import { AI_AGENT_SERVICE_ENDPOINTS } from "@/const/api-end-points";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 interface AIGenerateJobDescriptionProps {
@@ -50,7 +50,7 @@ const useAIGenerateJobDescription = ({
       workPreference,
       minimumQualificationLevel,
       jobSeniority,
-    ]
+    ],
   );
 
   const generateJobDescription = useCallback(async () => {
@@ -71,7 +71,7 @@ const useAIGenerateJobDescription = ({
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ payload: aiPromptInputs }),
-        }
+        },
       );
 
       if (!response.ok || !response.body) {

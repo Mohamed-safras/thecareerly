@@ -6,13 +6,10 @@ import {
 } from "@reduxjs/toolkit";
 import type { JobForm } from "@/interfaces/job";
 import { localStoreGet, localStoreSet } from "@/lib/common/localstore";
-import {
-  CREATE_JOB_FORM,
-  UPDATE_JOB_FORM,
-} from "@/constents/local-store-values";
+import { CREATE_JOB_FORM, UPDATE_JOB_FORM } from "@/const/local-store-values";
 import { Job } from "@/features/jobs/components/job-posting-card";
 import { axiosClient, extractMessage } from "@/lib/axios/axios-client";
-import { RECRUITMENT_SERVICE_ENDPOINTS } from "@/constents/api-end-points";
+import { RECRUITMENT_SERVICE_ENDPOINTS } from "@/const/api-end-points";
 import { AxiosError } from "axios";
 
 interface JobsState {
@@ -49,7 +46,7 @@ export const fetchJobs = createAsyncThunk(
       limit: number;
       prefetch?: boolean;
     },
-    { rejectWithValue, getState }
+    { rejectWithValue, getState },
   ) => {
     const state = getState() as { jobs: JobsState };
     const requestKey = `${page}-${limit}`;
@@ -82,7 +79,7 @@ export const fetchJobs = createAsyncThunk(
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         console.log("Fetched jobs response:", jobResponse);
@@ -123,14 +120,14 @@ export const fetchJobs = createAsyncThunk(
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
-  }
+  },
 );
 
 export const createJob = createAsyncThunk(
   "jobs/createJob",
   async (
     { formData, token }: { formData: FormData; token: string },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await axiosClient.post(
@@ -141,7 +138,7 @@ export const createJob = createAsyncThunk(
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       requestCache.clear();
@@ -164,12 +161,12 @@ export const createJob = createAsyncThunk(
 
       return rejectWithValue(message);
     }
-  }
+  },
 );
 
 export const updateJob = createAsyncThunk(
   "jobs/updateJob",
-  async ({ formData, token }: { formData: FormData; token: string }) => {}
+  async ({ formData, token }: { formData: FormData; token: string }) => {},
 );
 
 const defaultForm: JobForm = {
@@ -211,11 +208,11 @@ function normalize(input: unknown): JobForm {
 }
 
 const createJobFormInitialState: JobForm = normalize(
-  localStoreGet<JobForm>(CREATE_JOB_FORM, defaultForm)
+  localStoreGet<JobForm>(CREATE_JOB_FORM, defaultForm),
 );
 
 const updateJobFormInitialState: JobForm = normalize(
-  localStoreGet<JobForm>(UPDATE_JOB_FORM, defaultForm)
+  localStoreGet<JobForm>(UPDATE_JOB_FORM, defaultForm),
 );
 
 const initialState: JobsState = {
@@ -261,7 +258,7 @@ const jobsSlice = createSlice({
 
     setCreateJobFormField: <K extends keyof JobForm>(
       state: Draft<JobsState>,
-      action: PayloadAction<{ key: K; value: JobForm[K] }>
+      action: PayloadAction<{ key: K; value: JobForm[K] }>,
     ) => {
       const { key, value } = action.payload;
       (state.createJobForm as JobForm)[key] = value;
@@ -270,7 +267,7 @@ const jobsSlice = createSlice({
 
     setUpdateJobFormField: <K extends keyof JobForm>(
       state: Draft<JobsState>,
-      action: PayloadAction<{ key: K; value: JobForm[K] }>
+      action: PayloadAction<{ key: K; value: JobForm[K] }>,
     ) => {
       const { key, value } = action.payload;
       (state.updateJobForm as JobForm)[key] = value;
@@ -351,7 +348,7 @@ const jobsSlice = createSlice({
 
         if (action.payload?.data?.job) {
           const existingIndex = state.jobs.findIndex(
-            (job) => job.id === action.payload.data.job.id
+            (job) => job.id === action.payload.data.job.id,
           );
           if (existingIndex === -1) {
             state.jobs.unshift(action.payload.data.job);
@@ -385,7 +382,7 @@ const jobsSlice = createSlice({
             total: number;
             prefetch?: boolean;
             fromCache?: boolean;
-          }>
+          }>,
         ) => {
           const { jobs, hasMore, page, total, prefetch, fromCache } =
             action.payload;
@@ -417,7 +414,7 @@ const jobsSlice = createSlice({
           if (prefetch && !state.prefetchedPages.includes(page)) {
             state.prefetchedPages.push(page);
           }
-        }
+        },
       )
       .addCase(fetchJobs.rejected, (state, action) => {
         state.loading = false;

@@ -18,14 +18,14 @@ import JobDescription from "@/features/jobs/components/job-description";
 import PreviewPanel from "@/features/jobs/components/preview-job";
 import BasicInfo from "@/features/jobs/components/basci-info";
 import ScreeningQuestions from "@/features/jobs/components/screen-questions";
-import { editJobPostingSteps } from "@/constents/stepper-item";
+import { editJobPostingSteps } from "@/const/stepper-item";
 import HiringProcesses from "@/features/jobs/components/hiring-processes";
 import HeaderShell from "@/features/jobs/components/hiring-shell";
 import { useSubmitJobForm } from "@/features/jobs/hooks/use-submit-form";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { getJobsPath } from "@/lib/utils";
-import { goNext, goPrev, goTo } from "@/lib/form-validation/job-form";
-import { UPDATE_JOB_FORM } from "@/constents/local-store-values";
+import { goNext, goPrev, goTo } from "@/validators/job-form";
+import { UPDATE_JOB_FORM } from "@/const/local-store-values";
 import {
   setUpdateForm as setFormMerge,
   replaceUpdateForm as replaceForm,
@@ -63,7 +63,7 @@ export default function EditJob({ id }: EditJobProps) {
     dispatch(
       replaceForm({
         ...findJob,
-      })
+      }),
     );
   }, [id, dispatch, jobs]);
 

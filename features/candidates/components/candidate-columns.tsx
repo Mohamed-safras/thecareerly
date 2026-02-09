@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { userStatus } from "@/constents/action-colors";
+import { userStatus } from "@/const/action-colors";
 import {
   Calendar,
   FileText,
@@ -23,13 +23,13 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { USER_STATUS } from "@/constents/user-actions";
+import { USER_STATUS } from "@/const/user-actions";
 import { Candidate } from "@/interfaces/candidate";
 import StarRating from "@/components/star-rating";
 
 // Define the columns as a function that accepts the click handler
 export const createCandidateColumns = (
-  onViewDetails: (candidate: Candidate) => void
+  onViewDetails: (candidate: Candidate) => void,
 ): ColumnDef<Candidate>[] => [
   {
     id: "select",

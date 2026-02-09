@@ -18,20 +18,20 @@ import JobDescription from "@/features/jobs/components/job-description";
 import PreviewPanel from "@/features/jobs/components/preview-job";
 import BasicInfo from "@/features/jobs/components/basci-info";
 import ScreeningQuestions from "@/features/jobs/components/screen-questions";
-import { createJobPostingSteps } from "@/constents/stepper-item";
+import { createJobPostingSteps } from "@/const/stepper-item";
 import HiringProcesses from "@/features/jobs/components/hiring-processes";
 import HeaderShell from "@/features/jobs/components/hiring-shell";
 import { useSubmitJobForm } from "@/features/jobs/hooks/use-submit-form";
 import { useAppSelector } from "@/store/hooks";
 import { getJobsPath } from "@/lib/utils";
-import { CREATE_JOB_FORM } from "@/constents/local-store-values";
+import { CREATE_JOB_FORM } from "@/const/local-store-values";
 import {
   setCreateForm as setFormMerge,
   replaceCreateForm as replaceForm,
   toggleCreatePlatform as togglePlatformAction,
 } from "@/store/slice/jobs-slice";
 
-import { goNext, goPrev, goTo } from "@/lib/form-validation/job-form";
+import { goNext, goPrev, goTo } from "@/validators/job-form";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 
 export default function CreateJob() {

@@ -17,8 +17,8 @@ import {
   Link,
 } from "lucide-react";
 import { UserProfile } from "@/types/user-profile";
-import { userStatus } from "@/constents/action-colors";
-import { USER_STATUS } from "@/constents/user-actions";
+import { userStatus } from "@/const/action-colors";
+import { USER_STATUS } from "@/const/user-actions";
 import { Button } from "@/components/ui/button";
 
 interface UserProfileDialogProps {

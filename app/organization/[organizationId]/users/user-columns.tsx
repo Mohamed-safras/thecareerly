@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { UserProfile } from "@/types/user-profile";
-import { userStatus } from "@/constents/action-colors";
+import { userStatus } from "@/const/action-colors";
 import { CloudUpload, Copy, KeyRound, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
@@ -18,11 +18,11 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { USER_STATUS } from "@/constents/user-actions";
+import { USER_STATUS } from "@/const/user-actions";
 
 // Define the columns as a function that accepts the click handler
 export const createColumns = (
-  handleUpdateUserProfileClick: (user: UserProfile) => void
+  handleUpdateUserProfileClick: (user: UserProfile) => void,
 ): ColumnDef<UserProfile>[] => [
   {
     id: "select",
@@ -198,7 +198,7 @@ export const createColumns = (
       return filterValue.some((filter) =>
         values
           .map((value) => value.toLowerCase())
-          .includes(filter.toLowerCase())
+          .includes(filter.toLowerCase()),
       );
     },
   },

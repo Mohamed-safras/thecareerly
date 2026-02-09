@@ -1,4 +1,4 @@
-import { ALLOWED_VIBES_TYPES } from "@/constents/basic-info-options";
+import { ALLOWED_VIBES_TYPES } from "@/const/basic-info-options";
 
 /** Canonical allowed vibes */
 export const ALLOWED_VIBES = [
@@ -35,6 +35,6 @@ export const ALLOWED_VIBES_TYPE_LABEL: Readonly<
   Record<AllowedVibesTypeValue, string>
 > = Object.freeze(
   Object.fromEntries(
-    ALLOWED_VIBES_TYPES.map((o) => [o.value, o.label])
-  ) as Record<AllowedVibesTypeValue, string>
+    ALLOWED_VIBES_TYPES.map((o) => [o.value, o.label]),
+  ) as Record<AllowedVibesTypeValue, string>,
 );

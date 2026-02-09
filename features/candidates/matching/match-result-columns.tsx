@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { userStatus } from "@/constents/action-colors";
+import { userStatus } from "@/const/action-colors";
 import {
   Calendar,
   FileText,
@@ -23,14 +23,14 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { USER_STATUS } from "@/constents/user-actions";
+import { USER_STATUS } from "@/const/user-actions";
 import StarRating from "@/components/star-rating";
 import { MatchResult } from "@/interfaces/matching";
 
 // Define the columns as a function that accepts the click handler
 export const createMatchResultColumns = (
   handleUpdateUserProfileClick: (candidate: MatchResult) => void,
-  onViewDetails: (candidate: MatchResult) => void
+  onViewDetails: (candidate: MatchResult) => void,
 ): ColumnDef<MatchResult>[] => [
   {
     id: "select",

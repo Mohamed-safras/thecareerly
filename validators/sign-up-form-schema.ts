@@ -1,6 +1,6 @@
 // /types/sign-up-form-schema.ts
 import { z } from "zod";
-import { passwordPolicy } from "../common/form-validation-policy";
+import { passwordPolicy } from "../lib/common/form-validation-policy";
 
 export const organizationSignUpSchema = z
   .object({
@@ -13,7 +13,7 @@ export const organizationSignUpSchema = z
       .min(8, "Password must be at least 8 characters")
       .regex(
         passwordPolicy,
-        "Use upper & lower case letters, a number, and a special character"
+        "Use upper & lower case letters, a number, and a special character",
       ),
     confirmPassword: z.string(),
   })
