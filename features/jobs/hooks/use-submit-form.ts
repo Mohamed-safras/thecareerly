@@ -8,7 +8,7 @@ import { createJob, updateJob } from "@/store/slice/jobs-slice";
 import { AxiosError } from "axios";
 import { extractMessage } from "@/lib/axios/axios-client";
 import { getJobsPath } from "@/lib/utils";
-import { ACTIONS } from "@/constents/actions";
+import { ACTIONS } from "@/const/actions";
 import { JobForm } from "@/interfaces/job";
 
 export function useSubmitJobForm({
@@ -68,7 +68,7 @@ export function useSubmitJobForm({
       errors.push({ path: "description", message: "description is required" });
 
     dispatch(
-      setFieldErrors({ formId: formErrorType + "_job_description", errors })
+      setFieldErrors({ formId: formErrorType + "_job_description", errors }),
     );
     return errors;
   };
@@ -79,7 +79,7 @@ export function useSubmitJobForm({
       !Array.isArray(jobForm.selectionProcess) ||
       jobForm.selectionProcess.some(
         (item) =>
-          typeof item !== "object" || item === null || Array.isArray(item)
+          typeof item !== "object" || item === null || Array.isArray(item),
       )
     ) {
       errors.push({
@@ -88,7 +88,7 @@ export function useSubmitJobForm({
       });
     }
     dispatch(
-      setFieldErrors({ formId: formErrorType + "_selection_process", errors })
+      setFieldErrors({ formId: formErrorType + "_selection_process", errors }),
     );
     return errors;
   };
@@ -106,7 +106,7 @@ export function useSubmitJobForm({
 
   const submit = async (
     JobsState: ACTIONS.DRAFT | ACTIONS.PUBLISH,
-    submissionType: string
+    submissionType: string,
   ) => {
     const errors = [
       ...validateBasicInfo(),
@@ -135,7 +135,7 @@ export function useSubmitJobForm({
 
     formData.append(
       "minimumQualificationLevel",
-      jobForm.minimumQualificationLevel
+      jobForm.minimumQualificationLevel,
     );
 
     formData.append("description", jobForm.description);
@@ -174,13 +174,13 @@ export function useSubmitJobForm({
       const result = await dispatch(
         submissionType === ACTIONS.CREATE
           ? createJob({ formData, token })
-          : updateJob({ formData, token })
+          : updateJob({ formData, token }),
       ).unwrap();
 
       toast.success(
         JobsState === ACTIONS.PUBLISH
           ? "Job published successfully!"
-          : "Draft saved successfully!"
+          : "Draft saved successfully!",
       );
       router.push(jobsPath ? jobsPath : "#");
       return result;
@@ -189,8 +189,8 @@ export function useSubmitJobForm({
         typeof error === "string"
           ? error
           : error instanceof AxiosError
-          ? extractMessage(error.response?.data, error.response?.status)
-          : "Failed to save job. Please try again.";
+            ? extractMessage(error.response?.data, error.response?.status)
+            : "Failed to save job. Please try again.";
 
       toast.error(message);
     }

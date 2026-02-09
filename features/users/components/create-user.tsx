@@ -11,14 +11,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { createUserSteps } from "@/constents/stepper-item";
+import { createUserSteps } from "@/const/stepper-item";
 import { PlusCircle } from "lucide-react";
 import React, { useState } from "react";
 import OnboardingInviteStep from "./onboarding-invite";
 import BasicUserInfo from "./basic-user-info";
 import RolePermissionManager from "./role-permission-manager";
 import ReviewConfirm from "./review-confirm";
-import { goNext, goPrev, goTo } from "@/lib/form-validation/job-form";
+import { goNext, goPrev, goTo } from "@/validators/job-form";
 import { useDispatch } from "react-redux";
 import { resetOnboardingForm } from "@/store/slice/user-onboarding-slice";
 
@@ -87,7 +87,7 @@ const AddUser = () => {
                         currentStep,
                         createUserSteps.length,
                         () => [],
-                        setCurrentStep
+                        setCurrentStep,
                       )
               }
             >

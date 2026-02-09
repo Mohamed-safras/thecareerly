@@ -7,7 +7,7 @@ import {
   axiosClient,
   extractMessage,
 } from "@/lib/axios/axios-client";
-import { extractOrganizationData } from "@/lib/utils/organization-utils";
+import { extractOrganizationData } from "@/utils/organization-utils";
 
 export type AuthState = {
   status: AuthStatus;
@@ -39,7 +39,7 @@ export const registerOrganization = createAsyncThunk(
       password: string;
       confirmPassword: string;
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       console.log("Attempting register for:", organizationEmail);
@@ -51,7 +51,7 @@ export const registerOrganization = createAsyncThunk(
           organizationEmail,
           password,
           confirmPassword,
-        }
+        },
       );
 
       console.log(response);
@@ -60,18 +60,18 @@ export const registerOrganization = createAsyncThunk(
       const axiosError = error as AxiosError;
       const message = extractMessage(
         axiosError.response?.data as string | ApiErrorPayload | null,
-        axiosError.response?.status
+        axiosError.response?.status,
       );
       return rejectWithValue(message);
     }
-  }
+  },
 );
 
 export const loginUser = createAsyncThunk(
   "auth/login",
   async (
     { email, password }: { email: string; password: string },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       console.log("Attempting login for:", email);
@@ -96,11 +96,11 @@ export const loginUser = createAsyncThunk(
       const axiosError = error as AxiosError;
       const message = extractMessage(
         axiosError.response?.data as string | ApiErrorPayload | null,
-        axiosError.response?.status
+        axiosError.response?.status,
       );
       return rejectWithValue(message);
     }
-  }
+  },
 );
 
 // Refresh token and hydrate user
@@ -127,11 +127,11 @@ export const hydrateUserFromSession = createAsyncThunk(
       const axiosError = error as AxiosError;
       const message = extractMessage(
         axiosError.response?.data as string | ApiErrorPayload | null,
-        axiosError.response?.status
+        axiosError.response?.status,
       );
       return rejectWithValue(message);
     }
-  }
+  },
 );
 
 // Logout async thunk
@@ -155,7 +155,7 @@ export const checkAuthStatus = createAsyncThunk(
     } catch {
       return rejectWithValue("Not authenticated");
     }
-  }
+  },
 );
 
 const authSlice = createSlice({

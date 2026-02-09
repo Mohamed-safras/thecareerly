@@ -1,7 +1,7 @@
 // app/403/page.tsx
 import Link from "next/link";
 import { ShieldAlert } from "lucide-react";
-import { LOGIN } from "@/constents/router-links";
+import { LOGIN } from "@/const/router-links";
 import { Button } from "@/components/ui/button";
 
 export default function ForbiddenPage() {

@@ -1,9 +1,9 @@
 "use client";
 
 import { ReactNode } from "react";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/themes/theme-provider";
 import { ReduxProvider } from "@/store/provider";
-import PaletteInitializer from "@/components/color-palate-provider";
+import PaletteInitializer from "@/themes/color-palate-initializer";
 
 export default function AppProviders({ children }: { children: ReactNode }) {
   return (

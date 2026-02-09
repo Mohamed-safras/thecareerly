@@ -16,7 +16,7 @@ import InterviewLink from "./interview-link";
 import {
   InterviewScheduleFormValues,
   interviewScheduleSchema,
-} from "@/lib/form-validation/interview-scheduler-form-schema";
+} from "@/validators/interview-scheduler-form-schema";
 import axios from "axios";
 import { toast } from "sonner";
 import InterviewQuestions, { InterviewQuestion } from "./interview-questions";

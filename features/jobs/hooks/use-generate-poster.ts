@@ -6,7 +6,7 @@ import type { JobForm, PosterPayload } from "@/interfaces/job";
 import { normalizePosterVibe } from "@/types/poster";
 import axios from "axios";
 import { extractStatusAndMessage } from "@/lib/error/error-message-extractor";
-import { GENERATE_POSTER } from "@/constents/router-links";
+import { GENERATE_POSTER } from "@/const/router-links";
 
 interface GeneratePosterResponse {
   type: "poster";
@@ -35,7 +35,7 @@ export function useGeneratePoster({
       posterVibe,
       brandColorHex,
     }),
-    [title, posterNotes, posterVibe, brandColorHex]
+    [title, posterNotes, posterVibe, brandColorHex],
   );
 
   async function generatePoster() {
@@ -95,7 +95,7 @@ export function useGeneratePoster({
               console.warn(
                 "Skipping unsupported file type:",
                 file.type,
-                file.name
+                file.name,
               );
               return false;
             }
@@ -112,7 +112,7 @@ export function useGeneratePoster({
 
         if (validImages.length === 0) {
           setError(
-            "No valid image files selected. Please use JPEG, PNG, or WebP images."
+            "No valid image files selected. Please use JPEG, PNG, or WebP images.",
           );
           return;
         }
@@ -124,7 +124,7 @@ export function useGeneratePoster({
         for (const [key, value] of formData.entries()) {
           if (value instanceof File) {
             console.log(
-              `${key}: File(${value.name}, ${value.size} bytes, ${value.type})`
+              `${key}: File(${value.name}, ${value.size} bytes, ${value.type})`,
             );
           } else {
             console.log(`${key}: "${value}"`);
@@ -139,7 +139,7 @@ export function useGeneratePoster({
               // Let the browser set Content-Type with boundary for multipart
               "Content-Type": undefined,
             },
-          }
+          },
         );
         setPosterImg(data.image);
       } else {
@@ -154,7 +154,7 @@ export function useGeneratePoster({
 
         const { data } = await axiosClient.post<GeneratePosterResponse>(
           GENERATE_POSTER,
-          { payload }
+          { payload },
         );
         setPosterImg(data.image);
       }

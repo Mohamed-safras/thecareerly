@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 
 import KV from "@/features/jobs/components/kv";
-import { jobStatus } from "@/constents/action-colors";
+import { jobStatus } from "@/const/action-colors";
 import { JobForm } from "@/interfaces/job";
 
 export interface Job extends JobForm {

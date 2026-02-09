@@ -2,7 +2,7 @@ import {
   CONNECT_ORGANIZATION_NEW,
   LOGIN,
   FORBIDDEN,
-} from "../constents/router-links";
+} from "../const/router-links";
 
 /**
  * List of routes that are accessible without authentication.

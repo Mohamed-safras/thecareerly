@@ -3,7 +3,7 @@
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { LoginFormScheama } from "@/lib/form-validation/login-form-schema";
+import { LoginFormScheama } from "@/validators/login-form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/store/slice/auth-slice";
@@ -27,7 +27,7 @@ export default function useLogin() {
   const onSubmit = async (values: FormValues) => {
     try {
       const result = await dispatch(
-        loginUser({ email: values.email, password: values.password })
+        loginUser({ email: values.email, password: values.password }),
       ).unwrap();
 
       console.log("Login result:", result);

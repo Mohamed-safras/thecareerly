@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { UseFormReturn } from "react-hook-form";
-import { InterviewScheduleFormValues } from "@/lib/form-validation/interview-scheduler-form-schema";
+import { InterviewScheduleFormValues } from "@/validators/interview-scheduler-form-schema";
 
 export interface InterviewFormProps {
   form: UseFormReturn<InterviewScheduleFormValues>;

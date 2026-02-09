@@ -1,7 +1,7 @@
 "use client";
 
 import AccessCheck from "@/components/access-check";
-import { LOGIN } from "@/constents/router-links";
+import { LOGIN } from "@/const/router-links";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { redirect } from "next/navigation";
 

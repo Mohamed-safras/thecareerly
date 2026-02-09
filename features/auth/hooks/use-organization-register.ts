@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { organizationSignUpSchema } from "@/lib/form-validation/sign-up-form-schema";
+import { organizationSignUpSchema } from "@/validators/sign-up-form-schema";
 import { useAppDispatch } from "@/store/hooks";
 import { registerOrganization } from "@/store/slice/auth-slice";
 
@@ -36,7 +36,7 @@ export default function useOrganizationRegister() {
       organizationName,
       organizationEmail,
       password,
-      confirmPassword
+      confirmPassword,
     );
     try {
       const result = await dispatch(
@@ -45,7 +45,7 @@ export default function useOrganizationRegister() {
           organizationEmail,
           password,
           confirmPassword,
-        })
+        }),
       ).unwrap();
 
       console.log("Register result:", result);
@@ -70,7 +70,7 @@ export default function useOrganizationRegister() {
         console.error("API error:", error.response.data);
       } else {
         toast.error(
-          "Failed to create organization account. Please try again later."
+          "Failed to create organization account. Please try again later.",
         );
         console.error("Unknown error:", error);
       }

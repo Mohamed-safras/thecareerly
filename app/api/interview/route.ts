@@ -1,4 +1,4 @@
-import { QUESTION_PROMPT } from "@/constents/gen-ai-constent";
+import { QUESTION_PROMPT } from "@/const/gen-ai-constent";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     console.log(err);
     return NextResponse.json(
       { error: "Failed to generate questions", details: err },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

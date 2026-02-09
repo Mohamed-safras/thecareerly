@@ -1,6 +1,6 @@
 // src/store/slices/userFormSlice.ts
 
-import { RolePermissionsMap } from "@/constents/user-actions";
+import { RolePermissionsMap } from "@/const/user-actions";
 import { Roles } from "@/lib/role";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
@@ -255,7 +255,7 @@ export const userOnboardingSlice = createSlice({
     // Data Update Actions
     updateBasicInfo: (
       state,
-      action: PayloadAction<Partial<BasicInfoState>>
+      action: PayloadAction<Partial<BasicInfoState>>,
     ) => {
       state.basicInfo = { ...state.basicInfo, ...action.payload };
     },
@@ -264,7 +264,7 @@ export const userOnboardingSlice = createSlice({
     },
     updateOnboardingInfo: (
       state,
-      action: PayloadAction<Partial<OnboardingInfoState>>
+      action: PayloadAction<Partial<OnboardingInfoState>>,
     ) => {
       state.onboardingInfo = { ...state.onboardingInfo, ...action.payload };
     },

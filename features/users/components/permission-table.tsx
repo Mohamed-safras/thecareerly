@@ -13,14 +13,14 @@ import {
   PermissionState,
   RolePermissionsMap,
   formatName,
-} from "@/constents/user-actions";
+} from "@/const/user-actions";
 
 interface PermissionTableProps {
   permissions: RolePermissionsMap;
   onPermissionChange: (
     module: PermissionModule,
     permissionKey: keyof PermissionState,
-    checked: boolean
+    checked: boolean,
   ) => void;
   allModules: PermissionModule[];
   permissionKeys: Array<keyof PermissionState>;

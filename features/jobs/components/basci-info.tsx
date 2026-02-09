@@ -28,14 +28,14 @@ import {
   PAY_PERIOD,
   QUALIFICATION_LEVEL,
   WORK_PREFERENCE,
-} from "@/constents/basic-info-options";
+} from "@/const/basic-info-options";
 import { Separator } from "@/components/ui/separator";
 import { payPeriodTypeValue } from "@/types/pay-period";
 import { currencyOptionTypeValue } from "@/types/currency-option";
 import TypeaheadLocation from "@/components/type-ahead-location";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import type { JobForm } from "@/interfaces/job";
-import { JOB_TITLE_OPTIONS } from "@/constents/local-store-values";
+import { JOB_TITLE_OPTIONS } from "@/const/local-store-values";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
@@ -91,7 +91,7 @@ const BasicInfo = ({
     if (!trimmed) return;
 
     const existing = titleOptions?.find(
-      (option) => option.label.toLowerCase().trim() === trimmed.toLowerCase()
+      (option) => option.label.toLowerCase().trim() === trimmed.toLowerCase(),
     );
 
     if (existing) {
@@ -156,7 +156,7 @@ const BasicInfo = ({
 
   const selectedTitleValue = useMemo(
     () => titleOptions.find((o) => o.label === title)?.value ?? null,
-    [titleOptions, title]
+    [titleOptions, title],
   );
 
   return (
@@ -216,7 +216,7 @@ const BasicInfo = ({
                   dispatch(
                     setFormMerge({
                       workPreference: v as workPreferenceTypeValue,
-                    })
+                    }),
                   )
                 }
               >
@@ -249,7 +249,7 @@ const BasicInfo = ({
                 value={employmentType as employmentTypeValue | undefined}
                 onValueChange={(v) =>
                   dispatch(
-                    setFormMerge({ employmentType: v as employmentTypeValue })
+                    setFormMerge({ employmentType: v as employmentTypeValue }),
                   )
                 }
               >
@@ -284,7 +284,7 @@ const BasicInfo = ({
                 value={jobSeniority as jobSeniorityTypeValue | undefined}
                 onValueChange={(v) =>
                   dispatch(
-                    setFormMerge({ jobSeniority: v as jobSeniorityTypeValue })
+                    setFormMerge({ jobSeniority: v as jobSeniorityTypeValue }),
                   )
                 }
               >
@@ -326,7 +326,7 @@ const BasicInfo = ({
                     setFormMerge({
                       minimumQualificationLevel:
                         v as qualificationLevelTypeValue,
-                    })
+                    }),
                   )
                 }
               >
@@ -375,7 +375,7 @@ const BasicInfo = ({
                             ...jobForm.salary,
                             currency: v as currencyOptionTypeValue,
                           },
-                        })
+                        }),
                       )
                     }
                   >
@@ -403,7 +403,7 @@ const BasicInfo = ({
                             ...jobForm.salary,
                             payPeriod: v as payPeriodTypeValue,
                           },
-                        })
+                        }),
                       )
                     }
                   >
@@ -432,7 +432,7 @@ const BasicInfo = ({
                       dispatch(
                         setFormMerge({
                           salary: { ...jobForm.salary, min: e.target.value },
-                        })
+                        }),
                       )
                     }
                   />
@@ -450,7 +450,7 @@ const BasicInfo = ({
                       dispatch(
                         setFormMerge({
                           salary: { ...jobForm.salary, max: e.target.value },
-                        })
+                        }),
                       )
                     }
                   />

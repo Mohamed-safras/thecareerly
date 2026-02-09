@@ -15,7 +15,7 @@ import {
   ALL_MODULES,
   PERMISSION_KEYS,
   PermissionModule,
-} from "@/constents/user-actions";
+} from "@/const/user-actions";
 import { Roles } from "@/lib/role";
 import { PermissionTable } from "./permission-table";
 import { useDispatch } from "react-redux";
@@ -39,14 +39,14 @@ const RolePermissionManager = () => {
         permissions:
           DEFAULT_PERMISSIONS_MAP[role] ||
           DEFAULT_PERMISSIONS_MAP[Roles.TEAM_MEMBER],
-      })
+      }),
     );
   };
 
   const handlePermissionUpdate = (
     module: PermissionModule,
     permissionKey: keyof PermissionState,
-    checked: boolean
+    checked: boolean,
   ) => {
     dispatch(
       updateRoleInfo({
@@ -57,7 +57,7 @@ const RolePermissionManager = () => {
             [permissionKey]: checked,
           },
         },
-      })
+      }),
     );
   };
 

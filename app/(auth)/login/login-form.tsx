@@ -14,7 +14,7 @@ import {
 import useLogin from "@/features/auth/hooks/use-login";
 import { PasswordInput } from "../../../components/password-input";
 import Link from "next/link";
-import { CONNECT_ORGANIZATION_NEW } from "@/constents/router-links";
+import { CONNECT_ORGANIZATION_NEW } from "@/const/router-links";
 import { FieldGroup } from "../../../components/ui/field";
 import { ArrowRight, GalleryVerticalEnd } from "lucide-react";
 import CarouselSlides, {
