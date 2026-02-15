@@ -1,9 +1,7 @@
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { SelectionProcess } from "@/types/selection-process";
 import { SortableRenderApi } from "@/types/sortable-render-api";
 import { Copy, GripVertical, MoreHorizontal, Trash2 } from "lucide-react";
-import React from "react";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -12,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { SelectionProcess } from "@/types/job";
 
 const HiringProcess = ({
   process,

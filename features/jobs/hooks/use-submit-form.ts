@@ -9,13 +9,13 @@ import { AxiosError } from "axios";
 import { extractMessage } from "@/lib/axios/axios-client";
 import { getJobsPath } from "@/lib/utils";
 import { ACTIONS } from "@/const/actions";
-import { JobForm } from "@/interfaces/job";
+import { JobFormData } from "@/interfaces/job";
 
 export function useSubmitJobForm({
   jobForm,
   formErrorType,
 }: {
-  jobForm: JobForm;
+  jobForm: JobFormData;
   formErrorType: string;
 }) {
   const [postingType, setPostingType] = useState<
@@ -41,20 +41,20 @@ export function useSubmitJobForm({
         path: "workPreference",
         message: "Work preference is required",
       });
-    if (!jobForm.employmentType)
+    if (!jobForm.jobType)
       errors.push({
-        path: "employmentType",
-        message: "Employment type is required",
+        path: "jobType",
+        message: "Job type is required",
       });
-    if (!jobForm.jobSeniority)
+    if (!jobForm.experienceLevel)
       errors.push({
-        path: "jobSeniority",
-        message: "Job seniority is required",
+        path: "experienceLevel",
+        message: "Experience Level is required",
       });
-    if (!jobForm.minimumQualificationLevel)
+    if (!jobForm.educationLevel)
       errors.push({
-        path: "minimumQualificationLevel",
-        message: "Minimum Qualification Level is required",
+        path: "educationLevel",
+        message: "Education Level is required",
       });
 
     dispatch(setFieldErrors({ formId: formErrorType + "_basic_info", errors }));
@@ -130,20 +130,20 @@ export function useSubmitJobForm({
     formData.append("title", jobForm.title);
     formData.append("location", jobForm.location);
     formData.append("workPreference", jobForm.workPreference);
-    formData.append("employmentType", jobForm.employmentType);
-    formData.append("jobSeniority", jobForm.jobSeniority);
+    formData.append("employmentType", jobForm.jobType);
+    formData.append("jobSeniority", jobForm.experienceLevel);
 
-    formData.append(
-      "minimumQualificationLevel",
-      jobForm.minimumQualificationLevel,
-    );
+    formData.append("minimumQualificationLevel", jobForm.educationLevel);
 
     formData.append("description", jobForm.description);
 
-    formData.append("scheduleDate", jobForm.scheduleDate); // "YYYY-MM-DDTHH:mm"
+    formData.append(
+      "scheduleDate",
+      jobForm.scheduledDate || Date.now().toString(),
+    ); // "YYYY-MM-DDTHH:mm"
 
-    jobForm.facilities.forEach((facility) => {
-      formData.append("facilities[]", facility);
+    jobForm.benefits.forEach((benifit) => {
+      formData.append("benefits[]", benifit);
     });
 
     formData.append("salary", JSON.stringify(jobForm.salary));
@@ -152,7 +152,7 @@ export function useSubmitJobForm({
       formData.append("selectedPlatforms[]", platform);
     });
 
-    jobForm.questions.forEach((question) => {
+    jobForm.screeningQuestions.forEach((question) => {
       formData.append("questions[]", JSON.stringify(question));
     });
 

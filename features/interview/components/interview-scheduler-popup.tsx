@@ -19,7 +19,8 @@ import {
 } from "@/validators/interview-scheduler-form-schema";
 import axios from "axios";
 import { toast } from "sonner";
-import InterviewQuestions, { InterviewQuestion } from "./interview-questions";
+import { InterviewQuestion } from "@/interfaces/job";
+import InterviewQuestions from "./interview-questions";
 
 export interface InterviewSchedulerPopupProps {
   isDialogOpen: boolean;

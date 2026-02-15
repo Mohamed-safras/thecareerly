@@ -1,4 +1,4 @@
-import { CURRENCY_OPTIONS } from "@/const/basic-info-options";
+import { CURRENCY_OPTIONS } from "@/const/basic-job-info-options-value";
 
 export type currencyOptionTypeValue =
   (typeof CURRENCY_OPTIONS)[number]["value"];

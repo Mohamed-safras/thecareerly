@@ -1,10 +1,9 @@
-import { ExperienceLevel, JobType, PayPeriod } from "@/types/job";
-
-export type SelectFieldOptions = { value: string; label: string };
-
-type JobTypeOption = { value: JobType; label: string };
-type ExprerienceLevelOption = { value: ExperienceLevel; label: string };
-type PayPeriodOption = { value: PayPeriod; label: string };
+import {
+  ExprerienceLevelOption,
+  JobTypeOption,
+  PayPeriodOption,
+  SelectFieldOptions,
+} from "@/types/job";
 
 export const JOB_TYPES: Readonly<JobTypeOption[]> = Object.freeze([
   { value: "full-time", label: "Full-time" },
@@ -242,3 +241,11 @@ export const CURRENCY_OPTIONS: Readonly<SelectFieldOptions[]> = Object.freeze([
   { value: "ZMW", label: "ZMW - Zambian Kwacha" },
   { value: "ZWL", label: "ZWL - Zimbabwean Dollar" },
 ]);
+
+export const ALLOWED_VIBES = [
+  "",
+  "professional",
+  "modern",
+  "minimal",
+  "vibrant",
+] as const;

@@ -1,6 +1,15 @@
-import { ExperienceLevel, JobType } from "@/types/job";
-import { PosterVibe } from "@/types/poster";
-import { SelectionProcess } from "@/types/selection-process";
+import {
+  ApprovalStatus,
+  ComplianceCheckCategory,
+  ComplianceCheckStatus,
+  ExperienceLevel,
+  JobType,
+  MediaAttachmentStatus,
+  PayPeriod,
+  PosterVibe,
+  ScreeningQuestionType,
+} from "@/types/job";
+import { SelectionProcess } from "@/types/job";
 
 export interface JobFormData {
   title: string;
@@ -24,7 +33,7 @@ export interface JobFormData {
   screeningQuestions: ScreeningQuestion[];
   documentRequirements: DocumentRequirements;
   complianceChecks: ComplianceCheck[];
-  approvalStatus: "none" | "pending" | "approved" | "rejected";
+  approvalStatus: ApprovalStatus;
   approvalNotes: string;
   scheduledDate?: string;
   publishToCareerSite: boolean;
@@ -54,14 +63,14 @@ export interface SalaryRange {
   min: number;
   max: number;
   currency: string;
-  payPeriod: ;
+  payPeriod: PayPeriod;
   showOnPosting: boolean;
 }
 
 export interface ScreeningQuestion {
   id: string;
   question: string;
-  type: "text" | "yes_no" | "multiple_choice" | "file_upload";
+  type: ScreeningQuestionType;
   required: boolean;
   options?: string[];
   isKnockout?: boolean;
@@ -78,19 +87,17 @@ export interface ComplianceCheck {
   id: string;
   label: string;
   description: string;
-  status: "pass" | "fail" | "warning" | "pending";
-  category: "bias" | "legal" | "gdpr" | "inclusive";
+  status: ComplianceCheckStatus;
+  category: ComplianceCheckCategory;
 }
-
 export interface MediaAttachment {
   id: string;
   name: string;
   size: number;
   type: string;
   progress: number;
-  status: "uploading" | "complete" | "error";
+  status: MediaAttachmentStatus;
 }
-
 export interface JobTemplate {
   id: string;
   name: string;
@@ -98,4 +105,9 @@ export interface JobTemplate {
   department: string;
   tags: string[];
   prefill: Partial<JobFormData>;
+}
+
+export interface InterviewQuestion {
+  question: string;
+  type: string;
 }

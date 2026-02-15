@@ -1,10 +1,6 @@
 import CircleSpinner from "@/components/circlespinner";
+import { InterviewQuestion } from "@/interfaces/job";
 import React from "react";
-
-export interface InterviewQuestion {
-  question: string;
-  type: string;
-}
 
 export interface InterviewQuestionsProps {
   generating: boolean;

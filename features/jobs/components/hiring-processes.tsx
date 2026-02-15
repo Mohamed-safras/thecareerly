@@ -2,22 +2,22 @@ import SortableList from "@/components/sortable-list";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAppDispatch } from "@/store/hooks";
-import { JobForm } from "@/interfaces/job";
-import { SelectionProcess } from "@/types/selection-process";
+import { JobFormData } from "@/interfaces/job";
 import React, { useEffect } from "react";
 import HiringProcess from "@/features/jobs/components/hiring-process";
 import { localStoreGet, localStoreSet } from "@/lib/common/localstore";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { SelectionProcess } from "@/types/job";
 
 const uid = () => Math.random().toString(36).slice(2, 9);
 
 export interface HiringProcessProps {
-  jobForm: JobForm;
+  jobForm: JobFormData;
   formType: string;
-  setFormMerge: ActionCreatorWithPayload<Partial<JobForm>>;
-  replaceForm: ActionCreatorWithPayload<JobForm>;
+  setFormMerge: ActionCreatorWithPayload<Partial<JobFormData>>;
+  replaceForm: ActionCreatorWithPayload<JobFormData>;
 }
 
 const HiringProcesses = ({
@@ -35,25 +35,25 @@ const HiringProcesses = ({
           ...jobForm.selectionProcess,
           { id: uid(), name: "", description: "" },
         ],
-      })
+      }),
     );
 
   const remove = (id: string) =>
     dispatch(
       setFormMerge({
         selectionProcess: jobForm.selectionProcess.filter(
-          (process) => process.id !== id
+          (process) => process.id !== id,
         ),
-      })
+      }),
     );
 
   const patch = (id: string, changes: Partial<SelectionProcess>) =>
     dispatch(
       setFormMerge({
         selectionProcess: jobForm.selectionProcess.map((process) =>
-          process.id === id ? { ...process, ...changes } : process
+          process.id === id ? { ...process, ...changes } : process,
         ),
-      })
+      }),
     );
 
   const handleReorder = (next: SelectionProcess[]) =>
@@ -64,7 +64,7 @@ const HiringProcesses = ({
       setFormMerge({
         selectionProcess: (() => {
           const i = jobForm.selectionProcess.findIndex(
-            (process) => process.id === id
+            (process) => process.id === id,
           );
           if (i < 0) return jobForm.selectionProcess;
           const copy = { ...jobForm.selectionProcess[i], id: uid() };
@@ -72,17 +72,17 @@ const HiringProcesses = ({
           next.splice(i + 1, 0, copy);
           return next;
         })(),
-      })
+      }),
     );
 
   useEffect(() => {
-    const stored = localStoreGet<JobForm>(formType, jobForm);
+    const stored = localStoreGet<JobFormData>(formType, jobForm);
     dispatch(replaceForm(stored));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    localStoreSet<JobForm>(formType, {
+    localStoreSet<JobFormData>(formType, {
       ...jobForm,
       selectionProcess: jobForm.selectionProcess,
     });

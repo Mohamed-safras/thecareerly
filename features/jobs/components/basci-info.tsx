@@ -28,7 +28,7 @@ import {
   PAY_PERIOD,
   WORK_PREFERENCE,
   EDUCATION_LEVEL,
-} from "@/const/basic-info-options";
+} from "@/const/basic-job-info-options-value";
 import { Separator } from "@/components/ui/separator";
 import { payPeriodTypeValue } from "@/types/pay-period";
 import { currencyOptionTypeValue } from "@/types/currency-option";
