@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { AnswerType, Question } from "@/types/question";
+import { InterviewQuestion } from "@/interfaces/job";
 import { SortableRenderApi } from "@/types/sortable-render-api";
 import { Copy, GripVertical, MoreHorizontal, Trash2 } from "lucide-react";
 
@@ -28,9 +28,9 @@ export default function QuestionRow({
   dragHandle,
   isDragging,
 }: {
-  question: Question;
+  question: InterviewQuestion;
   index: number;
-  onChange: (patch: Partial<Question>) => void;
+  onChange: (patch: Partial<InterviewQuestion>) => void;
   onDelete: () => void;
   onDuplicate: () => void;
   dragHandle: SortableRenderApi; // use .attributes & .listeners on the handle button
@@ -90,8 +90,8 @@ export default function QuestionRow({
 
           <div className="grid gap-3">
             <Input
-              value={question.prompt}
-              onChange={(e) => onChange({ prompt: e.target.value })}
+              value={question.question}
+              onChange={(event) => onChange({ question: event.target.value })}
               placeholder="Type your question here…"
             />
 
@@ -101,7 +101,7 @@ export default function QuestionRow({
               </Label>
               <Select
                 value={question.type}
-                onValueChange={(v: AnswerType) => onChange({ type: v })}
+                onValueChange={(value: string) => onChange({ type: value })}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select an option" />

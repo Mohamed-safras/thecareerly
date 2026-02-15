@@ -2,11 +2,11 @@
 
 import { useMemo, useState } from "react";
 import { axiosClient } from "@/lib/axios/axios-client";
-import type { JobForm, PosterPayload } from "@/interfaces/job";
-import { normalizePosterVibe } from "@/types/poster";
+import type { JobFormData, PosterPayload } from "@/interfaces/job";
 import axios from "axios";
 import { extractStatusAndMessage } from "@/lib/error/error-message-extractor";
 import { GENERATE_POSTER } from "@/const/router-links";
+import { normalizePosterVibe } from "@/utils/job";
 
 interface GeneratePosterResponse {
   type: "poster";
@@ -20,9 +20,7 @@ export function useGeneratePoster({
   title,
   posterNotes,
   posterVibe,
-
-  brandColorHex,
-}: JobForm) {
+}: JobFormData) {
   const [busyPoster, setBusyPoster] = useState(false);
   const [posterImg, setPosterImg] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -33,9 +31,8 @@ export function useGeneratePoster({
       title,
       posterNotes,
       posterVibe,
-      brandColorHex,
     }),
-    [title, posterNotes, posterVibe, brandColorHex],
+    [title, posterNotes, posterVibe],
   );
 
   async function generatePoster() {

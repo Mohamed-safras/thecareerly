@@ -2,10 +2,11 @@
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { cn, getJobsPath } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { CirclePlus, Import } from "lucide-react";
 import { useAppSelector } from "@/store/hooks";
 import Link from "next/link";
+import { getJobsPath } from "@/utils/generate-path";
 
 type Props = {
   onImport?: () => void;
@@ -16,7 +17,7 @@ export default function JobsOpeningHeader({ onImport, className }: Props) {
   const { user } = useAppSelector(({ auth }) => auth);
 
   const jobsPath = getJobsPath(user?.organizationId, user?.teamId);
-
+  console.log(jobsPath);
   return (
     <div className={cn("w-full py-3", className)}>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -32,7 +33,11 @@ export default function JobsOpeningHeader({ onImport, className }: Props) {
               Import
             </span>
           </Button>
-          <Link href={jobsPath ? `${jobsPath}/create` : "#"}>
+          <Link
+            href={
+              "/organization/14d472ab-c06b-439b-84aa-303d0390182b/jobs/create"
+            }
+          >
             <Button className="relative inline-flex w-full sm:w-fit overflow-hidden rounded-lg p-[1px] focus:outline-none bg-transparent border-0 hover:bg-transparent">
               <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#272A3C_0%,#6971A2_50%,#272A3C_100%)]" />
               <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-[#161A31] px-7 py-2 text-sm font-semibold text-white backdrop-blur-3xl gap-2">

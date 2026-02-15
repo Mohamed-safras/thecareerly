@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -14,36 +14,36 @@ import { Combobox, type ComboItem } from "@/components/combobox";
 import { localStoreGet, localStoreSet } from "@/lib/common/localstore";
 import { isComboItemArray, slugify } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { employmentTypeValue } from "@/types/employment";
+import { jobTypeValue } from "@/types/employment";
 import { workPreferenceTypeValue } from "@/types/work-arrangments";
 import { AlertCircle } from "lucide-react";
-import { jobSeniorityTypeValue } from "@/types/job-seiority";
-import { qualificationLevelTypeValue } from "@/types/qulification-level";
+import { experienceLevelValue } from "@/types/experience-level";
+import { educationLevelTypeValue } from "@/types/qulification-level";
 import CheckboxGroup from "@/components/check-box-group";
 import {
   CURRENCY_OPTIONS,
-  EMPLOYMENT_TYPES,
+  JOB_TYPES,
   FACILITY_OPTIONS,
-  JOB_SENIORITY,
+  EXPRIENCE_LEVEL,
   PAY_PERIOD,
-  QUALIFICATION_LEVEL,
   WORK_PREFERENCE,
-} from "@/const/basic-info-options";
+  EDUCATION_LEVEL,
+} from "@/const/basic-job-info-options-value";
 import { Separator } from "@/components/ui/separator";
 import { payPeriodTypeValue } from "@/types/pay-period";
 import { currencyOptionTypeValue } from "@/types/currency-option";
 import TypeaheadLocation from "@/components/type-ahead-location";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import type { JobForm } from "@/interfaces/job";
+import type { JobFormData } from "@/interfaces/job";
 import { JOB_TITLE_OPTIONS } from "@/const/local-store-values";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 export interface BasicInfoProps {
-  jobForm: JobForm;
+  jobForm: JobFormData;
   formType: string;
-  setFormMerge: ActionCreatorWithPayload<Partial<JobForm>>;
-  replaceForm: ActionCreatorWithPayload<JobForm>;
+  setFormMerge: ActionCreatorWithPayload<Partial<JobFormData>>;
+  replaceForm: ActionCreatorWithPayload<JobFormData>;
   formErrorType: string;
 }
 
@@ -63,11 +63,11 @@ const BasicInfo = ({
 
   const {
     title,
-    employmentType,
+    jobType,
     workPreference,
-    jobSeniority,
-    facilities,
-    minimumQualificationLevel,
+    experienceLevel,
+    benefits,
+    educationLevel,
     location,
     salary: { min, max, currency, payPeriod },
   } = jobForm;
@@ -118,7 +118,7 @@ const BasicInfo = ({
   // Form hydration & persistence (unchanged)
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
-    const stored = localStoreGet<JobForm>(formType, jobForm);
+    const stored = localStoreGet<JobFormData>(formType, jobForm);
     console.log(stored);
     dispatch(replaceForm(stored));
     setHydrated(true);
@@ -127,26 +127,26 @@ const BasicInfo = ({
 
   useEffect(() => {
     if (!hydrated) return;
-    localStoreSet<JobForm>(formType, {
+    localStoreSet<JobFormData>(formType, {
       ...jobForm,
       title,
-      employmentType,
+      jobType,
       workPreference,
-      jobSeniority,
-      facilities,
-      minimumQualificationLevel,
+      experienceLevel,
+      benefits,
+      educationLevel,
       location,
-      salary: { min, max, currency, payPeriod },
+      salary: { min, max, currency, payPeriod, showOnPosting: true },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     hydrated,
     title,
-    employmentType,
+    jobType,
     workPreference,
-    jobSeniority,
-    facilities,
-    minimumQualificationLevel,
+    experienceLevel,
+    benefits,
+    experienceLevel,
     location,
     min,
     max,
@@ -242,22 +242,20 @@ const BasicInfo = ({
               )}
             </div>
 
-            {/* employmenet type */}
+            {/* job type */}
             <div className="space-y-1.5">
-              <Label htmlFor="employment-type">Employment Type</Label>
+              <Label htmlFor="job-type">Job Type</Label>
               <Select
-                value={employmentType as employmentTypeValue | undefined}
+                value={jobType as jobTypeValue | undefined}
                 onValueChange={(v) =>
-                  dispatch(
-                    setFormMerge({ employmentType: v as employmentTypeValue }),
-                  )
+                  dispatch(setFormMerge({ jobType: v as jobTypeValue }))
                 }
               >
-                <SelectTrigger id="employment-type" className="w-full">
+                <SelectTrigger id="job-type" className="w-full">
                   <SelectValue placeholder="Select type..." />
                 </SelectTrigger>
                 <SelectContent>
-                  {EMPLOYMENT_TYPES.map((opt) => (
+                  {JOB_TYPES.map((opt) => (
                     <SelectItem key={opt.value} value={opt.value}>
                       {opt.label}
                     </SelectItem>
@@ -281,10 +279,12 @@ const BasicInfo = ({
             <div className="space-y-1.5">
               <Label htmlFor="job-seiority">Job Seiority</Label>
               <Select
-                value={jobSeniority as jobSeniorityTypeValue | undefined}
+                value={experienceLevel as experienceLevelValue | undefined}
                 onValueChange={(v) =>
                   dispatch(
-                    setFormMerge({ jobSeniority: v as jobSeniorityTypeValue }),
+                    setFormMerge({
+                      experienceLevel: v as experienceLevelValue,
+                    }),
                   )
                 }
               >
@@ -292,7 +292,7 @@ const BasicInfo = ({
                   <SelectValue placeholder="Select job seiority..." />
                 </SelectTrigger>
                 <SelectContent>
-                  {JOB_SENIORITY?.map((opt) => (
+                  {EXPRIENCE_LEVEL?.map((opt) => (
                     <SelectItem key={opt.value} value={opt.value}>
                       {opt.label}
                     </SelectItem>
@@ -316,16 +316,11 @@ const BasicInfo = ({
                 Minimum Qualification Level
               </Label>
               <Select
-                value={
-                  minimumQualificationLevel as
-                    | qualificationLevelTypeValue
-                    | undefined
-                }
-                onValueChange={(v) =>
+                value={educationLevel as educationLevelTypeValue | undefined}
+                onValueChange={(value) =>
                   dispatch(
                     setFormMerge({
-                      minimumQualificationLevel:
-                        v as qualificationLevelTypeValue,
+                      educationLevel: value as educationLevelTypeValue,
                     }),
                   )
                 }
@@ -334,7 +329,7 @@ const BasicInfo = ({
                   <SelectValue placeholder="Select type..." />
                 </SelectTrigger>
                 <SelectContent>
-                  {QUALIFICATION_LEVEL.map((opt) => (
+                  {EDUCATION_LEVEL.map((opt) => (
                     <SelectItem key={opt.value} value={opt.value}>
                       {opt.label}
                     </SelectItem>
@@ -396,12 +391,12 @@ const BasicInfo = ({
                   <Label htmlFor="payPeriod">Pay Period</Label>
                   <Select
                     value={payPeriod as payPeriodTypeValue | undefined}
-                    onValueChange={(v) =>
+                    onValueChange={(value) =>
                       dispatch(
                         setFormMerge({
                           salary: {
                             ...jobForm.salary,
-                            payPeriod: v as payPeriodTypeValue,
+                            payPeriod: value as payPeriodTypeValue,
                           },
                         }),
                       )
@@ -428,10 +423,13 @@ const BasicInfo = ({
                     inputMode="numeric"
                     placeholder="Min"
                     value={min}
-                    onChange={(e) =>
+                    onChange={(event) =>
                       dispatch(
                         setFormMerge({
-                          salary: { ...jobForm.salary, min: e.target.value },
+                          salary: {
+                            ...jobForm.salary,
+                            min: +event.target.value,
+                          },
                         }),
                       )
                     }
@@ -446,10 +444,13 @@ const BasicInfo = ({
                     inputMode="numeric"
                     placeholder="Max"
                     value={max}
-                    onChange={(e) =>
+                    onChange={(event) =>
                       dispatch(
                         setFormMerge({
-                          salary: { ...jobForm.salary, max: e.target.value },
+                          salary: {
+                            ...jobForm.salary,
+                            max: +event.target.value,
+                          },
                         }),
                       )
                     }
@@ -465,8 +466,8 @@ const BasicInfo = ({
 
             <CheckboxGroup
               options={FACILITY_OPTIONS}
-              value={facilities ?? []}
-              onChange={(next) => dispatch(setFormMerge({ facilities: next }))}
+              value={benefits ?? []}
+              onChange={(next) => dispatch(setFormMerge({ benefits: next }))}
               columns={2}
             />
           </fieldset>

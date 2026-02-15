@@ -1,8 +1,6 @@
 "use client";
 
-import React from "react";
 import { Button } from "@/components/ui/button";
-import MarkdownEditor from "@/components/markdowneditor";
 import { AnimatedIconButton } from "@/components/animatediconbutton";
 import CircleSpinner from "@/components/circlespinner";
 import useAIGenerateJobDescription from "@/features/jobs/hooks/use-ai-generate-Job-description";
@@ -16,12 +14,13 @@ import { Switch } from "@/components/ui/switch";
 import AIPosterGenerator from "./AI-poster-generator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { setFieldErrors } from "@/store/slice/form-error-slice";
-import { JobForm } from "@/interfaces/job";
+import { JobFormData } from "@/interfaces/job";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import MarkdownEditor from "@/components/mark-down-editor";
 
 export interface JobDescriptionProps {
-  jobForm: JobForm;
-  setFormMerge: ActionCreatorWithPayload<Partial<JobForm>>;
+  jobForm: JobFormData;
+  setFormMerge: ActionCreatorWithPayload<Partial<JobFormData>>;
   formErrorType: string;
 }
 
@@ -104,7 +103,7 @@ const JobDescription = ({
                           message: "description is required",
                         },
                       ],
-                    })
+                    }),
                   );
                 }
                 if (!generating && (description ?? "") !== v) {

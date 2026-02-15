@@ -7,14 +7,14 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
   ssr: false,
 });
 
-type MarkDownEditorProps = {
+interface MarkDownEditorProps {
   value?: string;
   onChange: (v: string) => void;
   placeholder?: string;
   height?: number;
   children?: React.ReactNode;
   classNames?: string;
-};
+}
 
 const MarkdownEditor: React.FC<MarkDownEditorProps> = ({
   value,

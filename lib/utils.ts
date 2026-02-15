@@ -30,14 +30,14 @@ export function isComboItemArray(value: unknown): value is ComboItem[] {
       (item) =>
         item &&
         typeof (item as ComboItem).label === "string" &&
-        typeof (item as ComboItem).value === "string"
+        typeof (item as ComboItem).value === "string",
     )
   );
 }
 
 export function createQueryString(
   params: Record<string, string>,
-  searchParams?: URLSearchParams
+  searchParams?: URLSearchParams,
 ) {
   const newSearchParams = new URLSearchParams(searchParams?.toString());
 
@@ -46,18 +46,6 @@ export function createQueryString(
   });
 
   return newSearchParams.toString();
-}
-
-/**
- * Returns the jobs path for a given organizationId and teamId.
- * Usage: getJobsPath(organizationId, teamId)
- */
-export function getJobsPath(
-  organizationId?: string | null,
-  teamId?: string | null
-) {
-  if (!organizationId || !teamId) return null;
-  return `/organization/${organizationId}/team/${teamId}/jobs`;
 }
 
 export function getTeamsPath(organizationId?: string) {

@@ -12,13 +12,13 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { toast } from "sonner";
-import Platforms from "@/components/platforms";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 import { useSubmitJobForm } from "@/features/jobs/hooks/use-submit-form";
 import { ACTIONS } from "@/const/actions";
 import { JobForm } from "@/interfaces/job";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import Platforms from "@/components/platforms";
 
 interface SchedulePanelProps {
   setCurrentStep: Dispatch<SetStateAction<number>>;
