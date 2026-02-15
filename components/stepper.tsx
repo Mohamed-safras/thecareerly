@@ -21,7 +21,7 @@ export default function Stepper({
     goTo: number,
     currentStep: number,
     validateStep: (step: number) => FieldError[],
-    setCurrentStep: (value: React.SetStateAction<number>) => void
+    setCurrentStep: (value: React.SetStateAction<number>) => void,
   ) => void;
   className?: string;
   orientation?: StepperOrientation; // New prop for explicit control
@@ -47,7 +47,7 @@ export default function Stepper({
     <div
       // Key Change: Added overflow-x-scroll to the outer div for horizontal scroll
       className={`w-full no-scrollbar ${className} ${
-        isHorizontal ? "overflow-x-scroll" : "overflow-x-hidden"
+        isHorizontal ? "overflow-x-scroll pb-3" : "overflow-x-hidden"
       }`}
     >
       <div className={`relative ${innerContainerClasses}`}>
@@ -64,12 +64,12 @@ export default function Stepper({
                 onClick={() =>
                   goTo(stepNo, currentStep, validateStep, setCurrentStep)
                 }
-                className={`group flex items-center gap-2 rounded-full border px-3 py-1.5 transition-colors ${
+                className={`group flex items-center gap-3 rounded-full border px-3 py-1.5 transition-colors ${
                   active
                     ? "border-primary bg-primary/10 text-primary"
                     : done
-                    ? "border-muted bg-muted/40 text-foreground"
-                    : "border-muted text-muted-foreground"
+                      ? "border-muted bg-muted/40 text-foreground"
+                      : "border-muted text-muted-foreground"
                 }`}
               >
                 <span
@@ -77,8 +77,8 @@ export default function Stepper({
                     done
                       ? "bg-primary text-accent"
                       : active
-                      ? "bg-primary text-accent"
-                      : "bg-muted border text-foreground"
+                        ? "bg-primary text-accent"
+                        : "bg-muted border text-foreground"
                   }`}
                 >
                   {done ? <CheckCircle2 className="h-5 w-5" /> : stepNo}

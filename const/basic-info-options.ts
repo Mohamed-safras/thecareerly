@@ -1,33 +1,27 @@
-import { SelectFieldOptions } from "@/types/common";
+import { ExperienceLevel, JobType, PayPeriod } from "@/types/job";
 
-export const EMPLOYMENT_TYPES: Readonly<SelectFieldOptions[]> = Object.freeze([
-  { value: "Full-time", label: "Full-time" },
-  { value: "Part-time", label: "Part-time" },
-  { value: "Contract", label: "Contract" },
-  { value: "Internship", label: "Internship" },
-  { value: "Other", label: "Other" },
+export type SelectFieldOptions = { value: string; label: string };
+
+type JobTypeOption = { value: JobType; label: string };
+type ExprerienceLevelOption = { value: ExperienceLevel; label: string };
+type PayPeriodOption = { value: PayPeriod; label: string };
+
+export const JOB_TYPES: Readonly<JobTypeOption[]> = Object.freeze([
+  { value: "full-time", label: "Full-time" },
+  { value: "part-time", label: "Part-time" },
+  { value: "contract", label: "Contract" },
+  { value: "internship", label: "Internship" },
+  { value: "remote", label: "Remote" },
 ]);
 
-export const JOB_SENIORITY: Readonly<SelectFieldOptions[]> = Object.freeze([
-  { value: "Intern", label: "Intern" },
-  { value: "Junior", label: "Junior" },
-  { value: "Associate", label: "Associate" },
-  { value: "MidLevel", label: "Mid Level" },
-  { value: "Senior", label: "Senior" },
-  { value: "Lead", label: "Lead" },
-  { value: "Manager", label: "Manager" },
-  { value: "SeniorManager", label: "Senior Manager" },
-  { value: "Director", label: "Director" },
-  { value: "SeniorDirector", label: "Senior Director" },
-  { value: "AVP", label: "Assistant Vice President" },
-  { value: "VP", label: "Vice President" },
-  { value: "SVP", label: "Senior Vice President" },
-  { value: "EVP", label: "Executive Vice President" },
-  { value: "CLevel", label: "C-Level" },
-  { value: "President", label: "President" },
-  { value: "MD", label: "Managing Director" },
-  { value: "Chairman", label: "Chairman" },
-]);
+export const EXPRIENCE_LEVEL: Readonly<ExprerienceLevelOption[]> =
+  Object.freeze([
+    { value: "entry", label: "Entry" },
+    { value: "mid", label: "Mid" },
+    { value: "senior", label: "Senior" },
+    { value: "lead", label: "Lead" },
+    { value: "executive", label: "Executive" },
+  ]);
 
 export const FACILITY_OPTIONS = Object.freeze([
   { value: "bonus", label: "Bonus" },
@@ -63,36 +57,35 @@ export const WORK_PREFERENCE: Readonly<SelectFieldOptions[]> = Object.freeze([
   { value: "Remote", label: "Remote" },
 ]);
 
-export const QUALIFICATION_LEVEL: Readonly<SelectFieldOptions[]> =
-  Object.freeze([
-    { value: "High School / O-Levels", label: "High School / O-Levels" },
-    {
-      value: "Vocational / Technical Training",
-      label: "Vocational / Technical Training",
-    },
-    {
-      value: "Diploma / Advanced Diploma",
-      label: "Diploma / Advanced Diploma",
-    },
-    { value: "Associate Degree", label: "Associate Degree" },
-    { value: "Bachelor’s Degree", label: "Bachelor’s Degree" },
-    { value: "Master’s Degree", label: "Master’s Degree" },
-    { value: "Doctorate / PhD", label: "Doctorate / PhD" },
-    { value: "Post Doctorate", label: "Post Doctorate" },
-    {
-      value: "Professional Certification / License",
-      label: "Professional Certification / License",
-    },
-    {
-      value: "Bootcamp / Short Course Certification",
-      label: "Bootcamp / Short Course Certification",
-    },
-  ]);
+export const EDUCATION_LEVEL: Readonly<SelectFieldOptions[]> = Object.freeze([
+  { value: "High School / O-Levels", label: "High School / O-Levels" },
+  {
+    value: "Vocational / Technical Training",
+    label: "Vocational / Technical Training",
+  },
+  {
+    value: "Diploma / Advanced Diploma",
+    label: "Diploma / Advanced Diploma",
+  },
+  { value: "Associate Degree", label: "Associate Degree" },
+  { value: "Bachelor’s Degree", label: "Bachelor’s Degree" },
+  { value: "Master’s Degree", label: "Master’s Degree" },
+  { value: "Doctorate / PhD", label: "Doctorate / PhD" },
+  { value: "Post Doctorate", label: "Post Doctorate" },
+  {
+    value: "Professional Certification / License",
+    label: "Professional Certification / License",
+  },
+  {
+    value: "Bootcamp / Short Course Certification",
+    label: "Bootcamp / Short Course Certification",
+  },
+]);
 
-export const PAY_PERIOD: Readonly<SelectFieldOptions[]> = Object.freeze([
-  { value: "Weekly", label: "Weekly" },
-  { value: "Monthly", label: "Monthly" },
-  { value: "Annually", label: "Annually" },
+export const PAY_PERIOD: Readonly<PayPeriodOption[]> = Object.freeze([
+  { value: "hourly", label: "Hourly" },
+  { value: "monthly", label: "Monthly" },
+  { value: "yearly", label: "Yearly" },
 ]);
 
 export const CURRENCY_OPTIONS: Readonly<SelectFieldOptions[]> = Object.freeze([

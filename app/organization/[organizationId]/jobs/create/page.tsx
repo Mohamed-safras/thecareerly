@@ -1,13 +1,12 @@
-import React from "react";
-import CreateJob from "./create-job";
+import CreateNewJobWrapper from "./create-new-job-wrapper";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "thecareerly | create new job",
 };
 
-const page = () => {
-  return <CreateJob />;
+const CreateJobPage = () => {
+  return <CreateNewJobWrapper />;
 };
 
-export default page;
+export default CreateJobPage;

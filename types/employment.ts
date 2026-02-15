@@ -1,12 +1,10 @@
-import { EMPLOYMENT_TYPES } from "@/const/basic-info-options";
+import { JOB_TYPES } from "@/const/basic-info-options";
 
-export type employmentTypeValue = (typeof EMPLOYMENT_TYPES)[number]["value"];
+export type jobTypeValue = (typeof JOB_TYPES)[number]["value"];
 
-export const EMPLOYMENT_TYPE_LABEL: Readonly<
-  Record<employmentTypeValue, string>
-> = Object.freeze(
-  Object.fromEntries(EMPLOYMENT_TYPES.map((o) => [o.value, o.label])) as Record<
-    employmentTypeValue,
-    string
-  >,
-);
+export const JOB_TYPE_LABEL: Readonly<Record<jobTypeValue, string>> =
+  Object.freeze(
+    Object.fromEntries(
+      JOB_TYPES.map((type) => [type.value, type.label]),
+    ) as Record<jobTypeValue, string>,
+  );

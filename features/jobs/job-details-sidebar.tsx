@@ -37,13 +37,14 @@ const JobDetailsSidebar = ({
 }: JobDetailsSidebarProps) => {
   const router = useRouter();
   const { user } = useAppSelector(({ auth }) => auth);
+  console.log(user);
 
   const handleEdit = () => {
     const queryString = createQueryString({
       id: job.id,
     });
     router.replace(
-      `/organization/${user?.organizationId}/team/${user?.teamId}/jobs/edit?${queryString}`
+      `/organization/${user?.organizationId}/team/${user?.teamId}/jobs/edit?${queryString}`,
     );
   };
 

@@ -31,7 +31,7 @@ import { ALLOWED_VIBES_TYPES } from "@/const/basic-info-options";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { JobForm } from "@/interfaces/job";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
-import MarkdownEditor from "@/components/markdowneditor";
+import MarkdownEditor from "@/components/mark-down-editor";
 
 const MAX_FILES = 3;
 
