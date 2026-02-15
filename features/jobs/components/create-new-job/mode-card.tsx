@@ -25,7 +25,7 @@ export function ModeCard({
     <Card
       className={cn(
         "p-3 cursor-pointer transition-all hover:shadow-md",
-        selected && "ring-2 ring-primary",
+        selected && "ring-1 ring-primary",
       )}
       onClick={onClick}
     >

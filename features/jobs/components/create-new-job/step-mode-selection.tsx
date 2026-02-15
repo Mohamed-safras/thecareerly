@@ -54,7 +54,7 @@ export function StepModeSelection({
 
   return (
     <div className="space-y-3">
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <ModeCard
           icon={FileText}
           title="Start from Blank"
@@ -86,7 +86,7 @@ export function StepModeSelection({
             onDeptFilterChange={setDeptFilter}
           />
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {filteredTemplates.map((template) => (
               <TemplateCard
                 key={template.id}

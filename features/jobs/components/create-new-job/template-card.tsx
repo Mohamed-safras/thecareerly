@@ -21,14 +21,14 @@ export function TemplateCard({
   return (
     <Card
       className={cn(
-        "p-4 cursor-pointer transition-all hover:shadow-md group",
-        selected && "ring-2 ring-primary",
+        "p-3 cursor-pointer transition-all hover:shadow-md group",
+        selected && "ring-1 ring-primary",
       )}
       onClick={() => onSelect(template.id)}
     >
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-3">
-          <div className="p-2 rounded-lg bg-muted">
+          <div className="p-3 rounded-lg bg-muted">
             <Briefcase className="h-4 w-4 text-muted-foreground" />
           </div>
           <div>

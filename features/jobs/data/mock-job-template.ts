@@ -12,6 +12,8 @@ export const jobTemplates: JobTemplate[] = [
       department: "Engineering",
       jobType: "full-time",
       experienceLevel: "mid",
+      location: "colombo, sri lanka",
+      workPreference: "Hybrid",
       description:
         "We are looking for a talented Software Engineer to join our engineering team. You will design, develop, and maintain scalable software solutions that power our products. This role offers the opportunity to work with modern technologies and collaborate with a passionate team.",
       responsibilities:
@@ -50,6 +52,8 @@ export const jobTemplates: JobTemplate[] = [
       department: "Engineering",
       jobType: "full-time",
       experienceLevel: "mid",
+      location: "colombo, sri lanka",
+      workPreference: "Hybrid",
       description:
         "We are seeking a Frontend Developer who is passionate about building beautiful, performant user interfaces. You will work closely with designers and backend engineers to deliver delightful user experiences across web and mobile platforms.",
       responsibilities:
@@ -80,6 +84,8 @@ export const jobTemplates: JobTemplate[] = [
       department: "Engineering",
       jobType: "full-time",
       experienceLevel: "mid",
+      location: "colombo, sri lanka",
+      workPreference: "Hybrid",
       description:
         "We are looking for a Backend Developer to build and maintain robust server-side applications and APIs. You will work on scalable systems that handle millions of requests and ensure data integrity across our platform.",
       responsibilities:
@@ -110,6 +116,8 @@ export const jobTemplates: JobTemplate[] = [
       department: "Design",
       jobType: "full-time",
       experienceLevel: "mid",
+      location: "colombo, sri lanka",
+      workPreference: "Hybrid",
       description:
         "We are hiring a Product Designer to shape the future of our product experience. You will lead end-to-end design projects, from research and ideation through to polished, production-ready designs that delight our users.",
       responsibilities:
@@ -142,6 +150,8 @@ export const jobTemplates: JobTemplate[] = [
       department: "Design",
       jobType: "full-time",
       experienceLevel: "mid",
+      location: "colombo, sri lanka",
+      workPreference: "Hybrid",
       description:
         "We are looking for a UX Researcher to help us deeply understand our users and inform product decisions with data-driven insights. You will plan, conduct, and synthesize research that shapes our product roadmap.",
       responsibilities:
@@ -172,6 +182,8 @@ export const jobTemplates: JobTemplate[] = [
       department: "Product",
       jobType: "full-time",
       experienceLevel: "senior",
+      location: "colombo, sri lanka",
+      workPreference: "Hybrid",
       description:
         "We are seeking a Product Manager to own and drive the strategy, roadmap, and execution for a key product area. You will work at the intersection of business, technology, and design to deliver products that customers love.",
       responsibilities:
@@ -204,6 +216,8 @@ export const jobTemplates: JobTemplate[] = [
       department: "Sales",
       jobType: "full-time",
       experienceLevel: "mid",
+      location: "colombo, sri lanka",
+      workPreference: "Hybrid",
       description:
         "We are looking for a driven Sales Representative to join our growing sales team. You will be responsible for generating new business, managing a pipeline of prospects, and closing deals that drive company revenue.",
       responsibilities:
@@ -232,6 +246,8 @@ export const jobTemplates: JobTemplate[] = [
       department: "Marketing",
       jobType: "full-time",
       experienceLevel: "senior",
+      location: "colombo, sri lanka",
+      workPreference: "Hybrid",
       description:
         "We are hiring a Marketing Manager to lead our marketing efforts and drive brand awareness, lead generation, and customer engagement. You will develop and execute multi-channel marketing campaigns that deliver measurable results.",
       responsibilities:
@@ -262,6 +278,8 @@ export const jobTemplates: JobTemplate[] = [
       department: "Human Resources",
       jobType: "full-time",
       experienceLevel: "mid",
+      location: "colombo, sri lanka",
+      workPreference: "Hybrid",
       description:
         "We are looking for an HR Specialist to support our people operations and help build a world-class employee experience. You will manage HR processes, support talent acquisition, and drive employee engagement initiatives.",
       responsibilities:
@@ -293,6 +311,8 @@ export const jobTemplates: JobTemplate[] = [
       department: "Engineering",
       jobType: "full-time",
       experienceLevel: "mid",
+      location: "colombo, sri lanka",
+      workPreference: "Hybrid",
       description:
         "We are seeking a Data Analyst to turn data into actionable insights that drive business decisions. You will work with large datasets, build dashboards, and partner with teams across the organization to answer critical business questions.",
       responsibilities:

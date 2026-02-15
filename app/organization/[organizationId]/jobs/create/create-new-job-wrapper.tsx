@@ -19,7 +19,8 @@ import JobFormCard from "@/features/jobs/components/create-new-job/job-form-card
 import { getJobsPath } from "@/utils/generate-path";
 
 const CreateNewJobWrapper = () => {
-  const [currentStep, setCurrentStep] = React.useState(2);
+  const [currentStep, setCurrentStep] = React.useState(1);
+
   const total = createJobPostingSteps.length;
 
   const { user } = useAuth();

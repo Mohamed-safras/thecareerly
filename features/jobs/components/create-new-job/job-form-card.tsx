@@ -126,7 +126,6 @@ const JobFormCard = ({
             formErrorType={formErrorType}
           />
         );
-
       case 4:
         return (
           <ScreeningQuestions
@@ -175,7 +174,7 @@ const JobFormCard = ({
 
         <CardContent>{renderStep()}</CardContent>
 
-        <CardFooter className="flex  items-center justify-between gap-2 py-4 border-t">
+        <CardFooter className="flex  items-center justify-between gap-2 py-3 border-t">
           <Button
             variant="ghost"
             size="sm"

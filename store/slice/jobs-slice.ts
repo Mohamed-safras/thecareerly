@@ -173,6 +173,7 @@ const defaultForm: JobFormData = {
   title: "",
   jobType: "full-time",
   department: "",
+  // neeed to change
   workPreference: "",
   experienceLevel: "entry",
   educationLevel: "",
@@ -181,6 +182,7 @@ const defaultForm: JobFormData = {
   responsibilities: "",
   niceToHave: "",
   benefits: [],
+  // need to change
   location: "",
   salary: {
     min: 0,
