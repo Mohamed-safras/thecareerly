@@ -186,7 +186,7 @@ const defaultForm: JobFormData = {
     min: 0,
     max: 0,
     currency: "",
-    payPeriod: "",
+    payPeriod: "monthly",
     showOnPosting: false,
   },
   scheduledDate: "",

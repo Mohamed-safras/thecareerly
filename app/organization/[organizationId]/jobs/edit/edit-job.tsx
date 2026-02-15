@@ -7,7 +7,6 @@ import { editJobPostingSteps } from "@/const/stepper-item";
 import HeaderShell from "@/features/jobs/components/hiring-shell";
 import { useSubmitJobForm } from "@/features/jobs/hooks/use-submit-form";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { getJobsPath } from "@/lib/utils";
 import { goTo } from "@/validators/job-form";
 import { UPDATE_JOB_FORM } from "@/const/local-store-values";
 import {
@@ -17,6 +16,7 @@ import {
 } from "@/store/slice/jobs-slice";
 import { redirect } from "next/navigation";
 import JobFormCard from "@/features/jobs/components/create-new-job/job-form-card";
+import { getJobsPath } from "@/utils/generate-path";
 
 interface EditJobProps {
   id: string;
@@ -27,7 +27,7 @@ export default function EditJob({ id }: EditJobProps) {
   const { user } = useAppSelector(({ auth }) => auth);
 
   const { jobs } = useAppSelector(({ jobs }) => jobs);
-  const { updateJobForm } = useAppSelector(({ jobs }) => jobs);
+  const { updateJobFormData } = useAppSelector(({ jobs }) => jobs);
   const dispatch = useAppDispatch();
 
   const total = editJobPostingSteps.length;
@@ -35,7 +35,7 @@ export default function EditJob({ id }: EditJobProps) {
   const jobsPath = user && getJobsPath(user.organizationId, user.teamId);
 
   const { validateStep } = useSubmitJobForm({
-    jobForm: updateJobForm,
+    jobForm: updateJobFormData,
     formErrorType: UPDATE_JOB_FORM,
   });
   useEffect(() => {
@@ -83,7 +83,7 @@ export default function EditJob({ id }: EditJobProps) {
             currentStep={currentStep}
             setCurrentStep={setCurrentStep}
             total={total}
-            jobForm={updateJobForm}
+            jobForm={updateJobFormData}
             formType={UPDATE_JOB_FORM}
             formErrorType={UPDATE_JOB_FORM}
             defaultTitle="Edit Job"

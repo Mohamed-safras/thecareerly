@@ -26,18 +26,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useFileHandler } from "@/hooks/use-file-handler";
-import { AllowedVibesTypeValue, isPosterVibe } from "@/types/poster";
 import { ALLOWED_VIBES_TYPES } from "@/const/basic-job-info-options-value";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { JobForm } from "@/interfaces/job";
+import { JobFormData } from "@/interfaces/job";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import MarkdownEditor from "@/components/mark-down-editor";
+import { allowedVibesTypeValue } from "@/types/job";
+import { isPosterVibe } from "@/utils/job";
 
 const MAX_FILES = 3;
 
 export interface AIPosterGeneratorProps {
-  jobForm: JobForm;
-  setFormMerge: ActionCreatorWithPayload<Partial<JobForm>>;
+  jobForm: JobFormData;
+  setFormMerge: ActionCreatorWithPayload<Partial<JobFormData>>;
 }
 
 const AIPosterGenerator = ({
@@ -114,22 +115,12 @@ const AIPosterGenerator = ({
       </div>
 
       <div className="grid sm:grid-cols-2 gap-3">
-        <div className="space-y-1">
-          <Label>Brand Color (hex)</Label>
-          <Input
-            value={jobForm.brandColorHex || ""}
-            onChange={(e) =>
-              dispatch(setFormMerge({ brandColorHex: e.target.value }))
-            }
-            placeholder="#00A8E8"
-          />
-        </div>
         <div className="space-y-1.5">
           <Label htmlFor="poster-vibe">Poster vibe</Label>
           <Select
-            value={(jobForm.posterVibe as AllowedVibesTypeValue) || undefined}
-            onValueChange={(v) => {
-              const pv = isPosterVibe(v) ? v : ""; // narrow to PosterVibe
+            value={(jobForm.posterVibe as allowedVibesTypeValue) || undefined}
+            onValueChange={(value) => {
+              const pv = isPosterVibe(value) ? value : ""; // narrow to PosterVibe
               dispatch(setFormMerge({ posterVibe: pv }));
             }}
           >

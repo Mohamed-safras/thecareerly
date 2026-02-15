@@ -7,9 +7,9 @@ import { useRouter } from "next/navigation";
 import { createJob, updateJob } from "@/store/slice/jobs-slice";
 import { AxiosError } from "axios";
 import { extractMessage } from "@/lib/axios/axios-client";
-import { getJobsPath } from "@/lib/utils";
 import { ACTIONS } from "@/const/actions";
 import { JobFormData } from "@/interfaces/job";
+import { getJobsPath } from "@/utils/generate-path";
 
 export function useSubmitJobForm({
   jobForm,

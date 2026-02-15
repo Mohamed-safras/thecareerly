@@ -2,10 +2,11 @@
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { cn, getJobsPath } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { CirclePlus, Import } from "lucide-react";
 import { useAppSelector } from "@/store/hooks";
 import Link from "next/link";
+import { getJobsPath } from "@/utils/generate-path";
 
 type Props = {
   onImport?: () => void;

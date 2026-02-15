@@ -19,8 +19,9 @@ import { TeamSwitcher } from "@/components/team-switcher";
 
 import { NavSecondary } from "@/components/nav-secondary";
 import { useAppSelector } from "@/store/hooks";
-import { getJobsPath, getTeamsPath, getUsersPath } from "@/lib/utils";
+import { getTeamsPath, getUsersPath } from "@/lib/utils";
 import AppSideBar from "./app-site-bar";
+import { getJobsPath } from "@/utils/generate-path";
 
 const SuperAdminAppSideBar = () => {
   const { user } = useAppSelector(({ auth }) => auth);

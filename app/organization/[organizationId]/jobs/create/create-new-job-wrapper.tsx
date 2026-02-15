@@ -5,7 +5,6 @@ import { createJobPostingSteps } from "@/const/stepper-item";
 import HeaderShell from "@/features/jobs/components/hiring-shell";
 import { useSubmitJobForm } from "@/features/jobs/hooks/use-submit-form";
 import { useAppSelector } from "@/store/hooks";
-import { getJobsPath } from "@/lib/utils";
 import { CREATE_JOB_FORM } from "@/const/local-store-values";
 import {
   setCreateForm as setFormMerge,
@@ -17,6 +16,7 @@ import { goTo } from "@/validators/job-form";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import CreateNewJobHeaderStepper from "@/features/jobs/components/create-new-job/create-new-job-header-stepper";
 import JobFormCard from "@/features/jobs/components/create-new-job/job-form-card";
+import { getJobsPath } from "@/utils/generate-path";
 
 const CreateNewJobWrapper = () => {
   const [currentStep, setCurrentStep] = React.useState(2);
