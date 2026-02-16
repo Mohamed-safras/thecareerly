@@ -14,23 +14,18 @@ import { Combobox, type ComboItem } from "@/components/combobox";
 import { localStoreGet, localStoreSet } from "@/lib/common/localstore";
 import { isComboItemArray, slugify } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { jobTypeValue } from "@/types/employment";
-import { workPreferenceTypeValue } from "@/types/work-arrangments";
 import { AlertCircle } from "lucide-react";
-import { experienceLevelValue } from "@/types/experience-level";
-import { educationLevelTypeValue } from "@/types/qulification-level";
 import CheckboxGroup from "@/components/check-box-group";
 import {
   CURRENCY_OPTIONS,
   JOB_TYPES,
-  FACILITY_OPTIONS,
   EXPRIENCE_LEVEL,
   PAY_PERIOD,
   WORK_PREFERENCE,
   EDUCATION_LEVEL,
+  BENIFITS_OPTIONS,
 } from "@/const/basic-job-info-options-value";
 import { Separator } from "@/components/ui/separator";
-import { payPeriodTypeValue } from "@/types/pay-period";
 import { currencyOptionTypeValue } from "@/types/currency-option";
 import TypeaheadLocation from "@/components/type-ahead-location";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -38,6 +33,13 @@ import type { JobFormData } from "@/interfaces/job";
 import { JOB_TITLE_OPTIONS } from "@/const/local-store-values";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import {
+  educationLevelTypeValue,
+  experienceLevelValue,
+  jobTypeValue,
+  payPeriodTypeValue,
+  workPreferenceTypeValue,
+} from "@/types/job";
 
 export interface BasicInfoProps {
   jobForm: JobFormData;
@@ -69,7 +71,8 @@ const BasicInfo = ({
     benefits,
     educationLevel,
     location,
-    salary: { min, max, currency, payPeriod },
+    salary: { min, max, currency, payPeriod, showOnPosting },
+    useTemplate,
   } = jobForm;
 
   // Load title options once
@@ -136,7 +139,8 @@ const BasicInfo = ({
       benefits,
       educationLevel,
       location,
-      salary: { min, max, currency, payPeriod, showOnPosting: true },
+      salary: { min, max, currency, payPeriod, showOnPosting },
+      useTemplate,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -152,21 +156,23 @@ const BasicInfo = ({
     max,
     currency,
     payPeriod,
+    useTemplate,
   ]);
 
   const selectedTitleValue = useMemo(
-    () => titleOptions.find((o) => o.label === title)?.value ?? null,
+    () => titleOptions.find((option) => option.label === title)?.value || title,
     [titleOptions, title],
   );
 
+  console.log(selectedTitleValue);
   return (
     <ScrollArea className="max-h-[600px] overflow-y-scroll ">
-      <div className="space-y-4 rounded border p-4">
+      <div className="space-y-3 rounded border p-3">
         <h2 className="text-lg font-semibold">Basic Infomation</h2>
         <Separator />
 
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="space-y-3">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             {/* title */}
             <div className="space-y-1.5">
               <Label htmlFor="job-title">Job Title</Label>
@@ -175,8 +181,8 @@ const BasicInfo = ({
                 items={titleOptions}
                 value={selectedTitleValue}
                 onChange={(_, item) => {
-                  const nextTitle = item?.label ?? "";
-                  dispatch(setFormMerge({ title: nextTitle }));
+                  const title = item?.label ?? "";
+                  dispatch(setFormMerge({ title }));
                 }}
                 allowCreate
                 onCreate={onCreate}
@@ -189,7 +195,7 @@ const BasicInfo = ({
                 contentClassName="w-full"
               />
               {byForm?.[`${formErrorType}_basic_info`]?.title && (
-                <Alert variant="destructive" className="h-fit text-sm p-2">
+                <Alert variant="destructive" className="h-fit text-sm p-3">
                   <AlertCircle className="h-4 w-4" />
 
                   <AlertDescription>
@@ -201,21 +207,21 @@ const BasicInfo = ({
 
             <TypeaheadLocation
               value={location}
-              onChange={(v) => dispatch(setFormMerge({ location: v }))}
+              onChange={(value) => dispatch(setFormMerge({ location: value }))}
               fieldError={byForm?.[`${formErrorType}_basic_info`]?.location}
             />
           </div>
 
-          <div className="grid grid-cols-1 gap-4 items-baseline md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-3 items-baseline md:grid-cols-2">
             {/* work preference */}
             <div className="space-y-1.5">
               <Label htmlFor="work-preference">Work Preference</Label>
               <Select
                 value={workPreference as workPreferenceTypeValue | undefined}
-                onValueChange={(v) =>
+                onValueChange={(value) =>
                   dispatch(
                     setFormMerge({
-                      workPreference: v as workPreferenceTypeValue,
+                      workPreference: value as workPreferenceTypeValue,
                     }),
                   )
                 }
@@ -232,7 +238,7 @@ const BasicInfo = ({
                 </SelectContent>
               </Select>
               {byForm?.[`${formErrorType}_basic_info`]?.workPreference && (
-                <Alert variant="destructive" className="h-fit text-sm p-2">
+                <Alert variant="destructive" className="h-fit text-sm p-3">
                   <AlertCircle className="h-4 w-4" />
 
                   <AlertDescription>
@@ -247,8 +253,8 @@ const BasicInfo = ({
               <Label htmlFor="job-type">Job Type</Label>
               <Select
                 value={jobType as jobTypeValue | undefined}
-                onValueChange={(v) =>
-                  dispatch(setFormMerge({ jobType: v as jobTypeValue }))
+                onValueChange={(value) =>
+                  dispatch(setFormMerge({ jobType: value as jobTypeValue }))
                 }
               >
                 <SelectTrigger id="job-type" className="w-full">
@@ -263,7 +269,7 @@ const BasicInfo = ({
                 </SelectContent>
               </Select>
               {byForm?.[`${formErrorType}_basic_info`]?.employmentType && (
-                <Alert variant="destructive" className="h-fit text-sm p-2">
+                <Alert variant="destructive" className="h-fit text-sm p-3">
                   <AlertCircle className="h-4 w-4" />
 
                   <AlertDescription>
@@ -274,16 +280,16 @@ const BasicInfo = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 items-baseline md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-3 items-baseline md:grid-cols-2">
             {/* job seiority */}
             <div className="space-y-1.5">
-              <Label htmlFor="job-seiority">Job Seiority</Label>
+              <Label htmlFor="job-seiority">Expreience Level</Label>
               <Select
                 value={experienceLevel as experienceLevelValue | undefined}
-                onValueChange={(v) =>
+                onValueChange={(value) =>
                   dispatch(
                     setFormMerge({
-                      experienceLevel: v as experienceLevelValue,
+                      experienceLevel: value as experienceLevelValue,
                     }),
                   )
                 }
@@ -300,7 +306,7 @@ const BasicInfo = ({
                 </SelectContent>
               </Select>
               {byForm?.[`${formErrorType}_basic_info`]?.jobSeniority && (
-                <Alert variant="destructive" className="h-fit text-sm p-2">
+                <Alert variant="destructive" className="h-fit text-sm p-3">
                   <AlertCircle className="h-4 w-4" />
 
                   <AlertDescription>
@@ -312,9 +318,7 @@ const BasicInfo = ({
 
             {/* qualification level */}
             <div className="space-y-1.5">
-              <Label htmlFor="qualification-level">
-                Minimum Qualification Level
-              </Label>
+              <Label htmlFor="qualification-level">Education Level</Label>
               <Select
                 value={educationLevel as educationLevelTypeValue | undefined}
                 onValueChange={(value) =>
@@ -338,7 +342,7 @@ const BasicInfo = ({
               </Select>
               {byForm?.[`${formErrorType}_basic_info`]
                 ?.minimumQualificationLevel && (
-                <Alert variant="destructive" className="h-fit text-sm p-2">
+                <Alert variant="destructive" className="h-fit text-sm p-3">
                   <AlertCircle className="h-4 w-4" />
 
                   <AlertDescription>
@@ -352,13 +356,13 @@ const BasicInfo = ({
             </div>
           </div>
 
-          <p className="text-sm font-semibold">Salary & Facilites</p>
+          <p className="text-sm font-semibold">Salary & Benifits</p>
           <Separator />
 
           {/* salary */}
           <div className="grid grid-cols-1">
             <div className="space-y-1.5 md:col-span-2">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div className="space-y-1.5">
                   <Label htmlFor="currency">Currency</Label>
                   <Select
@@ -461,12 +465,12 @@ const BasicInfo = ({
           </div>
 
           {/* facilites */}
-          <fieldset className="space-y-1.5 md:col-span-2 mt-4" id="facilities">
-            <legend className="text-sm font-medium">Facilities</legend>
+          <fieldset className="space-y-1.5 md:col-span-2 mt-3" id="facilities">
+            <legend className="text-sm font-medium">Benifits</legend>
 
             <CheckboxGroup
-              options={FACILITY_OPTIONS}
-              value={benefits ?? []}
+              options={BENIFITS_OPTIONS}
+              values={benefits ?? []}
               onChange={(next) => dispatch(setFormMerge({ benefits: next }))}
               columns={2}
             />

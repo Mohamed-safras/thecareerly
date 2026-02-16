@@ -8,13 +8,13 @@ import { TemplateCard } from "./template-card";
 import { TemplatePreviewDialog } from "./template-preview-dialog";
 
 interface StepModeSelectionProps {
-  formData: JobFormData;
+  jobForm: JobFormData;
   onChange: (field: keyof JobFormData, value: unknown) => void;
   onApplyTemplate: (prefill: Partial<JobFormData>) => void;
 }
 
 export function StepModeSelection({
-  formData,
+  jobForm,
   onChange,
   onApplyTemplate,
 }: StepModeSelectionProps) {
@@ -59,7 +59,7 @@ export function StepModeSelection({
           icon={FileText}
           title="Start from Blank"
           description="Create from scratch"
-          selected={!formData.useTemplate}
+          selected={!jobForm.useTemplate}
           onClick={() => {
             onChange("useTemplate", false);
             onChange("templateId", undefined);
@@ -70,13 +70,13 @@ export function StepModeSelection({
           icon={Copy}
           title="Use Template"
           description="Pre-built job templates"
-          selected={!!formData.useTemplate}
+          selected={!!jobForm.useTemplate}
           onClick={() => onChange("useTemplate", true)}
           iconClassName="bg-accent text-accent-foreground"
         />
       </div>
 
-      {formData.useTemplate && (
+      {jobForm.useTemplate && (
         <div className="space-y-3">
           <TemplateSearchBar
             search={search}
@@ -86,12 +86,12 @@ export function StepModeSelection({
             onDeptFilterChange={setDeptFilter}
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {filteredTemplates.map((template) => (
               <TemplateCard
                 key={template.id}
                 template={template}
-                selected={formData.templateId === template.id}
+                selected={jobForm.templateId === template.id}
                 onSelect={selectTemplate}
                 onPreview={setPreviewTemplate}
               />

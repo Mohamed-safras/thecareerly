@@ -101,7 +101,7 @@ const JobFormCard = ({
       case 1:
         return (
           <StepModeSelection
-            formData={jobForm}
+            jobForm={jobForm}
             onChange={handleModeChange}
             onApplyTemplate={(prefill) => {
               dispatch(setFormMerge(prefill));
