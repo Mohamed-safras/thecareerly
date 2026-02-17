@@ -8,6 +8,7 @@ import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import CheckboxGroup from "@/components/check-box-group";
 import { BENIFITS_OPTIONS } from "@/const/basic-job-info-options-value";
+import MarkdownEditor from "@/components/mark-down-editor";
 
 interface StepContentReviewProps {
   jobForm: JobFormData;
@@ -20,57 +21,43 @@ export function StepContentReview({
 }: StepContentReviewProps) {
   const dispatch = useDispatch();
 
-  //need to change with markdown editor
   return (
     <div className="space-y-6">
       <div className="space-y-3">
         <Label>Description</Label>
-        <Textarea
-          className="text-sm"
+        <MarkdownEditor
+          placeholder="One per line..."
           value={jobForm.description}
-          onChange={(event) =>
-            dispatch(setFormMerge({ description: event.target.value }))
-          }
-          rows={4}
+          onChange={(value) => dispatch(setFormMerge({ description: value }))}
         />
       </div>
 
       <div className="space-y-3">
         <Label>Requirements</Label>
-        <Textarea
-          className="text-sm"
-          value={jobForm.requirements}
-          onChange={(event) =>
-            dispatch(setFormMerge({ requirements: event.target.value }))
-          }
-          rows={4}
+        <MarkdownEditor
           placeholder="One per line..."
+          value={jobForm.requirements}
+          onChange={(value) => dispatch(setFormMerge({ requirements: value }))}
         />
       </div>
 
       <div className="space-y-3">
         <Label>Responsibilities</Label>
-        <Textarea
-          className="text-sm"
-          value={jobForm.responsibilities}
-          onChange={(event) =>
-            dispatch(setFormMerge({ responsibilities: event.target.value }))
-          }
-          rows={4}
+        <MarkdownEditor
           placeholder="One per line..."
+          value={jobForm.responsibilities}
+          onChange={(value) =>
+            dispatch(setFormMerge({ responsibilities: value }))
+          }
         />
       </div>
 
       <div className="space-y-3">
         <Label>Nice to Have</Label>
-        <Textarea
-          className="text-sm"
+        <MarkdownEditor
+          placeholder="One per line..."
           value={jobForm.niceToHave}
-          onChange={(event) =>
-            dispatch(setFormMerge({ niceToHave: event.target.value }))
-          }
-          rows={3}
-          placeholder="Optional qualifications..."
+          onChange={(value) => dispatch(setFormMerge({ niceToHave: value }))}
         />
       </div>
 
