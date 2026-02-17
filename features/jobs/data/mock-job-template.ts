@@ -1,4 +1,4 @@
-import { JobTemplate } from "@/interfaces/job";
+import { ComplianceCheck, JobTemplate } from "@/interfaces/job";
 
 export const jobTemplates: JobTemplate[] = [
   {
@@ -399,5 +399,64 @@ export const jobTemplates: JobTemplate[] = [
         githubProfile: true,
       },
     },
+  },
+];
+
+export const defaultComplianceChecks: ComplianceCheck[] = [
+  {
+    id: "bias-gender",
+    label: "Gender Bias Check",
+    description: "Scans for gendered language",
+    status: "pending",
+    category: "bias",
+  },
+  {
+    id: "bias-age",
+    label: "Age Bias Check",
+    description: "Checks for age-discriminatory terms",
+    status: "pending",
+    category: "bias",
+  },
+  {
+    id: "legal-eeo",
+    label: "EEO Compliance",
+    description: "Equal Employment Opportunity statement",
+    status: "pending",
+    category: "legal",
+  },
+  {
+    id: "legal-ada",
+    label: "ADA Compliance",
+    description: "Reasonable accommodation notice",
+    status: "pending",
+    category: "legal",
+  },
+  {
+    id: "gdpr-data",
+    label: "GDPR Data Notice",
+    description: "Data processing disclosure",
+    status: "pending",
+    category: "gdpr",
+  },
+  {
+    id: "gdpr-consent",
+    label: "Consent Mechanism",
+    description: "Explicit consent collection",
+    status: "pending",
+    category: "gdpr",
+  },
+  {
+    id: "inclusive-lang",
+    label: "Inclusive Language",
+    description: "Uses inclusive language throughout",
+    status: "pending",
+    category: "inclusive",
+  },
+  {
+    id: "inclusive-req",
+    label: "Reasonable Requirements",
+    description: "Requirements not unnecessarily restrictive",
+    status: "pending",
+    category: "inclusive",
   },
 ];

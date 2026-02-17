@@ -56,7 +56,7 @@ const StepModeSelection: React.FC<StepModeSelectionProps> = ({
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 max-h-[600px] overflow-y-scroll border rounded-lg p-3">
       <div className="grid grid-cols-2 gap-3">
         <ModeCard
           icon={FileText}
@@ -90,7 +90,7 @@ const StepModeSelection: React.FC<StepModeSelectionProps> = ({
             onDeptFilterChange={setDeptFilter}
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {filteredTemplates.map((template) => (
               <TemplateCard
                 key={template.id}

@@ -13,6 +13,7 @@ import {
   ChevronRight,
   Eye,
   Rocket,
+  Shield,
   Sparkles,
   SparklesIcon,
 } from "lucide-react";
@@ -28,6 +29,8 @@ import { useAppDispatch } from "@/store/hooks";
 import StepRequirements from "./step-requirements";
 import StepJobDetails from "@/features/jobs/components/create-new-job/step-job-details";
 import StepModeSelection from "./step-mode-selection";
+import StepCompliance from "./step-compliance";
+import { StepContentReview } from "./step-content-review";
 
 interface JobFormCardProps {
   currentStep: number;
@@ -52,7 +55,7 @@ const stepHeaderDetails: Record<
     description: "Choose to start fresh or use a template.",
   },
   2: {
-    title: "Job Details",
+    title: "Job details",
     description: "Provide the basic information about the job.",
   },
   3: {
@@ -61,20 +64,24 @@ const stepHeaderDetails: Record<
     icon: <Sparkles className="h-5 w-5 text-primary" />,
   },
   4: {
+    title: "Review",
+    description: "Fine-tune the content before proceeding.",
+  },
+  5: {
     title: "Requirements & Screening",
     description:
       "Set education, experience, and application screening questions.",
   },
-  5: {
-    title: "",
-    description:
-      "The goal of the recruitment and selection process at organisation is to find and hire the best candidates for job openings. This process has a funnel structure. Imagine a new hire for a role - your current employee decided to pursure another opportunity",
-  },
   6: {
+    title: "Compliance Check",
+    description: "Scan your job posting for compliance issues.",
+    icon: <Shield className="h-5 w-5 text-primary" />,
+  },
+  7: {
     title: "",
     description: "See how your job post will look before publishing.",
   },
-  7: {
+  8: {
     title: "",
     description:
       "Plan your post in advance and publish it at the perfect time.",
@@ -128,6 +135,10 @@ const JobFormCard = ({
         );
       case 4:
         return (
+          <StepContentReview jobForm={jobForm} setFormMerge={setFormMerge} />
+        );
+      case 5:
+        return (
           <StepRequirements
             jobForm={jobForm}
             formType={formType}
@@ -136,7 +147,9 @@ const JobFormCard = ({
             formErrorType={formErrorType}
           />
         );
-      case 5:
+      case 6:
+        return <StepCompliance jobForm={jobForm} setFormMerge={setFormMerge} />;
+      case 7:
         return (
           <HiringProcesses
             jobForm={jobForm}
@@ -145,9 +158,9 @@ const JobFormCard = ({
             replaceForm={replaceForm}
           />
         );
-      case 6:
+      case 8:
         return <PreviewPanel jobForm={jobForm} />;
-      case 7:
+      case 9:
         return (
           <SchedulePanel
             setCurrentStep={setCurrentStep}
@@ -167,9 +180,9 @@ const JobFormCard = ({
       <Card className="rounded-none border-none py-0 gap-0">
         <CardHeader className="p-3">
           {stepHeaderDetails[currentStep] && (
-            <CardTitle className="flex items-center gap-3 text-xl">
+            <CardTitle className="flex items-center gap-1 text-xl">
               {stepHeaderDetails[currentStep].icon}
-              {stepHeaderDetails[currentStep].title}
+              {stepHeaderDetails[currentStep].title || defaultTitle}
             </CardTitle>
           )}
           {stepHeaderDetails[currentStep] && (

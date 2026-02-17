@@ -66,7 +66,7 @@ export default function Stepper({
                 }
                 className={`group flex items-center gap-3 rounded-full border px-3 py-1.5 transition-colors ${
                   active
-                    ? "border-primary bg-primary/10 text-primary"
+                    ? "bg-primary/10 text-primary"
                     : done
                       ? "border-muted bg-muted/40 text-foreground"
                       : "border-muted text-muted-foreground"
@@ -93,8 +93,8 @@ export default function Stepper({
                 <div
                   className={`bg-primary rounded ${
                     isVertical
-                      ? "ml-6 h-8 w-1" // Vertical connector
-                      : "absolute h-1 w-8 top-1/2 -translate-y-1/2 left-full translate-x-0" // Horizontal connector
+                      ? "ml-6 h-8 w-0.5" // Vertical connector
+                      : "absolute h-0.5 w-8 top-1/2 -translate-y-1/2 left-full translate-x-0" // Horizontal connector
                   }`}
                 />
               )}

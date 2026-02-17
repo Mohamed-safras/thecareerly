@@ -163,304 +163,288 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
   );
 
   return (
-    <ScrollArea className="max-h-[500px] overflow-y-scroll">
-      <div className="space-y-6 rounded border p-3">
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-            {/* title */}
-            <div className="space-y-3">
-              <Label htmlFor="job-title">Job Title *</Label>
-              <Combobox
-                id="job-title"
-                items={titleOptions}
-                value={selectedTitleValue}
-                onChange={(_, item) => {
-                  const title = item?.label ?? "";
-                  dispatch(setFormMerge({ title }));
-                }}
-                allowCreate
-                onCreate={onCreate}
-                placeholder="Select title..."
-                inputPlaceholder="Search titles..."
-                emptyMessage="No matching titles."
-                createPrefix="Create"
-                matchTriggerWidth
-                className={`w-full bg-transparent`}
-                contentClassName="w-full"
-              />
-              {byForm?.[`${formErrorType}_basic_info`]?.title && (
-                <Alert variant="destructive" className="h-fit text-sm p-3">
-                  <AlertCircle className="h-4 w-4" />
-
-                  <AlertDescription>
-                    {byForm?.[`${formErrorType}_basic_info`]?.title}
-                  </AlertDescription>
-                </Alert>
-              )}
-            </div>
-
-            {/* needs to do rate limiting */}
-            <TypeaheadLocation
-              value={location}
-              onChange={(value) => dispatch(setFormMerge({ location: value }))}
-              fieldError={byForm?.[`${formErrorType}_basic_info`]?.location}
+    <div className="space-y-6 rounded border p-3 max-h-[600px] overflow-y-scroll">
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          {/* title */}
+          <div className="space-y-3">
+            <Label htmlFor="job-title">Job Title *</Label>
+            <Combobox
+              id="job-title"
+              items={titleOptions}
+              value={selectedTitleValue}
+              onChange={(_, item) => {
+                const title = item?.label ?? "";
+                dispatch(setFormMerge({ title }));
+              }}
+              allowCreate
+              onCreate={onCreate}
+              placeholder="Select title..."
+              inputPlaceholder="Search titles..."
+              emptyMessage="No matching titles."
+              createPrefix="Create"
+              matchTriggerWidth
+              className={`w-full bg-transparent`}
+              contentClassName="w-full"
             />
+            {byForm?.[`${formErrorType}_basic_info`]?.title && (
+              <Alert variant="destructive" className="h-fit text-sm p-3">
+                <AlertCircle className="h-4 w-4" />
+
+                <AlertDescription>
+                  {byForm?.[`${formErrorType}_basic_info`]?.title}
+                </AlertDescription>
+              </Alert>
+            )}
           </div>
 
-          <div className="grid grid-cols-1 gap-3 items-baseline md:grid-cols-2">
-            {/* work preference */}
-            <div className="space-y-3">
-              <Label htmlFor="work-preference">Work Preference</Label>
-              <Select
-                value={workPreference as workPreferenceTypeValue | undefined}
-                onValueChange={(value) =>
-                  dispatch(
-                    setFormMerge({
-                      workPreference: value as workPreferenceTypeValue,
-                    }),
-                  )
-                }
-              >
-                <SelectTrigger id="work-preference" className="w-full">
-                  <SelectValue placeholder="Select work arrangement..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {WORK_PREFERENCE.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {byForm?.[`${formErrorType}_basic_info`]?.workPreference && (
-                <Alert variant="destructive" className="h-fit text-sm p-3">
-                  <AlertCircle className="h-4 w-4" />
+          {/* needs to do rate limiting */}
+          <TypeaheadLocation
+            value={location}
+            onChange={(value) => dispatch(setFormMerge({ location: value }))}
+            fieldError={byForm?.[`${formErrorType}_basic_info`]?.location}
+          />
+        </div>
 
-                  <AlertDescription>
-                    {byForm?.[`${formErrorType}_basic_info`]?.workPreference}
-                  </AlertDescription>
-                </Alert>
-              )}
-            </div>
+        <div className="grid grid-cols-1 gap-3 items-baseline md:grid-cols-2">
+          {/* work preference */}
+          <div className="space-y-3">
+            <Label htmlFor="work-preference">Work Preference</Label>
+            <Select
+              value={workPreference as workPreferenceTypeValue | undefined}
+              onValueChange={(value) =>
+                dispatch(
+                  setFormMerge({
+                    workPreference: value as workPreferenceTypeValue,
+                  }),
+                )
+              }
+            >
+              <SelectTrigger id="work-preference" className="w-full">
+                <SelectValue placeholder="Select work arrangement..." />
+              </SelectTrigger>
+              <SelectContent>
+                {WORK_PREFERENCE.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {byForm?.[`${formErrorType}_basic_info`]?.workPreference && (
+              <Alert variant="destructive" className="h-fit text-sm p-3">
+                <AlertCircle className="h-4 w-4" />
 
-            {/* job type */}
-            <div className="space-y-3">
-              <Label htmlFor="job-type">Job Type</Label>
-              <Select
-                value={jobType as jobTypeValue | undefined}
-                onValueChange={(value) =>
-                  dispatch(setFormMerge({ jobType: value as jobTypeValue }))
-                }
-              >
-                <SelectTrigger id="job-type" className="w-full">
-                  <SelectValue placeholder="Select type..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {JOB_TYPES.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {byForm?.[`${formErrorType}_basic_info`]?.employmentType && (
-                <Alert variant="destructive" className="h-fit text-sm p-3">
-                  <AlertCircle className="h-4 w-4" />
-
-                  <AlertDescription>
-                    {byForm?.[`${formErrorType}_basic_info`]?.employmentType}
-                  </AlertDescription>
-                </Alert>
-              )}
-            </div>
+                <AlertDescription>
+                  {byForm?.[`${formErrorType}_basic_info`]?.workPreference}
+                </AlertDescription>
+              </Alert>
+            )}
           </div>
 
-          <div className="grid grid-cols-1 gap-3 items-baseline md:grid-cols-2">
-            {/* job seiority */}
-            <div className="space-y-3">
-              <Label htmlFor="job-seiority">Expreience Level</Label>
-              <Select
-                value={experienceLevel as experienceLevelValue | undefined}
-                onValueChange={(value) =>
-                  dispatch(
-                    setFormMerge({
-                      experienceLevel: value as experienceLevelValue,
-                    }),
-                  )
-                }
-              >
-                <SelectTrigger id="job-seiority" className="w-full">
-                  <SelectValue placeholder="Select job seiority..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {EXPRIENCE_LEVEL?.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {byForm?.[`${formErrorType}_basic_info`]?.jobSeniority && (
-                <Alert variant="destructive" className="h-fit text-sm p-3">
-                  <AlertCircle className="h-4 w-4" />
+          {/* job type */}
+          <div className="space-y-3">
+            <Label htmlFor="job-type">Job Type</Label>
+            <Select
+              value={jobType as jobTypeValue | undefined}
+              onValueChange={(value) =>
+                dispatch(setFormMerge({ jobType: value as jobTypeValue }))
+              }
+            >
+              <SelectTrigger id="job-type" className="w-full">
+                <SelectValue placeholder="Select type..." />
+              </SelectTrigger>
+              <SelectContent>
+                {JOB_TYPES.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {byForm?.[`${formErrorType}_basic_info`]?.employmentType && (
+              <Alert variant="destructive" className="h-fit text-sm p-3">
+                <AlertCircle className="h-4 w-4" />
 
-                  <AlertDescription>
-                    {byForm?.[`${formErrorType}_basic_info`]?.jobSeniority}
-                  </AlertDescription>
-                </Alert>
-              )}
-            </div>
+                <AlertDescription>
+                  {byForm?.[`${formErrorType}_basic_info`]?.employmentType}
+                </AlertDescription>
+              </Alert>
+            )}
           </div>
+        </div>
 
-          {/* salary */}
-          <p className="text-sm font-semibold">Salary Range </p>
-          <div className="grid grid-cols-1">
-            <div className="space-y-3 md:col-span-2">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div className="space-y-3">
-                  <Label htmlFor="salaryMin">Min</Label>
-                  <Input
-                    id="salaryMin"
-                    type="number"
-                    inputMode="numeric"
-                    placeholder="Min"
-                    value={min}
-                    onChange={(event) =>
-                      dispatch(
-                        setFormMerge({
-                          salary: {
-                            ...jobForm.salary,
-                            min: +event.target.value,
-                          },
-                        }),
-                      )
-                    }
-                  />
-                </div>
+        <div className="grid grid-cols-1 gap-3 items-baseline md:grid-cols-2">
+          {/* job seiority */}
+          <div className="space-y-3">
+            <Label htmlFor="job-seiority">Expreience Level</Label>
+            <Select
+              value={experienceLevel as experienceLevelValue | undefined}
+              onValueChange={(value) =>
+                dispatch(
+                  setFormMerge({
+                    experienceLevel: value as experienceLevelValue,
+                  }),
+                )
+              }
+            >
+              <SelectTrigger id="job-seiority" className="w-full">
+                <SelectValue placeholder="Select job seiority..." />
+              </SelectTrigger>
+              <SelectContent>
+                {EXPRIENCE_LEVEL?.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {byForm?.[`${formErrorType}_basic_info`]?.jobSeniority && (
+              <Alert variant="destructive" className="h-fit text-sm p-3">
+                <AlertCircle className="h-4 w-4" />
 
-                <div className="space-y-3">
-                  <Label htmlFor="salaryMax">Max</Label>
-                  <Input
-                    id="salaryMax"
-                    type="number"
-                    inputMode="numeric"
-                    placeholder="Max"
-                    value={max}
-                    onChange={(event) =>
-                      dispatch(
-                        setFormMerge({
-                          salary: {
-                            ...jobForm.salary,
-                            max: +event.target.value,
-                          },
-                        }),
-                      )
-                    }
-                  />
-                </div>
+                <AlertDescription>
+                  {byForm?.[`${formErrorType}_basic_info`]?.jobSeniority}
+                </AlertDescription>
+              </Alert>
+            )}
+          </div>
+        </div>
 
-                <div className="space-y-3">
-                  <Label htmlFor="currency">Currency</Label>
-                  <Select
-                    value={currency as currencyOptionTypeValue | undefined}
-                    onValueChange={(value) =>
-                      dispatch(
-                        setFormMerge({
-                          salary: {
-                            ...jobForm.salary,
-                            currency: value as currencyOptionTypeValue,
-                          },
-                        }),
-                      )
-                    }
-                  >
-                    <SelectTrigger id="currency" className="w-full">
-                      <SelectValue placeholder="Currency (e.g., USD)" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {CURRENCY_OPTIONS.map((opt) => (
-                        <SelectItem key={opt.value} value={opt.value}>
-                          {opt.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-3">
-                  <Label htmlFor="payPeriod">Pay Period</Label>
-                  <Select
-                    value={payPeriod as payPeriodTypeValue | undefined}
-                    onValueChange={(value) =>
-                      dispatch(
-                        setFormMerge({
-                          salary: {
-                            ...jobForm.salary,
-                            payPeriod: value as payPeriodTypeValue,
-                          },
-                        }),
-                      )
-                    }
-                  >
-                    <SelectTrigger id="payPeriod" className="w-full">
-                      <SelectValue placeholder="Select pay period..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {PAY_PERIOD.map((opt) => (
-                        <SelectItem key={opt.value} value={opt.value}>
-                          {opt.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <Switch
-                  checked={jobForm.salary.showOnPosting}
-                  onCheckedChange={(checked) =>
+        {/* salary */}
+        <p className="text-sm font-semibold">Salary Range </p>
+        <div className="grid grid-cols-1">
+          <div className="space-y-3 md:col-span-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="space-y-3">
+                <Label htmlFor="salaryMin">Min</Label>
+                <Input
+                  id="salaryMin"
+                  type="number"
+                  inputMode="numeric"
+                  placeholder="Min"
+                  value={min}
+                  onChange={(event) =>
                     dispatch(
                       setFormMerge({
-                        salary: { ...jobForm.salary, showOnPosting: checked },
+                        salary: {
+                          ...jobForm.salary,
+                          min: +event.target.value,
+                        },
                       }),
                     )
                   }
                 />
-                <Label className="font-normal text-sm">
-                  Show salary on posting
-                </Label>
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="salaryMax">Max</Label>
+                <Input
+                  id="salaryMax"
+                  type="number"
+                  inputMode="numeric"
+                  placeholder="Max"
+                  value={max}
+                  onChange={(event) =>
+                    dispatch(
+                      setFormMerge({
+                        salary: {
+                          ...jobForm.salary,
+                          max: +event.target.value,
+                        },
+                      }),
+                    )
+                  }
+                />
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="currency">Currency</Label>
+                <Select
+                  value={currency as currencyOptionTypeValue | undefined}
+                  onValueChange={(value) =>
+                    dispatch(
+                      setFormMerge({
+                        salary: {
+                          ...jobForm.salary,
+                          currency: value as currencyOptionTypeValue,
+                        },
+                      }),
+                    )
+                  }
+                >
+                  <SelectTrigger id="currency" className="w-full">
+                    <SelectValue placeholder="Currency (e.g., USD)" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {CURRENCY_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="payPeriod">Pay Period</Label>
+                <Select
+                  value={payPeriod as payPeriodTypeValue | undefined}
+                  onValueChange={(value) =>
+                    dispatch(
+                      setFormMerge({
+                        salary: {
+                          ...jobForm.salary,
+                          payPeriod: value as payPeriodTypeValue,
+                        },
+                      }),
+                    )
+                  }
+                >
+                  <SelectTrigger id="payPeriod" className="w-full">
+                    <SelectValue placeholder="Select pay period..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PAY_PERIOD.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
+            <div className="flex items-center gap-2">
+              <Switch
+                checked={jobForm.salary.showOnPosting}
+                onCheckedChange={(checked) =>
+                  dispatch(
+                    setFormMerge({
+                      salary: { ...jobForm.salary, showOnPosting: checked },
+                    }),
+                  )
+                }
+              />
+              <Label className="font-normal text-sm">
+                Show salary on posting
+              </Label>
+            </div>
           </div>
+        </div>
 
-          <div className="space-y-3">
-            <Label htmlFor="skills">Required Skills</Label>
-            <Input
-              id="skills"
-              placeholder="e.g., React, TypeScript (comma separated)"
-              value={jobForm.skills}
-              onChange={(event) =>
-                dispatch(
-                  setFormMerge({ skills: event.target.value.split(",") }),
-                )
-              }
-            />
-          </div>
-
-          {/* facilites */}
-          {/* <fieldset className="space-y-3 md:col-span-2 mt-3" id="facilities">
-            <legend className="text-sm font-medium">Benifits</legend>
-
-            <CheckboxGroup
-              options={BENIFITS_OPTIONS}
-              values={benefits ?? []}
-              onChange={(next) => dispatch(setFormMerge({ benefits: next }))}
-              columns={2}
-            />
-          </fieldset> */}
+        <div className="space-y-3">
+          <Label htmlFor="skills">Required Skills</Label>
+          <Input
+            id="skills"
+            placeholder="e.g., React, TypeScript (comma separated)"
+            value={jobForm.skills}
+            onChange={(event) =>
+              dispatch(setFormMerge({ skills: event.target.value.split(",") }))
+            }
+          />
         </div>
       </div>
-    </ScrollArea>
+    </div>
   );
 };
 
