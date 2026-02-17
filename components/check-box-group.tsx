@@ -10,7 +10,7 @@ export type Option = { value: string; label: string };
 
 interface CheckboxGroupProps {
   options: Readonly<Option[]>;
-  value: string[]; // selected values
+  values: string[]; // selected values
   onChange: (next: string[]) => void;
   columns?: 1 | 2 | 3 | 4; // layout control (default 2)
   disabledValues?: string[]; // optional: disable specific items
@@ -18,15 +18,15 @@ interface CheckboxGroupProps {
 
 export default function CheckboxGroup({
   options,
-  value,
+  values,
   onChange,
   columns = 3,
   disabledValues = [],
 }: CheckboxGroupProps) {
-  const toggle = (v: string) => {
-    const next = value.includes(v)
-      ? value.filter((x) => x !== v)
-      : [...value, v];
+  const toggle = (newValue: string) => {
+    const next = values.includes(newValue)
+      ? values.filter((existingValue) => existingValue !== newValue)
+      : [...values, newValue];
     onChange(next);
   };
 
@@ -39,12 +39,12 @@ export default function CheckboxGroup({
         columns === 1 && "grid-cols-1",
         columns === 2 && "grid-cols-2",
         columns === 3 && "grid-cols-3",
-        columns === 4 && "grid-cols-4"
+        columns === 4 && "grid-cols-4",
       )}
     >
       {options.map((opt) => {
         const id = `${baseId}-${opt.value}`;
-        const checked = value.includes(opt.value);
+        const checked = values.includes(opt.value);
         const disabled = disabledValues.includes(opt.value);
         return (
           <div key={opt.value} className="flex items-center gap-2">

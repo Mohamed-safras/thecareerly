@@ -26,8 +26,8 @@ const CreateNewJobHeaderStepper: React.FC<CreateNewJobHeaderStepperProps> = ({
   goTo,
 }) => {
   return (
-    <div className="relative col-span-1">
-      <div className="p-3 space-y-3 border rounded-xl shadow-sm h-fit bg-card">
+    <div className="sticky top-10 z-20 col-span-1">
+      <div className="p-3 space-y-3 h-fit bg-card">
         <HorizontalStepper
           steps={createJobPostingSteps}
           currentStep={currentStep}

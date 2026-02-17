@@ -37,7 +37,7 @@ const CreateNewJobWrapper = () => {
       breadCrumbPage="Create New Job"
       breadCrumbsItems={[{ label: "Jobs", link: jobsPath ? jobsPath : "#" }]}
     >
-      <div className="mx-auto grid max-w-8xl grid-cols-1 gap-3 p-3">
+      <div className="mx-auto grid max-w-6xl grid-cols-1">
         <CreateNewJobHeaderStepper
           createJobPostingSteps={createJobPostingSteps}
           currentStep={currentStep}

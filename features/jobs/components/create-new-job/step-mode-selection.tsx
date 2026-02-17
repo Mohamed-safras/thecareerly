@@ -2,22 +2,26 @@ import { useState, useMemo } from "react";
 import { FileText, Copy } from "lucide-react";
 import { JobFormData } from "@/interfaces/job";
 import { jobTemplates } from "../../data/mock-job-template";
-import { ModeCard } from "./mode-card";
-import { TemplateSearchBar } from "./template-search-bar";
-import { TemplateCard } from "./template-card";
-import { TemplatePreviewDialog } from "./template-preview-dialog";
+import { ModeCard } from "../mode-card";
+import { TemplateSearchBar } from "../template-search-bar";
+import { TemplateCard } from "../template-card";
+import { TemplatePreviewDialog } from "../template-preview-dialog";
+import { useAppDispatch } from "@/store/hooks";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 interface StepModeSelectionProps {
-  formData: JobFormData;
-  onChange: (field: keyof JobFormData, value: unknown) => void;
+  jobForm: JobFormData;
+  setFormMerge: ActionCreatorWithPayload<Partial<JobFormData>>;
   onApplyTemplate: (prefill: Partial<JobFormData>) => void;
 }
 
-export function StepModeSelection({
-  formData,
-  onChange,
+const StepModeSelection: React.FC<StepModeSelectionProps> = ({
+  jobForm,
+  setFormMerge,
   onApplyTemplate,
-}: StepModeSelectionProps) {
+}) => {
+  const dispatch = useAppDispatch();
+
   const [search, setSearch] = useState("");
   const [deptFilter, setDeptFilter] = useState("all");
   const [previewTemplate, setPreviewTemplate] = useState<
@@ -44,8 +48,7 @@ export function StepModeSelection({
 
   const selectTemplate = (id: string) => {
     const template = jobTemplates.find((template) => template.id === id);
-    onChange("useTemplate", true);
-    onChange("templateId", id);
+    dispatch(setFormMerge({ useTemplate: true, templateId: id }));
     if (template?.prefill) {
       onApplyTemplate(template.prefill);
     }
@@ -53,30 +56,31 @@ export function StepModeSelection({
   };
 
   return (
-    <div className="space-y-3">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <div className="space-y-3 max-h-[600px] overflow-y-scroll border rounded-lg p-3">
+      <div className="grid grid-cols-2 gap-3">
         <ModeCard
           icon={FileText}
           title="Start from Blank"
           description="Create from scratch"
-          selected={!formData.useTemplate}
-          onClick={() => {
-            onChange("useTemplate", false);
-            onChange("templateId", undefined);
-          }}
+          selected={!jobForm.useTemplate}
+          onClick={() =>
+            dispatch(
+              setFormMerge({ useTemplate: false, templateId: undefined }),
+            )
+          }
           iconClassName="bg-primary/10 text-primary"
         />
         <ModeCard
           icon={Copy}
           title="Use Template"
           description="Pre-built job templates"
-          selected={!!formData.useTemplate}
-          onClick={() => onChange("useTemplate", true)}
+          selected={!!jobForm.useTemplate}
+          onClick={() => dispatch(setFormMerge({ useTemplate: true }))}
           iconClassName="bg-accent text-accent-foreground"
         />
       </div>
 
-      {formData.useTemplate && (
+      {jobForm.useTemplate && (
         <div className="space-y-3">
           <TemplateSearchBar
             search={search}
@@ -86,12 +90,12 @@ export function StepModeSelection({
             onDeptFilterChange={setDeptFilter}
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {filteredTemplates.map((template) => (
               <TemplateCard
                 key={template.id}
                 template={template}
-                selected={formData.templateId === template.id}
+                selected={jobForm.templateId === template.id}
                 onSelect={selectTemplate}
                 onPreview={setPreviewTemplate}
               />
@@ -113,4 +117,6 @@ export function StepModeSelection({
       />
     </div>
   );
-}
+};
+
+export default StepModeSelection;

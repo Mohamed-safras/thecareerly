@@ -76,6 +76,12 @@ export interface ScreeningQuestion {
   isKnockout?: boolean;
 }
 
+export interface JobBenefits {
+  id: string;
+  name: string;
+  icon: string;
+}
+
 export interface DocumentRequirements {
   resume: boolean;
   coverLetter: boolean;

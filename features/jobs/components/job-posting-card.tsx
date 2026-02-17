@@ -25,9 +25,9 @@ import {
 
 import KV from "@/features/jobs/components/kv";
 import { jobStatus } from "@/const/action-colors";
-import { JobForm } from "@/interfaces/job";
+import { JobFormData } from "@/interfaces/job";
 
-export interface Job extends JobForm {
+export interface Job extends JobFormData {
   id: string;
   status: "OPEN" | "HOLD" | "CLOSED" | "DRAFT";
   candidatesApplied: number;
@@ -106,7 +106,7 @@ export function JobPostingCard({
         )}
 
         <div className="flex flex-wrap justify-between items-center gap-x-2 gap-y-1">
-          <KV icon={BriefcaseBusiness}>{job.employmentType}</KV>
+          <KV icon={BriefcaseBusiness}>{job.jobType}</KV>
           <KV icon={MapPin}>
             {job.location.length > 10
               ? `${job.location.slice(0, 10)}...`

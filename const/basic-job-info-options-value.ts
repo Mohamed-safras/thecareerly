@@ -15,18 +15,19 @@ export const JOB_TYPES: Readonly<JobTypeOption[]> = Object.freeze([
 
 export const EXPRIENCE_LEVEL: Readonly<ExprerienceLevelOption[]> =
   Object.freeze([
-    { value: "entry", label: "Entry" },
-    { value: "mid", label: "Mid" },
-    { value: "senior", label: "Senior" },
-    { value: "lead", label: "Lead" },
-    { value: "executive", label: "Executive" },
+    { value: "entry", label: "Entry Level" },
+    { value: "mid", label: "Mid Level" },
+    { value: "senior", label: "Senior Level" },
+    { value: "lead", label: "Lead Level" },
+    { value: "executive", label: "Executive Level" },
   ]);
 
-export const FACILITY_OPTIONS = Object.freeze([
+export const BENIFITS_OPTIONS = Object.freeze([
+  { value: "health", label: "Health" },
+  { value: "dental", label: "Dental" },
   { value: "bonus", label: "Bonus" },
   { value: "comission", label: "Comission" },
   { value: "paid-overtime", label: "Paid Overtime" },
-  { value: "medical-cover", label: "Medical Cover" },
   { value: "dental-care", label: "Dental Care" },
   { value: "life-insurance", label: "Life Insurance" },
   { value: "eye-care", label: "Eye Care" },
@@ -67,7 +68,7 @@ export const EDUCATION_LEVEL: Readonly<SelectFieldOptions[]> = Object.freeze([
     label: "Diploma / Advanced Diploma",
   },
   { value: "Associate Degree", label: "Associate Degree" },
-  { value: "Bachelor’s Degree", label: "Bachelor’s Degree" },
+  { value: "bachelor", label: "Bachelor’s Degree" },
   { value: "Master’s Degree", label: "Master’s Degree" },
   { value: "Doctorate / PhD", label: "Doctorate / PhD" },
   { value: "Post Doctorate", label: "Post Doctorate" },
