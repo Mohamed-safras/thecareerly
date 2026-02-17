@@ -8,11 +8,11 @@ import { Forward, Heart, SquareArrowOutUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { JobForm } from "@/interfaces/job";
+import { JobFormData } from "@/interfaces/job";
 
 export interface PreviewPanelProps {
   compact?: boolean;
-  jobForm: JobForm;
+  jobForm: JobFormData;
 }
 
 const PreviewPanel = ({ compact, jobForm }: PreviewPanelProps) => {
@@ -88,12 +88,9 @@ const PreviewPanel = ({ compact, jobForm }: PreviewPanelProps) => {
       </div>
 
       <div className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
-        <SqureCard
-          title="Education"
-          value={jobForm.minimumQualificationLevel}
-        />
+        <SqureCard title="Education" value={jobForm.educationLevel} />
         <SqureCard title="Work Level" value={jobForm.workPreference} />
-        <SqureCard title="Employe Type" value={jobForm.employmentType} />
+        <SqureCard title="Employe Type" value={jobForm.jobType} />
         {jobForm.salary.min && (
           <SqureCard
             title="Offer Salary"

@@ -22,7 +22,6 @@ import {
   EXPRIENCE_LEVEL,
   PAY_PERIOD,
   WORK_PREFERENCE,
-  EDUCATION_LEVEL,
   BENIFITS_OPTIONS,
 } from "@/const/basic-job-info-options-value";
 import { Separator } from "@/components/ui/separator";
@@ -34,7 +33,6 @@ import { JOB_TITLE_OPTIONS } from "@/const/local-store-values";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import {
-  educationLevelTypeValue,
   experienceLevelValue,
   jobTypeValue,
   payPeriodTypeValue,
@@ -49,18 +47,17 @@ export interface BasicInfoProps {
   formErrorType: string;
 }
 
-const BasicInfo = ({
+const StepJobDetails: React.FC<BasicInfoProps> = ({
   jobForm,
   formType,
   setFormMerge,
   replaceForm,
   formErrorType,
-}: BasicInfoProps) => {
+}) => {
   const [titleOptions, setTitleOptions] = useState<ComboItem[]>([]);
   const [titlesHydrated, setTitlesHydrated] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
-
   const { byForm } = useAppSelector(({ formErrors }) => formErrors);
 
   const {
@@ -164,13 +161,9 @@ const BasicInfo = ({
     [titleOptions, title],
   );
 
-  console.log(selectedTitleValue);
   return (
-    <ScrollArea className="max-h-[600px] overflow-y-scroll ">
+    <ScrollArea className="max-h-[600px] overflow-y-scroll">
       <div className="space-y-3 rounded border p-3">
-        <h2 className="text-lg font-semibold">Basic Infomation</h2>
-        <Separator />
-
         <div className="space-y-3">
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             {/* title */}
@@ -315,45 +308,6 @@ const BasicInfo = ({
                 </Alert>
               )}
             </div>
-
-            {/* qualification level */}
-            <div className="space-y-1.5">
-              <Label htmlFor="qualification-level">Education Level</Label>
-              <Select
-                value={educationLevel as educationLevelTypeValue | undefined}
-                onValueChange={(value) =>
-                  dispatch(
-                    setFormMerge({
-                      educationLevel: value as educationLevelTypeValue,
-                    }),
-                  )
-                }
-              >
-                <SelectTrigger id="qualification-level" className="w-full">
-                  <SelectValue placeholder="Select type..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {EDUCATION_LEVEL.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {byForm?.[`${formErrorType}_basic_info`]
-                ?.minimumQualificationLevel && (
-                <Alert variant="destructive" className="h-fit text-sm p-3">
-                  <AlertCircle className="h-4 w-4" />
-
-                  <AlertDescription>
-                    {
-                      byForm?.[`${formErrorType}_basic_info`]
-                        ?.minimumQualificationLevel
-                    }
-                  </AlertDescription>
-                </Alert>
-              )}
-            </div>
           </div>
 
           <p className="text-sm font-semibold">Salary & Benifits</p>
@@ -481,4 +435,4 @@ const BasicInfo = ({
   );
 };
 
-export default BasicInfo;
+export default StepJobDetails;

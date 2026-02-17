@@ -1,7 +1,7 @@
 const baseJobPostingSteps: Readonly<{ id: number; title: string }[]> = [
   { id: 1, title: "Start" },
-  { id: 2, title: "Basic Information" },
-  { id: 3, title: "Job Description & Poster Generation" },
+  { id: 2, title: "Details" },
+  { id: 3, title: "Description & Poster Generation" },
   { id: 4, title: "Applicable Questions" },
   { id: 5, title: "Hiring Process" },
   { id: 6, title: "Preview" },
