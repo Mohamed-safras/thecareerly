@@ -61,9 +61,9 @@ const stepHeaderDetails: Record<
     icon: <Sparkles className="h-5 w-5 text-primary" />,
   },
   4: {
-    title: "",
+    title: "Requirements & Screening",
     description:
-      "You can create screening questions. Candidates who provide an incorrect answers will automatically be moved into the 'Unsuitable' folder within Applicant manager.",
+      "Set education, experience, and application screening questions.",
   },
   5: {
     title: "",

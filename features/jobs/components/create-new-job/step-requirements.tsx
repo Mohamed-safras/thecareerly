@@ -126,14 +126,7 @@ const StepRequirements: React.FC<StepRequirementsProps> = ({
   ];
 
   return (
-    <div className="space-y-3">
-      <div>
-        <h3 className="text-lg font-semibold">Requirements & Screening</h3>
-        <p className="text-sm text-muted-foreground">
-          Set education, experience, and application screening questions.
-        </p>
-      </div>
-
+    <div className="space-y-3 border p-3 rounded-lg">
       <div className="grid grid-cols-2 gap-3">
         {/* qualification level */}
         <div className="space-y-1.5">

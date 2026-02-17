@@ -14,9 +14,9 @@ import { AlertCircle, Loader2, MapPin, Search } from "lucide-react";
 import axios from "axios";
 import { useAutoSearch } from "@/hooks/use-auto-search";
 import { mapNominatim } from "@/lib/geo/place";
-import { Place } from "@/types/place";
 import { Label } from "./ui/label";
 import { Alert, AlertDescription } from "./ui/alert";
+import { Place } from "@/types/job";
 
 const nominatim = axios.create({
   baseURL: "https://nominatim.openstreetmap.org",
@@ -54,6 +54,7 @@ export default function TypeaheadLocation({
     enabled: true,
   });
 
+  console.log(results);
   // Open/close based on focus + results/loading + minChars
   useEffect(() => {
     const hasQuery = value.trim().length >= minChars;
@@ -75,7 +76,7 @@ export default function TypeaheadLocation({
   }, []);
 
   return (
-    <div ref={wrapperRef} className="space-y-1.5">
+    <div ref={wrapperRef} className="space-y-3">
       <Label htmlFor="location">Location</Label>
 
       <div className={`relative`}>

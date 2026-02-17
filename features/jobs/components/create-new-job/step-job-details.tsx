@@ -14,7 +14,7 @@ import { Combobox, type ComboItem } from "@/components/combobox";
 import { localStoreGet, localStoreSet } from "@/lib/common/localstore";
 import { isComboItemArray, slugify } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Search } from "lucide-react";
 import CheckboxGroup from "@/components/check-box-group";
 import {
   CURRENCY_OPTIONS,
@@ -38,6 +38,7 @@ import {
   payPeriodTypeValue,
   workPreferenceTypeValue,
 } from "@/types/job";
+import { Switch } from "@/components/ui/switch";
 
 export interface BasicInfoProps {
   jobForm: JobFormData;
@@ -162,13 +163,13 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
   );
 
   return (
-    <ScrollArea className="max-h-[600px] overflow-y-scroll">
-      <div className="space-y-3 rounded border p-3">
-        <div className="space-y-3">
+    <ScrollArea className="max-h-[500px] overflow-y-scroll">
+      <div className="space-y-6 rounded border p-3">
+        <div className="space-y-6">
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             {/* title */}
-            <div className="space-y-1.5">
-              <Label htmlFor="job-title">Job Title</Label>
+            <div className="space-y-3">
+              <Label htmlFor="job-title">Job Title *</Label>
               <Combobox
                 id="job-title"
                 items={titleOptions}
@@ -198,6 +199,7 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
               )}
             </div>
 
+            {/* needs to do rate limiting */}
             <TypeaheadLocation
               value={location}
               onChange={(value) => dispatch(setFormMerge({ location: value }))}
@@ -207,7 +209,7 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
 
           <div className="grid grid-cols-1 gap-3 items-baseline md:grid-cols-2">
             {/* work preference */}
-            <div className="space-y-1.5">
+            <div className="space-y-3">
               <Label htmlFor="work-preference">Work Preference</Label>
               <Select
                 value={workPreference as workPreferenceTypeValue | undefined}
@@ -242,7 +244,7 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
             </div>
 
             {/* job type */}
-            <div className="space-y-1.5">
+            <div className="space-y-3">
               <Label htmlFor="job-type">Job Type</Label>
               <Select
                 value={jobType as jobTypeValue | undefined}
@@ -275,7 +277,7 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
 
           <div className="grid grid-cols-1 gap-3 items-baseline md:grid-cols-2">
             {/* job seiority */}
-            <div className="space-y-1.5">
+            <div className="space-y-3">
               <Label htmlFor="job-seiority">Expreience Level</Label>
               <Select
                 value={experienceLevel as experienceLevelValue | undefined}
@@ -310,23 +312,63 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
             </div>
           </div>
 
-          <p className="text-sm font-semibold">Salary & Benifits</p>
-          <Separator />
-
           {/* salary */}
+          <p className="text-sm font-semibold">Salary Range </p>
           <div className="grid grid-cols-1">
-            <div className="space-y-1.5 md:col-span-2">
+            <div className="space-y-3 md:col-span-2">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div className="space-y-1.5">
-                  <Label htmlFor="currency">Currency</Label>
-                  <Select
-                    value={currency as currencyOptionTypeValue | undefined}
-                    onValueChange={(v) =>
+                <div className="space-y-3">
+                  <Label htmlFor="salaryMin">Min</Label>
+                  <Input
+                    id="salaryMin"
+                    type="number"
+                    inputMode="numeric"
+                    placeholder="Min"
+                    value={min}
+                    onChange={(event) =>
                       dispatch(
                         setFormMerge({
                           salary: {
                             ...jobForm.salary,
-                            currency: v as currencyOptionTypeValue,
+                            min: +event.target.value,
+                          },
+                        }),
+                      )
+                    }
+                  />
+                </div>
+
+                <div className="space-y-3">
+                  <Label htmlFor="salaryMax">Max</Label>
+                  <Input
+                    id="salaryMax"
+                    type="number"
+                    inputMode="numeric"
+                    placeholder="Max"
+                    value={max}
+                    onChange={(event) =>
+                      dispatch(
+                        setFormMerge({
+                          salary: {
+                            ...jobForm.salary,
+                            max: +event.target.value,
+                          },
+                        }),
+                      )
+                    }
+                  />
+                </div>
+
+                <div className="space-y-3">
+                  <Label htmlFor="currency">Currency</Label>
+                  <Select
+                    value={currency as currencyOptionTypeValue | undefined}
+                    onValueChange={(value) =>
+                      dispatch(
+                        setFormMerge({
+                          salary: {
+                            ...jobForm.salary,
+                            currency: value as currencyOptionTypeValue,
                           },
                         }),
                       )
@@ -345,7 +387,7 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
                   </Select>
                 </div>
 
-                <div className="space-y-1.5">
+                <div className="space-y-3">
                   <Label htmlFor="payPeriod">Pay Period</Label>
                   <Select
                     value={payPeriod as payPeriodTypeValue | undefined}
@@ -372,54 +414,41 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
                     </SelectContent>
                   </Select>
                 </div>
-
-                <div className="space-y-1.5">
-                  <Label htmlFor="salaryMin">Salary Min</Label>
-                  <Input
-                    id="salaryMin"
-                    type="number"
-                    inputMode="numeric"
-                    placeholder="Min"
-                    value={min}
-                    onChange={(event) =>
-                      dispatch(
-                        setFormMerge({
-                          salary: {
-                            ...jobForm.salary,
-                            min: +event.target.value,
-                          },
-                        }),
-                      )
-                    }
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label htmlFor="salaryMax">Salary Max</Label>
-                  <Input
-                    id="salaryMax"
-                    type="number"
-                    inputMode="numeric"
-                    placeholder="Max"
-                    value={max}
-                    onChange={(event) =>
-                      dispatch(
-                        setFormMerge({
-                          salary: {
-                            ...jobForm.salary,
-                            max: +event.target.value,
-                          },
-                        }),
-                      )
-                    }
-                  />
-                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Switch
+                  checked={jobForm.salary.showOnPosting}
+                  onCheckedChange={(checked) =>
+                    dispatch(
+                      setFormMerge({
+                        salary: { ...jobForm.salary, showOnPosting: checked },
+                      }),
+                    )
+                  }
+                />
+                <Label className="font-normal text-sm">
+                  Show salary on posting
+                </Label>
               </div>
             </div>
           </div>
 
+          <div className="space-y-3">
+            <Label htmlFor="skills">Required Skills</Label>
+            <Input
+              id="skills"
+              placeholder="e.g., React, TypeScript (comma separated)"
+              value={jobForm.skills}
+              onChange={(event) =>
+                dispatch(
+                  setFormMerge({ skills: event.target.value.split(",") }),
+                )
+              }
+            />
+          </div>
+
           {/* facilites */}
-          <fieldset className="space-y-1.5 md:col-span-2 mt-3" id="facilities">
+          {/* <fieldset className="space-y-3 md:col-span-2 mt-3" id="facilities">
             <legend className="text-sm font-medium">Benifits</legend>
 
             <CheckboxGroup
@@ -428,7 +457,7 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
               onChange={(next) => dispatch(setFormMerge({ benefits: next }))}
               columns={2}
             />
-          </fieldset>
+          </fieldset> */}
         </div>
       </div>
     </ScrollArea>
