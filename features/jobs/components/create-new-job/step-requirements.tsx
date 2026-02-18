@@ -33,17 +33,13 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface StepRequirementsProps {
   jobForm: JobFormData;
-  formType: string;
   setFormMerge: ActionCreatorWithPayload<Partial<JobFormData>>;
-  replaceForm: ActionCreatorWithPayload<JobFormData>;
   formErrorType: string;
 }
 
 const StepRequirements: React.FC<StepRequirementsProps> = ({
   jobForm,
-  formType,
   setFormMerge,
-  replaceForm,
   formErrorType,
 }) => {
   const dispatch = useAppDispatch();

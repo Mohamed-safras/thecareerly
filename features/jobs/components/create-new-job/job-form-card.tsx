@@ -8,15 +8,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Eye,
-  Rocket,
-  Shield,
-  Sparkles,
-  SparklesIcon,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Shield, Sparkles } from "lucide-react";
 import SchedulePanel from "@/features/jobs/components/publish-job";
 import JobDescription from "@/features/jobs/components/job-description";
 import PreviewPanel from "@/features/jobs/components/preview-job";
@@ -31,6 +23,7 @@ import StepJobDetails from "@/features/jobs/components/create-new-job/step-job-d
 import StepModeSelection from "./step-mode-selection";
 import StepCompliance from "./step-compliance";
 import { StepContentReview } from "./step-content-review";
+import StepMediaAttachments from "./step-media-attachments";
 
 interface JobFormCardProps {
   currentStep: number;
@@ -73,15 +66,19 @@ const stepHeaderDetails: Record<
       "Set education, experience, and application screening questions.",
   },
   6: {
+    title: "Media & Attachments",
+    description: "Add images, videos, or documents to your job posting.",
+  },
+  7: {
     title: "Compliance Check",
     description: "Scan your job posting for compliance issues.",
     icon: <Shield className="h-5 w-5 text-primary" />,
   },
-  7: {
+  8: {
     title: "",
     description: "See how your job post will look before publishing.",
   },
-  8: {
+  9: {
     title: "",
     description:
       "Plan your post in advance and publish it at the perfect time.",
@@ -141,15 +138,17 @@ const JobFormCard = ({
         return (
           <StepRequirements
             jobForm={jobForm}
-            formType={formType}
             setFormMerge={setFormMerge}
-            replaceForm={replaceForm}
             formErrorType={formErrorType}
           />
         );
       case 6:
-        return <StepCompliance jobForm={jobForm} setFormMerge={setFormMerge} />;
+        return (
+          <StepMediaAttachments jobForm={jobForm} setFormMerge={setFormMerge} />
+        );
       case 7:
+        return <StepCompliance jobForm={jobForm} setFormMerge={setFormMerge} />;
+      case 8:
         return (
           <HiringProcesses
             jobForm={jobForm}
@@ -158,9 +157,9 @@ const JobFormCard = ({
             replaceForm={replaceForm}
           />
         );
-      case 8:
-        return <PreviewPanel jobForm={jobForm} />;
       case 9:
+        return <PreviewPanel jobForm={jobForm} />;
+      case 10:
         return (
           <SchedulePanel
             setCurrentStep={setCurrentStep}
