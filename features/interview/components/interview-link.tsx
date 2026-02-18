@@ -29,7 +29,7 @@ const InterviewShareCard = ({
 }: InterviewShareCardProps) => {
   const [copied, setCopied] = useState(false);
 
-  const interviewLink = `http://localhost:5173/interview/${interviewId}`;
+  const interviewLink = `http://localhost:5173/meeting/${interviewId}`;
 
   const handleCopyLink = async () => {
     try {
