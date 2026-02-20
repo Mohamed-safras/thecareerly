@@ -55,8 +55,6 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
   replaceForm,
   formErrorType,
 }) => {
-  const [titleOptions, setTitleOptions] = useState<ComboItem[]>([]);
-  const [titlesHydrated, setTitlesHydrated] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
   const { byForm } = useAppSelector(({ formErrors }) => formErrors);
@@ -73,51 +71,10 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
     useTemplate,
   } = jobForm;
 
-  // Load title options once
-  useEffect(() => {
-    const stored = localStoreGet<unknown>(JOB_TITLE_OPTIONS, []);
-    const safeStored = isComboItemArray(stored) ? stored : [];
-    setTitleOptions(safeStored);
-    setTitlesHydrated(true);
-  }, []);
-
-  // Save title options only AFTER they are hydrated
-  useEffect(() => {
-    if (!titlesHydrated) return;
-    localStoreSet<ComboItem[]>(JOB_TITLE_OPTIONS, titleOptions);
-  }, [titleOptions, titlesHydrated]);
-
-  function onCreate(label: string) {
-    const trimmed = label.trim();
-    if (!trimmed) return;
-
-    const existing = titleOptions?.find(
-      (option) => option.label.toLowerCase().trim() === trimmed.toLowerCase(),
-    );
-
-    if (existing) {
-      dispatch(setFormMerge({ title: existing.label }));
-      return existing;
-    }
-
-    const newItem: ComboItem = {
-      value: slugify(trimmed) || trimmed,
-      label: trimmed,
-    };
-
-    setTitleOptions((prev) => {
-      const next = [...prev, newItem];
-      // Persist immediately (titlesHydrated is true after initial load)
-      localStoreSet<ComboItem[]>(JOB_TITLE_OPTIONS, next);
-      return next;
-    });
-
-    dispatch(setFormMerge({ title: trimmed }));
-    return newItem;
-  }
 
   // Form hydration & persistence (unchanged)
   const [hydrated, setHydrated] = useState(false);
+
   useEffect(() => {
     const stored = localStoreGet<JobFormData>(formType, jobForm);
     console.log(stored);
@@ -157,11 +114,6 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
     useTemplate,
   ]);
 
-  const selectedTitleValue = useMemo(
-    () => titleOptions.find((option) => option.label === title)?.value || title,
-    [titleOptions, title],
-  );
-
   return (
     <div className="space-y-6 rounded border p-3 max-h-[600px] overflow-y-scroll">
       <div className="space-y-6">
@@ -169,30 +121,25 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
           {/* title */}
           <div className="space-y-3">
             <Label htmlFor="job-title">Job Title *</Label>
-            <Combobox
-              id="job-title"
-              items={titleOptions}
-              value={selectedTitleValue}
-              onChange={(_, item) => {
-                const title = item?.label ?? "";
-                dispatch(setFormMerge({ title }));
-              }}
-              allowCreate
-              onCreate={onCreate}
-              placeholder="Select title..."
-              inputPlaceholder="Search titles..."
-              emptyMessage="No matching titles."
-              createPrefix="Create"
-              matchTriggerWidth
-              className={`w-full bg-transparent`}
-              contentClassName="w-full"
-            />
-            {byForm?.[`${formErrorType}_basic_info`]?.title && (
+            <Input
+                  id="job-title"
+                  type="text"
+                  placeholder="e.g., Senior Engineer"
+                  value={title}
+                  onChange={(event) =>
+                    dispatch(
+                      setFormMerge({
+                        title: event.target.value.trim(),
+                      }),
+                    )
+                  }
+                />
+            {byForm?.[`${formErrorType}_job_details`]?.title && (
               <Alert variant="destructive" className="h-fit text-sm p-3">
                 <AlertCircle className="h-4 w-4" />
 
                 <AlertDescription>
-                  {byForm?.[`${formErrorType}_basic_info`]?.title}
+                  {byForm?.[`${formErrorType}_job_details`]?.title}
                 </AlertDescription>
               </Alert>
             )}
@@ -202,7 +149,7 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
           <TypeaheadLocation
             value={location}
             onChange={(value) => dispatch(setFormMerge({ location: value }))}
-            fieldError={byForm?.[`${formErrorType}_basic_info`]?.location}
+            fieldError={byForm?.[`${formErrorType}_job_details`]?.location}
           />
         </div>
 
@@ -231,12 +178,12 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
                 ))}
               </SelectContent>
             </Select>
-            {byForm?.[`${formErrorType}_basic_info`]?.workPreference && (
+            {byForm?.[`${formErrorType}_job_details`]?.workPreference && (
               <Alert variant="destructive" className="h-fit text-sm p-3">
                 <AlertCircle className="h-4 w-4" />
 
                 <AlertDescription>
-                  {byForm?.[`${formErrorType}_basic_info`]?.workPreference}
+                  {byForm?.[`${formErrorType}_job_details`]?.workPreference}
                 </AlertDescription>
               </Alert>
             )}
@@ -262,12 +209,12 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
                 ))}
               </SelectContent>
             </Select>
-            {byForm?.[`${formErrorType}_basic_info`]?.employmentType && (
+            {byForm?.[`${formErrorType}_job_details`]?.employmentType && (
               <Alert variant="destructive" className="h-fit text-sm p-3">
                 <AlertCircle className="h-4 w-4" />
 
                 <AlertDescription>
-                  {byForm?.[`${formErrorType}_basic_info`]?.employmentType}
+                  {byForm?.[`${formErrorType}_job_details`]?.employmentType}
                 </AlertDescription>
               </Alert>
             )}
@@ -299,12 +246,12 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
                 ))}
               </SelectContent>
             </Select>
-            {byForm?.[`${formErrorType}_basic_info`]?.jobSeniority && (
+            {byForm?.[`${formErrorType}_job_details`]?.jobSeniority && (
               <Alert variant="destructive" className="h-fit text-sm p-3">
                 <AlertCircle className="h-4 w-4" />
 
                 <AlertDescription>
-                  {byForm?.[`${formErrorType}_basic_info`]?.jobSeniority}
+                  {byForm?.[`${formErrorType}_job_details`]?.jobSeniority}
                 </AlertDescription>
               </Alert>
             )}
@@ -312,7 +259,7 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
         </div>
 
         {/* salary */}
-        <p className="text-sm font-semibold">Salary Range </p>
+        <p className="text-sm font-semibold">Salary Range</p>
         <div className="grid grid-cols-1">
           <div className="space-y-3 md:col-span-2">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

@@ -11,7 +11,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -83,6 +82,7 @@ const StepMediaAttachments: React.FC<StepMediaAttachmentsProps> = ({
           //     a.id === attachment.id
           //       ? { ...a, progress: 100, status: "complete" as const }
           //       : a]}))
+          // dispatch(setFormMerge({mediaAttachments: }))
         } else {
           // onChange("mediaAttachments", (prev: MediaAttachment[]) =>
           //   prev.map((a) =>
@@ -102,8 +102,8 @@ const StepMediaAttachments: React.FC<StepMediaAttachmentsProps> = ({
       e.preventDefault();
       setIsDragging(false);
       const files = Array.from(e.dataTransfer.files);
-      files.forEach((f) =>
-        simulateUpload({ name: f.name, size: f.size, type: f.type }),
+      files.forEach((file) =>
+        simulateUpload({ name: file.name, size: file.size, type: file.type }),
       );
     },
     [simulateUpload],

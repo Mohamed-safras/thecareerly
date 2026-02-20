@@ -60,3 +60,6 @@ export type workPreferenceTypeValue = (typeof WORK_PREFERENCE)[number]["value"];
 export type allowedVibesTypeValue =
   (typeof ALLOWED_VIBES_TYPES)[number]["value"];
 export type PosterVibe = (typeof ALLOWED_VIBES)[number];
+
+
+export type DevicePreview = 'desktop' | 'tablet' | 'mobile';

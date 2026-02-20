@@ -45,6 +45,7 @@ export interface JobFormData {
   posterVibe: PosterVibe;
   posterNotes: string;
   selectionProcess: SelectionProcess[];
+  publishMode: 'immediate' | 'scheduled';
   publishChannels: {
     companyWebsite: boolean;
     internalJobBoard: boolean;
