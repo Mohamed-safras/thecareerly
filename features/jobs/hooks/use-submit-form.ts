@@ -51,13 +51,7 @@ export function useSubmitJobForm({
         path: "experienceLevel",
         message: "Experience Level is required",
       });
-    if (!jobForm.educationLevel)
-      errors.push({
-        path: "educationLevel",
-        message: "Education Level is required",
-      });
-
-    dispatch(setFieldErrors({ formId: formErrorType + "_basic_info", errors }));
+    dispatch(setFieldErrors({ formId: formErrorType + "_job_details", errors }));
     return errors;
   };
 
@@ -95,9 +89,9 @@ export function useSubmitJobForm({
 
   const validateStep = (step: number): FieldError[] => {
     switch (step) {
-      case 1:
-        return validateBasicInfo();
       case 2:
+        return validateBasicInfo();
+      case 3:
         return validateJobDescription();
       default:
         return [];
