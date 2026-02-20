@@ -9,10 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Shield, Sparkles } from "lucide-react";
-import SchedulePanel from "@/features/jobs/components/publish-job";
 import JobDescription from "@/features/jobs/components/job-description";
-import PreviewPanel from "@/features/jobs/components/preview-job";
-import HiringProcesses from "@/features/jobs/components/hiring-processes";
 import { goNext, goPrev } from "@/validators/job-form";
 import type { JobFormData } from "@/interfaces/job";
 import type { ActionCreatorWithPayload } from "@reduxjs/toolkit";
@@ -24,6 +21,8 @@ import StepModeSelection from "./step-mode-selection";
 import StepCompliance from "./step-compliance";
 import StepContentReview from "./step-content-review";
 import StepMediaAttachments from "./step-media-attachments";
+import StepPublication from "./step-publication";
+import { StepPreviewApproval } from "./step-preview-approval";
 
 interface JobFormCardProps {
   currentStep: number;
@@ -75,13 +74,13 @@ const stepHeaderDetails: Record<
     icon: <Shield className="h-5 w-5 text-primary" />,
   },
   8: {
-    title: "",
-    description: "See how your job post will look before publishing.",
+    title: "Preview & Approval",
+    description: "Preview on different devices and submit for approval.",
   },
   9: {
-    title: "",
+    title: "Publication Settings",
     description:
-      "Plan your post in advance and publish it at the perfect time.",
+      "Choose when and where to publish your job posting.",
   },
 };
 
@@ -149,24 +148,12 @@ const JobFormCard = ({
       case 7:
         return <StepCompliance jobForm={jobForm} setFormMerge={setFormMerge} />;
       case 8:
-        return (
-          <HiringProcesses
-            jobForm={jobForm}
-            formType={formType}
-            setFormMerge={setFormMerge}
-            replaceForm={replaceForm}
-          />
-        );
+        return <StepPreviewApproval jobForm={jobForm} setFormMerge={setFormMerge}/>;
       case 9:
-        return <PreviewPanel jobForm={jobForm} />;
-      case 10:
         return (
-          <SchedulePanel
-            setCurrentStep={setCurrentStep}
+          <StepPublication
             jobForm={jobForm}
             setFormMerge={setFormMerge}
-            togglePlatformAction={togglePlatformAction}
-            formErrorType={formErrorType}
           />
         );
       default:
