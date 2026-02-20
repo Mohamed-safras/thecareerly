@@ -1,8 +1,5 @@
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Check } from "lucide-react";
 import { JobFormData } from "@/interfaces/job";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
@@ -15,10 +12,10 @@ interface StepContentReviewProps {
   setFormMerge: ActionCreatorWithPayload<Partial<JobFormData>>;
 }
 
-export function StepContentReview({
+const StepContentReview: React.FC<StepContentReviewProps> = ({
   jobForm,
   setFormMerge,
-}: StepContentReviewProps) {
+}) =>{
   const dispatch = useDispatch();
 
   return (
@@ -88,3 +85,5 @@ export function StepContentReview({
     </div>
   );
 }
+
+export default StepContentReview;

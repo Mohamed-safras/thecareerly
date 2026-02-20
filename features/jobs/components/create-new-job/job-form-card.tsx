@@ -22,7 +22,7 @@ import StepRequirements from "./step-requirements";
 import StepJobDetails from "@/features/jobs/components/create-new-job/step-job-details";
 import StepModeSelection from "./step-mode-selection";
 import StepCompliance from "./step-compliance";
-import { StepContentReview } from "./step-content-review";
+import StepContentReview from "./step-content-review";
 import StepMediaAttachments from "./step-media-attachments";
 
 interface JobFormCardProps {
