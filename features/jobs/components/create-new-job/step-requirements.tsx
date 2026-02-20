@@ -148,12 +148,12 @@ const StepRequirements: React.FC<StepRequirementsProps> = ({
               ))}
             </SelectContent>
           </Select>
-          {byForm?.[`${formErrorType}_basic_info`]?.educationLevel && (
+          {byForm?.[`${formErrorType}_job_details`]?.educationLevel && (
             <Alert variant="destructive" className="h-fit text-sm p-3">
               <AlertCircle className="h-4 w-4" />
 
               <AlertDescription>
-                {byForm?.[`${formErrorType}_basic_info`]?.educationLevel}
+                {byForm?.[`${formErrorType}_job_details`]?.educationLevel}
               </AlertDescription>
             </Alert>
           )}
