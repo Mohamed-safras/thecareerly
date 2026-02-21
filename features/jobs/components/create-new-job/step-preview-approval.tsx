@@ -56,7 +56,7 @@ export function StepPreviewApproval({ jobForm, setFormMerge }: StepPreviewApprov
   const workArrangement = jobForm.workPreference || 'On-site';
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-200px)] h-full">
+    <div className="flex flex-col max-h-[600px] overflow-y-auto border p-3 rounded-lg">
       {/* Sticky Header */}
       <div className="shrink-0 space-y-3 pb-3 flex items-center justify-center">
 
@@ -65,6 +65,7 @@ export function StepPreviewApproval({ jobForm, setFormMerge }: StepPreviewApprov
           {devices.map((dvs) => (
             <Button
               key={dvs.id}
+              aria-label={dvs.label}
               variant={device === dvs.id ? 'default' : 'ghost'}
               size="sm"
               className="gap-1 sm:gap-1.5 text-xs sm:text-sm px-2 sm:px-3"
@@ -80,7 +81,7 @@ export function StepPreviewApproval({ jobForm, setFormMerge }: StepPreviewApprov
       {/* Scrollable Preview Area */}
       <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden pr-1">
         <div className="flex justify-center"> 
-          <Card className={cn('p-3 transition-all border w-full shadow-none', deviceWidths[device])}>
+          <Card data-testid="preview-card" className={cn('p-3 transition-all border w-full shadow-none', deviceWidths[device])}>
             <div className="space-y-3">
               {/* Header */}
               <div className="flex flex-col gap-3">

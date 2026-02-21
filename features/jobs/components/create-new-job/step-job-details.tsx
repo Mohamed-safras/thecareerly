@@ -115,8 +115,8 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
   ]);
 
   return (
-    <div className="space-y-6 rounded border p-3 max-h-[600px] overflow-y-scroll">
-      <div className="space-y-6">
+    <div className="space-y-3 rounded border p-3 max-h-[600px] overflow-y-auto">
+      <div className="space-y-3">
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {/* title */}
           <div className="space-y-3">
@@ -224,7 +224,7 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
         <div className="grid grid-cols-1 gap-3 items-baseline md:grid-cols-2">
           {/* job seiority */}
           <div className="space-y-3">
-            <Label htmlFor="job-seiority">Expreience Level</Label>
+            <Label htmlFor="expreience-level">Expreience Level</Label>
             <Select
               value={experienceLevel as experienceLevelValue | undefined}
               onValueChange={(value) =>
@@ -235,8 +235,8 @@ const StepJobDetails: React.FC<BasicInfoProps> = ({
                 )
               }
             >
-              <SelectTrigger id="job-seiority" className="w-full">
-                <SelectValue placeholder="Select job seiority..." />
+              <SelectTrigger id="expreience-level" className="w-full">
+                <SelectValue placeholder="Select Expreience Level..." />
               </SelectTrigger>
               <SelectContent>
                 {EXPRIENCE_LEVEL?.map((opt) => (

@@ -56,7 +56,7 @@ const StepModeSelection: React.FC<StepModeSelectionProps> = ({
   };
 
   return (
-    <div className="space-y-3 max-h-[600px] overflow-y-scroll border rounded-lg p-3">
+    <div className="space-y-3 max-h-[600px] overflow-y-auto border rounded-lg p-3">
       <div className="grid grid-cols-2 gap-3">
         <ModeCard
           icon={FileText}

@@ -84,8 +84,15 @@ const StepCompliance: React.FC<StepComplianceProps> = ({
   const total = jobForm.complianceChecks.length;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 max-h-[600px] overflow-y-auto border p-3 rounded-lg">
       <div className="flex items-center justify-between">
+        {passCount > 0 && (
+        <div className="flex items-center gap-2">
+          <Badge variant="secondary">
+            {passCount}/{total} passed
+          </Badge>
+        </div>
+      )}
         <div className="flex gap-2">
           <Button
             variant="outline"
@@ -110,15 +117,11 @@ const StepCompliance: React.FC<StepComplianceProps> = ({
             Run Scan
           </Button>
         </div>
+
+        
       </div>
 
-      {passCount > 0 && (
-        <div className="flex items-center gap-2">
-          <Badge variant="secondary">
-            {passCount}/{total} passed
-          </Badge>
-        </div>
-      )}
+      
 
       {categories.map((category) => {
         const checks = jobForm.complianceChecks.filter(

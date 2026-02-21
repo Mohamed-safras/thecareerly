@@ -57,8 +57,8 @@ const JobDescription = ({
   }
 
   return (
-    <ScrollArea className="max-h-[600px] overflow-y-scroll">
-      <div className="relative space-y-2 border p-4 rounded-lg">
+    <ScrollArea className="max-h-[600px] overflow-y-auto">
+      <div className="relative space-y-3 border p-3 rounded-lg">
         <h2 className="text-lg font-semibold">
           Job Description & Poster Generation
         </h2>
