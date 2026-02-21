@@ -19,7 +19,7 @@ const StepContentReview: React.FC<StepContentReviewProps> = ({
   const dispatch = useDispatch();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 max-h-[600px] overflow-y-auto border p-3 rounded-lg">
       <div className="space-y-3">
         <Label>Description</Label>
         <MarkdownEditor

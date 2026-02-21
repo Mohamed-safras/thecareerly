@@ -128,7 +128,7 @@ const StepMediaAttachments: React.FC<StepMediaAttachmentsProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 max-h-[600px] overflow-y-auto border rounded-lg p-3">
       {/* Drop Zone */}
       <div
         className={cn(

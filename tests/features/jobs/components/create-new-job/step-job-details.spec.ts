@@ -44,16 +44,9 @@ test.describe('StepJobDetails', () => {
       await expect(page.getByPlaceholder('e.g., Senior Engineer')).toBeVisible();
     });
 
-    test('should render salary min and max inputs', async ({ page }) => {
-      await expect(page.getByLabel('Min')).toBeVisible();
-      await expect(page.getByLabel('Max')).toBeVisible();
-    });
-
-    test('should render skills input', async ({ page }) => {
-      await expect(
-        page.getByPlaceholder('e.g., React, TypeScript (comma separated)'),
-      ).toBeVisible();
-    });
+    test('should render location input', async ({page})=> {
+      await expect(page.getByPlaceholder("Type a city, area, address")).toBeVisible()
+    })
 
     test('should render work preference select', async ({ page }) => {
       await expect(page.locator('#work-preference')).toBeVisible();
@@ -64,7 +57,12 @@ test.describe('StepJobDetails', () => {
     });
 
     test('should render experience level select', async ({ page }) => {
-      await expect(page.locator('#job-seiority')).toBeVisible();
+      await expect(page.locator('#expreience-level')).toBeVisible();
+    });
+
+    test('should render salary min and max inputs', async ({ page }) => {
+      await expect(page.getByLabel('Min')).toBeVisible();
+      await expect(page.getByLabel('Max')).toBeVisible();
     });
 
     test('should render currency select', async ({ page }) => {
@@ -77,6 +75,12 @@ test.describe('StepJobDetails', () => {
 
     test('should render "show salary on posting" toggle', async ({ page }) => {
       await expect(page.getByText('Show salary on posting')).toBeVisible();
+    });
+
+    test('should render skills input', async ({ page }) => {
+      await expect(
+        page.getByPlaceholder('e.g., React, TypeScript (comma separated)'),
+      ).toBeVisible();
     });
   });
 
@@ -118,8 +122,8 @@ test.describe('StepJobDetails', () => {
     });
 
     test('should select an experience level option', async ({ page }) => {
-      await selectFirstOption(page, '#job-seiority');
-      await expect(page.locator('#job-seiority')).not.toContainText('Select job seiority...');
+      await selectFirstOption(page, '#expreience-level');
+      await expect(page.locator('#expreience-level')).not.toContainText('Select job seiority...');
     });
 
     test('should select a currency option', async ({ page }) => {

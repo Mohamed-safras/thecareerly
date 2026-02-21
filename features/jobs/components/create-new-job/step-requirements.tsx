@@ -122,7 +122,7 @@ const StepRequirements: React.FC<StepRequirementsProps> = ({
   ];
 
   return (
-    <div className="space-y-3 border p-3 rounded-lg">
+    <div className="space-y-3 border max-h-[600px] overflow-y-auto p-3 rounded-lg">
       <div className="grid grid-cols-2 gap-3">
         {/* qualification level */}
         <div className="space-y-1.5">

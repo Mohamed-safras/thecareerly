@@ -14,7 +14,7 @@ import {
 
 import { goTo } from "@/validators/job-form";
 import { useAuth } from "@/features/auth/hooks/use-auth";
-import CreateNewJobHeaderStepper from "@/features/jobs/components/create-new-job/create-new-job-header-stepper";
+import JobHeaderStepper from "@/features/jobs/components/create-new-job/job-header-stepper";
 import JobFormCard from "@/features/jobs/components/create-new-job/job-form-card";
 import { getJobsPath } from "@/utils/generate-path";
 
@@ -37,28 +37,30 @@ const CreateNewJobWrapper = () => {
       breadCrumbPage="Create New Job"
       breadCrumbsItems={[{ label: "Jobs", link: jobsPath ? jobsPath : "#" }]}
     >
-      <div className="mx-auto grid max-w-6xl grid-cols-1">
-        <CreateNewJobHeaderStepper
-          createJobPostingSteps={createJobPostingSteps}
-          currentStep={currentStep}
-          validateStep={validateStep}
-          setCurrentStep={setCurrentStep}
-          goTo={goTo}
-        />
+      <div className="flex items-center justify-center min-h-[calc(100vh-60px)] w-full p-0">
+        <div className="grid grid-cols-1 w-full h-full lg:mx-auto lg:max-w-7xl">
+          <JobHeaderStepper
+            createJobPostingSteps={createJobPostingSteps}
+            currentStep={currentStep}
+            validateStep={validateStep}
+            setCurrentStep={setCurrentStep}
+            goTo={goTo}
+          />
 
-        <JobFormCard
-          currentStep={currentStep}
-          setCurrentStep={setCurrentStep}
-          total={total}
-          jobForm={createJobFormData}
-          formType={CREATE_JOB_FORM}
-          formErrorType={CREATE_JOB_FORM}
-          defaultTitle="Create Job"
-          setFormMerge={setFormMerge}
-          replaceForm={replaceForm}
-          togglePlatformAction={togglePlatformAction}
-          validateStep={validateStep}
-        />
+          <JobFormCard
+            currentStep={currentStep}
+            setCurrentStep={setCurrentStep}
+            total={total}
+            jobForm={createJobFormData}
+            formType={CREATE_JOB_FORM}
+            formErrorType={CREATE_JOB_FORM}
+            defaultTitle="Create Job"
+            setFormMerge={setFormMerge}
+            replaceForm={replaceForm}
+            togglePlatformAction={togglePlatformAction}
+            validateStep={validateStep}
+          />
+        </div>
       </div>
     </HeaderShell>
   );

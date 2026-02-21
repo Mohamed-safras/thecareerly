@@ -2,7 +2,7 @@ import HorizontalStepper from "@/components/stepper";
 import { FieldError } from "@/types/form-errors";
 import React from "react";
 
-export interface CreateNewJobHeaderStepperProps {
+export interface JobHeaderStepperProps {
   createJobPostingSteps: readonly {
     id: number;
     title: string;
@@ -18,7 +18,7 @@ export interface CreateNewJobHeaderStepperProps {
   ) => void;
 }
 
-const CreateNewJobHeaderStepper: React.FC<CreateNewJobHeaderStepperProps> = ({
+const JobHeaderStepper: React.FC<JobHeaderStepperProps> = ({
   createJobPostingSteps,
   currentStep,
   validateStep,
@@ -26,7 +26,7 @@ const CreateNewJobHeaderStepper: React.FC<CreateNewJobHeaderStepperProps> = ({
   goTo,
 }) => {
   return (
-    <div className="sticky top-14.5 z-10 col-span-1">
+    <div className="sticky top-14 z-10 col-span-1">
       <div className="p-3 bg-card">
         <HorizontalStepper
           steps={createJobPostingSteps}
@@ -41,4 +41,4 @@ const CreateNewJobHeaderStepper: React.FC<CreateNewJobHeaderStepperProps> = ({
   );
 };
 
-export default CreateNewJobHeaderStepper;
+export default JobHeaderStepper;

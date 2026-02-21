@@ -33,7 +33,7 @@ const StepPublication:React.FC<StepPublicationProps>= ({ jobForm, setFormMerge }
   ];
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 max-h-[600px] overflow-y-auto rounded-lg border p-3">
 
       {/* Publish Mode */}
       <div className="space-y-3">
